@@ -1,10 +1,16 @@
-Author -- Geoffrey Jarman<br/>
-Started -- 12-Apr-2020<br/>
-References:<br/>
+#Project
+    mysql-c-library
+#Description
+    Console c program using mysql C api to track books in a personal reading library
+#Author
+    Geoffrey Jarman<br/>
+#Started
+    12-Apr-2020<br/>
+#References:<br/>
     https://qnaplus.com/how-to-access-mysql-database-from-c-program/<br/>
-Compliation:<br/>
+#Compliation:<br/>
     gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c<br/>
-Log:<br/>
+#Log:<br/>
     12-Apr-2021 started<br/>
     12-Apr-2021 reviewed all<br/>
     12-Apr-2021 consolecode<br/>
