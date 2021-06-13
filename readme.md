@@ -99,5 +99,5 @@
     27-May-2021 add exits for option choices
     28-May-2021 fix bAttributeQuery equality bug in updating attributes on a title
     08-Jun-2021 replace return 0 or 1 with return EXIT_SUCCESS and return EXIT_FAILURE
-Enhancements:
+# Enhancements:
 
