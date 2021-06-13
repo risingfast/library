@@ -1,16 +1,16 @@
-## Project
+### Project
     mysql-c-library
-## Description
+### Description
     Console c program using mysql C api to track books in a personal reading library
-## Author
+### Author
     Geoffrey Jarman
-## Started
+### Started
     12-Apr-2021
-## References:
+### References:
     https://qnaplus.com/how-to-access-mysql-database-from-c-program/
-## Compliation:
+### Compliation:
     gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c
-## Log:
+### Log:
     12-Apr-2021 started
     12-Apr-2021 reviewed all
     12-Apr-2021 consolecode
@@ -99,4 +99,4 @@
     27-May-2021 add exits for option choices
     28-May-2021 fix bAttributeQuery equality bug in updating attributes on a title
     08-Jun-2021 replace return 0 or 1 with return EXIT_SUCCESS and return EXIT_FAILURE
-## Enhancements: (0)
+### Enhancements: (0)
