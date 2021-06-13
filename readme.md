@@ -1,4 +1,4 @@
-Author -- Geoffrey Jarman<br/><br/>
+Author -- Geoffrey Jarman<br/>
 Started -- 12-Apr-2020<br/>
 References:<br/>
     https://qnaplus.com/how-to-access-mysql-database-from-c-program/<br/>
