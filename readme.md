@@ -99,4 +99,5 @@
     27-May-2021 add exits for option choices
     28-May-2021 fix bAttributeQuery equality bug in updating attributes on a title
     08-Jun-2021 replace return 0 or 1 with return EXIT_SUCCESS and return EXIT_FAILURE
+    14-Jun-2021 separate functions into rf50.c and rf50.h for retitling console and pausing console
 ##### Enhancements: (0)
