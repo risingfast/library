@@ -13,8 +13,8 @@
 
 void fListTitles(char *, int *, char *, char *, char *); //show all titles & authors on the console
 void fListAuthors(char *, int *, char *, char *);//show all authors and title counts on the console
-void fMaintainAttributes(char *, int *);
-void fSetOptions(char *, int *, char *, char *, char *);
+void fMaintainAttributes(char *, int *);                               // maintain attribute tables
+void fSetOptions(char *, int *, char *, char *, char *);                // main menu to set options
 int  fAddSeries(char *);          // add a series, return EXIT_FAILURE if not added or EXIT_SUCCESS
 int  fAddAuthor(char *);         // add an author, return EXIT_FAILURE if not added or EXIT_SUCCESS
 int  fAddClassification(char *);// add a classifn, return EXIT_FAILURE if not added or EXIT_SUCCESS
