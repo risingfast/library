@@ -9,7 +9,7 @@
 ##### References:
     https://qnaplus.com/how-to-access-mysql-database-from-c-program/
 ##### Compliation:
-    gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c
+    gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c rf50.c
 ##### Log:
     12-Apr-2021 started
     12-Apr-2021 reviewed all

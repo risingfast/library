@@ -15,3 +15,11 @@ char *toUpperStr(char *);
 //  Should not be used on a stack string which is immutable.
 
 char *toLowerStr(char *);
+
+//  clears the console and prints a title from a parameter
+
+void fRetitleConsole(char *);
+
+//  pauses the console with a message to press enter to continue
+
+void fPressEnterToContinue(void);

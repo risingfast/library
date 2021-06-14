@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cs50.h"
+#include "rf50.h"
 #include <ctype.h>
 #include <stdbool.h>
 
@@ -29,7 +30,6 @@ int  fGetMinTitleID(void);                                       // get the min 
 void fShowAttributes(int);                                  // show title attributes on the console
 void fShowCharacters(int, char *);                                // show characters on the console
 void fSearchTitles(char *);                                    // search titles and show a title ID
-void fRetitleConsole(char *);                                      // clear and retitle the console
 void fShowAllAuthors(int *);                                     // show all authors on the console
 void fShowAllSeries(int *);                                       // show all series on the console
 void fShowAllSources(int *);                                     // show all sources on the console
@@ -61,7 +61,6 @@ void fUpdateSeries(char *);                                                     
 void fUpdateSource(char *);                                                      // update a source
 void fUpdateStatus(char *);                                                      // update a status
 void fUpdateGenre(char *);                                                       // update an genre
-void fPressEnterToContinue(void);                                             // pause and continue
 bool fTestDbConnection(void);                                    // test connection to the database
 int  fGetFieldLength(char *, char *);             // get the max field length of a field in a table
 
@@ -2633,14 +2632,6 @@ void fSearchTitles(char *strSearchString)
 
     mysql_free_result(res);
     mysql_close(conn);
-    return;
-}
-
-void fRetitleConsole(char *strPrgNme)
-{
-    (void) system("clear");
-    printf("%s -- Library maintenance using mySQL.", strPrgNme);
-    printf("\n");
     return;
 }
 
@@ -7320,16 +7311,6 @@ void fUpdateGenre(char *strPrgNme)
     free(strGenreName);
     free(strGenreNameEscaped);
     mysql_close(conn);
-    return;
-}
-
-void fPressEnterToContinue()
-{
-    printf("Press enter to continue ");
-    while(getchar() != '\n')
-    {
-        continue;
-    }
     return;
 }
 

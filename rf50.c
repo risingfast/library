@@ -7,6 +7,8 @@
 //      03-Jan-2021 reviewed all
 //      18-Mar-2021 librarycode
 //      30-May-2021 rewrite toUppseStr and toLowerStr
+//      14-Jun-2021 add fRetitleConsole(char *)
+//      14-Jun-2021 add fPressEnterToContinue(void)
 //  Enhancements (0)
 
 #include <stdio.h>
@@ -14,7 +16,13 @@
 #include <string.h>
 #include <ctype.h>
 
-// function to convert an array or heap string to uppercase
+void fRetitleConsole(char *strPrgNme)
+{
+    (void) system("clear");
+    printf("%s", strPrgNme);
+    printf("\n");
+    return;
+}
 
 char *toUpperStr(char *s)
 {
@@ -39,3 +47,14 @@ char *toLowerStr(char *s)
     }
     return s;
 }
+
+void fPressEnterToContinue(void)
+{
+    printf("Press enter to continue ");
+    while(getchar() != '\n')
+    {
+        continue;
+    }
+    return;
+}
+
