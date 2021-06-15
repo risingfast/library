@@ -1,10 +1,7 @@
-# Created: 13-Jun-2021
-# Geoffrey Jarman
+# -*- makefile -*-
 # makefile for mysql-c-library project
-# Ref: http://www6.uniovi.es/cscene/CS2/CS2-10.html -- Gnu Make and Multifile projects
-#      https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html -- Make tutorial
-#      https://www.youtube.com/watch?v=G5dNorAoeCM&feature=youtu.be -- Jacob Sorber, Automatic variables in make
-# -ggdb option includs gdb friendly debug info in the executable
+# Created: 15-Jun-2021
+# Geoffrey Jarman
 # $@ Target file
 # $^ Dependency files
 # $(CC) Compiler executable
@@ -16,18 +13,13 @@
 
 CC=gcc
 CFLAGS=-g -o
+SQL1FLAGS=-I/usr/include/mysql
+SQL2FLAGS=-L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl -lresolv
 
-all: mysql-c-library -I/usr/include/mysql
+all: mysql-c-library
 
-# General pattern make
-%: %.c %.h
-	$(CC) $(CFLAGS) $@ $^
+mysql-c-library: mysql-c-library.c rf50.c cs50.c
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
-# Specific pattern makes
-
-mysql-c-library: mysql-c-library.c
-	gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c
-
-# clean or delete all generated intermediate files
 clean:
-	
+	rm -f *.o *.s *.i mysql-c-library
