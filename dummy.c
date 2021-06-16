@@ -1,3 +1,100 @@
+//  Author -- Geoffrey Jarman
+//  Started -- 12-Apr-2020
+//  References:
+//      https://qnaplus.com/how-to-access-mysql-database-from-c-program/
+//  Compliation:
+//      gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c
+//  Log:
+//      12-Apr-2021 started
+//      12-Apr-2021 reviewed all
+//      12-Apr-2021 consolecode
+//      12-Apr-2021 function to print titles and authors
+//      13-Apr-2021 function to add attribute - shell outline
+//      14-Apr-2021 functions to add new attributes
+//      15-Apr-2021 function to title with unassigned attribute for foreign keys
+//      15-Apr-2021 title and attribute maintenance start
+//      16-Apr-2021 attribute descriptions
+//      17-Apr-2021 restriction on valid title ID range to enter to lookup a title
+//      18-Apr-2021 function fUpdateTitleAndAttributes() to change attributes
+//      18-Apr-2021 function to show numbered attributes
+//      19-Apr-2021 function to show numbered characters on the console
+//      19-Apr-2021 function to add characters
+//      20-Apr-2021 function to search title names
+//      20-Apr-2021 function to clear the screen
+//      21-Apr-2021 make X a universal exit key
+//      22-Apr-2021 x exit shortcut for options after 'maintain attributes' on the main menu
+//      22-Apr-2021 standard menus with character shortcuts
+//      23-Apr-2021 fShow functions on Attribute updates for classification and rating
+//      25-Apr-2021 narrow list layout for titles
+//      25-Apr-2021 start of character maintenance and debugging
+//      25-Apr-2021 update and delete characters
+//      25-Apr-2021 option to list titles descending
+//      25-Apr-2021 character count on lists
+//      25-Apr-2021 title name on attribute update page
+//      26-Apr-2021 title name on character update page
+//      26-Apr-2021 escape the ' character in strings
+//      26-Apr-2021 check a title exists in title ID queries
+//      27-Apr-2021 paginate long list: authors and series
+//      27-Apr-2021 explicit returns on all functions
+//      27-Apr-2021 show attribute value choices when updating attributes
+//      27-Apr-2021 escape option from adding attributes
+//      28-Apr-2021 fix bug entering a bad date on attribute maintenance
+//      28-Apr-2021 show all attributes and characters for in a single title
+//      28-Apr-2021 allow nulling out the dates on a title in Attribute Updates
+//      28-Apr-2021 remove unused option choices
+//      28-Apr-2021 list authors and title counts
+//      28-Apr-2021 format SQl in sprintf statements
+//      03-May-2021 remove double 'Press enter to continue" messages when print block ends
+//      03-May-2021 remove double prompt for Title search adding characters
+//      03-May-2021 remove double prompt for Title search updating attributes
+//      03-May-2021 modify getchar() to clear the buffer
+//      03-May-2021 search or list authors adding attributes
+//      04-May-2021 delete for attribute maintenance on authors
+//      04-May-2021 change add to maintain attributes
+//      04-May-2021 search or list Series adding attributes
+//      04-May-2021 add a title count to author listings
+//      04-May-2021 add a title count to series listings
+//      05-May-2021 search, delete functions to attribute maintenance for Genres
+//      05-May-2021 search, delete functions to attribute maintenance for Sources
+//      05-May-2021 search, delete functions to attribute maintenance for Ratings
+//      05-May-2021 search, delete functions to attribute maintenance for Statuses
+//      06-may-2021 search, delete functions to attribute maintenance for Classifications
+//      06-May-2021 troubleshoot connection statements in functions
+//      07-May-2021 fEscapeSingleQuotes on adding comments
+//      07-May-2021 error trap for mysql_query() errors
+//      08-May-2021 finish adding a change option to attribute maintenance
+//      09-May-2021 allow nulls start date on new title
+//      09-May-2021 add status filters to title listing
+//      09-May-2021 escape changing an author name with an embedded '
+//      09-May-2021 dynamically size names in listings
+//      09-May-2021 left-justify number columns in listings past Author listing
+//      10-May-2021 streamline error printing with __func__
+//      10-May-2021 streamline error detection blocks
+//      11-May-2021 block adding empty attributes by hitting enter without text
+//      12-May-2021 debug fEscapeSingleQuote() function
+//      12-May-2021 continue debug of fEscapeSingleQuote() function
+//      21-May-2021 trouble-shoot fEscapeSingleQuote() function
+//      21-May-2021 apply fEscapeSingleQuotes() function to updating an existing title name
+//      22-May-2021 add check for db service connection as fTestDbConnection();
+//      22-May-2021 add a reporting option to list all books
+//      22-May-2021 add decodes to option settings
+//      23-May-2021 function to fetch max field length of a column
+//      23-May-2021 eliminate bad foratting on trailing EOL's
+//      23-May-2021 impelement __func__ in printf statements where not already done
+//      23-May-2021 add length limits updating authors and classification attributes
+//      24-May-2021 add char limit checks on updating ratings and other text fields
+//      25-May-2021 add length limit to character maintenance
+//      25-May-2021 add options to reset all options to default values or print values
+//      25-May-2021 add char limit on changing characters
+//      25-May-2021 add Genre Description to change fields in attribute updates
+//      26-May-2021 add exits for author changes and attribute changes
+//      27-May-2021 add exits for title and attribute updates
+//      27-May-2021 add or confirm toupper() check for all E(x)it tests
+//      27-May-2021 add exits for option choices
+//      28-May-2021 fix bAttributeQuery equality bug in updating attributes on a title
+//      08-Jun-2021 replace return 0 or 1 with return EXIT_SUCCESS and return EXIT_FAILURE
+//  Enhancements:
+
 // includes and defines
 
 #include <mysql.h>
@@ -5,7 +102,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cs50.h"
-#include "rf50.h"
 #include <ctype.h>
 #include <stdbool.h>
 
@@ -13,8 +109,8 @@
 
 void fListTitles(char *, int *, char *, char *, char *); //show all titles & authors on the console
 void fListAuthors(char *, int *, char *, char *);//show all authors and title counts on the console
-void fMaintainAttributes(char *, int *);                               // maintain attribute tables
-void fSetOptions(char *, int *, char *, char *, char *);                // main menu to set options
+void fMaintainAttributes(char *, int *);
+void fSetOptions(char *, int *, char *, char *, char *);
 int  fAddSeries(char *);          // add a series, return EXIT_FAILURE if not added or EXIT_SUCCESS
 int  fAddAuthor(char *);         // add an author, return EXIT_FAILURE if not added or EXIT_SUCCESS
 int  fAddClassification(char *);// add a classifn, return EXIT_FAILURE if not added or EXIT_SUCCESS
@@ -30,6 +126,7 @@ int  fGetMinTitleID(void);                                       // get the min 
 void fShowAttributes(int);                                  // show title attributes on the console
 void fShowCharacters(int, char *);                                // show characters on the console
 void fSearchTitles(char *);                                    // search titles and show a title ID
+void fRetitleConsole(char *);                                      // clear and retitle the console
 void fShowAllAuthors(int *);                                     // show all authors on the console
 void fShowAllSeries(int *);                                       // show all series on the console
 void fShowAllSources(int *);                                     // show all sources on the console
@@ -61,26 +158,15 @@ void fUpdateSeries(char *);                                                     
 void fUpdateSource(char *);                                                      // update a source
 void fUpdateStatus(char *);                                                      // update a status
 void fUpdateGenre(char *);                                                       // update an genre
+void fPressEnterToContinue(void);                                             // pause and continue
 bool fTestDbConnection(void);                                    // test connection to the database
 int  fGetFieldLength(char *, char *);             // get the max field length of a field in a table
-void fGetPwdFromConsole(void);                                   // get a password from the console
 
-// global declarations
-
-char *sgServer = "192.168.0.13";                                           //mysqlServer IP address
-char *sgUsername = "gjarman";                                          // mysqlSerer logon username
-char sgPassword[20] = {'\0'};                                 // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                            // default database name on mysqlserver
-
-MYSQL *conn;
-MYSQL_RES *res;
-MYSQL_ROW row;
-    
 int main(int argc, char** argv)
 {
 // declarations
 
-    char *strPrgNme = strcat(argv[0] + 2, " -- Library and reading log");           // program name
+    char *strPrgNme = argv[0] + 2;                                                  // program name
     bool bHelp = false;                                              // help flag to show help text
     bool bExitMain = false;                                             // flag to exit the program
     char charMainChoice = '0';                                                  // main menu choice
@@ -106,39 +192,18 @@ int main(int argc, char** argv)
         printf("\n");
     }
 
-// get a password from the console and test the db connection
-
-    fRetitleConsole(strPrgNme);
-    fGetPwdFromConsole();
-    if(strcmp("BadSoExit", sgPassword) == 0)
-    {
-        printf("\n");
-        return EXIT_FAILURE;
-    }
-    fRetitleConsole(strPrgNme);
-
-// Initialize a connection and connect to the database$
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        fPressEnterToContinue();
-        printf("\n");
-        return -1;
-    }
-
 // print the main menu
 
     while(bExitMain == false)
     {
         while(charMainChoice == '0')
         {
+            fRetitleConsole(strPrgNme);
+            if (fTestDbConnection() == false)
+            {
+                printf("\n");
+                return EXIT_FAILURE;
+            }
             fRetitleConsole(strPrgNme);
             printf("\n");
             printf("Main Menu");
@@ -231,16 +296,24 @@ int main(int argc, char** argv)
         }
     }
 
-    mysql_close(conn);
-    system("clear");
+    (void) system("clear");
+
     return EXIT_SUCCESS;
 }
 
 void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplayPageWidth, char *pcharDisplayPageFormat, char *pCharDisplayOrder)
 {
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     int intColCount = 0;
     int *intLengths = NULL;
     int intRowCount = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     int  intStatusFilter = 0;
     char charStatusFilterChoice = '0';
     char strOrder[6] = {'D', 'E', 'S', 'C', '\0'};
@@ -317,6 +390,18 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
                         "GROUP BY T.`Title ID`"
                         "ORDER BY T.`Title ID` %s", intStatusFilter, strOrder);
     }
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -326,6 +411,7 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -338,6 +424,7 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
         printf("\n");
 
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -437,6 +524,7 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
     fRetitleConsole(strPrgNme);
     free(intLengths);
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -1130,9 +1218,15 @@ void fSetOptions(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
 int fAddSeries(char *strPrgNme)
 {
     char *strSeriesName = NULL;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strSeriesNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
     int  intSeriesMaxLength = 0;
+
+    MYSQL *conn;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1164,6 +1258,17 @@ int fAddSeries(char *strPrgNme)
 
 // initialize a connection and connect to the database
 
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_FAILURE;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) == 0)
@@ -1179,6 +1284,7 @@ int fAddSeries(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
@@ -1186,6 +1292,7 @@ int fAddSeries(char *strPrgNme)
 
     free(strSeriesName);
     free(strSeriesNameEscaped);
+    mysql_close(conn);
     return EXIT_FAILURE;
 }
 
@@ -1193,8 +1300,14 @@ int fAddAuthor(char *strPrgNme)
 {
     char *strAuthorName = NULL;
     char *strEscapedAuthorName = NULL;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intAuthorMaxLength = 0;
+
+    MYSQL *conn;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1225,6 +1338,19 @@ int fAddAuthor(char *strPrgNme)
     printf("\n");
     sprintf(strSQL, "INSERT INTO `Book Authors` (`Author Name`) VALUES('%s')", strEscapedAuthorName);
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_FAILURE;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) == 0)
@@ -1240,21 +1366,29 @@ int fAddAuthor(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
     free(strEscapedAuthorName);
     free(strAuthorName);
     fRetitleConsole(strPrgNme);
+    mysql_close(conn);
     return EXIT_FAILURE;
 }
 
 int fAddClassification(char *strPrgNme)
 {
     char *strClassificationName = NULL;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     char *strClassificationNameEscaped = NULL;
     int  intClassificationMaxLength = 0;
+
+    MYSQL *conn;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1286,6 +1420,19 @@ int fAddClassification(char *strPrgNme)
 
     sprintf(strSQL, "INSERT INTO `Book Classifications` (`Classification Name`) VALUES('%s')", strClassificationNameEscaped);
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_FAILURE;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) == 0)
@@ -1301,10 +1448,12 @@ int fAddClassification(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
     fRetitleConsole(strPrgNme);
+    mysql_close(conn);
     free(strClassificationNameEscaped);
     free(strClassificationName);
     return EXIT_FAILURE;
@@ -1313,9 +1462,15 @@ int fAddClassification(char *strPrgNme)
 int fAddRating(char *strPrgNme)
 {
     char *strRatingName = NULL;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strRatingNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
     int  intRatingMaxLength = 0;
+
+    MYSQL *conn;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1345,6 +1500,19 @@ int fAddRating(char *strPrgNme)
     printf("\n");
     sprintf(strSQL, "INSERT INTO `Book Ratings` (`Rating Name`) VALUES('%s')", strRatingNameEscaped);
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_FAILURE;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) == 0)
@@ -1360,10 +1528,12 @@ int fAddRating(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
     fRetitleConsole(strPrgNme);
+    mysql_close(conn);
     free(strRatingName);
     free(strRatingNameEscaped);
     return EXIT_FAILURE;
@@ -1372,9 +1542,15 @@ int fAddRating(char *strPrgNme)
 int fAddSource(char *strPrgNme)
 {
     char *strSourceName = NULL;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strSourceNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
     int  intSourceMaxLength = 0;
+
+    MYSQL *conn;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1404,6 +1580,19 @@ int fAddSource(char *strPrgNme)
     printf("\n");
     sprintf(strSQL, "INSERT INTO `Book Sources` (`Source Name`) VALUES('%s')", strSourceNameEscaped);
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_FAILURE;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) == 0)
@@ -1419,6 +1608,7 @@ int fAddSource(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
@@ -1426,15 +1616,22 @@ int fAddSource(char *strPrgNme)
 
     free(strSourceName);
     free(strSourceNameEscaped);
+    mysql_close(conn);
     return EXIT_FAILURE;
 }
 
 int fAddStatus(char *strPrgNme)
 {
     char *strStatusName = NULL;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strStatusNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
     int  intStatusMaxLength = 0;
+
+    MYSQL *conn;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1464,6 +1661,19 @@ int fAddStatus(char *strPrgNme)
     printf("\n");
     sprintf(strSQL, "INSERT INTO `Book Statuses` (`Status Name`) VALUES('%s')", strStatusNameEscaped);
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_FAILURE;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) == 0)
@@ -1479,12 +1689,14 @@ int fAddStatus(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
     fRetitleConsole(strPrgNme);
     free(strStatusName);
     free(strStatusNameEscaped);
+    mysql_close(conn);
     return EXIT_FAILURE;
 }
 
@@ -1492,11 +1704,17 @@ int fAddGenre(char *strPrgNme)
 {
     char *strGenreName = NULL;
     char *strGenreDesc = NULL;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strGenreNameEscaped = NULL;
     char *strGenreDescEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
     int  intGenreNameMaxLength = 0;
     int  intGenreDescMaxLength = 0;
+
+    MYSQL *conn;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1547,6 +1765,19 @@ int fAddGenre(char *strPrgNme)
     printf("\n");
     sprintf(strSQL, "INSERT INTO `Book Genres` (`Genre Name`, `Genre Description`) VALUES('%s', '%s')", strGenreNameEscaped, strGenreDescEscaped);
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_FAILURE;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) == 0)
@@ -1563,6 +1794,7 @@ int fAddGenre(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
@@ -1571,6 +1803,7 @@ int fAddGenre(char *strPrgNme)
     free(strGenreNameEscaped);
     free(strGenreDesc);
     free(strGenreDescEscaped);
+    mysql_close(conn);
     return EXIT_FAILURE;
 }
 
@@ -1579,13 +1812,32 @@ void fAddTitle(char *strPrgNme)
     char *strTitleName = NULL;
     char *strTitleNameEscaped = NULL;
     char *strStartDate;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intTitleMaxLength = 0;
+
+    MYSQL *conn;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
     printf("Main Menu > Add Title");
     printf("\n\n");
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // Get the title name and start date from the console
 
@@ -1655,12 +1907,14 @@ void fAddTitle(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
     free(strTitleNameEscaped);
     free(strTitleName);
     fRetitleConsole(strPrgNme);
+    mysql_close(conn);
     return;
 }
 
@@ -1679,6 +1933,10 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
     bool bExitAttributeChoice = false;
     bool bTitleFound = false;
     bool bAttributeQueryIsValid = false;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     char *strTitleName = NULL;
     char *strNewStartDate = NULL;
@@ -1740,6 +1998,10 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
             return;
         }
     }
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     intMaxTitleID = fGetMaxTitleID();
     intMinTitleID = fGetMinTitleID();
@@ -1875,6 +2137,7 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
             bAttributeQueryIsValid = true;
             strcpy(strAttribChoice, "00");
         }
+
         else if(strstr("11mM", strAttribChoice) != NULL)
         {
             printf("New Comments or E(x)it: ");
@@ -1893,6 +2156,7 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
                 bAttributeQueryIsValid = true;
             }
         }
+
         else if(strstr("12hH", strAttribChoice) != NULL)
         {
             printf("Show Characters: ");
@@ -1908,28 +2172,46 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
             bExitAttributeChoice = true;
         }
 
+// initialize a connection and connect to the database
+
+        if((bExitAttributeChoice == false) && (bAttributeQueryIsValid == true))
+        {
+            conn = mysql_init(NULL);
+
+            if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+            {
+                printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+                printf("\n");
+                fPressEnterToContinue();
+                mysql_close(conn);
+                return;
+            }
+
 // execute the query and check for no result
 
-        if(mysql_query(conn, strSQL) != 0)
-        {
-            printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
-            printf("\n\n");
-            fPressEnterToContinue();
-            return;
-        }
+            if(mysql_query(conn, strSQL) != 0)
+            {
+                printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
+                printf("\n\n");
+                fPressEnterToContinue();
+                mysql_close(conn);
+                return;
+            }
 
 // test for a SQL error
 
-        if(*mysql_error(conn))
-        {
-            printf("\n");
-            printf("SQL Error in function %s():\n\n%s", __func__, mysql_error(conn));
-            printf("\n\n");
-            fPressEnterToContinue();
+            if(*mysql_error(conn))
+            {
+                printf("\n");
+                printf("SQL Error in function %s():\n\n%s", __func__, mysql_error(conn));
+                printf("\n\n");
+                fPressEnterToContinue();
+                fRetitleConsole(strPrgNme);
+                strcpy(strAttribChoice, "00");
+            }
             fRetitleConsole(strPrgNme);
-            strcpy(strAttribChoice, "00");
+            mysql_close(conn);
         }
-        fRetitleConsole(strPrgNme);
     }
 
     fRetitleConsole(strPrgNme);
@@ -1938,10 +2220,31 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
 
 int  fGetMaxTitleID(void)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     char **endptr;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT MAX(`Title ID`) from `Book Titles`");
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_FAILURE;
+    }
 
 // execute the query and check for no result
 
@@ -1950,6 +2253,7 @@ int  fGetMaxTitleID(void)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
@@ -1964,6 +2268,7 @@ int  fGetMaxTitleID(void)
         (void) system("clear");
         printf("\n");
 
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
@@ -1979,6 +2284,7 @@ int  fGetMaxTitleID(void)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return EXIT_SUCCESS;
     }
 
@@ -1989,15 +2295,37 @@ int  fGetMaxTitleID(void)
     row = mysql_fetch_row(res);
 
     mysql_free_result(res);
+    mysql_close(conn);
     return(int) strtol(row[0], endptr, 10);
 }
 
 int fGetMinTitleID(void)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     char **endptr;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT MIN(`Title ID`) from `Book Titles`");
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_SUCCESS;
+    }
 
 // execute the query and check for no result
 
@@ -2006,6 +2334,7 @@ int fGetMinTitleID(void)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_SUCCESS;
     }
 
@@ -2020,6 +2349,7 @@ int fGetMinTitleID(void)
         (void) system("clear");
         printf("\n");
 
+        mysql_close(conn);
         return EXIT_SUCCESS;
     }
 
@@ -2035,6 +2365,7 @@ int fGetMinTitleID(void)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return EXIT_SUCCESS;
     }
 
@@ -2045,12 +2376,21 @@ int fGetMinTitleID(void)
     row = mysql_fetch_row(res);
 
     mysql_free_result(res);
+    mysql_close(conn);
     return(int) strtol(row[0], endptr, 10);
 }
 
 void fShowAttributes(int intTitleID)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT `Title ID`"
                          ", `Title Name`"
@@ -2080,6 +2420,19 @@ void fShowAttributes(int intTitleID)
                          "LEFT JOIN `Book Ratings` BR ON BT.`Rating ID` = BR.`Rating ID`"
                          "WHERE `Title ID` = %d", intTitleID);
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -2087,6 +2440,7 @@ void fShowAttributes(int intTitleID)
         printf("mysql_query() error in function\n\n%s(): %s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -2101,6 +2455,7 @@ void fShowAttributes(int intTitleID)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -2113,6 +2468,7 @@ void fShowAttributes(int intTitleID)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -2154,6 +2510,7 @@ void fShowAttributes(int intTitleID)
     printf("\n");
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -2163,11 +2520,32 @@ void fShowCharacters(int intTitleID, char *strPrgNme)
     int intColCount = 0;
     int intRowsReturned = 0;
     int intRowsPrinted = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Character ID`, `Character Name` "
                     "FROM `Book Characters` "
                     "WHERE `Title ID` = %d", intTitleID);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -2186,11 +2564,13 @@ void fShowCharacters(int intTitleID, char *strPrgNme)
         printf("SQL Error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
 
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -2203,6 +2583,7 @@ void fShowCharacters(int intTitleID, char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -2256,19 +2637,41 @@ void fShowCharacters(int intTitleID, char *strPrgNme)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fSearchTitles(char *strSearchString)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Title ID`, `Title Name` "
                     "FROM `Book Titles` "
                     "WHERE `Title Name` LIKE '%%%s%%'", strSearchString);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -2287,6 +2690,7 @@ void fSearchTitles(char *strSearchString)
         printf("SQL Error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
      }
  // store the result of the query
@@ -2299,6 +2703,7 @@ void fSearchTitles(char *strSearchString)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -2324,6 +2729,15 @@ void fSearchTitles(char *strSearchString)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
+    return;
+}
+
+void fRetitleConsole(char *strPrgNme)
+{
+    (void) system("clear");
+    printf("%s -- Library maintenance using mySQL.", strPrgNme);
+    printf("\n");
     return;
 }
 
@@ -2331,7 +2745,15 @@ void fShowAllSources(int *pintDisplayPageLength)
 {
     int  intRowCount = 0;
     int  intMaxWidth = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT S.`Source ID`"
                          ", S.`Source Name` "
@@ -2341,6 +2763,19 @@ void fShowAllSources(int *pintDisplayPageLength)
                    " GROUP BY S.`Source ID`, S.`Source Name`"
                    " ORDER BY `Source ID` ASC");
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -2348,6 +2783,7 @@ void fShowAllSources(int *pintDisplayPageLength)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -2362,6 +2798,7 @@ void fShowAllSources(int *pintDisplayPageLength)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -2374,6 +2811,7 @@ void fShowAllSources(int *pintDisplayPageLength)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -2413,6 +2851,7 @@ void fShowAllSources(int *pintDisplayPageLength)
     printf("\n");
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -2420,7 +2859,15 @@ void fShowAllGenres(int *pintDisplayPageLength)
 {
     int  intRowCount = 0;
     int  intMaxWidth = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT G.`Genre ID`"
                          ", G. `Genre Name` "
@@ -2430,6 +2877,19 @@ void fShowAllGenres(int *pintDisplayPageLength)
                    " GROUP BY G.`Genre ID`, G.`Genre Name`"
                    " ORDER BY `Genre ID` ASC");
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -2437,6 +2897,7 @@ void fShowAllGenres(int *pintDisplayPageLength)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -2451,6 +2912,7 @@ void fShowAllGenres(int *pintDisplayPageLength)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -2463,6 +2925,7 @@ void fShowAllGenres(int *pintDisplayPageLength)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -2502,6 +2965,7 @@ void fShowAllGenres(int *pintDisplayPageLength)
     printf("\n");
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -2509,7 +2973,15 @@ void fShowAllStatuses(int *pintDisplayPageLength)
 {
     int  intRowCount = 0;
     int  intMaxWidth = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT S.`Status ID`"
                         ", S.`Status Name`"
@@ -2519,6 +2991,19 @@ void fShowAllStatuses(int *pintDisplayPageLength)
                    " GROUP BY S.`Status ID`, S.`Status Name`"
                    " ORDER BY `Status ID` ASC");
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -2526,6 +3011,7 @@ void fShowAllStatuses(int *pintDisplayPageLength)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -2540,6 +3026,7 @@ void fShowAllStatuses(int *pintDisplayPageLength)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -2552,6 +3039,7 @@ void fShowAllStatuses(int *pintDisplayPageLength)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -2591,6 +3079,7 @@ void fShowAllStatuses(int *pintDisplayPageLength)
     printf("\n");
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -2598,7 +3087,15 @@ void fShowAllClassifications(int *pintDisplayPageLength)
 {
     int  intRowCount = 0;
     int  intMaxWidth = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT C.`Classification ID`"
                         " , C.`Classification Name`"
@@ -2608,6 +3105,19 @@ void fShowAllClassifications(int *pintDisplayPageLength)
                    " GROUP BY C.`Classification ID`, C.`Classification Name`"
                     "ORDER BY C.`Classification ID` ASC");
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -2615,6 +3125,7 @@ void fShowAllClassifications(int *pintDisplayPageLength)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -2629,6 +3140,7 @@ void fShowAllClassifications(int *pintDisplayPageLength)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -2641,6 +3153,7 @@ void fShowAllClassifications(int *pintDisplayPageLength)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -2680,6 +3193,7 @@ void fShowAllClassifications(int *pintDisplayPageLength)
     printf("\n");
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -2687,7 +3201,15 @@ void fShowAllRatings(int  *pintDisplayPageLength)
 {
     int  intRowCount = 0;
     int  intMaxWidth = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT R.`Rating ID`"
                         " , R.`Rating Name` "
@@ -2697,6 +3219,19 @@ void fShowAllRatings(int  *pintDisplayPageLength)
                    " GROUP BY R.`Rating ID`, R.`Rating Name`"
                    " ORDER BY `Rating ID` ASC");
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -2704,6 +3239,7 @@ void fShowAllRatings(int  *pintDisplayPageLength)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -2718,6 +3254,7 @@ void fShowAllRatings(int  *pintDisplayPageLength)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -2730,6 +3267,7 @@ void fShowAllRatings(int  *pintDisplayPageLength)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -2769,6 +3307,7 @@ void fShowAllRatings(int  *pintDisplayPageLength)
     printf("\n");
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 void fCharacters(char *strPrgNme)
@@ -2780,6 +3319,10 @@ void fCharacters(char *strPrgNme)
     char *strCharacterToAddEscaped = NULL;
     char *strCharacterToChange = NULL;
     char *strCharacterToChangeEscaped = NULL;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strTitleSearch = NULL;
     char strSQL[SQL_LEN] = {'\0'};
     char charAddCharacterAction = 'X';
@@ -2789,6 +3332,10 @@ void fCharacters(char *strPrgNme)
     char charAction = 'A';
     int  intCharID = 0;
     int  intCharacterMaxLength = 0;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     while(bTitleFound == false)
     {
@@ -2937,6 +3484,19 @@ void fCharacters(char *strPrgNme)
 
         printf("\n");
 
+// initialize a connection and connect to the database
+
+        conn = mysql_init(NULL);
+
+        if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+        {
+            printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+            printf("\n");
+            fPressEnterToContinue();
+            mysql_close(conn);
+            return;
+        }
+
 // execute the query and check for no result
 
         if(mysql_query(conn, strSQL) == 0)
@@ -2977,6 +3537,9 @@ void fCharacters(char *strPrgNme)
     }
 
     fRetitleConsole(strPrgNme);
+
+    mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -2986,11 +3549,30 @@ void fShowTitle(int intTitleID, char *strPrgNme)
     int intColCount = 0;
     int intRowsReturned = 0;
     int intRowsPrinted = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Title Name` "
                     "FROM `Book Titles` "
                     "WHERE `Title ID` = %d", intTitleID);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("Failed in %s to connect to MySQL Server %s\n. Error: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n\n");
+        fPressEnterToContinue();
+    }
 
 // execute the query and check for no result
 
@@ -2998,6 +3580,7 @@ void fShowTitle(int intTitleID, char *strPrgNme)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
+        mysql_close(conn);
         fPressEnterToContinue();
         return;
     }
@@ -3013,6 +3596,7 @@ void fShowTitle(int intTitleID, char *strPrgNme)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -3025,6 +3609,7 @@ void fShowTitle(int intTitleID, char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3080,6 +3665,7 @@ void fShowTitle(int intTitleID, char *strPrgNme)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -3116,12 +3702,33 @@ char *fEscapeSingleQuote(char *strQuery)
 bool fCheckTitleIDExists(int intTitleID)
 {
     int intRowsReturned = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     bool bTitleIDFound = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Title ID` "
                     "FROM `Book Titles` "
                     "WHERE `Title ID` = %d", intTitleID);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return false;
+    }
 
 // execute the query and check for no result
 
@@ -3157,6 +3764,7 @@ bool fCheckTitleIDExists(int intTitleID)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return EXIT_FAILURE;
     }
 
@@ -3184,6 +3792,7 @@ bool fCheckTitleIDExists(int intTitleID)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return bTitleIDFound;
 }
 
@@ -3191,7 +3800,15 @@ void fShowAllAuthors(int *pintDisplayPageLength)
 {
     int  intRowCount = 0;
     int  intMaxWidth = 0;                                // Maximum width of Name colum for printing
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 //    sprintf(strSQL, "SELECT `Author ID`, `Author Name` "
 //                    "FROM `Book Authors`"
@@ -3205,6 +3822,19 @@ void fShowAllAuthors(int *pintDisplayPageLength)
                     "GROUP BY A.`Author ID`, A.`Author Name` "
                     "ORDER BY `Author ID` ASC");
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -3212,6 +3842,7 @@ void fShowAllAuthors(int *pintDisplayPageLength)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -3226,6 +3857,7 @@ void fShowAllAuthors(int *pintDisplayPageLength)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -3238,6 +3870,7 @@ void fShowAllAuthors(int *pintDisplayPageLength)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3277,6 +3910,7 @@ void fShowAllAuthors(int *pintDisplayPageLength)
     printf("\n");
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
@@ -3284,7 +3918,15 @@ void fShowAllSeries(int *pintDisplayPageLength)
 {
     int  intRowCount = 0;
     int  intMaxWidth = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT E.`Series ID`"
                         " , E.`Series Name` "
@@ -3294,6 +3936,19 @@ void fShowAllSeries(int *pintDisplayPageLength)
                    " GROUP BY E.`Series ID`, E.`Series Name`"
                    "ORDER BY `Series ID` ASC");
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -3301,6 +3956,7 @@ void fShowAllSeries(int *pintDisplayPageLength)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -3315,6 +3971,7 @@ void fShowAllSeries(int *pintDisplayPageLength)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 // store the result of the query
@@ -3327,6 +3984,7 @@ void fShowAllSeries(int *pintDisplayPageLength)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3366,14 +4024,23 @@ void fShowAllSeries(int *pintDisplayPageLength)
     printf("\n");
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplayPageWidth, char *pCharDisplayOrder)
 {
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     int intColCount = 0;
     int *intLengths = NULL;
     int intRowCount = 0;
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strOrder[6] = {'D', 'E', 'S', 'C', '\0'};
     char strSQL[SQL_LEN] = {'\0'};
     bool bEndOfPrintBlock = false;
@@ -3400,6 +4067,19 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
     printf("Main Menu > List Authors > Authors and Title Counts");
     printf("\n\n");
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -3407,6 +4087,7 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -3420,6 +4101,7 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3483,19 +4165,41 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
 
     fRetitleConsole(strPrgNme);
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fSearchAuthors(char *strSearchString)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Author ID`, `Author Name` "
                     "FROM `Book Authors` "
                     "WHERE `Author Name` LIKE '%%%s%%'", strSearchString);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -3504,6 +4208,7 @@ void fSearchAuthors(char *strSearchString)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -3518,6 +4223,7 @@ void fSearchAuthors(char *strSearchString)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
  // store the result of the query
@@ -3530,6 +4236,7 @@ void fSearchAuthors(char *strSearchString)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
      }
 
@@ -3555,17 +4262,26 @@ void fSearchAuthors(char *strSearchString)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fDeleteAuthor(char *strPrgNme)
 {
 
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intRowsReturned = 0;
     int  intAuthorID = 0;
     bool bAuthorExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -3579,6 +4295,19 @@ void fDeleteAuthor(char *strPrgNme)
     printf("Author ID: ");
     intAuthorID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Author ID exists
 
     sprintf(strSQL, "SELECT `Author ID` FROM `Book Authors` "
@@ -3589,6 +4318,7 @@ void fDeleteAuthor(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -3603,6 +4333,7 @@ void fDeleteAuthor(char *strPrgNme)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
 
@@ -3616,6 +4347,7 @@ void fDeleteAuthor(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3647,6 +4379,7 @@ void fDeleteAuthor(char *strPrgNme)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3662,6 +4395,7 @@ void fDeleteAuthor(char *strPrgNme)
         printf("\n");
 
         mysql_free_result(res);
+        mysql_close(conn);
         return;
      }
 
@@ -3675,6 +4409,7 @@ void fDeleteAuthor(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3710,6 +4445,7 @@ void fDeleteAuthor(char *strPrgNme)
             printf("\n\n");
             fPressEnterToContinue();
             mysql_free_result(res);
+            mysql_close(conn);
             return;
         }
 
@@ -3733,19 +4469,41 @@ void fDeleteAuthor(char *strPrgNme)
      }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fSearchSeries(char *strSearchString)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Series ID`, `Series Name` "
                     "FROM `Book Series` "
                     "WHERE `Series Name` LIKE '%%%s%%'", strSearchString);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -3754,6 +4512,7 @@ void fSearchSeries(char *strSearchString)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -3768,6 +4527,7 @@ void fSearchSeries(char *strSearchString)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
  // store the result of the query
@@ -3780,6 +4540,7 @@ void fSearchSeries(char *strSearchString)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
 
      }
@@ -3806,17 +4567,26 @@ void fSearchSeries(char *strSearchString)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fDeleteSeries(char *strPrgNme)
 {
 
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intRowsReturned = 0;
     int  intSeriesID = 0;
     bool bSeriesExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -3830,6 +4600,19 @@ void fDeleteSeries(char *strPrgNme)
     printf("Series ID: ");
     intSeriesID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Author ID exists
 
     sprintf(strSQL, "SELECT `Series ID` FROM `Book Series` "
@@ -3840,6 +4623,7 @@ void fDeleteSeries(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -3854,6 +4638,7 @@ void fDeleteSeries(char *strPrgNme)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 
@@ -3867,6 +4652,7 @@ void fDeleteSeries(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
      }
 
@@ -3898,6 +4684,7 @@ void fDeleteSeries(char *strPrgNme)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3913,6 +4700,7 @@ void fDeleteSeries(char *strPrgNme)
         printf("\n");
 
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3926,6 +4714,7 @@ void fDeleteSeries(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3961,6 +4750,7 @@ void fDeleteSeries(char *strPrgNme)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -3984,17 +4774,26 @@ void fDeleteSeries(char *strPrgNme)
      }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fDeleteGenre(char *strPrgNme)
 {
 
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intRowsReturned = 0;
     int  intGenreID = 0;
     bool bGenreExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -4008,6 +4807,19 @@ void fDeleteGenre(char *strPrgNme)
     printf("Genre ID: ");
     intGenreID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Author ID exists
 
     sprintf(strSQL, "SELECT `Genre ID` FROM `Book Genres` "
@@ -4018,6 +4830,7 @@ void fDeleteGenre(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -4032,6 +4845,7 @@ void fDeleteGenre(char *strPrgNme)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 
@@ -4045,6 +4859,7 @@ void fDeleteGenre(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4076,6 +4891,7 @@ void fDeleteGenre(char *strPrgNme)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4091,6 +4907,7 @@ void fDeleteGenre(char *strPrgNme)
         printf("\n");
 
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4104,6 +4921,7 @@ void fDeleteGenre(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4139,6 +4957,7 @@ void fDeleteGenre(char *strPrgNme)
             printf("\n\n");
             fPressEnterToContinue();
             mysql_free_result(res);
+            mysql_close(conn);
             return;
         }
 
@@ -4162,19 +4981,41 @@ void fDeleteGenre(char *strPrgNme)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fSearchGenres(char *strSearchString)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Genre ID`, `Genre Name` "
                     "FROM `Book Genres` "
                     "WHERE `Genre Name` LIKE '%%%s%%'", strSearchString);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -4183,6 +5024,7 @@ void fSearchGenres(char *strSearchString)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -4197,6 +5039,7 @@ void fSearchGenres(char *strSearchString)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
  // store the result of the query
@@ -4209,6 +5052,7 @@ void fSearchGenres(char *strSearchString)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4234,17 +5078,26 @@ void fSearchGenres(char *strSearchString)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fDeleteSource(char *strPrgNme)
 {
 
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intRowsReturned = 0;
     int  intSourceID = 0;
     bool bSourceExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -4258,6 +5111,19 @@ void fDeleteSource(char *strPrgNme)
     printf("Source ID: ");
     intSourceID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Author ID exists
 
     sprintf(strSQL, "SELECT `Source ID` FROM `Book Sources` "
@@ -4268,6 +5134,7 @@ void fDeleteSource(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -4282,6 +5149,7 @@ void fDeleteSource(char *strPrgNme)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
 
@@ -4295,6 +5163,7 @@ void fDeleteSource(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4326,6 +5195,7 @@ void fDeleteSource(char *strPrgNme)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4341,6 +5211,7 @@ void fDeleteSource(char *strPrgNme)
         printf("\n");
 
         mysql_free_result(res);
+        mysql_close(conn);
         return;
      }
 
@@ -4354,6 +5225,7 @@ void fDeleteSource(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4389,6 +5261,7 @@ void fDeleteSource(char *strPrgNme)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4413,19 +5286,41 @@ void fDeleteSource(char *strPrgNme)
      }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fSearchSources(char *strSearchString)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Source ID`, `Source Name` "
                     "FROM `Book Sources` "
                     "WHERE `Source Name` LIKE '%%%s%%'", strSearchString);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -4447,6 +5342,7 @@ void fSearchSources(char *strSearchString)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
  // store the result of the query
@@ -4459,6 +5355,7 @@ void fSearchSources(char *strSearchString)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4484,17 +5381,26 @@ void fSearchSources(char *strSearchString)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fDeleteRating(char *strPrgNme)
 {
 
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intRowsReturned = 0;
     int  intRatingID = 0;
     bool bRatingExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -4508,6 +5414,19 @@ void fDeleteRating(char *strPrgNme)
     printf("Rating ID: ");
     intRatingID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Rating ID exists
 
     sprintf(strSQL, "SELECT `Rating ID` FROM `Book Ratings` "
@@ -4518,6 +5437,7 @@ void fDeleteRating(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -4532,6 +5452,7 @@ void fDeleteRating(char *strPrgNme)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
     }
 
@@ -4545,6 +5466,7 @@ void fDeleteRating(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4576,6 +5498,7 @@ void fDeleteRating(char *strPrgNme)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4591,6 +5514,7 @@ void fDeleteRating(char *strPrgNme)
         printf("\n");
 
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4604,6 +5528,7 @@ void fDeleteRating(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4659,19 +5584,41 @@ void fDeleteRating(char *strPrgNme)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fSearchRatings(char *strSearchString)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Rating ID`, `Rating Name` "
                     "FROM `Book Ratings` "
                     "WHERE `Rating Name` LIKE '%%%s%%'", strSearchString);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -4680,6 +5627,7 @@ void fSearchRatings(char *strSearchString)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -4694,6 +5642,7 @@ void fSearchRatings(char *strSearchString)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
  // store the result of the query
@@ -4706,6 +5655,7 @@ void fSearchRatings(char *strSearchString)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4731,17 +5681,26 @@ void fSearchRatings(char *strSearchString)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fDeleteStatus(char *strPrgNme)
 {
 
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intRowsReturned = 0;
     int  intStatusID = 0;
     bool bStatusExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -4755,6 +5714,19 @@ void fDeleteStatus(char *strPrgNme)
     printf("Status ID: ");
     intStatusID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Author ID exists
 
     sprintf(strSQL, "SELECT `Status ID` FROM `Book Statuses` "
@@ -4765,6 +5737,7 @@ void fDeleteStatus(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -4777,6 +5750,7 @@ void fDeleteStatus(char *strPrgNme)
         printf("\n\n");
         printf("fShowAttributes() -- SQL error");
         printf("\n");
+        mysql_close(conn);
         return;
      }
 
@@ -4790,6 +5764,7 @@ void fDeleteStatus(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4821,6 +5796,7 @@ void fDeleteStatus(char *strPrgNme)
         printf("\n\n");
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4836,6 +5812,7 @@ void fDeleteStatus(char *strPrgNme)
         printf("\n");
 
         mysql_free_result(res);
+        mysql_close(conn);
         return;
      }
 
@@ -4849,6 +5826,7 @@ void fDeleteStatus(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4908,19 +5886,41 @@ void fDeleteStatus(char *strPrgNme)
      }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fSearchStatuses(char *strSearchString)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Status ID`, `Status Name` "
                     "FROM `Book Statuses` "
                     "WHERE `Status Name` LIKE '%%%s%%'", strSearchString);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -4942,6 +5942,7 @@ void fSearchStatuses(char *strSearchString)
         printf("fShowAttributes() -- SQL error");
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
  // store the result of the query
@@ -4954,6 +5955,7 @@ void fSearchStatuses(char *strSearchString)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -4979,7 +5981,8 @@ void fSearchStatuses(char *strSearchString)
     }
 
     mysql_free_result(res);
-        return;
+    mysql_close(conn);
+    return;
 }
 
 void fDeleteClassification(char *strPrgNme)
@@ -4995,6 +5998,10 @@ void fDeleteClassification(char *strPrgNme)
     bool bClassificationExists = false;
     bool bTitlesExist = false;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -5006,6 +6013,19 @@ void fDeleteClassification(char *strPrgNme)
 
     printf("Classification ID: ");
     intClassificationID = GetInt();
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query to check if the Author ID exists
 
@@ -5167,14 +6187,35 @@ void fDeleteClassification(char *strPrgNme)
 
 void fSearchClassifications(char *strSearchString)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Classification ID`, `Classification Name` "
                     "FROM `Book Classifications` "
                     "WHERE `Classification Name` LIKE '%%%s%%'", strSearchString);
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query and check for no result
 
@@ -5196,6 +6237,7 @@ void fSearchClassifications(char *strSearchString)
 
         printf("fShowAttributes() -- SQL error");
         printf("\n");
+        mysql_close(conn);
         return;
      }
  // store the result of the query
@@ -5208,6 +6250,7 @@ void fSearchClassifications(char *strSearchString)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -5233,11 +6276,16 @@ void fSearchClassifications(char *strSearchString)
     }
 
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fUpdateAuthor(char *strPrgNme)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strAuthorName = NULL;
     char *strEscapedAuthorName = NULL;
     char strSQL[SQL_LEN] = {'\0'};
@@ -5247,7 +6295,9 @@ void fUpdateAuthor(char *strPrgNme)
     bool bAuthorExists = false;
     bool bTitlesExist = false;
 
-    intAuthorMaxLength = fGetFieldLength("Book Authors", "Author Name");
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5261,6 +6311,19 @@ void fUpdateAuthor(char *strPrgNme)
     printf("Author ID: ");
     intAuthorID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Author ID exists
 
     sprintf(strSQL, "SELECT `Author ID`"
@@ -5273,24 +6336,26 @@ void fUpdateAuthor(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
 // test for a SQL error
 
-    if(*mysql_error(conn))
-    {
-       printf("\n");
-       printf("SQL Error in function %s():\n\n%s", __func__, mysql_error(conn));
-       printf("\n\n");
-       fPressEnterToContinue();
-       printf("%s() -- SQL error", __func__);
-       printf("\n");
+     if(*mysql_error(conn))
+     {
+        printf("\n");
+        printf("SQL Error in function %s():\n\n%s", __func__, mysql_error(conn));
+        printf("\n\n");
+        fPressEnterToContinue();
+        printf("%s() -- SQL error", __func__);
+        printf("\n");
 
-       return;
-    }
+        mysql_close(conn);
+        return;
+     }
 
-// store the result of the query
+ // store the result of the query
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -5300,6 +6365,7 @@ void fUpdateAuthor(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -5320,6 +6386,7 @@ void fUpdateAuthor(char *strPrgNme)
         bAuthorExists = true;
         row = mysql_fetch_row(res);
         printf("\n");
+        intAuthorMaxLength = fGetFieldLength("Book Authors", "Author Name");
         printf("Author Name: %s", row[1]);
         printf("\n\n");
         do {
@@ -5364,11 +6431,16 @@ void fUpdateAuthor(char *strPrgNme)
 
     free(strAuthorName);
     mysql_free_result(res);
+    mysql_close(conn);
     return;
 }
 
 void fUpdateClassification(char *strPrgNme)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strClassificationName = NULL;
     char *strClassificationNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
@@ -5377,6 +6449,10 @@ void fUpdateClassification(char *strPrgNme)
     int  intClassificationMaxLength = 0;
     bool bClassificationExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5389,6 +6465,19 @@ void fUpdateClassification(char *strPrgNme)
 
     printf("Classification ID: ");
     intClassificationID = GetInt();
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        mysql_close(conn);
+        fPressEnterToContinue();
+        return;
+    }
 
 // execute the query to check if the Classification ID exists
 
@@ -5415,6 +6504,7 @@ void fUpdateClassification(char *strPrgNme)
         printf("%s() -- SQL error", __func__);
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
 
@@ -5428,6 +6518,7 @@ void fUpdateClassification(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -5498,11 +6589,16 @@ void fUpdateClassification(char *strPrgNme)
     mysql_free_result(res);
     free(strClassificationName);
     free(strClassificationNameEscaped);
+    mysql_close(conn);
     return;
 }
 
 void fUpdateRating(char *strPrgNme)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strRatingName = NULL;
     char *strRatingNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
@@ -5511,6 +6607,10 @@ void fUpdateRating(char *strPrgNme)
     int  intRatingMaxLength = 0;
     bool bRatingExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5524,6 +6624,19 @@ void fUpdateRating(char *strPrgNme)
     printf("Rating ID: ");
     intRatingID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Rating ID exists
 
     sprintf(strSQL, "SELECT `Rating ID`"
@@ -5536,6 +6649,7 @@ void fUpdateRating(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -5550,6 +6664,7 @@ void fUpdateRating(char *strPrgNme)
         printf("%s() -- SQL error", __func__);
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
 
@@ -5563,6 +6678,7 @@ void fUpdateRating(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -5635,11 +6751,16 @@ void fUpdateRating(char *strPrgNme)
     mysql_free_result(res);
     free(strRatingName);
     free(strRatingNameEscaped);
+    mysql_close(conn);
     return;
 }
 
 void fUpdateSeries(char *strPrgNme)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strSeriesName = NULL;
     char *strSeriesNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
@@ -5648,6 +6769,10 @@ void fUpdateSeries(char *strPrgNme)
     int  intSeriesMaxLength = 0;
     bool bSeriesExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5661,6 +6786,19 @@ void fUpdateSeries(char *strPrgNme)
     printf("Series ID: ");
     intSeriesID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Series ID exists
 
     sprintf(strSQL, "SELECT `Series ID`"
@@ -5673,6 +6811,7 @@ void fUpdateSeries(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -5687,6 +6826,7 @@ void fUpdateSeries(char *strPrgNme)
         printf("%s() -- SQL error", __func__);
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
 
@@ -5700,6 +6840,7 @@ void fUpdateSeries(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -5771,11 +6912,16 @@ void fUpdateSeries(char *strPrgNme)
     mysql_free_result(res);
     free(strSeriesName);
     free(strSeriesNameEscaped);
+    mysql_close(conn);
     return;
 }
 
 void fUpdateSource(char *strPrgNme)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strSourceName = NULL;
     char *strSourceNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
@@ -5784,6 +6930,10 @@ void fUpdateSource(char *strPrgNme)
     int  intSourceMaxLength = 0;
     bool bSourceExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5797,6 +6947,19 @@ void fUpdateSource(char *strPrgNme)
     printf("Source ID: ");
     intSourceID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Source ID exists
 
     sprintf(strSQL, "SELECT `Source ID`"
@@ -5809,6 +6972,7 @@ void fUpdateSource(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -5823,6 +6987,7 @@ void fUpdateSource(char *strPrgNme)
         printf("%s() -- SQL error", __func__);
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
 
@@ -5836,6 +7001,7 @@ void fUpdateSource(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -5907,11 +7073,16 @@ void fUpdateSource(char *strPrgNme)
     mysql_free_result(res);
     free(strSourceName);
     free(strSourceNameEscaped);
+    mysql_close(conn);
     return;
 }
 
 void fUpdateStatus(char *strPrgNme)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strStatusName = NULL;
     char *strStatusNameEscaped = NULL;
     char strSQL[SQL_LEN] = {'\0'};
@@ -5920,6 +7091,10 @@ void fUpdateStatus(char *strPrgNme)
     int  intStatusMaxLength = 0;
     bool bStatusExists = false;
     bool bTitlesExist = false;
+
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5933,6 +7108,19 @@ void fUpdateStatus(char *strPrgNme)
     printf("Status ID: ");
     intStatusID = GetInt();
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
+
 // execute the query to check if the Status ID exists
 
     sprintf(strSQL, "SELECT `Status ID`"
@@ -5945,6 +7133,7 @@ void fUpdateStatus(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -5959,6 +7148,7 @@ void fUpdateStatus(char *strPrgNme)
         printf("%s() -- SQL error", __func__);
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
 
@@ -5972,6 +7162,7 @@ void fUpdateStatus(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -6036,11 +7227,16 @@ void fUpdateStatus(char *strPrgNme)
     mysql_free_result(res);
     free(strStatusName);
     free(strStatusNameEscaped);
+    mysql_close(conn);
     return;
 }
 
 void fUpdateGenre(char *strPrgNme)
 {
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char *strGenreName = NULL;
     char *strGenreDesc = NULL;
     char *strGenreNameEscaped = NULL;
@@ -6053,6 +7249,10 @@ void fUpdateGenre(char *strPrgNme)
     bool bGenreExists = false;
     bool bTitlesExist = false;
 
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -6064,6 +7264,19 @@ void fUpdateGenre(char *strPrgNme)
 
     printf("Genre ID: ");
     intGenreID = GetInt();
+
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return;
+    }
 
 // execute the query to check if the Genre ID exists
 
@@ -6078,6 +7291,7 @@ void fUpdateGenre(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return;
     }
 
@@ -6092,6 +7306,7 @@ void fUpdateGenre(char *strPrgNme)
         printf("%s() -- SQL error", __func__);
         printf("\n");
 
+        mysql_close(conn);
         return;
      }
 
@@ -6105,6 +7320,7 @@ void fUpdateGenre(char *strPrgNme)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return;
     }
 
@@ -6200,11 +7416,64 @@ void fUpdateGenre(char *strPrgNme)
     mysql_free_result(res);
     free(strGenreName);
     free(strGenreNameEscaped);
+    mysql_close(conn);
     return;
+}
+
+void fPressEnterToContinue()
+{
+    printf("Press enter to continue ");
+    while(getchar() != '\n')
+    {
+        continue;
+    }
+    return;
+}
+
+bool fTestDbConnection(void)
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
+
+// initialize a connection and test the connection to the database
+
+    conn = mysql_init(NULL);
+
+    printf("\n");
+    printf("Testing connecting to database ... please wait");
+    printf("\n");
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return false;
+    }
+    else
+    {
+        mysql_close(conn);
+        return true;
+    }
 }
 
 int  fGetFieldLength(char *strTableName, char *strFieldName)
 {
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    char *strServer = "192.168.0.13";
+    char *strUser = "gjarman";
+    char *strPassword = "Mpa4egu$";
+    char *strDatabase = "risingfast";
     char strSQL[SQL_LEN] = {'\0'};
     int intMaxFieldLength = 0;
 
@@ -6214,6 +7483,19 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
                     " AND TABLE_NAME = '%s'"
                     " AND COLUMN_NAME = '%s'", strTableName, strFieldName);
 
+// initialize a connection and connect to the database
+
+    conn = mysql_init(NULL);
+
+    if(!mysql_real_connect(conn, strServer, strUser, strPassword, strDatabase, 0, NULL, 0))
+    {
+        printf("\nFailed in function: %s() to connect to MySQL Server at: %s\n\nError: %s\n", __func__, strServer, mysql_error(conn));
+        printf("\n");
+        fPressEnterToContinue();
+        mysql_close(conn);
+        return EXIT_SUCCESS;
+    }
+
 // execute the query and check for no result
 
     if(mysql_query(conn, strSQL) != 0)
@@ -6221,6 +7503,7 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
+        mysql_close(conn);
         return EXIT_SUCCESS;
     }
 
@@ -6234,6 +7517,7 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
 
         fPressEnterToContinue();
         mysql_free_result(res);
+        mysql_close(conn);
         return EXIT_SUCCESS;
     }
 
@@ -6241,43 +7525,7 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
     intMaxFieldLength = (int) atol(row[0]);
 
     mysql_free_result(res);
+    mysql_close(conn);
     return intMaxFieldLength;
 
-}
-
-void fGetPwdFromConsole(void)
-{
-    char *sEnteredPwd = NULL;;
-
-    printf("\n");
-    do
-    {
-        printf("Password to connect to mysqlDB (or E(x)it): ");
-        sEnteredPwd = GetString();
-        if((strlen(sEnteredPwd) == 1) && (strchr("xX", sEnteredPwd[0]) != NULL))
-        {
-            strcpy(sgPassword, "BadSoExit");
-            break;
-        }
-        else
-        {
-            conn = mysql_init(NULL);
-
-            if (!mysql_real_connect(conn, sgServer, sgUsername, sEnteredPwd, sgDatabase, 0, NULL, 0))
-            {
-                printf("\n");
-                printf("Failed to connect to MySQL server with entered password");
-                printf("\n\n");
-                fPressEnterToContinue();
-                printf("\n");
-            }
-            else
-            {
-                strcpy(sgPassword, sEnteredPwd);
-                mysql_close(conn);
-            }
-        }
-    } while(strcmp(sgPassword, sEnteredPwd) != 0);
-
-    return;
 }
