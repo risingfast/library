@@ -8,6 +8,8 @@
     12-Apr-2021
 ##### References:
     https://qnaplus.com/how-to-access-mysql-database-from-c-program/
+##### Prerequisites:
+    None
 ##### Installation:
     Create a local repository and clone down
     Run ./mysql-c-library from the local directory
