@@ -1,22 +1,22 @@
-##### Project
+#### Project
     mysql-c-library
-##### Description
+#### Description
     Console c program using mysql C api to track books in a personal reading library
-##### Author
+#### Author
     Geoffrey Jarman
-##### Started
+#### Started
     12-Apr-2021
-##### References:
+#### References:
     https://qnaplus.com/how-to-access-mysql-database-from-c-program/
-##### Prerequisites:
+#### Prerequisites:
     None
-##### Installation:
+#### Installation:
     Create a local repository and clone down
     Run ./mysql-c-library from the local directory
-##### Compliation:
+#### Compliation:
     make, or
     gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c rf50.c
-##### Log:
+#### Log:
     12-Apr-2021 started
     12-Apr-2021 reviewed all
     12-Apr-2021 consolecode
@@ -107,4 +107,4 @@
     08-Jun-2021 replace return 0 or 1 with return EXIT_SUCCESS and return EXIT_FAILURE
     14-Jun-2021 separate functions into rf50.c and rf50.h for retitling console and pausing console
     16-Jun-2021 new makefile
-##### Enhancements: (0)
+#### Enhancements: (0)
