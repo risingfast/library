@@ -63,6 +63,7 @@ void fUpdateStatus(char *);                                                     
 void fUpdateGenre(char *);                                                       // update an genre
 bool fTestDbConnection(void);                                    // test connection to the database
 int  fGetFieldLength(char *, char *);             // get the max field length of a field in a table
+void fGetPwdFromConsole(void);                                   // get a password from the console
 
 int main(int argc, char** argv)
 {
@@ -76,6 +77,7 @@ int main(int argc, char** argv)
     char charDisplayPageWidth = 'N';                           // display page width wide or narrow
     char charDisplayPageFormat = 'T';                         // display page format (T)ab or (C)SV
     char charDisplayOrder = 'A';                           // display order asc or desc on Title ID
+    char *sPassword;                                                // password to connect to sqlDB
 
 // Search for input parameters
 
