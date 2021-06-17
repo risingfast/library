@@ -1187,7 +1187,7 @@ int fAddSeries(char *strPrgNme)
 
     free(strSeriesName);
     free(strSeriesNameEscaped);
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 int fAddAuthor(char *strPrgNme)
@@ -1247,7 +1247,7 @@ int fAddAuthor(char *strPrgNme)
     free(strEscapedAuthorName);
     free(strAuthorName);
     fRetitleConsole(strPrgNme);
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 int fAddClassification(char *strPrgNme)
@@ -1308,7 +1308,7 @@ int fAddClassification(char *strPrgNme)
     fRetitleConsole(strPrgNme);
     free(strClassificationNameEscaped);
     free(strClassificationName);
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 int fAddRating(char *strPrgNme)
@@ -1367,7 +1367,7 @@ int fAddRating(char *strPrgNme)
     fRetitleConsole(strPrgNme);
     free(strRatingName);
     free(strRatingNameEscaped);
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 int fAddSource(char *strPrgNme)
@@ -1427,7 +1427,7 @@ int fAddSource(char *strPrgNme)
 
     free(strSourceName);
     free(strSourceNameEscaped);
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 int fAddStatus(char *strPrgNme)
@@ -1486,7 +1486,7 @@ int fAddStatus(char *strPrgNme)
     fRetitleConsole(strPrgNme);
     free(strStatusName);
     free(strStatusNameEscaped);
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 int fAddGenre(char *strPrgNme)
@@ -1572,7 +1572,7 @@ int fAddGenre(char *strPrgNme)
     free(strGenreNameEscaped);
     free(strGenreDesc);
     free(strGenreDescEscaped);
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 void fAddTitle(char *strPrgNme)
