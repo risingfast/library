@@ -5403,7 +5403,7 @@ void fUpdateAuthor(char *strPrgNme)
         } while (strlen(strAuthorName) == 0);
     }
 
-    if((toupper(strAuthorName[0]) == 'X') && (strlen(strAuthorName) == 1))
+    if((bAuthorExists == true) && (toupper(strAuthorName[0]) == 'X') && (strlen(strAuthorName) == 1))
     {
         free(strAuthorName);
         return;
@@ -5539,7 +5539,7 @@ void fUpdateClassification(char *strPrgNme)
         strClassificationNameEscaped = fEscapeSingleQuote(strClassificationName);
     }
 
-    if((toupper(strClassificationName[0]) == 'X') && (strlen(strClassificationName) == 1))
+    if((bClassificationExists == true) && (toupper(strClassificationName[0]) == 'X') && (strlen(strClassificationName) == 1))
     {
         free(strClassificationName);
         return;
@@ -5650,7 +5650,7 @@ void fUpdateRating(char *strPrgNme)
         printf("\n");
         printf("No matching Rating ID: %d", intRatingID);
         printf("\n\n");
-        fPressEnterToContinue;
+        fPressEnterToContinue();
         bRatingExists = false;
     }
     else
@@ -5678,7 +5678,7 @@ void fUpdateRating(char *strPrgNme)
 
     }
 
-    if((toupper(strRatingName[0]) == 'X') && (strlen(strRatingName) == 1))
+    if((bRatingExists == true) && (toupper(strRatingName[0]) == 'X') && (strlen(strRatingName) == 1))
     {
         free(strRatingName);
         return;
@@ -5818,7 +5818,7 @@ void fUpdateSeries(char *strPrgNme)
 
     }
 
-    if((toupper(strSeriesName[0]) == 'X') && (strlen(strSeriesName) == 1))
+    if((bSeriesExists == true) && (toupper(strSeriesName[0]) == 'X') && (strlen(strSeriesName) == 1))
     {
         free(strSeriesName);
         return;
@@ -5957,7 +5957,7 @@ void fUpdateSource(char *strPrgNme)
 
     }
 
-    if((toupper(strSourceName[0]) == 'X') && (strlen(strSourceName) == 1))
+    if((bSourceExists == true) && (toupper(strSourceName[0]) == 'X') && (strlen(strSourceName) == 1))
     {
         free(strSourceName);
         return;
@@ -6093,6 +6093,12 @@ void fUpdateStatus(char *strPrgNme)
         } while(strlen(strStatusName) == 0);
 
         strStatusNameEscaped = fEscapeSingleQuote(strStatusName);
+    }
+
+    if((bStatusExists == true) && (toupper(strStatusName[0]) == 'X') && (strlen(strStatusName) == 1))
+    {
+        free(strStatusName);
+        return;
     }
 
 // execute a query to change the Status if the status exists
@@ -6253,7 +6259,7 @@ void fUpdateGenre(char *strPrgNme)
 
         strGenreDescEscaped = fEscapeSingleQuote(strGenreDesc);
 
-        if((toupper(strGenreDesc[0]) == 'X') && (strlen(strGenreDesc) == 1))
+        if((bGenreExists == true) && (toupper(strGenreDesc[0]) == 'X') && (strlen(strGenreDesc) == 1))
         {
             free(strGenreDesc);
             return;
