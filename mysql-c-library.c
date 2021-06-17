@@ -29,7 +29,6 @@ int  fGetMaxTitleID(void);                                       // get the max 
 int  fGetMinTitleID(void);                                       // get the min value of Title ID's
 void fShowAttributes(int);                                  // show title attributes on the console
 void fShowCharacters(int, char *);                                // show characters on the console
-void fSearchTitles(char *);                                    // search titles and show a title ID
 void fShowAllAuthors(int *);                                     // show all authors on the console
 void fShowAllSeries(int *);                                       // show all series on the console
 void fShowAllSources(int *);                                     // show all sources on the console
@@ -40,19 +39,20 @@ void fShowAllRatings(int *);                                     // show all rat
 void fShowTitle(int, char *);                                   // show a title name on the console
 char *fEscapeSingleQuote(char *);                    // escape ' as '' for mysql in string literals
 bool fCheckTitleIDExists(int);                        // check a Title ID and return True if exists
-void fSearchAuthors(char *);                                // search authors and show an author id
 void fDeleteAuthor(char *);                                      // delete an author with no titles
-void fSearchSeries(char *);                                   // search series and show a series ID
 void fDeleteSeries(char *);                                       // delete a series with no titles
 void fDeleteGenre(char *);                                         // delete a genre with no titles
-void fSearchGenres(char *);                                    // search genres and show a genre ID
 void fDeleteSource(char *);                                       // delete a source with no titles
-void fSearchSources(char *);                                 // search sources and show a source ID
 void fDeleteRating(char *);                                       // delete a rating with no titles
-void fSearchRatings(char *);                                 // search ratings and show a rating ID
 void fDeleteStatus(char *);                                       // delete a status with no titles
-void fSearchStatuses(char *);                               // search statuses and show a status ID
 void fDeleteClassification(char *);                       // delete a classification with no titles
+void fSearchAuthors(char *);                                // search authors and show an author id
+void fSearchTitles(char *);                                    // search titles and show a title ID
+void fSearchSeries(char *);                                   // search series and show a series ID
+void fSearchGenres(char *);                                    // search genres and show a genre ID
+void fSearchSources(char *);                                 // search sources and show a source ID
+void fSearchRatings(char *);                                 // search ratings and show a rating ID
+void fSearchStatuses(char *);                               // search statuses and show a status ID
 void fSearchClassifications(char *);         // search classifications and show a classification ID
 void fUpdateAuthor(char *);                                                     // update an author
 void fUpdateClassification(char *);                                      // update a classification
@@ -73,9 +73,7 @@ char sgPassword[20] = {'\0'};                                 // password to con
 char *sgDatabase = "risingfast";                            // default database name on mysqlserver
 
 MYSQL *conn;
-MYSQL_RES *res;
-MYSQL_ROW row;
-    
+
 int main(int argc, char** argv)
 {
 // declarations
@@ -246,6 +244,9 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
     char strOrder[6] = {'D', 'E', 'S', 'C', '\0'};
     char strSQL[SQL_LEN] = {'\0'};
     bool bEndOfPrintBlock = false;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     if(*pCharDisplayOrder == 'A')
     {
@@ -675,7 +676,7 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     printf("\n\n");
                     printf("Search String or E(x)it: ");
                     strRatingSearch = GetString();
-                    if(strstr("xX", strRatingSearch) != NULL);
+                    if(strstr("xX", strRatingSearch) != NULL)
                     {
                         continue;
                     }
@@ -1941,6 +1942,9 @@ int  fGetMaxTitleID(void)
     char strSQL[SQL_LEN] = {'\0'};
     char **endptr;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT MAX(`Title ID`) from `Book Titles`");
 
 // execute the query and check for no result
@@ -1997,6 +2001,9 @@ int fGetMinTitleID(void)
     char strSQL[SQL_LEN] = {'\0'};
     char **endptr;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT MIN(`Title ID`) from `Book Titles`");
 
 // execute the query and check for no result
@@ -2051,6 +2058,9 @@ int fGetMinTitleID(void)
 void fShowAttributes(int intTitleID)
 {
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT `Title ID`"
                          ", `Title Name`"
@@ -2165,6 +2175,9 @@ void fShowCharacters(int intTitleID, char *strPrgNme)
     int intRowsPrinted = 0;
     char strSQL[SQL_LEN] = {'\0'};
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Character ID`, `Character Name` "
                     "FROM `Book Characters` "
                     "WHERE `Title ID` = %d", intTitleID);
@@ -2266,6 +2279,9 @@ void fSearchTitles(char *strSearchString)
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Title ID`, `Title Name` "
                     "FROM `Book Titles` "
                     "WHERE `Title Name` LIKE '%%%s%%'", strSearchString);
@@ -2332,6 +2348,9 @@ void fShowAllSources(int *pintDisplayPageLength)
     int  intRowCount = 0;
     int  intMaxWidth = 0;
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT S.`Source ID`"
                          ", S.`Source Name` "
@@ -2422,6 +2441,9 @@ void fShowAllGenres(int *pintDisplayPageLength)
     int  intMaxWidth = 0;
     char strSQL[SQL_LEN] = {'\0'};
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT G.`Genre ID`"
                          ", G. `Genre Name` "
                          ", COUNT(T.`Title ID`)"
@@ -2510,6 +2532,9 @@ void fShowAllStatuses(int *pintDisplayPageLength)
     int  intRowCount = 0;
     int  intMaxWidth = 0;
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT S.`Status ID`"
                         ", S.`Status Name`"
@@ -2600,6 +2625,9 @@ void fShowAllClassifications(int *pintDisplayPageLength)
     int  intMaxWidth = 0;
     char strSQL[SQL_LEN] = {'\0'};
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT C.`Classification ID`"
                         " , C.`Classification Name`"
                         " , COUNT(T.`Title ID`)"
@@ -2688,6 +2716,9 @@ void fShowAllRatings(int  *pintDisplayPageLength)
     int  intRowCount = 0;
     int  intMaxWidth = 0;
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT R.`Rating ID`"
                         " , R.`Rating Name` "
@@ -2988,6 +3019,9 @@ void fShowTitle(int intTitleID, char *strPrgNme)
     int intRowsPrinted = 0;
     char strSQL[SQL_LEN] = {'\0'};
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Title Name` "
                     "FROM `Book Titles` "
                     "WHERE `Title ID` = %d", intTitleID);
@@ -3119,6 +3153,9 @@ bool fCheckTitleIDExists(int intTitleID)
     char strSQL[SQL_LEN] = {'\0'};
     bool bTitleIDFound = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Title ID` "
                     "FROM `Book Titles` "
                     "WHERE `Title ID` = %d", intTitleID);
@@ -3192,6 +3229,10 @@ void fShowAllAuthors(int *pintDisplayPageLength)
     int  intRowCount = 0;
     int  intMaxWidth = 0;                                // Maximum width of Name colum for printing
     char strSQL[SQL_LEN] = {'\0'};
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 
 //    sprintf(strSQL, "SELECT `Author ID`, `Author Name` "
 //                    "FROM `Book Authors`"
@@ -3286,6 +3327,9 @@ void fShowAllSeries(int *pintDisplayPageLength)
     int  intMaxWidth = 0;
     char strSQL[SQL_LEN] = {'\0'};
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT E.`Series ID`"
                         " , E.`Series Name` "
                         ",  COUNT(T.`Title ID`)"
@@ -3377,6 +3421,9 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
     char strOrder[6] = {'D', 'E', 'S', 'C', '\0'};
     char strSQL[SQL_LEN] = {'\0'};
     bool bEndOfPrintBlock = false;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     if(*pCharDisplayOrder == 'A')
     {
@@ -3493,6 +3540,9 @@ void fSearchAuthors(char *strSearchString)
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT  `Author ID`, `Author Name` "
                     "FROM `Book Authors` "
                     "WHERE `Author Name` LIKE '%%%s%%'", strSearchString);
@@ -3567,6 +3617,9 @@ void fDeleteAuthor(char *strPrgNme)
     bool bAuthorExists = false;
     bool bTitlesExist = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -3615,7 +3668,6 @@ void fDeleteAuthor(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -3636,6 +3688,8 @@ void fDeleteAuthor(char *strPrgNme)
         bAuthorExists = true;
     }
 
+    mysql_free_result(res);
+
 // execute a query to check if the author has titles
 
     sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
@@ -3646,7 +3700,6 @@ void fDeleteAuthor(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -3660,8 +3713,6 @@ void fDeleteAuthor(char *strPrgNme)
         fPressEnterToContinue();
         printf("fShowAttributes() -- SQL error");
         printf("\n");
-
-        mysql_free_result(res);
         return;
      }
 
@@ -3674,11 +3725,10 @@ void fDeleteAuthor(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
-// fetch the number of fields and rows in the result
+// fetch the number of rows in the result
 
     intRowsReturned = mysql_num_rows(res);
 
@@ -3697,6 +3747,8 @@ void fDeleteAuthor(char *strPrgNme)
         bTitlesExist = false;
     }
 
+    mysql_free_result(res);
+
 // execute a query to delete the author if the author exists and has no titles
 
     if((bTitlesExist == false) && (bAuthorExists == true))
@@ -3709,7 +3761,6 @@ void fDeleteAuthor(char *strPrgNme)
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
             fPressEnterToContinue();
-            mysql_free_result(res);
             return;
         }
 
@@ -3732,7 +3783,6 @@ void fDeleteAuthor(char *strPrgNme)
         fPressEnterToContinue();
      }
 
-    mysql_free_result(res);
     return;
 }
 
@@ -3742,6 +3792,9 @@ void fSearchSeries(char *strSearchString)
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Series ID`, `Series Name` "
                     "FROM `Book Series` "
@@ -3818,6 +3871,9 @@ void fDeleteSeries(char *strPrgNme)
     bool bSeriesExists = false;
     bool bTitlesExist = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -3866,7 +3922,6 @@ void fDeleteSeries(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
      }
 
@@ -3887,6 +3942,8 @@ void fDeleteSeries(char *strPrgNme)
         bSeriesExists = true;
     }
 
+    mysql_free_result(res);
+
 // execute a query to check if the author has titles
 
     sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
@@ -3897,7 +3954,6 @@ void fDeleteSeries(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -3911,8 +3967,6 @@ void fDeleteSeries(char *strPrgNme)
         fPressEnterToContinue();
         printf("fShowAttributes() -- SQL error");
         printf("\n");
-
-        mysql_free_result(res);
         return;
     }
 
@@ -3925,7 +3979,6 @@ void fDeleteSeries(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -3948,6 +4001,8 @@ void fDeleteSeries(char *strPrgNme)
         bTitlesExist = false;
     }
 
+    mysql_free_result(res);
+
 // execute a query to delete the author if the author exists and has no titles
 
     if((bTitlesExist == false) && (bSeriesExists == true))
@@ -3960,7 +4015,6 @@ void fDeleteSeries(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -3983,7 +4037,6 @@ void fDeleteSeries(char *strPrgNme)
         fPressEnterToContinue();
      }
 
-    mysql_free_result(res);
     return;
 }
 
@@ -3995,6 +4048,9 @@ void fDeleteGenre(char *strPrgNme)
     int  intGenreID = 0;
     bool bGenreExists = false;
     bool bTitlesExist = false;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -4044,7 +4100,6 @@ void fDeleteGenre(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4065,6 +4120,8 @@ void fDeleteGenre(char *strPrgNme)
         bGenreExists = true;
     }
 
+    mysql_free_result(res);
+
 // execute a query to check if the author has titles
 
     sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
@@ -4075,7 +4132,6 @@ void fDeleteGenre(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4089,8 +4145,6 @@ void fDeleteGenre(char *strPrgNme)
         fPressEnterToContinue();
         printf("fShowAttributes() -- SQL error");
         printf("\n");
-
-        mysql_free_result(res);
         return;
     }
 
@@ -4103,7 +4157,6 @@ void fDeleteGenre(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4126,6 +4179,8 @@ void fDeleteGenre(char *strPrgNme)
         bTitlesExist = false;
     }
 
+    mysql_free_result(res);
+
 // execute a query to delete the author if the author exists and has no titles
 
     if((bTitlesExist == false) && (bGenreExists == true))
@@ -4138,7 +4193,6 @@ void fDeleteGenre(char *strPrgNme)
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
             fPressEnterToContinue();
-            mysql_free_result(res);
             return;
         }
 
@@ -4161,7 +4215,6 @@ void fDeleteGenre(char *strPrgNme)
         fPressEnterToContinue();
     }
 
-    mysql_free_result(res);
     return;
 }
 
@@ -4171,6 +4224,9 @@ void fSearchGenres(char *strSearchString)
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Genre ID`, `Genre Name` "
                     "FROM `Book Genres` "
@@ -4246,6 +4302,9 @@ void fDeleteSource(char *strPrgNme)
     bool bSourceExists = false;
     bool bTitlesExist = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -4294,7 +4353,6 @@ void fDeleteSource(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4315,6 +4373,8 @@ void fDeleteSource(char *strPrgNme)
         bSourceExists = true;
     }
 
+    mysql_free_result(res);
+
 // execute a query to check if the author has titles
 
     sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
@@ -4325,7 +4385,6 @@ void fDeleteSource(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4339,8 +4398,6 @@ void fDeleteSource(char *strPrgNme)
         fPressEnterToContinue();
         printf("fShowAttributes() -- SQL error");
         printf("\n");
-
-        mysql_free_result(res);
         return;
      }
 
@@ -4353,7 +4410,6 @@ void fDeleteSource(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4376,6 +4432,8 @@ void fDeleteSource(char *strPrgNme)
         bTitlesExist = false;
     }
 
+    mysql_free_result(res);
+
 // execute a query to delete the author if the author exists and has no titles
 
     if((bTitlesExist == false) && (bSourceExists == true))
@@ -4388,7 +4446,6 @@ void fDeleteSource(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4412,7 +4469,6 @@ void fDeleteSource(char *strPrgNme)
         fPressEnterToContinue();
      }
 
-    mysql_free_result(res);
     return;
 }
 
@@ -4422,6 +4478,9 @@ void fSearchSources(char *strSearchString)
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Source ID`, `Source Name` "
                     "FROM `Book Sources` "
@@ -4496,6 +4555,9 @@ void fDeleteRating(char *strPrgNme)
     bool bRatingExists = false;
     bool bTitlesExist = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -4544,7 +4606,6 @@ void fDeleteRating(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4565,6 +4626,8 @@ void fDeleteRating(char *strPrgNme)
         bRatingExists = true;
     }
 
+    mysql_free_result(res);
+
 // execute a query to check if the rating has titles
 
     sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
@@ -4575,7 +4638,6 @@ void fDeleteRating(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4589,8 +4651,6 @@ void fDeleteRating(char *strPrgNme)
         fPressEnterToContinue();
         printf("fShowAttributes() -- SQL error");
         printf("\n");
-
-        mysql_free_result(res);
         return;
     }
 
@@ -4603,7 +4663,6 @@ void fDeleteRating(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4625,6 +4684,8 @@ void fDeleteRating(char *strPrgNme)
     {
         bTitlesExist = false;
     }
+
+    mysql_free_result(res);
 
 // execute a query to delete the author if the author exists and has no titles
 
@@ -4658,7 +4719,6 @@ void fDeleteRating(char *strPrgNme)
         fPressEnterToContinue();
     }
 
-    mysql_free_result(res);
     return;
 }
 
@@ -4668,6 +4728,9 @@ void fSearchRatings(char *strSearchString)
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Rating ID`, `Rating Name` "
                     "FROM `Book Ratings` "
@@ -4743,6 +4806,9 @@ void fDeleteStatus(char *strPrgNme)
     bool bStatusExists = false;
     bool bTitlesExist = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -4789,7 +4855,6 @@ void fDeleteStatus(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4810,6 +4875,8 @@ void fDeleteStatus(char *strPrgNme)
         bStatusExists = true;
     }
 
+    mysql_free_result(res);
+
 // execute a query to check if the author has titles
 
     sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
@@ -4820,7 +4887,6 @@ void fDeleteStatus(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4834,8 +4900,6 @@ void fDeleteStatus(char *strPrgNme)
         fPressEnterToContinue();
         printf("fShowAttributes() -- SQL error");
         printf("\n");
-
-        mysql_free_result(res);
         return;
      }
 
@@ -4848,7 +4912,6 @@ void fDeleteStatus(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4874,6 +4937,8 @@ void fDeleteStatus(char *strPrgNme)
     {
         bTitlesExist = false;
     }
+
+    mysql_free_result(res);
 
 // execute a query to delete the author if the author exists and has no titles
 
@@ -4907,7 +4972,6 @@ void fDeleteStatus(char *strPrgNme)
         fPressEnterToContinue();
      }
 
-    mysql_free_result(res);
     return;
 }
 
@@ -4917,6 +4981,9 @@ void fSearchStatuses(char *strSearchString)
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Status ID`, `Status Name` "
                     "FROM `Book Statuses` "
@@ -4995,6 +5062,9 @@ void fDeleteClassification(char *strPrgNme)
     bool bClassificationExists = false;
     bool bTitlesExist = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -5017,7 +5087,6 @@ void fDeleteClassification(char *strPrgNme)
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         fPressEnterToContinue();
-        mysql_close(conn);
         return;
     }
 
@@ -5031,7 +5100,6 @@ void fDeleteClassification(char *strPrgNme)
         fPressEnterToContinue();
         printf("fShowAttributes() -- SQL error");
         printf("\n");
-        mysql_close(conn);
         return;
     }
 
@@ -5044,8 +5112,6 @@ void fDeleteClassification(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
-        mysql_close(conn);
         return;
     }
 
@@ -5065,6 +5131,8 @@ void fDeleteClassification(char *strPrgNme)
     {
         bClassificationExists = true;
     }
+
+    mysql_free_result(res);
 
 // execute a query to check if the author has titles
 
@@ -5089,9 +5157,6 @@ void fDeleteClassification(char *strPrgNme)
 
         printf("fShowAttributes() -- SQL error");
         printf("\n");
-
-        mysql_free_result(res);
-        mysql_close(conn);
         return;
      }
 
@@ -5104,8 +5169,6 @@ void fDeleteClassification(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
-        mysql_close(conn);
         return;
     }
 
@@ -5127,6 +5190,8 @@ void fDeleteClassification(char *strPrgNme)
     {
         bTitlesExist = false;
     }
+
+    mysql_free_result(res);
 
 // execute a query to delete the author if the author exists and has no titles
 
@@ -5160,8 +5225,6 @@ void fDeleteClassification(char *strPrgNme)
         fPressEnterToContinue();
     }
 
-    mysql_free_result(res);
-    mysql_close(conn);
     return;
 }
 
@@ -5171,6 +5234,9 @@ void fSearchClassifications(char *strSearchString)
     int  intColCount = 0;
     int  intRowsReturned = 0;
     int  intRowsPrinted = 0;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     sprintf(strSQL, "SELECT  `Classification ID`, `Classification Name` "
                     "FROM `Book Classifications` "
@@ -5246,6 +5312,9 @@ void fUpdateAuthor(char *strPrgNme)
     int  intAuthorMaxLength = 0;
     bool bAuthorExists = false;
     bool bTitlesExist = false;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
     intAuthorMaxLength = fGetFieldLength("Book Authors", "Author Name");
 
@@ -5377,6 +5446,9 @@ void fUpdateClassification(char *strPrgNme)
     int  intClassificationMaxLength = 0;
     bool bClassificationExists = false;
     bool bTitlesExist = false;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5511,6 +5583,9 @@ void fUpdateRating(char *strPrgNme)
     int  intRatingMaxLength = 0;
     bool bRatingExists = false;
     bool bTitlesExist = false;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5649,6 +5724,9 @@ void fUpdateSeries(char *strPrgNme)
     bool bSeriesExists = false;
     bool bTitlesExist = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -5784,6 +5862,9 @@ void fUpdateSource(char *strPrgNme)
     int  intSourceMaxLength = 0;
     bool bSourceExists = false;
     bool bTitlesExist = false;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -5921,6 +6002,9 @@ void fUpdateStatus(char *strPrgNme)
     bool bStatusExists = false;
     bool bTitlesExist = false;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
 // retitle the console
 
     fRetitleConsole(strPrgNme);
@@ -6052,6 +6136,9 @@ void fUpdateGenre(char *strPrgNme)
     int  intGenreDescMaxLength = 0;
     bool bGenreExists = false;
     bool bTitlesExist = false;
+
+    MYSQL_RES *res;
+    MYSQL_ROW row;
 
 // retitle the console
 
@@ -6208,6 +6295,9 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
     char strSQL[SQL_LEN] = {'\0'};
     int intMaxFieldLength = 0;
 
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
     sprintf(strSQL, "SELECT CHARACTER_MAXIMUM_LENGTH"
                     " FROM information_schema.COLUMNS"
                     " WHERE TABLE_SCHEMA ='risingfast'"
@@ -6274,7 +6364,6 @@ void fGetPwdFromConsole(void)
             else
             {
                 strcpy(sgPassword, sEnteredPwd);
-                mysql_close(conn);
             }
         }
     } while(strcmp(sgPassword, sEnteredPwd) != 0);
