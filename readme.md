@@ -109,5 +109,6 @@
     16-Jun-2021 new makefile
     16-Jun-2021 migrate to global mysql variables
     16-Jun-2021 get password from console
+    17-Jun-2021 eliminate duplicate mysql_free_result() calls in fDelete attribute calls
 #### Enhancements: (0)
     Make res and row variables local to procedures
