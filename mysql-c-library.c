@@ -447,28 +447,6 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
         {
             bAttributeAdded = false;
             fShowAttributesMenu();
-/*
-            printf("\n");
-            printf("Main Menu > Maintain Attributes");
-            printf("\n\n");
-            printf("1. (A)uthor");
-            printf("\n");
-            printf("2. (C)lassification");
-            printf("\n");
-            printf("3. (R)ating");
-            printf("\n");
-            printf("4. S(e)ries");
-            printf("\n");
-            printf("5. S(o)urces");
-            printf("\n");
-            printf("6. (S)tatuses");
-            printf("\n");
-            printf("7. (G)enres");
-            printf("\n");
-            printf("8. E(x)it");
-            printf("\n\n");
-            printf("Choice: ");
-*/
             charAttributeChoice = GetChar();
             if(strchr("12345678AaCcRrEeOoSsGgXx", charAttributeChoice) == NULL)
             {
