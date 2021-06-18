@@ -11,68 +11,68 @@
 
 #define SQL_LEN 5000
 
-void fListTitles(char *, int *, char *, char *, char *); //show all titles & authors on the console
-void fListAuthors(char *, int *, char *, char *);//show all authors and title counts on the console
-void fMaintainAttributes(char *, int *);                               // maintain attribute tables
-void fSetOptions(char *, int *, char *, char *, char *);                // main menu to set options
-int  fAddSeries(char *);          // add a series, return EXIT_FAILURE if not added or EXIT_SUCCESS
-int  fAddAuthor(char *);         // add an author, return EXIT_FAILURE if not added or EXIT_SUCCESS
-int  fAddClassification(char *);// add a classifn, return EXIT_FAILURE if not added or EXIT_SUCCESS
-int  fAddRating(char *);          // add a rating, return EXIT_FAILURE if not added or EXIT_SUCCESS
-int  fAddSource(char *);          // add a source, return EXIT_FAILURE if not added or EXIT_SUCCESS
-int  fAddStatus(char *);          // add a status, return EXIT_FAILURE if not added or EXIT_SUCCESS
-int  fAddGenre(char *);            // add a genre, return EXIT_FAILURE if not added or EXIT_SUCCESS
-void fAddTitle(char *);                                      // add a title with default attributes
-void fCharacters(char *);                         // view, add, change delete characters on a title
-int  fGetMaxTitleID(void);                                       // get the max value of Title ID's
-int  fGetMinTitleID(void);                                       // get the min value of Title ID's
-void fShowAttributes(int);                                  // show title attributes on the console
-void fShowCharacters(int, char *);                                // show characters on the console
-void fShowAllAuthors(int *);                                     // show all authors on the console
-void fShowAllSeries(int *);                                       // show all series on the console
-void fShowAllSources(int *);                                     // show all sources on the console
-void fShowAllGenres(int *);                                       // show all genres on the console
-void fShowAllStatuses(int *);                                   // show all statuses on the console
-void fShowAllClassifications(int *);                     // show all classifications on the console
-void fShowAllRatings(int *);                                     // show all ratings on the console
-void fShowMainMenu(void);                                                     // show the main menu
-void fShowAttributesMenu(void);                                               // show the main menu
-void fShowTitle(int, char *);                                   // show a title name on the console
-char *fEscapeSingleQuote(char *);                    // escape ' as '' for mysql in string literals
-bool fCheckTitleIDExists(int);                        // check a Title ID and return True if exists
-void fDeleteAuthor(char *);                                      // delete an author with no titles
-void fDeleteSeries(char *);                                       // delete a series with no titles
-void fDeleteGenre(char *);                                         // delete a genre with no titles
-void fDeleteSource(char *);                                       // delete a source with no titles
-void fDeleteRating(char *);                                       // delete a rating with no titles
-void fDeleteStatus(char *);                                       // delete a status with no titles
-void fDeleteClassification(char *);                       // delete a classification with no titles
-void fSearchAuthors(char *);                                // search authors and show an author id
-void fSearchTitles(char *);                                    // search titles and show a title ID
-void fSearchSeries(char *);                                   // search series and show a series ID
-void fSearchGenres(char *);                                    // search genres and show a genre ID
-void fSearchSources(char *);                                 // search sources and show a source ID
-void fSearchRatings(char *);                                 // search ratings and show a rating ID
-void fSearchStatuses(char *);                               // search statuses and show a status ID
-void fSearchClassifications(char *);         // search classifications and show a classification ID
-void fUpdateTitleAndAttributes(char *, int *);   // update attributes of a Title but not characters
-void fUpdateAuthor(char *);                                                     // update an author
-void fUpdateClassification(char *);                                      // update a classification
-void fUpdateRating(char *);                                                      // update a rating
-void fUpdateSeries(char *);                                                      // update a series
-void fUpdateSource(char *);                                                      // update a source
-void fUpdateStatus(char *);                                                      // update a status
-void fUpdateGenre(char *);                                                       // update an genre
-bool fTestDbConnection(void);                                    // test connection to the database
-int  fGetFieldLength(char *, char *);             // get the max field length of a field in a table
-void fGetPwdFromConsole(void);                                   // get a password from the console
+void fListTitles(char *, int *, char *, char *, char *);                     //show all titles & authors on the console
+void fListAuthors(char *, int *, char *, char *);                    //show all authors and title counts on the console
+void fMaintainAttributes(char *, int *);                                                   // maintain attribute tables
+void fSetOptions(char *, int *, char *, char *, char *);                                    // main menu to set options
+int  fAddSeries(char *);                              // add a series, return EXIT_FAILURE if not added or EXIT_SUCCESS
+int  fAddAuthor(char *);                             // add an author, return EXIT_FAILURE if not added or EXIT_SUCCESS
+int  fAddClassification(char *);                    // add a classifn, return EXIT_FAILURE if not added or EXIT_SUCCESS
+int  fAddRating(char *);                              // add a rating, return EXIT_FAILURE if not added or EXIT_SUCCESS
+int  fAddSource(char *);                              // add a source, return EXIT_FAILURE if not added or EXIT_SUCCESS
+int  fAddStatus(char *);                              // add a status, return EXIT_FAILURE if not added or EXIT_SUCCESS
+int  fAddGenre(char *);                                // add a genre, return EXIT_FAILURE if not added or EXIT_SUCCESS
+void fAddTitle(char *);                                                          // add a title with default attributes
+void fCharacters(char *);                                             // view, add, change delete characters on a title
+int  fGetMaxTitleID(void);                                                           // get the max value of Title ID's
+int  fGetMinTitleID(void);                                                           // get the min value of Title ID's
+void fShowAttributes(int);                                                      // show title attributes on the console
+void fShowCharacters(int, char *);                                                    // show characters on the console
+void fShowAllAuthors(int *);                                                         // show all authors on the console
+void fShowAllSeries(int *);                                                           // show all series on the console
+void fShowAllSources(int *);                                                         // show all sources on the console
+void fShowAllGenres(int *);                                                           // show all genres on the console
+void fShowAllStatuses(int *);                                                       // show all statuses on the console
+void fShowAllClassifications(int *);                                         // show all classifications on the console
+void fShowAllRatings(int *);                                                         // show all ratings on the console
+void fShowMainMenu(void);                                                                         // show the main menu
+void fShowAttributesMenu(void);                                                                   // show the main menu
+void fShowTitle(int, char *);                                                       // show a title name on the console
+char *fEscapeSingleQuote(char *);                                        // escape ' as '' for mysql in string literals
+bool fCheckTitleIDExists(int);                                            // check a Title ID and return True if exists
+void fDeleteAuthor(char *);                                                          // delete an author with no titles
+void fDeleteSeries(char *);                                                           // delete a series with no titles
+void fDeleteGenre(char *);                                                             // delete a genre with no titles
+void fDeleteSource(char *);                                                           // delete a source with no titles
+void fDeleteRating(char *);                                                           // delete a rating with no titles
+void fDeleteStatus(char *);                                                           // delete a status with no titles
+void fDeleteClassification(char *);                                           // delete a classification with no titles
+void fSearchAuthors(char *);                                                    // search authors and show an author ID
+void fSearchTitles(char *);                                                        // search titles and show a title ID
+void fSearchSeries(char *);                                                       // search series and show a series ID
+void fSearchGenres(char *);                                                        // search genres and show a genre ID
+void fSearchSources(char *);                                                     // search sources and show a source ID
+void fSearchRatings(char *);                                                     // search ratings and show a rating ID
+void fSearchStatuses(char *);                                                   // search statuses and show a status ID
+void fSearchClassifications(char *);                             // search classifications and show a classification ID
+void fUpdateTitleAndAttributes(char *, int *);                       // update attributes of a Title but not characters
+void fUpdateAuthor(char *);                                                                         // update an author
+void fUpdateClassification(char *);                                                          // update a classification
+void fUpdateRating(char *);                                                                          // update a rating
+void fUpdateSeries(char *);                                                                          // update a series
+void fUpdateSource(char *);                                                                          // update a source
+void fUpdateStatus(char *);                                                                          // update a status
+void fUpdateGenre(char *);                                                                           // update an genre
+bool fTestDbConnection(void);                                                        // test connection to the database
+int  fGetFieldLength(char *, char *);                                 // get the max field length of a field in a table
+void fGetPwdFromConsole(void);                                                       // get a password from the console
 
 // global declarations
 
-char *sgServer = "192.168.0.13";                                           //mysqlServer IP address
-char *sgUsername = "gjarman";                                          // mysqlSerer logon username
-char sgPassword[20] = {'\0'};                                 // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                            // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
+char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
+char sgPassword[20] = {'\0'};                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
 
 MYSQL *conn;
 
@@ -80,14 +80,14 @@ int main(int argc, char** argv)
 {
 // declarations
 
-    char *strPrgNme = strcat(argv[0] + 2, " -- Library and reading log");           // program name
-    bool bHelp = false;                                              // help flag to show help text
-    bool bExitMain = false;                                             // flag to exit the program
-    char charMainChoice = '0';                                                  // main menu choice
-    int  intDisplayPageLength = 83;                                // display page lines for paging
-    char charDisplayPageWidth = 'N';                           // display page width wide or narrow
-    char charDisplayPageFormat = 'T';                         // display page format (T)ab or (C)SV
-    char charDisplayOrder = 'A';                           // display order asc or desc on Title ID
+    char *strPrgNme = strcat(argv[0] + 2, " -- Library and reading log");                               // program name
+    bool bHelp = false;                                                                  // help flag to show help text
+    bool bExitMain = false;                                                                 // flag to exit the program
+    char cMainChoice = '0';                                                                      // main menu choice
+    int  iDisplayPageLength = 83;                                                    // display page lines for paging
+    char cDisplayPageWidth = 'N';                                               // display page width wide or narrow
+    char cDipslayPageFormat = 'T';                                             // display page format (T)ab or (C)SV
+    char cDisplayOrder = 'A';                                               // display order asc or desc on Title ID
 
 // Search for input parameters
 
@@ -137,76 +137,76 @@ int main(int argc, char** argv)
 
     while(bExitMain == false)
     {
-        while(charMainChoice == '0')
+        while(cMainChoice == '0')
         {
             fRetitleConsole(strPrgNme);
             fShowMainMenu();
-            charMainChoice = GetChar();
-            if(strchr("12345678xXcCpPuUaAlLtTrR", charMainChoice) == NULL)
+            cMainChoice = GetChar();
+            if(strchr("12345678xXcCpPuUaAlLtTrR", cMainChoice) == NULL)
             {
-                charMainChoice = '0';
+                cMainChoice = '0';
                 fRetitleConsole(strPrgNme);
                 printf("\n");
             }
         }
 
-        if(strchr("1lL", charMainChoice) != NULL)
+        if(strchr("1lL", cMainChoice) != NULL)
         {
             printf("\n");
-            fListTitles(strPrgNme, &intDisplayPageLength, &charDisplayPageWidth, &charDisplayPageFormat, &charDisplayOrder);
+            fListTitles(strPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDipslayPageFormat, &cDisplayOrder);
             printf("\n");
-            charMainChoice = '0';
+            cMainChoice = '0';
             bExitMain = false;
         }
-        else if(strchr("2rR", charMainChoice) != NULL)
+        else if(strchr("2rR", cMainChoice) != NULL)
         {
             printf("\n");
-            fListAuthors(strPrgNme, &intDisplayPageLength, &charDisplayPageWidth, &charDisplayOrder);
+            fListAuthors(strPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDisplayOrder);
             printf("\n");
-            charMainChoice = '0';
+            cMainChoice = '0';
             bExitMain = false;
         }
-        else if(strchr("3tT", charMainChoice) != NULL)
+        else if(strchr("3tT", cMainChoice) != NULL)
         {
             printf("\n");
             fAddTitle(strPrgNme);
             printf("\n");
-            charMainChoice = '0';
+            cMainChoice = '0';
             bExitMain = false;
         }
-        else if(strchr("aA4", charMainChoice) != NULL)
+        else if(strchr("aA4", cMainChoice) != NULL)
         {
             printf("\n");
-            fMaintainAttributes(strPrgNme, &intDisplayPageLength);
+            fMaintainAttributes(strPrgNme, &iDisplayPageLength);
             printf("\n");
-            charMainChoice = '0';
+            cMainChoice = '0';
             bExitMain = false;
         }
-        else if(strchr("uU5", charMainChoice) != NULL)
+        else if(strchr("uU5", cMainChoice) != NULL)
         {
             printf("\n");
-            fUpdateTitleAndAttributes(strPrgNme, &intDisplayPageLength);
+            fUpdateTitleAndAttributes(strPrgNme, &iDisplayPageLength);
             printf("\n");
-            charMainChoice = '0';
+            cMainChoice = '0';
             bExitMain = false;
         }
-        else if(strchr("cC6", charMainChoice) != NULL)
+        else if(strchr("cC6", cMainChoice) != NULL)
         {
             printf("\n");
             fCharacters(strPrgNme);
             printf("\n");
-            charMainChoice = '0';
+            cMainChoice = '0';
             bExitMain = false;
         }
-        else if(strchr("pP7", charMainChoice) != NULL)
+        else if(strchr("pP7", cMainChoice) != NULL)
         {
             printf("\n");
-            fSetOptions(strPrgNme, &intDisplayPageLength, &charDisplayPageWidth, &charDisplayPageFormat, &charDisplayOrder);
+            fSetOptions(strPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDipslayPageFormat, &cDisplayOrder);
             printf("\n");
-            charMainChoice = '0';
+            cMainChoice = '0';
             bExitMain = false;
         }
-        else if(strchr("xX8", charMainChoice) != NULL)
+        else if(strchr("xX8", cMainChoice) != NULL)
         {
             bExitMain = true;
         }
@@ -217,27 +217,27 @@ int main(int argc, char** argv)
     return EXIT_SUCCESS;
 }
 
-void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplayPageWidth, char *pcharDisplayPageFormat, char *pCharDisplayOrder)
+void fListTitles(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDipslayPageFormat, char *pcDisplayOrder)
 {
-    int intColCount = 0;
-    int *intLengths = NULL;
-    int intRowCount = 0;
-    int  intStatusFilter = 0;
-    char charStatusFilterChoice = '0';
-    char strOrder[6] = {'D', 'E', 'S', 'C', '\0'};
-    char strSQL[SQL_LEN] = {'\0'};
+    int iColCount = 0;
+    int *iLengths = NULL;
+    int iRowCount = 0;
+    int  iStatusFilter = 0;
+    char cStatusFilterchoice = '0';
+    char caOrder[6] = {'D', 'E', 'S', 'C', '\0'};
+    char caSQL[SQL_LEN] = {'\0'};
     bool bEndOfPrintBlock = false;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    if(*pCharDisplayOrder == 'A')
+    if(*pcDisplayOrder == 'A')
     {
-        strcpy(strOrder, "ASC");
+        strcpy(caOrder, "ASC");
     }
-    else if(*pCharDisplayOrder == 'D')
+    else if(*pcDisplayOrder == 'D')
     {
-        strcpy(strOrder, "DESC");
+        strcpy(caOrder, "DESC");
     }
 
     fRetitleConsole(strPrgNme);
@@ -246,65 +246,65 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
     printf("\n\n");
     printf("(A)ll, (U)nassigned, (N)ot Started, (S)tarted, (P)aused, (F)inished or E(x)it");
     printf("\n\n");
-    while(strchr("aAuUnNsSfFpPxX", charStatusFilterChoice) == NULL)
+    while(strchr("aAuUnNsSfFpPxX", cStatusFilterchoice) == NULL)
     {
         printf("Choice: ");
-        charStatusFilterChoice = toupper(GetChar());
+        cStatusFilterchoice = toupper(GetChar());
     }
-    if(toupper(charStatusFilterChoice) == 'X')
+    if(toupper(cStatusFilterchoice) == 'X')
     {
         return;
     }
-    else if(charStatusFilterChoice == 'A')
+    else if(cStatusFilterchoice == 'A')
     {
-        intStatusFilter = 0;
+        iStatusFilter = 0;
     }
-    else if(charStatusFilterChoice == 'U')
+    else if(cStatusFilterchoice == 'U')
     {
-        intStatusFilter = 6;
+        iStatusFilter = 6;
     }
-    else if(charStatusFilterChoice == 'N')
+    else if(cStatusFilterchoice == 'N')
     {
-        intStatusFilter = 1;
+        iStatusFilter = 1;
     }
-    else if(charStatusFilterChoice == 'S')
+    else if(cStatusFilterchoice == 'S')
     {
-        intStatusFilter = 2;
+        iStatusFilter = 2;
     }
-    else if(charStatusFilterChoice == 'P')
+    else if(cStatusFilterchoice == 'P')
     {
-        intStatusFilter = 5;
+        iStatusFilter = 5;
     }
-    else if(charStatusFilterChoice == 'F')
+    else if(cStatusFilterchoice == 'F')
     {
-        intStatusFilter = 4;
+        iStatusFilter = 4;
     }
 
-    if(intStatusFilter == 0)
+    if(iStatusFilter == 0)
     {
-        sprintf(strSQL, "SELECT T.`Title ID` , T.`Title Name` 'Title' , A.`Author Name` 'Author', "
+        sprintf(caSQL, "SELECT T.`Title ID` , T.`Title Name` 'Title' , A.`Author Name` 'Author', "
                         "COUNT(C.`Character Name`) 'Chars', T.`Start`, T.`Finish`,"
                         "T.`Comments` FROM risingfast.`Book Titles` T "
                         "LEFT JOIN risingfast.`Book Authors` A ON T.`Author ID` = A.`Author ID`"
                         "LEFT JOIN risingfast.`Book Characters` C on T.`Title ID` = C.`Title ID`"
                         "GROUP BY T.`Title ID`"
-                        "ORDER BY T.`Title ID` %s", strOrder);
+                        "ORDER BY T.`Title ID` %s", caOrder);
     }
     else
     {
-        sprintf(strSQL, "SELECT T.`Title ID` , T.`Title Name` 'Title' , A.`Author Name` 'Author', "
+        sprintf(caSQL, "SELECT T.`Title ID` , T.`Title Name` 'Title' , A.`Author Name` 'Author', "
                         "COUNT(C.`Character Name`) 'Chars', T.`Start`, T.`Finish`,"
                         "T.`Comments` FROM risingfast.`Book Titles` T "
                         "LEFT JOIN risingfast.`Book Authors` A ON T.`Author ID` = A.`Author ID`"
                         "LEFT JOIN risingfast.`Book Characters` C on T.`Title ID` = C.`Title ID`"
                         "WHERE T.`Status ID` = %d "
                         "GROUP BY T.`Title ID`"
-                        "ORDER BY T.`Title ID` %s", intStatusFilter, strOrder);
+                        "ORDER BY T.`Title ID` %s", iStatusFilter, caOrder);
     }
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -327,28 +327,28 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
 
 // fetch the number of fields in the result
 
-    if(*pcharDisplayPageWidth == 'W')
+    if(*pcDisplayPageWidth == 'W')
     {
-        intColCount = mysql_num_fields(res);
+        iColCount = mysql_num_fields(res);
     }
-    else if(*pcharDisplayPageWidth == 'N')
+    else if(*pcDisplayPageWidth == 'N')
     {
-        intColCount = mysql_num_fields(res) - 3;
+        iColCount = mysql_num_fields(res) - 3;
     }
 
 // fetch the max width of each column
 
-    intLengths = (int *)calloc(intColCount, sizeof(int));
+    iLengths = (int *)calloc(iColCount, sizeof(int));
 
     while(row = mysql_fetch_row(res))
     {
-        for (int k = 0; k < intColCount; k++)
+        for (int k = 0; k < iColCount; k++)
         {
             if(row[k] != NULL)
             {
-                if(strlen(row[k]) > intLengths[k])
+                if(strlen(row[k]) > iLengths[k])
                 {
-                     intLengths[k] = strlen(row[k]);
+                     iLengths[k] = strlen(row[k]);
                 }
             }
         }
@@ -363,33 +363,33 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
     printf("\n\n");
     while(row = mysql_fetch_row(res))
     {
-        if(*pcharDisplayPageFormat == 'T')
+        if(*pcDipslayPageFormat == 'T')
         {
             bEndOfPrintBlock = false;
-            intRowCount++;
-            for(int i = 0; i < intColCount; i++)
+            iRowCount++;
+            for(int i = 0; i < iColCount; i++)
             {
                 if((i==3) || (i==0))
                 {
-                    printf("%*s", intLengths[i] + 1, row[i] ? row[i] : "");
+                    printf("%*s", iLengths[i] + 1, row[i] ? row[i] : "");
                 }
                 else
                 {
-                    printf("  %-*s", intLengths[i] + 1, row[i] ? row[i] : "");
+                    printf("  %-*s", iLengths[i] + 1, row[i] ? row[i] : "");
                 }
             }
             printf("\n");
-            if(intRowCount >= *pintDisplayPageLength)
+            if(iRowCount >= *piDisplayPageLength)
             {
                 printf("\n");
                 fPressEnterToContinue();
                 printf("\n");
-                intRowCount = 0;
+                iRowCount = 0;
             }
         }
         else
         {
-            for(int i = 0; i < intColCount; i++)
+            for(int i = 0; i < iColCount; i++)
             {
                 if(i == 0)
                 {
@@ -419,23 +419,23 @@ void fListTitles(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
     }
 
     fRetitleConsole(strPrgNme);
-    free(intLengths);
+    free(iLengths);
     mysql_free_result(res);
     return;
 }
 
-void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
+void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
 {
 
-    char charAttributeChoice = '0';
-    char charAddChangeDeleteListSearchExitChoice = '0';
-    char *strAuthorSearch = NULL;
-    char *strSeriesSearch = NULL;
-    char *strGenreSearch = NULL;
-    char *strSourceSearch = NULL;
-    char *strRatingSearch = NULL;
-    char *strStatusSearch = NULL;
-    char *strClassificationSearch = NULL;
+    char cAttributeChoice = '0';
+    char cAddChangeDeleteListSearchExitChoice = '0';
+    char *sAuthorSearch = NULL;
+    char *sSeriesSearch = NULL;
+    char *sGenreSearch = NULL;
+    char *sSourceSearch = NULL;
+    char *sRatingSearch = NULL;
+    char *sStatusSearch = NULL;
+    char *sClassificationSearch = NULL;
     bool bExitAttributes = false;
     bool bAttributeAdded = false;
 
@@ -443,18 +443,18 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
 
     while(bExitAttributes == false)
     {
-        while(charAttributeChoice == '0')
+        while(cAttributeChoice == '0')
         {
             bAttributeAdded = false;
             fShowAttributesMenu();
-            charAttributeChoice = GetChar();
-            if(strchr("12345678AaCcRrEeOoSsGgXx", charAttributeChoice) == NULL)
+            cAttributeChoice = GetChar();
+            if(strchr("12345678AaCcRrEeOoSsGgXx", cAttributeChoice) == NULL)
             {
-                charAttributeChoice = 0;
+                cAttributeChoice = 0;
             }
             printf("\n");
         }
-        if(strchr("1Aa", charAttributeChoice) != NULL)
+        if(strchr("1Aa", cAttributeChoice) != NULL)
         {
             while(bAttributeAdded == false)
             {
@@ -463,8 +463,8 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                 printf("Main Menu > Maintain Attributes > Authors");
                 printf("\n\n");
                 printf("(A)dd, (C)hange, (D)elete, (L)ist, (S)earch or E(x)it: ");
-                charAddChangeDeleteListSearchExitChoice = toupper(GetChar());
-                if(charAddChangeDeleteListSearchExitChoice == 'A')
+                cAddChangeDeleteListSearchExitChoice = toupper(GetChar());
+                if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
                     if(fAddAuthor(strPrgNme) == 0)
@@ -475,29 +475,29 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     {
                         bAttributeAdded = true;
                     }
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'C')
+                else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
                     fUpdateAuthor(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'D')
+                else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
                     fDeleteAuthor(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'L')
+                else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Authors > List");
                     printf("\n\n");
-                    fShowAllAuthors(pintDisplayPageLength);
+                    fShowAllAuthors(piDisplayPageLength);
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'S')
+                else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
@@ -505,23 +505,23 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     printf("Main Menu > Maintain Attributes > Authors > Search");
                     printf("\n\n");
                     printf("Search String or E(x)it: ");
-                    strAuthorSearch = GetString();
-                    if(strstr("xX", strAuthorSearch) != NULL)
+                    sAuthorSearch = GetString();
+                    if(strstr("xX", sAuthorSearch) != NULL)
                     {
                         continue;
                     }
-                    fSearchAuthors(strAuthorSearch);
+                    fSearchAuthors(sAuthorSearch);
                     printf("\n");
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'X')
+                else if(cAddChangeDeleteListSearchExitChoice == 'X')
                 {
                     bAttributeAdded = true;
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
             }
         }
-        else if(strchr("2Cc", charAttributeChoice) != NULL)
+        else if(strchr("2Cc", cAttributeChoice) != NULL)
         {
             while(bAttributeAdded == false)
             {
@@ -530,8 +530,8 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                 printf("Main Menu > Maintain Attributes > Classifications");
                 printf("\n\n");
                 printf("(A)dd, (C)hange, (D)elete, (L)ist, (S)earch or E(x)it: ");
-                charAddChangeDeleteListSearchExitChoice = toupper(GetChar());
-                if(charAddChangeDeleteListSearchExitChoice == 'A')
+                cAddChangeDeleteListSearchExitChoice = toupper(GetChar());
+                if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
                     if(fAddClassification(strPrgNme) == 0)
@@ -542,29 +542,29 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     {
                         bAttributeAdded = true;
                     }
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'C')
+                else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
                     fUpdateClassification(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'D')
+                else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
                     fDeleteClassification(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'L')
+                else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Classifications > List");
                     printf("\n\n");
-                    fShowAllClassifications(pintDisplayPageLength);
+                    fShowAllClassifications(piDisplayPageLength);
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'S')
+                else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
@@ -572,23 +572,23 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     printf("Main Menu > Maintain Attributes > Classifications > Search");
                     printf("\n\n");
                     printf("Search String or E(x)it: ");
-                    strClassificationSearch = GetString();
-                    if(strstr("xX", strClassificationSearch) != NULL)
+                    sClassificationSearch = GetString();
+                    if(strstr("xX", sClassificationSearch) != NULL)
                     {
                         continue;
                     }
-                    fSearchClassifications(strClassificationSearch);
+                    fSearchClassifications(sClassificationSearch);
                     printf("\n");
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'X')
+                else if(cAddChangeDeleteListSearchExitChoice == 'X')
                 {
                     bAttributeAdded = true;
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
             }
         }
-        else if(strchr("3Rr", charAttributeChoice) != NULL)
+        else if(strchr("3Rr", cAttributeChoice) != NULL)
         {
             while(bAttributeAdded == false)
             {
@@ -597,8 +597,8 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                 printf("Main Menu > Maintain Attributes > Ratings");
                 printf("\n\n");
                 printf("(A)dd, (C)hange, (D)elete, (L)ist, (S)earch or E(x)it: ");
-                charAddChangeDeleteListSearchExitChoice = toupper(GetChar());
-                if(charAddChangeDeleteListSearchExitChoice == 'A')
+                cAddChangeDeleteListSearchExitChoice = toupper(GetChar());
+                if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
                     if(fAddRating(strPrgNme) == 0)
@@ -609,29 +609,29 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     {
                         bAttributeAdded = true;
                     }
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'C')
+                else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
                     fUpdateRating(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'D')
+                else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
                     fDeleteRating(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'L')
+                else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Ratings > List");
                     printf("\n\n");
-                    fShowAllRatings(pintDisplayPageLength);
+                    fShowAllRatings(piDisplayPageLength);
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'S')
+                else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
@@ -639,23 +639,23 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     printf("Main Menu > Maintain Attributes > Ratings > Search");
                     printf("\n\n");
                     printf("Search String or E(x)it: ");
-                    strRatingSearch = GetString();
-                    if(strstr("xX", strRatingSearch) != NULL)
+                    sRatingSearch = GetString();
+                    if(strstr("xX", sRatingSearch) != NULL)
                     {
                         continue;
                     }
-                    fSearchRatings(strRatingSearch);
+                    fSearchRatings(sRatingSearch);
                     printf("\n");
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'X')
+                else if(cAddChangeDeleteListSearchExitChoice == 'X')
                 {
                     bAttributeAdded = true;
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
             }
         }
-        else if(strchr("4Ee", charAttributeChoice) != NULL)
+        else if(strchr("4Ee", cAttributeChoice) != NULL)
         {
             while(bAttributeAdded == false)
             {
@@ -664,8 +664,8 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                 printf("Main Menu > Maintain Attributes > Series");
                 printf("\n\n");
                 printf("(A)dd, (C)hange, (D)elete, (L)ist, (S)earch or E(x)it: ");
-                charAddChangeDeleteListSearchExitChoice = toupper(GetChar());
-                if(charAddChangeDeleteListSearchExitChoice == 'A')
+                cAddChangeDeleteListSearchExitChoice = toupper(GetChar());
+                if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
                     if(fAddSeries(strPrgNme) == 0)
@@ -676,29 +676,29 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     {
                         bAttributeAdded = true;
                     }
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'C')
+                else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
                     fUpdateSeries(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'D')
+                else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
                     fDeleteSeries(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'L')
+                else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Series > List");
                     printf("\n\n");
-                    fShowAllSeries(pintDisplayPageLength);
+                    fShowAllSeries(piDisplayPageLength);
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'S')
+                else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
@@ -706,23 +706,23 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     printf("Main Menu > Maintain Attributes > Series > Search");
                     printf("\n\n");
                     printf("Search String or E(x)it: ");
-                    strSeriesSearch = GetString();
-                    if(strstr("xX", strSeriesSearch) != NULL)
+                    sSeriesSearch = GetString();
+                    if(strstr("xX", sSeriesSearch) != NULL)
                     {
                         continue;
                     }
-                    fSearchSeries(strSeriesSearch);
+                    fSearchSeries(sSeriesSearch);
                     printf("\n");
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'X')
+                else if(cAddChangeDeleteListSearchExitChoice == 'X')
                 {
                     bAttributeAdded = true;
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
             }
         }
-        else if(strchr("5Oo", charAttributeChoice) != NULL)
+        else if(strchr("5Oo", cAttributeChoice) != NULL)
         {
             while(bAttributeAdded == false)
             {
@@ -731,8 +731,8 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                 printf("Main Menu > Maintain Attribues > Sources");
                 printf("\n\n");
                 printf("(A)dd, (C)hange, (D)elete, (L)ist, (S)earch or E(x)it: ");
-                charAddChangeDeleteListSearchExitChoice = toupper(GetChar());
-                if(charAddChangeDeleteListSearchExitChoice == 'A')
+                cAddChangeDeleteListSearchExitChoice = toupper(GetChar());
+                if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
                     if(fAddSource(strPrgNme) == 0)
@@ -743,29 +743,29 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     {
                         bAttributeAdded = true;
                     }
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'C')
+                else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
                     fUpdateSource(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'D')
+                else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
                     fDeleteSource(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'L')
+                else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Sources > List");
                     printf("\n\n");
-                    fShowAllSources(pintDisplayPageLength);
+                    fShowAllSources(piDisplayPageLength);
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'S')
+                else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
@@ -773,23 +773,23 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     printf("Main Menu > Maintain Attributes > Sources > Search");
                     printf("\n\n");
                     printf("Search String or E(x)it: ");
-                    strSourceSearch = GetString();
-                    if(strstr("xX", strSourceSearch) != NULL)
+                    sSourceSearch = GetString();
+                    if(strstr("xX", sSourceSearch) != NULL)
                     {
                         continue;
                     }
-                    fSearchSources(strSourceSearch);
+                    fSearchSources(sSourceSearch);
                     printf("\n");
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'X')
+                else if(cAddChangeDeleteListSearchExitChoice == 'X')
                 {
                      bAttributeAdded = true;
-                     charAttributeChoice = '0';
+                     cAttributeChoice = '0';
                 }
             }
         }
-        else if(strchr("6Ss", charAttributeChoice) != NULL)
+        else if(strchr("6Ss", cAttributeChoice) != NULL)
         {
             while(bAttributeAdded == false)
             {
@@ -798,8 +798,8 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                 printf("Main Menu > Maintain Attributes > Statuses");
                 printf("\n\n");
                 printf("(A)dd, (C)hange, (D)elete, (L)ist, (S)earch or E(x)it: ");
-                charAddChangeDeleteListSearchExitChoice = toupper(GetChar());
-                if(charAddChangeDeleteListSearchExitChoice == 'A')
+                cAddChangeDeleteListSearchExitChoice = toupper(GetChar());
+                if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
                     if(fAddStatus(strPrgNme) == 0)
@@ -810,29 +810,29 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     {
                         bAttributeAdded = true;
                     }
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'C')
+                else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
                     fUpdateStatus(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'D')
+                else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                      printf("\n");
                      fDeleteStatus(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'L')
+                else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Statuses > List");
                     printf("\n\n");
-                    fShowAllStatuses(pintDisplayPageLength);
+                    fShowAllStatuses(piDisplayPageLength);
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'S')
+                else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
@@ -840,23 +840,23 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     printf("Main Menu > Maintain Attributes > Statuses > Search");
                     printf("\n\n");
                     printf("Search String or E(x)it: ");
-                    strStatusSearch = GetString();
-                    if(strstr("xX", strStatusSearch) != NULL)
+                    sStatusSearch = GetString();
+                    if(strstr("xX", sStatusSearch) != NULL)
                     {
                         continue;
                     }
-                    fSearchStatuses(strStatusSearch);
+                    fSearchStatuses(sStatusSearch);
                     printf("\n");
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'X')
+                else if(cAddChangeDeleteListSearchExitChoice == 'X')
                 {
                     bAttributeAdded = true;
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
             }
         }
-        else if(strchr("7Gg", charAttributeChoice) != NULL)
+        else if(strchr("7Gg", cAttributeChoice) != NULL)
         {
             while(bAttributeAdded == false)
             {
@@ -865,8 +865,8 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                 printf("Main Menu > Maintain Attributes > Genres");
                 printf("\n\n");
                 printf("(A)dd, (C)hange, (D)elete, (L)ist, (S)earch or E(x)it: ");
-                charAddChangeDeleteListSearchExitChoice = toupper(GetChar());
-                if(charAddChangeDeleteListSearchExitChoice == 'A')
+                cAddChangeDeleteListSearchExitChoice = toupper(GetChar());
+                if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
                     if(fAddGenre(strPrgNme) == 0)
@@ -877,28 +877,28 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     {
                         bAttributeAdded = true;
                     }
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'C')
+                else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
                     fUpdateGenre(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'D')
+                else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     fDeleteGenre(strPrgNme);
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'L')
+                else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Genres > List");
                     printf("\n\n");
-                    fShowAllGenres(pintDisplayPageLength);
+                    fShowAllGenres(piDisplayPageLength);
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'S')
+                else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
                     fRetitleConsole(strPrgNme);
@@ -906,23 +906,23 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
                     printf("Main Menu > Maintain Attributes > Genres > Search");
                     printf("\n\n");
                     printf("Search String or E(x)it: ");
-                    strGenreSearch = GetString();
-                    if(strstr("xX", strGenreSearch) != NULL)
+                    sGenreSearch = GetString();
+                    if(strstr("xX", sGenreSearch) != NULL)
                     {
                         continue;
                     }
-                    fSearchGenres(strGenreSearch);
+                    fSearchGenres(sGenreSearch);
                     printf("\n");
                     fPressEnterToContinue();
                 }
-                else if(charAddChangeDeleteListSearchExitChoice == 'X')
+                else if(cAddChangeDeleteListSearchExitChoice == 'X')
                 {
                     bAttributeAdded = true;
-                    charAttributeChoice = '0';
+                    cAttributeChoice = '0';
                 }
             }
         }
-        else if(strchr("8Xx", charAttributeChoice) != NULL)
+        else if(strchr("8Xx", cAttributeChoice) != NULL)
         {
             bExitAttributes = true;
         }
@@ -933,10 +933,10 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
     return;
 }
 
-void fSetOptions(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplayPageWidth, char *pcharDisplayPageFormat, char *pcharDisplayOrder)
+void fSetOptions(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDipslayPageFormat, char *pcDisplayOrder)
 {
 
-    int  charOptionChoice = '0';
+    int  iOptionChoice = '0';
     bool bExitOptions = false;
     bool bValidOptionChoice = false;
 
@@ -944,19 +944,19 @@ void fSetOptions(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
 
     while(bExitOptions == false)
     {
-        while(charOptionChoice == '0')
+        while(iOptionChoice == '0')
         {
             printf("\n");
             printf("Main Menu > Set Options");
             printf("\n");
             printf("\n");
-            printf("1. Display (L)ength: %9d", *pintDisplayPageLength);
+            printf("1. Display (L)ength: %9d", *piDisplayPageLength);
             printf("\n");
-            printf("2. Display (W)idth: %10s", (*pcharDisplayPageWidth == 'N') ? "Narrow" : "Wide");
+            printf("2. Display (W)idth: %10s", (*pcDisplayPageWidth == 'N') ? "Narrow" : "Wide");
             printf("\n");
-            printf("3. List (F)ormat: %12s", (*pcharDisplayPageFormat == 'T') ? "Tab" : "CSV");
+            printf("3. List (F)ormat: %12s", (*pcDipslayPageFormat == 'T') ? "Tab" : "CSV");
             printf("\n");
-            printf("4. List (O)rder: %13s", (*pcharDisplayOrder == 'A') ? "Ascending" : "Descending");
+            printf("4. List (O)rder: %13s", (*pcDisplayOrder == 'A') ? "Ascending" : "Descending");
             printf("\n");
             printf("5. (P)rint Options");
             printf("\n");
@@ -965,36 +965,36 @@ void fSetOptions(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
             printf("7. E(x)it");
             printf("\n\n");
             printf("Choice: ");
-            charOptionChoice = GetChar();
-            if(strchr("1234567LloOpPrRxX", charOptionChoice) == NULL)
+            iOptionChoice = GetChar();
+            if(strchr("1234567LloOpPrRxX", iOptionChoice) == NULL)
             {
-                charOptionChoice = '0';
+                iOptionChoice = '0';
             }
         }
-        if(strchr("1lL", charOptionChoice) != NULL)
+        if(strchr("1lL", iOptionChoice) != NULL)
         {
             printf("\n");
             printf("Display Length: ");
-            *pintDisplayPageLength = GetInt();
+            *piDisplayPageLength = GetInt();
             printf("\n");
-            charOptionChoice = '0';
+            iOptionChoice = '0';
         }
-        else if(strchr("2wW", charOptionChoice) != NULL)
+        else if(strchr("2wW", iOptionChoice) != NULL)
         {
             printf("\n");
             while(bValidOptionChoice == false)
             {
                 printf("Display Width ((W)ide or (N)arrow) or E(x)it: ");
-                *pcharDisplayPageWidth = toupper(GetChar());
-                if(*pcharDisplayPageWidth == 'W')
+                *pcDisplayPageWidth = toupper(GetChar());
+                if(*pcDisplayPageWidth == 'W')
                 {
                     bValidOptionChoice = true;
                 }
-                else if(*pcharDisplayPageWidth == 'N')
+                else if(*pcDisplayPageWidth == 'N')
                 {
                     bValidOptionChoice = true;
                 }
-                else if(*pcharDisplayPageWidth == 'X')
+                else if(*pcDisplayPageWidth == 'X')
                 {
                     bValidOptionChoice = true;
                 }
@@ -1005,24 +1005,24 @@ void fSetOptions(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
             }
             printf("\n");
             bValidOptionChoice = false;
-            charOptionChoice = '0';
+            iOptionChoice = '0';
         }
-        else if(strchr("3fF", charOptionChoice) != NULL)
+        else if(strchr("3fF", iOptionChoice) != NULL)
         {
             printf("\n");
             while(bValidOptionChoice == false)
             {
                 printf("Display Format ((T)ab or (C)SV) or E(x)it: ");
-                *pcharDisplayPageFormat = toupper(GetChar());
-                if(*pcharDisplayPageFormat == 'T')
+                *pcDipslayPageFormat = toupper(GetChar());
+                if(*pcDipslayPageFormat == 'T')
                 {
                     bValidOptionChoice = true;
                 }
-                else if(*pcharDisplayPageFormat == 'C')
+                else if(*pcDipslayPageFormat == 'C')
                 {
                     bValidOptionChoice = true;
                 }
-                else if(*pcharDisplayPageFormat == 'X')
+                else if(*pcDipslayPageFormat == 'X')
                 {
                     bValidOptionChoice = true;
                 }
@@ -1033,24 +1033,24 @@ void fSetOptions(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
             }
             printf("\n");
             bValidOptionChoice = false;
-            charOptionChoice = '0';
+            iOptionChoice = '0';
         }
-        else if(strchr("4oO", charOptionChoice) != NULL)
+        else if(strchr("4oO", iOptionChoice) != NULL)
         {
             printf("\n");
             while(bValidOptionChoice == false)
             {
                 printf("Display Order ((A)sc or (D)esc or E(x)it): ");
-                *pcharDisplayOrder = toupper(GetChar());
-                if(*pcharDisplayOrder == 'A')
+                *pcDisplayOrder = toupper(GetChar());
+                if(*pcDisplayOrder == 'A')
                 {
                     bValidOptionChoice = true;
                 }
-                else if(*pcharDisplayOrder == 'D')
+                else if(*pcDisplayOrder == 'D')
                 {
                     bValidOptionChoice = true;
                 }
-                else if(*pcharDisplayOrder == 'X')
+                else if(*pcDisplayOrder == 'X')
                 {
                     bValidOptionChoice = true;
                 }
@@ -1061,27 +1061,27 @@ void fSetOptions(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
             }
             printf("\n");
             bValidOptionChoice = false;
-            charOptionChoice = '0';
+            iOptionChoice = '0';
         }
-        else if(strchr("5pP", charOptionChoice) != NULL)
+        else if(strchr("5pP", iOptionChoice) != NULL)
         {
-            *pcharDisplayPageFormat = 'C';
-            *pcharDisplayOrder = 'A';
-            *pintDisplayPageLength = 1000;
-            *pcharDisplayPageWidth = 'W';
+            *pcDipslayPageFormat = 'C';
+            *pcDisplayOrder = 'A';
+            *piDisplayPageLength = 1000;
+            *pcDisplayPageWidth = 'W';
             bValidOptionChoice = false;
-            charOptionChoice = '0';
+            iOptionChoice = '0';
         }
-        else if(strchr("6rR", charOptionChoice) != NULL)
+        else if(strchr("6rR", iOptionChoice) != NULL)
         {
-            *pcharDisplayPageFormat = 'T';
-            *pcharDisplayOrder = 'A';
-            *pintDisplayPageLength = 80;
-            *pcharDisplayPageWidth = 'N';
+            *pcDipslayPageFormat = 'T';
+            *pcDisplayOrder = 'A';
+            *piDisplayPageLength = 80;
+            *pcDisplayPageWidth = 'N';
             bValidOptionChoice = false;
-            charOptionChoice = '0';
+            iOptionChoice = '0';
         }
-        else if(strchr("7xX", charOptionChoice) != NULL)
+        else if(strchr("7xX", iOptionChoice) != NULL)
         {
             bExitOptions = true;
         }
@@ -1094,46 +1094,46 @@ void fSetOptions(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplay
 
 int fAddSeries(char *strPrgNme)
 {
-    char *strSeriesName = NULL;
-    char *strSeriesNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intSeriesMaxLength = 0;
+    char *sSeriesName = NULL;
+    char *sSeriesNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iSeriesMaxLength = 0;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Series > Add");
     printf("\n\n");
 
-    intSeriesMaxLength = fGetFieldLength("Book Series", "Series Name");
+    iSeriesMaxLength = fGetFieldLength("Book Series", "Series Name");
 
     do{
-        printf("Series Name or E(x)it (max %d chars): ", intSeriesMaxLength);
-        strSeriesName = GetString();
-        if(strlen(strSeriesName) > intSeriesMaxLength)
+        printf("Series Name or E(x)it (max %d chars): ", iSeriesMaxLength);
+        sSeriesName = GetString();
+        if(strlen(sSeriesName) > iSeriesMaxLength)
         {
-            printf("Series Name max %d chars. You entered %d chars", intSeriesMaxLength, (int) strlen(strSeriesName));
+            printf("Series Name max %d chars. You entered %d chars", iSeriesMaxLength, (int) strlen(sSeriesName));
             printf("\n");
-            strSeriesName[0] = '\0';
+            sSeriesName[0] = '\0';
         }
-    } while(strlen(strSeriesName) == 0);
+    } while(strlen(sSeriesName) == 0);
 
-    strSeriesNameEscaped = fEscapeSingleQuote(strSeriesName);
+    sSeriesNameEscaped = fEscapeSingleQuote(sSeriesName);
 
-    if(strcmp(strSeriesName, "x") == 0)
+    if(strcmp(sSeriesName, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
-    sprintf(strSQL, "INSERT INTO `Book Series` (`Series Name`) VALUES('%s')", strSeriesNameEscaped);
+    sprintf(caSQL, "INSERT INTO `Book Series` (`Series Name`) VALUES('%s')", sSeriesNameEscaped);
 
 // initialize a connection and connect to the database
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) == 0)
+    if(mysql_query(conn, caSQL) == 0)
     {
-        printf("Series Added: %s", strSeriesName);
+        printf("Series Added: %s", sSeriesName);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -1149,17 +1149,17 @@ int fAddSeries(char *strPrgNme)
 
     fRetitleConsole(strPrgNme);
 
-    free(strSeriesName);
-    free(strSeriesNameEscaped);
+    free(sSeriesName);
+    free(sSeriesNameEscaped);
     return EXIT_SUCCESS;
 }
 
 int fAddAuthor(char *strPrgNme)
 {
-    char *strAuthorName = NULL;
-    char *strEscapedAuthorName = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intAuthorMaxLength = 0;
+    char *sAuthorName = NULL;
+    char *sEscapedAuthorName = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iAuthorMaxLength = 0;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1168,33 +1168,33 @@ int fAddAuthor(char *strPrgNme)
 
 // get the author name
 
-    intAuthorMaxLength = fGetFieldLength("Book Authors", "Author Name");
+    iAuthorMaxLength = fGetFieldLength("Book Authors", "Author Name");
     do {
-        printf("Author Name or E(x)it (max %d chars): ", intAuthorMaxLength);
-        strAuthorName = GetString();
-        if(strlen(strAuthorName) > intAuthorMaxLength)
+        printf("Author Name or E(x)it (max %d chars): ", iAuthorMaxLength);
+        sAuthorName = GetString();
+        if(strlen(sAuthorName) > iAuthorMaxLength)
         {
-            printf("Author Name max %d chars. You entered %d chars", intAuthorMaxLength, (int) strlen(strAuthorName));
+            printf("Author Name max %d chars. You entered %d chars", iAuthorMaxLength, (int) strlen(sAuthorName));
             printf("\n");
-            strAuthorName[0] = '\0';
+            sAuthorName[0] = '\0';
         }
-    }while (strlen(strAuthorName) == 0);
+    }while (strlen(sAuthorName) == 0);
 
-    strEscapedAuthorName = fEscapeSingleQuote(strAuthorName);
+    sEscapedAuthorName = fEscapeSingleQuote(sAuthorName);
 
-    if(strcmp(strAuthorName, "x") == 0)
+    if(strcmp(sAuthorName, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
-    sprintf(strSQL, "INSERT INTO `Book Authors` (`Author Name`) VALUES('%s')", strEscapedAuthorName);
+    sprintf(caSQL, "INSERT INTO `Book Authors` (`Author Name`) VALUES('%s')", sEscapedAuthorName);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) == 0)
+    if(mysql_query(conn, caSQL) == 0)
     {
-        printf("Author Added: %s", strAuthorName);
+        printf("Author Added: %s", sAuthorName);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -1208,54 +1208,54 @@ int fAddAuthor(char *strPrgNme)
         return EXIT_FAILURE;
     }
 
-    free(strEscapedAuthorName);
-    free(strAuthorName);
+    free(sEscapedAuthorName);
+    free(sAuthorName);
     fRetitleConsole(strPrgNme);
     return EXIT_SUCCESS;
 }
 
 int fAddClassification(char *strPrgNme)
 {
-    char *strClassificationName = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    char *strClassificationNameEscaped = NULL;
-    int  intClassificationMaxLength = 0;
+    char *sClassificationName = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    char *sClassificationNameEscaped = NULL;
+    int  iClassificationMaxLength = 0;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Classification > Add");
     printf("\n\n");
 
-    intClassificationMaxLength = fGetFieldLength("Book Classifications", "Classification Name");
+    iClassificationMaxLength = fGetFieldLength("Book Classifications", "Classification Name");
 
     do
     {
-        printf("Classification Name or E(x)it (max %d chars): ", intClassificationMaxLength);
-        strClassificationName = GetString();
-        if(strlen(strClassificationName) > intClassificationMaxLength)
+        printf("Classification Name or E(x)it (max %d chars): ", iClassificationMaxLength);
+        sClassificationName = GetString();
+        if(strlen(sClassificationName) > iClassificationMaxLength)
         {
-            printf("Classification Name max %d chars. You entered %d chars", intClassificationMaxLength, (int) strlen(strClassificationName));
+            printf("Classification Name max %d chars. You entered %d chars", iClassificationMaxLength, (int) strlen(sClassificationName));
             printf("\n");
-            strClassificationName[0] = '\0';
+            sClassificationName[0] = '\0';
         }
-    } while(strlen(strClassificationName) == 0);
+    } while(strlen(sClassificationName) == 0);
 
-    strClassificationNameEscaped = fEscapeSingleQuote(strClassificationName);
+    sClassificationNameEscaped = fEscapeSingleQuote(sClassificationName);
 
-    if(strcmp(strClassificationName, "x") == 0)
+    if(strcmp(sClassificationName, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
 
-    sprintf(strSQL, "INSERT INTO `Book Classifications` (`Classification Name`) VALUES('%s')", strClassificationNameEscaped);
+    sprintf(caSQL, "INSERT INTO `Book Classifications` (`Classification Name`) VALUES('%s')", sClassificationNameEscaped);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) == 0)
+    if(mysql_query(conn, caSQL) == 0)
     {
-        printf("Classification Added: %s", strClassificationName);
+        printf("Classification Added: %s", sClassificationName);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -1270,51 +1270,51 @@ int fAddClassification(char *strPrgNme)
     }
 
     fRetitleConsole(strPrgNme);
-    free(strClassificationNameEscaped);
-    free(strClassificationName);
+    free(sClassificationNameEscaped);
+    free(sClassificationName);
     return EXIT_SUCCESS;
 }
 
 int fAddRating(char *strPrgNme)
 {
-    char *strRatingName = NULL;
-    char *strRatingNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRatingMaxLength = 0;
+    char *sRatingName = NULL;
+    char *sRatingNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRatingMaxLength = 0;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Rating > Add");
     printf("\n\n");
 
-    intRatingMaxLength = fGetFieldLength("Book Ratings", "Rating Name");
+    iRatingMaxLength = fGetFieldLength("Book Ratings", "Rating Name");
 
     do{
-        printf("Rating Name or E(x)it (max %d chars): ", intRatingMaxLength);
-        strRatingName = GetString();
-        if(strlen(strRatingName) > intRatingMaxLength)
+        printf("Rating Name or E(x)it (max %d chars): ", iRatingMaxLength);
+        sRatingName = GetString();
+        if(strlen(sRatingName) > iRatingMaxLength)
         {
-            printf("Rating Name max %d chars. You entered %d chars", intRatingMaxLength, (int) strlen(strRatingName));
+            printf("Rating Name max %d chars. You entered %d chars", iRatingMaxLength, (int) strlen(sRatingName));
             printf("\n");
-            strRatingName[0] = '\0';
+            sRatingName[0] = '\0';
         }
-    } while(strlen(strRatingName) == 0);
+    } while(strlen(sRatingName) == 0);
 
-    strRatingNameEscaped = fEscapeSingleQuote(strRatingName);
+    sRatingNameEscaped = fEscapeSingleQuote(sRatingName);
 
-    if(strcmp(strRatingName, "x") == 0)
+    if(strcmp(sRatingName, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
-    sprintf(strSQL, "INSERT INTO `Book Ratings` (`Rating Name`) VALUES('%s')", strRatingNameEscaped);
+    sprintf(caSQL, "INSERT INTO `Book Ratings` (`Rating Name`) VALUES('%s')", sRatingNameEscaped);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) == 0)
+    if(mysql_query(conn, caSQL) == 0)
     {
-        printf("Rating Added: %s", strRatingName);
+        printf("Rating Added: %s", sRatingName);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -1329,51 +1329,51 @@ int fAddRating(char *strPrgNme)
     }
 
     fRetitleConsole(strPrgNme);
-    free(strRatingName);
-    free(strRatingNameEscaped);
+    free(sRatingName);
+    free(sRatingNameEscaped);
     return EXIT_SUCCESS;
 }
 
 int fAddSource(char *strPrgNme)
 {
-    char *strSourceName = NULL;
-    char *strSourceNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intSourceMaxLength = 0;
+    char *sSourceName = NULL;
+    char *sSourceNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iSourceMaxLength = 0;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Source > Add");
     printf("\n\n");
 
-    intSourceMaxLength = fGetFieldLength("Book Sources", "Source Name");
+    iSourceMaxLength = fGetFieldLength("Book Sources", "Source Name");
 
     do {
-        printf("Source Name or E(x)it (max %d chars): ", intSourceMaxLength);
-        strSourceName = GetString();
-        if (strlen(strSourceName) > intSourceMaxLength)
+        printf("Source Name or E(x)it (max %d chars): ", iSourceMaxLength);
+        sSourceName = GetString();
+        if (strlen(sSourceName) > iSourceMaxLength)
         {
-            printf("Source Name max %d chars. You entered %d chars", intSourceMaxLength, (int) strlen(strSourceName));
+            printf("Source Name max %d chars. You entered %d chars", iSourceMaxLength, (int) strlen(sSourceName));
             printf("\n");
-            strSourceName[0] = '\0';
+            sSourceName[0] = '\0';
         }
-    } while(strlen(strSourceName) == 0);
+    } while(strlen(sSourceName) == 0);
 
-    strSourceNameEscaped = fEscapeSingleQuote(strSourceName);
+    sSourceNameEscaped = fEscapeSingleQuote(sSourceName);
 
-    if(strcmp(strSourceName, "x") == 0)
+    if(strcmp(sSourceName, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
-    sprintf(strSQL, "INSERT INTO `Book Sources` (`Source Name`) VALUES('%s')", strSourceNameEscaped);
+    sprintf(caSQL, "INSERT INTO `Book Sources` (`Source Name`) VALUES('%s')", sSourceNameEscaped);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) == 0)
+    if(mysql_query(conn, caSQL) == 0)
     {
-        printf("Source Added: %s", strSourceName);
+        printf("Source Added: %s", sSourceName);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -1389,51 +1389,51 @@ int fAddSource(char *strPrgNme)
 
     fRetitleConsole(strPrgNme);
 
-    free(strSourceName);
-    free(strSourceNameEscaped);
+    free(sSourceName);
+    free(sSourceNameEscaped);
     return EXIT_SUCCESS;
 }
 
 int fAddStatus(char *strPrgNme)
 {
-    char *strStatusName = NULL;
-    char *strStatusNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intStatusMaxLength = 0;
+    char *sStatusName = NULL;
+    char *sStatusNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iStatusMaxLength = 0;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Status > Add");
     printf("\n\n");
 
-    intStatusMaxLength = fGetFieldLength("Book Statuses", "Status Name");
+    iStatusMaxLength = fGetFieldLength("Book Statuses", "Status Name");
 
     do {
-        printf("Status Name or E(x)it (max %d chars): ", intStatusMaxLength);
-        strStatusName = GetString();
-        if (strlen(strStatusName) > intStatusMaxLength)
+        printf("Status Name or E(x)it (max %d chars): ", iStatusMaxLength);
+        sStatusName = GetString();
+        if (strlen(sStatusName) > iStatusMaxLength)
         {
-             printf("Status Name max %d chars. You entered %d chars", intStatusMaxLength, (int) strlen(strStatusName));
+             printf("Status Name max %d chars. You entered %d chars", iStatusMaxLength, (int) strlen(sStatusName));
              printf("\n");
-             strStatusName[0] = '\0';
+             sStatusName[0] = '\0';
         }
-    } while(strlen(strStatusName) == 0);
+    } while(strlen(sStatusName) == 0);
 
-    strStatusNameEscaped = fEscapeSingleQuote(strStatusName);
+    sStatusNameEscaped = fEscapeSingleQuote(sStatusName);
 
-    if(strcmp(strStatusName, "x") == 0)
+    if(strcmp(sStatusName, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
-    sprintf(strSQL, "INSERT INTO `Book Statuses` (`Status Name`) VALUES('%s')", strStatusNameEscaped);
+    sprintf(caSQL, "INSERT INTO `Book Statuses` (`Status Name`) VALUES('%s')", sStatusNameEscaped);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) == 0)
+    if(mysql_query(conn, caSQL) == 0)
     {
-        printf("Status Added: %s", strStatusName);
+        printf("Status Added: %s", sStatusName);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -1448,75 +1448,75 @@ int fAddStatus(char *strPrgNme)
     }
 
     fRetitleConsole(strPrgNme);
-    free(strStatusName);
-    free(strStatusNameEscaped);
+    free(sStatusName);
+    free(sStatusNameEscaped);
     return EXIT_SUCCESS;
 }
 
 int fAddGenre(char *strPrgNme)
 {
-    char *strGenreName = NULL;
-    char *strGenreDesc = NULL;
-    char *strGenreNameEscaped = NULL;
-    char *strGenreDescEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intGenreNameMaxLength = 0;
-    int  intGenreDescMaxLength = 0;
+    char *sGenreName = NULL;
+    char *sGenreDesc = NULL;
+    char *sGenreNameEscaped = NULL;
+    char *sGenreDescEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iGenreNameMaxLength = 0;
+    int  iGenreDescMaxLength = 0;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Genre > Add:");
     printf("\n\n");
 
-    intGenreNameMaxLength = fGetFieldLength("Book Genres", "Genre Name");
-    intGenreDescMaxLength = fGetFieldLength("Book Genres", "Genre Description");
+    iGenreNameMaxLength = fGetFieldLength("Book Genres", "Genre Name");
+    iGenreDescMaxLength = fGetFieldLength("Book Genres", "Genre Description");
 
     do{
-        printf("Genre Name or E(x)it (max %d chars): ", intGenreNameMaxLength);
-        strGenreName = GetString();
-        if (strlen(strGenreName) > intGenreNameMaxLength)
+        printf("Genre Name or E(x)it (max %d chars): ", iGenreNameMaxLength);
+        sGenreName = GetString();
+        if (strlen(sGenreName) > iGenreNameMaxLength)
         {
-             printf("Genre Name max %d chars. You entered %d chars", intGenreNameMaxLength, (int) strlen(strGenreName));
+             printf("Genre Name max %d chars. You entered %d chars", iGenreNameMaxLength, (int) strlen(sGenreName));
              printf("\n");
-             strGenreName[0] = '\0';
+             sGenreName[0] = '\0';
         }
-    } while(strlen(strGenreName) == 0);
+    } while(strlen(sGenreName) == 0);
 
-    strGenreNameEscaped = fEscapeSingleQuote(strGenreName);
+    sGenreNameEscaped = fEscapeSingleQuote(sGenreName);
 
-    if(strcmp(strGenreName, "x") == 0)
+    if(strcmp(sGenreName, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return EXIT_SUCCESS;
     }
 
     do{
-        printf("Genre Description or E(x)it (max %d chars): ", intGenreDescMaxLength);
-        strGenreDesc = GetString();
-        if (strlen(strGenreDesc) > intGenreDescMaxLength)
+        printf("Genre Description or E(x)it (max %d chars): ", iGenreDescMaxLength);
+        sGenreDesc = GetString();
+        if (strlen(sGenreDesc) > iGenreDescMaxLength)
         {
-             printf("Genre Desc max %d chars. You entered %d chars", intGenreDescMaxLength, (int) strlen(strGenreDesc));
+             printf("Genre Desc max %d chars. You entered %d chars", iGenreDescMaxLength, (int) strlen(sGenreDesc));
              printf("\n");
-             strGenreDesc[0] = '\0';
+             sGenreDesc[0] = '\0';
         }
-    } while(strlen(strGenreDesc) == 0);
+    } while(strlen(sGenreDesc) == 0);
 
-    strGenreDescEscaped = fEscapeSingleQuote(strGenreDesc);
+    sGenreDescEscaped = fEscapeSingleQuote(sGenreDesc);
 
-    if(strcmp(strGenreDesc, "x") == 0)
+    if(strcmp(sGenreDesc, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return EXIT_SUCCESS;
     }
 
     printf("\n");
-    sprintf(strSQL, "INSERT INTO `Book Genres` (`Genre Name`, `Genre Description`) VALUES('%s', '%s')", strGenreNameEscaped, strGenreDescEscaped);
+    sprintf(caSQL, "INSERT INTO `Book Genres` (`Genre Name`, `Genre Description`) VALUES('%s', '%s')", sGenreNameEscaped, sGenreDescEscaped);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) == 0)
+    if(mysql_query(conn, caSQL) == 0)
     {
-        printf("Genre Added: %s, %s", strGenreName, strGenreDesc);
+        printf("Genre Added: %s, %s", sGenreName, sGenreDesc);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -1532,20 +1532,20 @@ int fAddGenre(char *strPrgNme)
     }
 
     fRetitleConsole(strPrgNme);
-    free(strGenreName);
-    free(strGenreNameEscaped);
-    free(strGenreDesc);
-    free(strGenreDescEscaped);
+    free(sGenreName);
+    free(sGenreNameEscaped);
+    free(sGenreDesc);
+    free(sGenreDescEscaped);
     return EXIT_SUCCESS;
 }
 
 void fAddTitle(char *strPrgNme)
 {
-    char *strTitleName = NULL;
-    char *strTitleNameEscaped = NULL;
-    char *strStartDate;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intTitleMaxLength = 0;
+    char *sTitleName = NULL;
+    char *sTitleNameEscaped = NULL;
+    char *sStartDate;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iTitleMaxLength = 0;
 
     fRetitleConsole(strPrgNme);
     printf("\n");
@@ -1554,61 +1554,61 @@ void fAddTitle(char *strPrgNme)
 
 // Get the title name and start date from the console
 
-    intTitleMaxLength = fGetFieldLength("Book Titles", "Title Name");
+    iTitleMaxLength = fGetFieldLength("Book Titles", "Title Name");
     do {
-        printf("Title Name or E(x)it (max %d chars): ", intTitleMaxLength);
-        strTitleName = GetString();
-        if(strlen(strTitleName) > intTitleMaxLength)
+        printf("Title Name or E(x)it (max %d chars): ", iTitleMaxLength);
+        sTitleName = GetString();
+        if(strlen(sTitleName) > iTitleMaxLength)
         {
-            printf("Title Name max %d chars. You entered %d chars", intTitleMaxLength, (int) strlen(strTitleName));
+            printf("Title Name max %d chars. You entered %d chars", iTitleMaxLength, (int) strlen(sTitleName));
             printf("\n");
-            strTitleName[0] = '\0';
+            sTitleName[0] = '\0';
         }
-    } while(strlen(strTitleName) == 0);
+    } while(strlen(sTitleName) == 0);
 
-    strTitleNameEscaped = fEscapeSingleQuote(strTitleName);
+    sTitleNameEscaped = fEscapeSingleQuote(sTitleName);
 
-    if(strcmp(strTitleName, "x") == 0)
+    if(strcmp(sTitleName, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return;
     }
 
     printf("Start Date (YYYY-MM-DD) or E(x)it: ");
-    strStartDate = GetString();
-    if(strcmp(strStartDate, "x") == 0)
+    sStartDate = GetString();
+    if(strcmp(sStartDate, "x") == 0)
     {
         fRetitleConsole(strPrgNme);
         return;
     }
 
     printf("\n");
-    if(strlen(strStartDate) == 0)
+    if(strlen(sStartDate) == 0)
     {
-        sprintf(strSQL, "INSERT INTO `Book Titles` (`Title Name`, `Author ID`, `Source ID`, `Series ID`"
+        sprintf(caSQL, "INSERT INTO `Book Titles` (`Title Name`, `Author ID`, `Source ID`, `Series ID`"
                         ", `Genre ID`, `Status ID`, `Classification ID`,"
-                        "`Rating ID`, `Start`) VALUES ('%s', 67, 10, 57, 17, 6, 3, 6, null)", strTitleNameEscaped);
+                        "`Rating ID`, `Start`) VALUES ('%s', 67, 10, 57, 17, 6, 3, 6, null)", sTitleNameEscaped);
     }
     else
     {
-        sprintf(strSQL, "INSERT INTO `Book Titles` (`Title Name`, `Author ID`, `Source ID`, `Series ID`"
+        sprintf(caSQL, "INSERT INTO `Book Titles` (`Title Name`, `Author ID`, `Source ID`, `Series ID`"
                         ", `Genre ID`, `Status ID`, `Classification ID`,"
-                        "`Rating ID`, `Start`) VALUES ('%s', 67, 10, 57, 17, 6, 3, 6, '%s')", strTitleNameEscaped, strStartDate);
+                        "`Rating ID`, `Start`) VALUES ('%s', 67, 10, 57, 17, 6, 3, 6, '%s')", sTitleNameEscaped, sStartDate);
     }
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) == 0)
+    if(mysql_query(conn, caSQL) == 0)
     {
-        if(strlen(strStartDate) > 0)
+        if(strlen(sStartDate) > 0)
         {
-            printf("Title Added: %s starting %s", strTitleName, strStartDate);
+            printf("Title Added: %s starting %s", sTitleName, sStartDate);
             printf("\n\n");
             fPressEnterToContinue();
         }
         else
         {
-            printf("Title Added: %s", strTitleName);
+            printf("Title Added: %s", sTitleName);
             printf("\n\n");
             fPressEnterToContinue();
         }
@@ -1623,36 +1623,36 @@ void fAddTitle(char *strPrgNme)
         return;
     }
 
-    free(strTitleNameEscaped);
-    free(strTitleName);
+    free(sTitleNameEscaped);
+    free(sTitleName);
     fRetitleConsole(strPrgNme);
     return;
 }
 
-void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
+void fUpdateTitleAndAttributes(char *strPrgNme, int *piDisplayPageLength)
 {
-    int  intTitleID = 0;
-    int  intMaxTitleID = 0;
-    int  intMinTitleID = 0;
-    int  intNewAuthorID = 0;
-    int  intNewSourceID = 0;
-    int  intNewSeriesID = 0;
-    int  intNewGenreID = 0;
-    int  intNewStatusID = 0;
-    int  intNewClassnID = 0;
-    int  intNewRatingID = 0;
+    int  iTitleID = 0;
+    int  iMaxTitleID = 0;
+    int  iMinTitleID = 0;
+    int  iNewAuthorID = 0;
+    int  iNewSourceID = 0;
+    int  iNewSeriesID = 0;
+    int  iNewGenreID = 0;
+    int  iNewStatusID = 0;
+    int  iNewClassnID = 0;
+    int  iNewRatingID = 0;
     bool bExitAttributeChoice = false;
     bool bTitleFound = false;
     bool bAttributeQueryIsValid = false;
-    char strSQL[SQL_LEN] = {'\0'};
-    char *strTitleName = NULL;
-    char *strNewStartDate = NULL;
-    char *strNewFinishDate = NULL;
-    char *strNewComments = NULL;
-    char *strNewCommentsEscaped = NULL;
-    char charUpdateTitleAndAttributesAction = 'X';
-    char *strTitleSearch = NULL;
-    char *strAttribChoice = "00";                                  // choice of attribute to change
+    char caSQL[SQL_LEN] = {'\0'};
+    char *sTitleName = NULL;
+    char *sNewStartDate = NULL;
+    char *sNewFinishDate = NULL;
+    char *sNewComments = NULL;
+    char *sNewCommentsEscaped = NULL;
+    char cUpdateTitleAndAttributesAction = 'X';
+    char *sTitleSearch = NULL;
+    char *sAttribChoice = "00";                                                      // choice of attribute to change
 
     while(bTitleFound == false)
     {
@@ -1663,23 +1663,23 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
         printf("\n\n");
 
         printf("(T)itle ID, (S)earch or E(x)it: ");
-        charUpdateTitleAndAttributesAction = GetChar();
+        cUpdateTitleAndAttributesAction = GetChar();
 
-        if(toupper(charUpdateTitleAndAttributesAction) == 'S')
+        if(toupper(cUpdateTitleAndAttributesAction) == 'S')
         {
             printf("\n");
             printf("Search String: ");
-            strTitleSearch = GetString();
-            fSearchTitles(strTitleSearch);
+            sTitleSearch = GetString();
+            fSearchTitles(sTitleSearch);
             printf("\n");
             fPressEnterToContinue();
         }
-        else if(toupper(charUpdateTitleAndAttributesAction) == 'T')
+        else if(toupper(cUpdateTitleAndAttributesAction) == 'T')
         {
             printf("\n");
             printf("Title ID: ");
-            intTitleID = GetInt();
-            if(fCheckTitleIDExists(intTitleID) == true)
+            iTitleID = GetInt();
+            if(fCheckTitleIDExists(iTitleID) == true)
             {
                 bTitleFound = true;
             }
@@ -1689,7 +1689,7 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
             }
             printf("\n");
         }
-        else if(toupper(charUpdateTitleAndAttributesAction) == 'X')
+        else if(toupper(cUpdateTitleAndAttributesAction) == 'X')
         {
             fRetitleConsole(strPrgNme);
             return;
@@ -1706,176 +1706,176 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
         }
     }
 
-    intMaxTitleID = fGetMaxTitleID();
-    intMinTitleID = fGetMinTitleID();
+    iMaxTitleID = fGetMaxTitleID();
+    iMinTitleID = fGetMinTitleID();
 
     while(bExitAttributeChoice == false)
     {
-        while((intTitleID < intMinTitleID) || (intTitleID > intMaxTitleID + 1))
+        while((iTitleID < iMinTitleID) || (iTitleID > iMaxTitleID + 1))
         {
-            printf("Title ID (%d - %d): ", intMinTitleID, intMaxTitleID);
-            intTitleID = GetInt();
+            printf("Title ID (%d - %d): ", iMinTitleID, iMaxTitleID);
+            iTitleID = GetInt();
         }
 
         fRetitleConsole(strPrgNme);
         printf("\n");
-        fShowTitle(intTitleID, strPrgNme);
-        fShowAttributes(intTitleID);
+        fShowTitle(iTitleID, strPrgNme);
+        fShowAttributes(iTitleID);
 
-        while((strstr("12345678910111213tTaAoOeEgGsScCrRdDfFmMxXhH", strAttribChoice) == NULL))
+        while((strstr("12345678910111213tTaAoOeEgGsScCrRdDfFmMxXhH", sAttribChoice) == NULL))
         {
             printf("\n");
             printf("Attribute Number (1-13): ");
-            strAttribChoice = GetString();
+            sAttribChoice = GetString();
             printf("\n");
         }
 
-        if(strstr("1tT", strAttribChoice) != NULL)
+        if(strstr("1tT", sAttribChoice) != NULL)
         {
             printf("New Title Name or E(x)it: ");
-            strTitleName = fEscapeSingleQuote(GetString());
-            if((toupper(strTitleName[0]) == 'X') && (strlen(strTitleName) == 1))
+            sTitleName = fEscapeSingleQuote(GetString());
+            if((toupper(sTitleName[0]) == 'X') && (strlen(sTitleName) == 1))
             {
-                strcpy(strAttribChoice, "00");
+                strcpy(sAttribChoice, "00");
                 bExitAttributeChoice == false;
                 bAttributeQueryIsValid = false;
             }
             else
             {
-                sprintf(strSQL, "UPDATE `Book Titles` SET `Title Name` = '%s' WHERE `Title ID` = %d", strTitleName, intTitleID);
-                strcpy(strAttribChoice, "00");
+                sprintf(caSQL, "UPDATE `Book Titles` SET `Title Name` = '%s' WHERE `Title ID` = %d", sTitleName, iTitleID);
+                strcpy(sAttribChoice, "00");
                 bAttributeQueryIsValid = true;
             }
         }
-        else if(strstr("2aA", strAttribChoice) != NULL)
+        else if(strstr("2aA", sAttribChoice) != NULL)
         {
-            fShowAllAuthors(pintDisplayPageLength);
+            fShowAllAuthors(piDisplayPageLength);
             printf("New Author ID: ");
-            intNewAuthorID = GetInt();
-            sprintf(strSQL, "UPDATE `Book Titles` SET `Author ID` = %d WHERE `Title ID` = %d", intNewAuthorID, intTitleID);
+            iNewAuthorID = GetInt();
+            sprintf(caSQL, "UPDATE `Book Titles` SET `Author ID` = %d WHERE `Title ID` = %d", iNewAuthorID, iTitleID);
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("3Oo", strAttribChoice) != NULL)
+        else if(strstr("3Oo", sAttribChoice) != NULL)
         {
-            fShowAllSources(pintDisplayPageLength);
+            fShowAllSources(piDisplayPageLength);
             printf("New Source ID: ");
-            intNewSourceID = GetInt();
-            sprintf(strSQL, "UPDATE `Book Titles` SET `Source ID` = %d WHERE `Title ID` = %d", intNewSourceID, intTitleID);
+            iNewSourceID = GetInt();
+            sprintf(caSQL, "UPDATE `Book Titles` SET `Source ID` = %d WHERE `Title ID` = %d", iNewSourceID, iTitleID);
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("4eE", strAttribChoice) != NULL)
+        else if(strstr("4eE", sAttribChoice) != NULL)
         {
-            fShowAllSeries(pintDisplayPageLength);
+            fShowAllSeries(piDisplayPageLength);
             printf("New Series ID: ");
-            intNewSeriesID = GetInt();
-            sprintf(strSQL, "UPDATE `Book Titles` SET `Series ID` = %d WHERE `Title ID` = %d", intNewSeriesID, intTitleID);
+            iNewSeriesID = GetInt();
+            sprintf(caSQL, "UPDATE `Book Titles` SET `Series ID` = %d WHERE `Title ID` = %d", iNewSeriesID, iTitleID);
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("5gG", strAttribChoice) != NULL)
+        else if(strstr("5gG", sAttribChoice) != NULL)
         {
-            fShowAllGenres(pintDisplayPageLength);
+            fShowAllGenres(piDisplayPageLength);
             printf("New Genre ID: ");
-            intNewGenreID = GetInt();
-            sprintf(strSQL, "UPDATE `Book Titles` SET `Genre ID` = %d WHERE `Title ID` = %d", intNewGenreID, intTitleID);
+            iNewGenreID = GetInt();
+            sprintf(caSQL, "UPDATE `Book Titles` SET `Genre ID` = %d WHERE `Title ID` = %d", iNewGenreID, iTitleID);
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("6sS", strAttribChoice) != NULL)
+        else if(strstr("6sS", sAttribChoice) != NULL)
         {
-            fShowAllStatuses(pintDisplayPageLength);
+            fShowAllStatuses(piDisplayPageLength);
             printf("New Status ID: ");
-            intNewStatusID = GetInt();
-            sprintf(strSQL, "UPDATE `Book Titles` SET `Status ID` = %d WHERE `Title ID` = %d", intNewStatusID, intTitleID);
+            iNewStatusID = GetInt();
+            sprintf(caSQL, "UPDATE `Book Titles` SET `Status ID` = %d WHERE `Title ID` = %d", iNewStatusID, iTitleID);
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("7cC", strAttribChoice) != NULL)
+        else if(strstr("7cC", sAttribChoice) != NULL)
         {
-            fShowAllClassifications(pintDisplayPageLength);
+            fShowAllClassifications(piDisplayPageLength);
             printf("New Classn ID: ");
-            intNewClassnID = GetInt();
-            sprintf(strSQL, "UPDATE `Book Titles` SET `Classification ID` = %d WHERE `Title ID` = %d", intNewClassnID, intTitleID);
+            iNewClassnID = GetInt();
+            sprintf(caSQL, "UPDATE `Book Titles` SET `Classification ID` = %d WHERE `Title ID` = %d", iNewClassnID, iTitleID);
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("8rR", strAttribChoice) != NULL)
+        else if(strstr("8rR", sAttribChoice) != NULL)
         {
-            fShowAllRatings(pintDisplayPageLength);
+            fShowAllRatings(piDisplayPageLength);
             printf("New Rating ID: ");
-            intNewRatingID = GetInt();
-            sprintf(strSQL, "UPDATE `Book Titles` SET `Rating ID` = %d WHERE `Title ID` = %d", intNewRatingID, intTitleID);
+            iNewRatingID = GetInt();
+            sprintf(caSQL, "UPDATE `Book Titles` SET `Rating ID` = %d WHERE `Title ID` = %d", iNewRatingID, iTitleID);
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("9dD", strAttribChoice) != NULL)
+        else if(strstr("9dD", sAttribChoice) != NULL)
         {
             printf("New Start Date (YYYY-MM-DD): ");
-            strNewStartDate = GetString();
-            if(strlen(strNewStartDate) == 0)
+            sNewStartDate = GetString();
+            if(strlen(sNewStartDate) == 0)
             {
-                sprintf(strSQL, "UPDATE `Book Titles` SET `Start` = NULL WHERE `Title ID` = %d", intTitleID);
+                sprintf(caSQL, "UPDATE `Book Titles` SET `Start` = NULL WHERE `Title ID` = %d", iTitleID);
             }
             else
             {
-                sprintf(strSQL, "UPDATE `Book Titles` SET `Start` = '%s' WHERE `Title ID` = %d", strNewStartDate, intTitleID);
+                sprintf(caSQL, "UPDATE `Book Titles` SET `Start` = '%s' WHERE `Title ID` = %d", sNewStartDate, iTitleID);
             }
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("10fF", strAttribChoice) != NULL)
+        else if(strstr("10fF", sAttribChoice) != NULL)
         {
             printf("New Finish Date (YYYY-MM-DD): ");
-            strNewFinishDate = GetString();
-            if(strlen(strNewFinishDate) == 0)
+            sNewFinishDate = GetString();
+            if(strlen(sNewFinishDate) == 0)
             {
-                sprintf(strSQL, "UPDATE `Book Titles` SET `Finish` = NULL WHERE `Title ID` = %d", intTitleID);
+                sprintf(caSQL, "UPDATE `Book Titles` SET `Finish` = NULL WHERE `Title ID` = %d", iTitleID);
             }
             else
             {
-                sprintf(strSQL, "UPDATE `Book Titles` SET `Finish` = '%s' WHERE `Title ID` = %d", strNewFinishDate, intTitleID);
+                sprintf(caSQL, "UPDATE `Book Titles` SET `Finish` = '%s' WHERE `Title ID` = %d", sNewFinishDate, iTitleID);
             }
             bAttributeQueryIsValid = true;
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
-        else if(strstr("11mM", strAttribChoice) != NULL)
+        else if(strstr("11mM", sAttribChoice) != NULL)
         {
             printf("New Comments or E(x)it: ");
-            strNewComments = fEscapeSingleQuote(GetString());
-            if((toupper(strNewComments[0]) == 'X') && (strlen(strNewComments) == 1))
+            sNewComments = fEscapeSingleQuote(GetString());
+            if((toupper(sNewComments[0]) == 'X') && (strlen(sNewComments) == 1))
             {
-                strcpy(strAttribChoice, "00");
+                strcpy(sAttribChoice, "00");
                 bExitAttributeChoice == false;
                 bAttributeQueryIsValid = false;
             }
             else
             {
-                sprintf(strSQL, "UPDATE `Book Titles` SET `Comments` = '%s' WHERE `Title ID` = %d", strNewComments, intTitleID);
-                free(strNewComments);
-                strcpy(strAttribChoice, "00");
+                sprintf(caSQL, "UPDATE `Book Titles` SET `Comments` = '%s' WHERE `Title ID` = %d", sNewComments, iTitleID);
+                free(sNewComments);
+                strcpy(sAttribChoice, "00");
                 bAttributeQueryIsValid = true;
             }
         }
-        else if(strstr("12hH", strAttribChoice) != NULL)
+        else if(strstr("12hH", sAttribChoice) != NULL)
         {
             printf("Show Characters: ");
             printf("\n\n");
-            fShowCharacters(intTitleID, strPrgNme);
-            sprintf(strSQL, "UPDATE `Book Titles` SET `Comments` = '%s' WHERE `Title ID` = %d", strNewComments, intTitleID);
-            strcpy(strAttribChoice, "00");
+            fShowCharacters(iTitleID, strPrgNme);
+            sprintf(caSQL, "UPDATE `Book Titles` SET `Comments` = '%s' WHERE `Title ID` = %d", sNewComments, iTitleID);
+            strcpy(sAttribChoice, "00");
             printf("\n");
             fPressEnterToContinue();
         }
-        else if(strstr("13xX", strAttribChoice) != NULL)
+        else if(strstr("13xX", sAttribChoice) != NULL)
         {
             bExitAttributeChoice = true;
         }
 
 // execute the query and check for no result
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -1892,7 +1892,7 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
             printf("\n\n");
             fPressEnterToContinue();
             fRetitleConsole(strPrgNme);
-            strcpy(strAttribChoice, "00");
+            strcpy(sAttribChoice, "00");
         }
         fRetitleConsole(strPrgNme);
     }
@@ -1903,17 +1903,17 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *pintDisplayPageLength)
 
 int  fGetMaxTitleID(void)
 {
-    char strSQL[SQL_LEN] = {'\0'};
+    char caSQL[SQL_LEN] = {'\0'};
     char **endptr;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT MAX(`Title ID`) from `Book Titles`");
+    sprintf(caSQL, "SELECT MAX(`Title ID`) from `Book Titles`");
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -1962,17 +1962,17 @@ int  fGetMaxTitleID(void)
 
 int fGetMinTitleID(void)
 {
-    char strSQL[SQL_LEN] = {'\0'};
+    char caSQL[SQL_LEN] = {'\0'};
     char **endptr;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT MIN(`Title ID`) from `Book Titles`");
+    sprintf(caSQL, "SELECT MIN(`Title ID`) from `Book Titles`");
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2019,14 +2019,14 @@ int fGetMinTitleID(void)
     return(int) strtol(row[0], endptr, 10);
 }
 
-void fShowAttributes(int intTitleID)
+void fShowAttributes(int iTitleID)
 {
-    char strSQL[SQL_LEN] = {'\0'};
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT `Title ID`"
+    sprintf(caSQL, "SELECT `Title ID`"
                          ", `Title Name`"
                          ", BT.`Author ID`"
                          ", BA.`Author Name`"
@@ -2052,11 +2052,11 @@ void fShowAttributes(int intTitleID)
                          "LEFT JOIN `Book Statuses` BU on BT.`Status ID` = BU.`Status ID`"
                          "LEFT JOIN `Book Classifications` BC ON BT.`Classification ID` = BC.`Classification ID`"
                          "LEFT JOIN `Book Ratings` BR ON BT.`Rating ID` = BR.`Rating ID`"
-                         "WHERE `Title ID` = %d", intTitleID);
+                         "WHERE `Title ID` = %d", iTitleID);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function\n\n%s(): %s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2131,24 +2131,24 @@ void fShowAttributes(int intTitleID)
     return;
 }
 
-void fShowCharacters(int intTitleID, char *strPrgNme)
+void fShowCharacters(int iTitleID, char *strPrgNme)
 {
-    int *intLengths = NULL;
-    int intColCount = 0;
-    int intRowsReturned = 0;
-    int intRowsPrinted = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int *iLengths = NULL;
+    int iColCount = 0;
+    int iRowsReturned = 0;
+    int iRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Character ID`, `Character Name` "
+    sprintf(caSQL, "SELECT  `Character ID`, `Character Name` "
                     "FROM `Book Characters` "
-                    "WHERE `Title ID` = %d", intTitleID);
+                    "WHERE `Title ID` = %d", iTitleID);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2189,28 +2189,28 @@ void fShowCharacters(int intTitleID, char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
-        printf("No characters in Title ID: %d", intTitleID);
+        printf("No characters in Title ID: %d", iTitleID);
         printf("\n");
     }
 
 // fetch the max width of each column
 
-    intLengths = (int *)calloc(intColCount, sizeof(int));
+    iLengths = (int *)calloc(iColCount, sizeof(int));
 
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        for(int k = 0; k < intColCount; k++)
+        for(int k = 0; k < iColCount; k++)
         {
             if(row[k] != NULL)
             {
-                if(strlen(row[k]) > intLengths[k])
+                if(strlen(row[k]) > iLengths[k])
                 {
-                     intLengths[k] = strlen(row[k]);
+                     iLengths[k] = strlen(row[k]);
                 }
             }
         }
@@ -2222,12 +2222,12 @@ void fShowCharacters(int intTitleID, char *strPrgNme)
 
 // print each row of results
 
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
-        for(int i = 0; i < intColCount; i++)
+        iRowsPrinted++;
+        for(int i = 0; i < iColCount; i++)
         {
-            printf("%-*s", intLengths[i] + 1, row[i] ? row[i] : "");
+            printf("%-*s", iLengths[i] + 1, row[i] ? row[i] : "");
         }
         printf("\n");
     }
@@ -2238,21 +2238,21 @@ void fShowCharacters(int intTitleID, char *strPrgNme)
 
 void fSearchTitles(char *strSearchString)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intColCount = 0;
-    int  intRowsReturned = 0;
-    int  intRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iColCount = 0;
+    int  iRowsReturned = 0;
+    int  iRowsPrinted = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Title ID`, `Title Name` "
+    sprintf(caSQL, "SELECT  `Title ID`, `Title Name` "
                     "FROM `Book Titles` "
                     "WHERE `Title Name` LIKE '%%%s%%'", strSearchString);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2284,10 +2284,10 @@ void fSearchTitles(char *strSearchString)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
         printf("No matching titles found");
@@ -2296,9 +2296,9 @@ void fSearchTitles(char *strSearchString)
 // print each row of results
 
     printf("\n");
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
+        iRowsPrinted++;
         printf("%4s  %s", row[0], row[1]);
         printf("\n");
     }
@@ -2307,16 +2307,16 @@ void fSearchTitles(char *strSearchString)
     return;
 }
 
-void fShowAllSources(int *pintDisplayPageLength)
+void fShowAllSources(int *piDisplayPageLength)
 {
-    int  intRowCount = 0;
-    int  intMaxWidth = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int  iRowCount = 0;
+    int  iMaxWidth = 0;
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT S.`Source ID`"
+    sprintf(caSQL, "SELECT S.`Source ID`"
                          ", S.`Source Name` "
                          ", COUNT(T.`Title ID`)"
                    " FROM `Book Sources` S"
@@ -2326,7 +2326,7 @@ void fShowAllSources(int *pintDisplayPageLength)
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2368,9 +2368,9 @@ void fShowAllSources(int *pintDisplayPageLength)
 
     while(row = mysql_fetch_row(res))
     {
-        if(strlen(row[1]) > intMaxWidth)
+        if(strlen(row[1]) > iMaxWidth)
         {
-            intMaxWidth = strlen(row[1]);
+            iMaxWidth = strlen(row[1]);
         }
     }
 
@@ -2382,15 +2382,15 @@ void fShowAllSources(int *pintDisplayPageLength)
     printf("\n\n");
     while(row = mysql_fetch_row(res))
     {
-        intRowCount++;
-        printf("%3s  %-*s %3s", row[0], intMaxWidth, row[1], row[2]);
+        iRowCount++;
+        printf("%3s  %-*s %3s", row[0], iMaxWidth, row[1], row[2]);
         printf("\n");
-        if(intRowCount >= *pintDisplayPageLength)
+        if(iRowCount >= *piDisplayPageLength)
         {
             printf("\n");
             fPressEnterToContinue();
             printf("\n");
-            intRowCount = 0;
+            iRowCount = 0;
         }
     }
     printf("\n");
@@ -2399,16 +2399,16 @@ void fShowAllSources(int *pintDisplayPageLength)
     return;
 }
 
-void fShowAllGenres(int *pintDisplayPageLength)
+void fShowAllGenres(int *piDisplayPageLength)
 {
-    int  intRowCount = 0;
-    int  intMaxWidth = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int  iRowCount = 0;
+    int  iMaxWidth = 0;
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT G.`Genre ID`"
+    sprintf(caSQL, "SELECT G.`Genre ID`"
                          ", G. `Genre Name` "
                          ", COUNT(T.`Title ID`)"
                    " FROM `Book Genres` G"
@@ -2418,7 +2418,7 @@ void fShowAllGenres(int *pintDisplayPageLength)
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2459,9 +2459,9 @@ void fShowAllGenres(int *pintDisplayPageLength)
 
     while(row = mysql_fetch_row(res))
     {
-        if(strlen(row[1]) > intMaxWidth)
+        if(strlen(row[1]) > iMaxWidth)
         {
-            intMaxWidth = strlen(row[1]);
+            iMaxWidth = strlen(row[1]);
         }
     }
 
@@ -2473,15 +2473,15 @@ void fShowAllGenres(int *pintDisplayPageLength)
     printf("\n\n");
     while(row = mysql_fetch_row(res))
     {
-        intRowCount++;
-        printf("%3s  %-*s %3s", row[0], intMaxWidth, row[1], row[2]);
+        iRowCount++;
+        printf("%3s  %-*s %3s", row[0], iMaxWidth, row[1], row[2]);
         printf("\n");
-        if(intRowCount >= *pintDisplayPageLength)
+        if(iRowCount >= *piDisplayPageLength)
         {
             printf("\n");
             fPressEnterToContinue();
             printf("\n");
-            intRowCount = 0;
+            iRowCount = 0;
         }
     }
     printf("\n");
@@ -2490,16 +2490,16 @@ void fShowAllGenres(int *pintDisplayPageLength)
     return;
 }
 
-void fShowAllStatuses(int *pintDisplayPageLength)
+void fShowAllStatuses(int *piDisplayPageLength)
 {
-    int  intRowCount = 0;
-    int  intMaxWidth = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int  iRowCount = 0;
+    int  iMaxWidth = 0;
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT S.`Status ID`"
+    sprintf(caSQL, "SELECT S.`Status ID`"
                         ", S.`Status Name`"
                         ", COUNT(T.`Title ID`)"
                    " FROM `Book Statuses` S"
@@ -2509,7 +2509,7 @@ void fShowAllStatuses(int *pintDisplayPageLength)
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2550,9 +2550,9 @@ void fShowAllStatuses(int *pintDisplayPageLength)
 
     while(row = mysql_fetch_row(res))
     {
-        if(strlen(row[1]) > intMaxWidth)
+        if(strlen(row[1]) > iMaxWidth)
         {
-            intMaxWidth = strlen(row[1]);
+            iMaxWidth = strlen(row[1]);
         }
     }
 
@@ -2564,15 +2564,15 @@ void fShowAllStatuses(int *pintDisplayPageLength)
     printf("\n\n");
     while(row = mysql_fetch_row(res))
     {
-        intRowCount++;
-        printf("%3s  %-*s %3s", row[0], intMaxWidth, row[1], row[2]);
+        iRowCount++;
+        printf("%3s  %-*s %3s", row[0], iMaxWidth, row[1], row[2]);
         printf("\n");
-        if(intRowCount >= *pintDisplayPageLength)
+        if(iRowCount >= *piDisplayPageLength)
         {
             printf("\n");
             fPressEnterToContinue();
             printf("\n");
-            intRowCount = 0;
+            iRowCount = 0;
         }
     }
     printf("\n");
@@ -2581,16 +2581,16 @@ void fShowAllStatuses(int *pintDisplayPageLength)
     return;
 }
 
-void fShowAllClassifications(int *pintDisplayPageLength)
+void fShowAllClassifications(int *piDisplayPageLength)
 {
-    int  intRowCount = 0;
-    int  intMaxWidth = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int  iRowCount = 0;
+    int  iMaxWidth = 0;
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT C.`Classification ID`"
+    sprintf(caSQL, "SELECT C.`Classification ID`"
                         " , C.`Classification Name`"
                         " , COUNT(T.`Title ID`)"
                    " FROM `Book Classifications` C"
@@ -2600,7 +2600,7 @@ void fShowAllClassifications(int *pintDisplayPageLength)
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2641,9 +2641,9 @@ void fShowAllClassifications(int *pintDisplayPageLength)
 
     while(row = mysql_fetch_row(res))
     {
-        if(strlen(row[1]) > intMaxWidth)
+        if(strlen(row[1]) > iMaxWidth)
         {
-            intMaxWidth = strlen(row[1]);
+            iMaxWidth = strlen(row[1]);
         }
     }
 
@@ -2655,15 +2655,15 @@ void fShowAllClassifications(int *pintDisplayPageLength)
     printf("\n\n");
     while(row = mysql_fetch_row(res))
     {
-        intRowCount++;
-        printf("%3s  %-*s %3s", row[0], intMaxWidth, row[1], row[2]);
+        iRowCount++;
+        printf("%3s  %-*s %3s", row[0], iMaxWidth, row[1], row[2]);
         printf("\n");
-        if(intRowCount >= *pintDisplayPageLength)
+        if(iRowCount >= *piDisplayPageLength)
         {
             printf("\n");
             fPressEnterToContinue();
             printf("\n");
-            intRowCount = 0;
+            iRowCount = 0;
         }
     }
     printf("\n");
@@ -2672,16 +2672,16 @@ void fShowAllClassifications(int *pintDisplayPageLength)
     return;
 }
 
-void fShowAllRatings(int  *pintDisplayPageLength)
+void fShowAllRatings(int  *piDisplayPageLength)
 {
-    int  intRowCount = 0;
-    int  intMaxWidth = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int  iRowCount = 0;
+    int  iMaxWidth = 0;
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT R.`Rating ID`"
+    sprintf(caSQL, "SELECT R.`Rating ID`"
                         " , R.`Rating Name` "
                         " , COUNT(T.`Title ID`)"
                    " FROM `Book Ratings` R"
@@ -2691,7 +2691,7 @@ void fShowAllRatings(int  *pintDisplayPageLength)
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -2732,9 +2732,9 @@ void fShowAllRatings(int  *pintDisplayPageLength)
 
     while(row = mysql_fetch_row(res))
     {
-        if(strlen(row[1]) > intMaxWidth)
+        if(strlen(row[1]) > iMaxWidth)
         {
-            intMaxWidth = strlen(row[1]);
+            iMaxWidth = strlen(row[1]);
         }
     }
 
@@ -2746,15 +2746,15 @@ void fShowAllRatings(int  *pintDisplayPageLength)
     printf("\n\n");
     while(row = mysql_fetch_row(res))
     {
-        intRowCount++;
-        printf("%3s  %-*s %3s", row[0], intMaxWidth, row[1], row[2]);
+        iRowCount++;
+        printf("%3s  %-*s %3s", row[0], iMaxWidth, row[1], row[2]);
         printf("\n");
-        if(intRowCount >= *pintDisplayPageLength)
+        if(iRowCount >= *piDisplayPageLength)
         {
             printf("\n");
             fPressEnterToContinue();
             printf("\n");
-            intRowCount = 0;
+            iRowCount = 0;
         }
     }
     printf("\n");
@@ -2815,22 +2815,21 @@ void fShowAttributesMenu(void)
 
 void fCharacters(char *strPrgNme)
 {
-
-    int intTitleID = 0;
-    char charExitOrContinue = 'C';
-    char *strCharacterToAdd = NULL;
-    char *strCharacterToAddEscaped = NULL;
-    char *strCharacterToChange = NULL;
-    char *strCharacterToChangeEscaped = NULL;
-    char *strTitleSearch = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    char charAddCharacterAction = 'X';
+    int  iTitleID = 0;
+    char cExitOrContinue = 'C';
+    char *sCharacterToAdd = NULL;
+    char *sCharacterToAddEscaped = NULL;
+    char *sCharacterToChange = NULL;
+    char *sCharacterToChangeEscaped = NULL;
+    char *sTitleSearch = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    char cAddCharacterAction = 'X';
     bool bExitCharacters = false;
     bool bTitleFound = false;
     bool bValidChoice = false;
-    char charAction = 'A';
-    int  intCharID = 0;
-    int  intCharacterMaxLength = 0;
+    char cAction = 'A';
+    int  iCharID = 0;
+    int  iCharacterMaxLength = 0;
 
     while(bTitleFound == false)
     {
@@ -2841,25 +2840,25 @@ void fCharacters(char *strPrgNme)
         printf("\n\n");
 
         printf("(T)itle ID, (S)earch or E(x)it: ");
-        charAddCharacterAction = GetChar();
+        cAddCharacterAction = GetChar();
 
-        if(toupper(charAddCharacterAction) == 'S')
+        if(toupper(cAddCharacterAction) == 'S')
         {
             printf("\n");
             printf("Search String: ");
-            strTitleSearch = GetString();
-            fSearchTitles(strTitleSearch);
+            sTitleSearch = GetString();
+            fSearchTitles(sTitleSearch);
             printf("\n");
             fPressEnterToContinue();
             printf("\n");
-            charAddCharacterAction = 'T';
+            cAddCharacterAction = 'T';
         }
-        else if(toupper(charAddCharacterAction) == 'T')
+        else if(toupper(cAddCharacterAction) == 'T')
         {
             printf("\n");
             printf("Title ID: ");
-            intTitleID = GetInt();
-            if(fCheckTitleIDExists(intTitleID) == true)
+            iTitleID = GetInt();
+            if(fCheckTitleIDExists(iTitleID) == true)
             {
                 bTitleFound = true;
             }
@@ -2869,7 +2868,7 @@ void fCharacters(char *strPrgNme)
             }
             printf("\n");
         }
-        else if(toupper(charAddCharacterAction) == 'X')
+        else if(toupper(cAddCharacterAction) == 'X')
         {
             fRetitleConsole(strPrgNme);
             return;
@@ -2895,81 +2894,81 @@ void fCharacters(char *strPrgNme)
             printf("\n");
             printf("Main Menu > Characters");
             printf("\n\n");
-            printf("Title ID: %d", intTitleID);
+            printf("Title ID: %d", iTitleID);
             printf("\n\n");
 
-            fShowTitle(intTitleID, strPrgNme);
+            fShowTitle(iTitleID, strPrgNme);
             printf("\n");
-            fShowCharacters(intTitleID, strPrgNme);
+            fShowCharacters(iTitleID, strPrgNme);
 
             printf("\n");
             printf("(A)dd, (C)hange, (D)elete or E(x)it Characters: ");
-            charAction = toupper(GetChar());
-            if(strchr("xX", charAction) != NULL)
+            cAction = toupper(GetChar());
+            if(strchr("xX", cAction) != NULL)
             {
                 fRetitleConsole(strPrgNme);
                 return;
             }
-            else if(strchr("aA", charAction) != NULL)
+            else if(strchr("aA", cAction) != NULL)
             {
                 bValidChoice = true;
                 printf("\n");
 
-                intCharacterMaxLength = fGetFieldLength("Book Characters", "Character Name");
+                iCharacterMaxLength = fGetFieldLength("Book Characters", "Character Name");
 
                 do{
-                    printf("Character Name (max %d chars): ", intCharacterMaxLength);
-                    strCharacterToAdd = GetString();
-                    if(strlen(strCharacterToAdd) > intCharacterMaxLength)
+                    printf("Character Name (max %d chars): ", iCharacterMaxLength);
+                    sCharacterToAdd = GetString();
+                    if(strlen(sCharacterToAdd) > iCharacterMaxLength)
                     {
-                        printf("Character Name max %d chars. You entered %d chars", intCharacterMaxLength, (int) strlen(strCharacterToAdd));
+                        printf("Character Name max %d chars. You entered %d chars", iCharacterMaxLength, (int) strlen(sCharacterToAdd));
                         printf("\n");
-                        strCharacterToAdd[0] = '\0';
+                        sCharacterToAdd[0] = '\0';
                     }
-                } while(strlen(strCharacterToAdd) == 0);
+                } while(strlen(sCharacterToAdd) == 0);
 
-                strCharacterToAddEscaped = fEscapeSingleQuote(strCharacterToAdd);
+                sCharacterToAddEscaped = fEscapeSingleQuote(sCharacterToAdd);
                 
-                sprintf(strSQL, "INSERT INTO `Book Characters` (`Character Name`, `Title ID`) VALUES('%s', %d)", strCharacterToAddEscaped, intTitleID);
+                sprintf(caSQL, "INSERT INTO `Book Characters` (`Character Name`, `Title ID`) VALUES('%s', %d)", sCharacterToAddEscaped, iTitleID);
                 
-                free(strCharacterToAddEscaped);
-                free(strCharacterToAdd);
+                free(sCharacterToAddEscaped);
+                free(sCharacterToAdd);
             }
                 
-            else if(strchr("cC", charAction) != NULL)
+            else if(strchr("cC", cAction) != NULL)
             {
                 bValidChoice = true;
                 printf("\n");
 
-                intCharacterMaxLength = fGetFieldLength("Book Characters", "Character Name");
+                iCharacterMaxLength = fGetFieldLength("Book Characters", "Character Name");
 
                 printf("Character ID: ");
-                intCharID = GetInt();
+                iCharID = GetInt();
                 printf("\n");
 
                 do{
-                    printf("Character Name (max %d chars): ", intCharacterMaxLength);
-                    strCharacterToChange = GetString();
-                    if(strlen(strCharacterToChange) > intCharacterMaxLength)
+                    printf("Character Name (max %d chars): ", iCharacterMaxLength);
+                    sCharacterToChange = GetString();
+                    if(strlen(sCharacterToChange) > iCharacterMaxLength)
                     {
-                        printf("Character Name max %d chars. You entered %d chars", intCharacterMaxLength, (int) strlen(strCharacterToChange));
+                        printf("Character Name max %d chars. You entered %d chars", iCharacterMaxLength, (int) strlen(sCharacterToChange));
                         printf("\n");
-                        strCharacterToChange[0] = '\0';
+                        sCharacterToChange[0] = '\0';
                     }
-                } while(strlen(strCharacterToChange) ==0);
+                } while(strlen(sCharacterToChange) ==0);
 
-                strCharacterToChangeEscaped = fEscapeSingleQuote(strCharacterToChange);
-                sprintf(strSQL, "UPDATE `Book Characters` SET `Character Name` = '%s' WHERE `Character ID` = %d" , strCharacterToChangeEscaped, intCharID);
-                free(strCharacterToChangeEscaped);
-                free(strCharacterToChange);
+                sCharacterToChangeEscaped = fEscapeSingleQuote(sCharacterToChange);
+                sprintf(caSQL, "UPDATE `Book Characters` SET `Character Name` = '%s' WHERE `Character ID` = %d" , sCharacterToChangeEscaped, iCharID);
+                free(sCharacterToChangeEscaped);
+                free(sCharacterToChange);
             }
-            else if(strchr("dD", charAction) != NULL)
+            else if(strchr("dD", cAction) != NULL)
             {
                 bValidChoice = true;
                 printf("\n");
                 printf("Character ID: ");
-                intCharID = GetInt();
-                sprintf(strSQL, "DELETE FROM `Book Characters` WHERE `Character ID` = %d" , intCharID);
+                iCharID = GetInt();
+                sprintf(caSQL, "DELETE FROM `Book Characters` WHERE `Character ID` = %d" , iCharID);
             }
             else
             {
@@ -2981,19 +2980,19 @@ void fCharacters(char *strPrgNme)
 
 // execute the query and check for no result
 
-        if(mysql_query(conn, strSQL) == 0)
+        if(mysql_query(conn, caSQL) == 0)
         {
-            if(charAction == 'A')
+            if(cAction == 'A')
             {
                 printf("Character Added.");
                 printf("\n");
             }
-            else if(charAction == 'C')
+            else if(cAction == 'C')
             {
                 printf("Character Changed.");
                 printf("\n");
             }
-            else if(charAction == 'D')
+            else if(cAction == 'D')
             {
                 printf("Character Deleted.");
                 printf("\n");
@@ -3006,12 +3005,12 @@ void fCharacters(char *strPrgNme)
 
         printf("\n");
         printf("E(x)it or (C)ontinue): ");
-        charExitOrContinue = GetChar();
-        if(toupper(charExitOrContinue) == 'X')
+        cExitOrContinue = GetChar();
+        if(toupper(cExitOrContinue) == 'X')
         {
             bExitCharacters = true;
         }
-        else if(toupper(charExitOrContinue) == 'C')
+        else if(toupper(cExitOrContinue) == 'C')
         {
             bExitCharacters = false;
             bValidChoice =  false;
@@ -3022,24 +3021,24 @@ void fCharacters(char *strPrgNme)
     return;
 }
 
-void fShowTitle(int intTitleID, char *strPrgNme)
+void fShowTitle(int iTitleID, char *strPrgNme)
 {
-    int *intLengths = NULL;
-    int intColCount = 0;
-    int intRowsReturned = 0;
-    int intRowsPrinted = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int *iLengths = NULL;
+    int iColCount = 0;
+    int iRowsReturned = 0;
+    int iRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Title Name` "
+    sprintf(caSQL, "SELECT  `Title Name` "
                     "FROM `Book Titles` "
-                    "WHERE `Title ID` = %d", intTitleID);
+                    "WHERE `Title ID` = %d", iTitleID);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3078,28 +3077,28 @@ void fShowTitle(int intTitleID, char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
-        printf("No Title Name for the Title ID: %d", intTitleID);
+        printf("No Title Name for the Title ID: %d", iTitleID);
         printf("\n");
     }
 
 // fetch the max width of each column
 
-    intLengths = (int *)calloc(intColCount, sizeof(int));
+    iLengths = (int *)calloc(iColCount, sizeof(int));
 
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        for(int k = 0; k < intColCount; k++)
+        for(int k = 0; k < iColCount; k++)
         {
             if(row[k] != NULL)
             {
-                if(strlen(row[k]) > intLengths[k])
+                if(strlen(row[k]) > iLengths[k])
                 {
-                     intLengths[k] = strlen(row[k]);
+                     iLengths[k] = strlen(row[k]);
                 }
             }
         }
@@ -3111,14 +3110,14 @@ void fShowTitle(int intTitleID, char *strPrgNme)
 
 // print each row of results
 
-    printf("%d ", intTitleID);
+    printf("%d ", iTitleID);
 
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
-        for(int i = 0; i < intColCount; i++)
+        iRowsPrinted++;
+        for(int i = 0; i < iColCount; i++)
         {
-            printf("%-*s", intLengths[i] + 1, row[i] ? row[i] : "");
+            printf("%-*s", iLengths[i] + 1, row[i] ? row[i] : "");
         }
         printf("\n");
     }
@@ -3153,26 +3152,26 @@ char *fEscapeSingleQuote(char *strQuery)
         j++;
     }
     strTemp = (char *)realloc(strTemp, strlen(strQuery) + k);
-    strTemp[j] = '\0';                                                  // terminate the new string
+    strTemp[j] = '\0';                                                                     // terminate the new string
     return(strTemp);
 }
 
-bool fCheckTitleIDExists(int intTitleID)
+bool fCheckTitleIDExists(int iTitleID)
 {
-    int intRowsReturned = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int iRowsReturned = 0;
+    char caSQL[SQL_LEN] = {'\0'};
     bool bTitleIDFound = false;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Title ID` "
+    sprintf(caSQL, "SELECT  `Title ID` "
                     "FROM `Book Titles` "
-                    "WHERE `Title ID` = %d", intTitleID);
+                    "WHERE `Title ID` = %d", iTitleID);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3210,12 +3209,12 @@ bool fCheckTitleIDExists(int intTitleID)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No Match for Title ID: %d. ", intTitleID);
+        printf("No Match for Title ID: %d. ", iTitleID);
         printf("\n\n");
         fPressEnterToContinue();
         bTitleIDFound = false;
@@ -3231,21 +3230,21 @@ bool fCheckTitleIDExists(int intTitleID)
     return bTitleIDFound;
 }
 
-void fShowAllAuthors(int *pintDisplayPageLength)
+void fShowAllAuthors(int *piDisplayPageLength)
 {
-    int  intRowCount = 0;
-    int  intMaxWidth = 0;                                // Maximum width of Name colum for printing
-    char strSQL[SQL_LEN] = {'\0'};
+    int  iRowCount = 0;
+    int  iMaxWidth = 0;                                                   // Maximum width of Name colum for printing
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
 
-//    sprintf(strSQL, "SELECT `Author ID`, `Author Name` "
+//    sprintf(caSQL, "SELECT `Author ID`, `Author Name` "
 //                    "FROM `Book Authors`"
 //                    "ORDER BY `Author ID` ASC");
 
-    sprintf(strSQL, "SELECT A.`Author ID`"
+    sprintf(caSQL, "SELECT A.`Author ID`"
                          ", A.`Author Name` "
                          ", COUNT(T.`Title Name`) "
                     "FROM `Book Authors` A "
@@ -3255,7 +3254,7 @@ void fShowAllAuthors(int *pintDisplayPageLength)
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3296,9 +3295,9 @@ void fShowAllAuthors(int *pintDisplayPageLength)
 
     while(row = mysql_fetch_row(res))
     {
-        if(strlen(row[1]) > intMaxWidth)
+        if(strlen(row[1]) > iMaxWidth)
         {
-            intMaxWidth = strlen(row[1]);
+            iMaxWidth = strlen(row[1]);
         }
     }
 
@@ -3310,15 +3309,15 @@ void fShowAllAuthors(int *pintDisplayPageLength)
     printf("\n\n");
     while(row = mysql_fetch_row(res))
     {
-        intRowCount++;
-        printf("%3s  %-*s %3s", row[0], intMaxWidth, row[1], row[2]);
+        iRowCount++;
+        printf("%3s  %-*s %3s", row[0], iMaxWidth, row[1], row[2]);
         printf("\n");
-        if(intRowCount >= *pintDisplayPageLength)
+        if(iRowCount >= *piDisplayPageLength)
         {
             printf("\n");
             fPressEnterToContinue();
             printf("\n");
-            intRowCount = 0;
+            iRowCount = 0;
         }
     }
     printf("\n");
@@ -3327,16 +3326,16 @@ void fShowAllAuthors(int *pintDisplayPageLength)
     return;
 }
 
-void fShowAllSeries(int *pintDisplayPageLength)
+void fShowAllSeries(int *piDisplayPageLength)
 {
-    int  intRowCount = 0;
-    int  intMaxWidth = 0;
-    char strSQL[SQL_LEN] = {'\0'};
+    int  iRowCount = 0;
+    int  iMaxWidth = 0;
+    char caSQL[SQL_LEN] = {'\0'};
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT E.`Series ID`"
+    sprintf(caSQL, "SELECT E.`Series ID`"
                         " , E.`Series Name` "
                         ",  COUNT(T.`Title ID`)"
                    " FROM `Book Series` E"
@@ -3346,7 +3345,7 @@ void fShowAllSeries(int *pintDisplayPageLength)
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3387,9 +3386,9 @@ void fShowAllSeries(int *pintDisplayPageLength)
 
     while(row = mysql_fetch_row(res))
     {
-        if(strlen(row[1]) > intMaxWidth)
+        if(strlen(row[1]) > iMaxWidth)
         {
-            intMaxWidth = strlen(row[1]);
+            iMaxWidth = strlen(row[1]);
         }
     }
 
@@ -3401,15 +3400,15 @@ void fShowAllSeries(int *pintDisplayPageLength)
     printf("\n\n");
     while(row = mysql_fetch_row(res))
     {
-        intRowCount++;
-        printf("%3s  %-*s %3s", row[0], intMaxWidth, row[1], row[2]);
+        iRowCount++;
+        printf("%3s  %-*s %3s", row[0], iMaxWidth, row[1], row[2]);
         printf("\n");
-        if(intRowCount >= *pintDisplayPageLength)
+        if(iRowCount >= *piDisplayPageLength)
         {
             printf("\n");
             fPressEnterToContinue();
             printf("\n");
-            intRowCount = 0;
+            iRowCount = 0;
         }
     }
     printf("\n");
@@ -3417,28 +3416,28 @@ void fShowAllSeries(int *pintDisplayPageLength)
     return;
 }
 
-void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDisplayPageWidth, char *pCharDisplayOrder)
+void fListAuthors(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDisplayOrder)
 {
-    int intColCount = 0;
-    int *intLengths = NULL;
-    int intRowCount = 0;
-    char strOrder[6] = {'D', 'E', 'S', 'C', '\0'};
-    char strSQL[SQL_LEN] = {'\0'};
+    int iColCount = 0;
+    int *iLengths = NULL;
+    int iRowCount = 0;
+    char caOrder[6] = {'D', 'E', 'S', 'C', '\0'};
+    char caSQL[SQL_LEN] = {'\0'};
     bool bEndOfPrintBlock = false;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    if(*pCharDisplayOrder == 'A')
+    if(*pcDisplayOrder == 'A')
     {
-        strcpy(strOrder, "ASC");
+        strcpy(caOrder, "ASC");
     }
-    else if(*pCharDisplayOrder == 'D')
+    else if(*pcDisplayOrder == 'D')
     {
-        strcpy(strOrder, "DESC");
+        strcpy(caOrder, "DESC");
     }
 
-    sprintf(strSQL, "SELECT A.`Author ID`"
+    sprintf(caSQL, "SELECT A.`Author ID`"
                     ", A.`Author Name` 'Author'"
                     ", COUNT(T.`Title Name`) 'Count'"
                     "FROM risingfast.`Book Authors` A "
@@ -3453,7 +3452,7 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3476,21 +3475,21 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
 
 // fetch the number of fields in the result
 
-    intColCount = mysql_num_fields(res);
+    iColCount = mysql_num_fields(res);
 
 // fetch the max width of each column
 
-    intLengths = (int *)calloc(intColCount, sizeof(int));
+    iLengths = (int *)calloc(iColCount, sizeof(int));
 
     while(row = mysql_fetch_row(res))
     {
-        for(int k = 0; k < intColCount; k++)
+        for(int k = 0; k < iColCount; k++)
         {
             if(row[k] != NULL)
             {
-                if(strlen(row[k]) > intLengths[k])
+                if(strlen(row[k]) > iLengths[k])
                 {
-                     intLengths[k] = strlen(row[k]);
+                     iLengths[k] = strlen(row[k]);
                 }
             }
         }
@@ -3502,29 +3501,29 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
 
     while(row = mysql_fetch_row(res))
     {
-        intRowCount++;
+        iRowCount++;
         bEndOfPrintBlock = false;
-        for(int i = 0; i < intColCount; i++)
+        for(int i = 0; i < iColCount; i++)
         if((i==0) || (i==2))
         {
-            printf("%*s", intLengths[i] + 1, row[i] ? row[i] : "");
+            printf("%*s", iLengths[i] + 1, row[i] ? row[i] : "");
         }
         else
         {
-            printf("  %-*s", intLengths[i] + 1, row[i] ? row[i] : "");
+            printf("  %-*s", iLengths[i] + 1, row[i] ? row[i] : "");
         }
         printf("\n");
-        if(intRowCount >= *pintDisplayPageLength)
+        if(iRowCount >= *piDisplayPageLength)
         {
             printf("\n");
             fPressEnterToContinue();
             bEndOfPrintBlock = true;
             printf("\n");
-            intRowCount = 0;
+            iRowCount = 0;
         }
     }
 
-    free(intLengths);
+    free(iLengths);
 
     printf("\n");
     if(bEndOfPrintBlock == false)
@@ -3539,21 +3538,21 @@ void fListAuthors(char *strPrgNme, int *pintDisplayPageLength, char *pcharDispla
 
 void fSearchAuthors(char *strSearchString)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intColCount = 0;
-    int  intRowsReturned = 0;
-    int  intRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iColCount = 0;
+    int  iRowsReturned = 0;
+    int  iRowsPrinted = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Author ID`, `Author Name` "
+    sprintf(caSQL, "SELECT  `Author ID`, `Author Name` "
                     "FROM `Book Authors` "
                     "WHERE `Author Name` LIKE '%%%s%%'", strSearchString);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3588,10 +3587,10 @@ void fSearchAuthors(char *strSearchString)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
         printf("No matching authors found");
@@ -3600,9 +3599,9 @@ void fSearchAuthors(char *strSearchString)
 // print each row of results
 
     printf("\n");
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
+        iRowsPrinted++;
         printf("%-4s  %s", row[0], row[1]);
         printf("\n");
     }
@@ -3614,9 +3613,9 @@ void fSearchAuthors(char *strSearchString)
 void fDeleteAuthor(char *strPrgNme)
 {
 
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intAuthorID = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iAuthorID = 0;
     bool bAuthorExists = false;
     bool bTitlesExist = false;
 
@@ -3633,14 +3632,14 @@ void fDeleteAuthor(char *strPrgNme)
 // get an Author ID to delete
 
     printf("Author ID: ");
-    intAuthorID = GetInt();
+    iAuthorID = GetInt();
 
 // execute the query to check if the Author ID exists
 
-    sprintf(strSQL, "SELECT `Author ID` FROM `Book Authors` "
-                    "WHERE `Author ID` = %d", intAuthorID);
+    sprintf(caSQL, "SELECT `Author ID` FROM `Book Authors` "
+                    "WHERE `Author ID` = %d", iAuthorID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3676,12 +3675,12 @@ void fDeleteAuthor(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Author ID: %d", intAuthorID);
+        printf("No matching Author ID: %d", iAuthorID);
         printf("\n\n");
         fPressEnterToContinue();
         bAuthorExists = false;
@@ -3695,10 +3694,10 @@ void fDeleteAuthor(char *strPrgNme)
 
 // execute a query to check if the author has titles
 
-    sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
-                    "WHERE `Author ID` = %d", intAuthorID);
+    sprintf(caSQL, "SELECT `Title ID` FROM `Book Titles` "
+                    "WHERE `Author ID` = %d", iAuthorID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3733,13 +3732,13 @@ void fDeleteAuthor(char *strPrgNme)
 
 // fetch the number of rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned > 0)
+    if(iRowsReturned > 0)
     {
         bTitlesExist = true;
         printf("\n");
-        printf("Titles exists for Author ID: %d", intAuthorID);
+        printf("Titles exists for Author ID: %d", iAuthorID);
         printf("\n\n");
         printf("Author will not be deleted");
         printf("\n\n");
@@ -3756,10 +3755,10 @@ void fDeleteAuthor(char *strPrgNme)
 
     if((bTitlesExist == false) && (bAuthorExists == true))
     {
-        sprintf(strSQL, "DELETE FROM `Book Authors` "
-                        "WHERE `Author ID` = %d", intAuthorID);
+        sprintf(caSQL, "DELETE FROM `Book Authors` "
+                        "WHERE `Author ID` = %d", iAuthorID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -3781,7 +3780,7 @@ void fDeleteAuthor(char *strPrgNme)
         }
 
         printf("\n");
-        printf("Author ID: %d deleted", intAuthorID);
+        printf("Author ID: %d deleted", iAuthorID);
         printf("\n\n");
         fPressEnterToContinue();
      }
@@ -3791,21 +3790,21 @@ void fDeleteAuthor(char *strPrgNme)
 
 void fSearchSeries(char *strSearchString)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intColCount = 0;
-    int  intRowsReturned = 0;
-    int  intRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iColCount = 0;
+    int  iRowsReturned = 0;
+    int  iRowsPrinted = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Series ID`, `Series Name` "
+    sprintf(caSQL, "SELECT  `Series ID`, `Series Name` "
                     "FROM `Book Series` "
                     "WHERE `Series Name` LIKE '%%%s%%'", strSearchString);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3841,10 +3840,10 @@ void fSearchSeries(char *strSearchString)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
         printf("No matching series found");
@@ -3853,9 +3852,9 @@ void fSearchSeries(char *strSearchString)
 // print each row of results
 
     printf("\n");
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
+        iRowsPrinted++;
         printf("%-4s  %s", row[0], row[1]);
         printf("\n");
     }
@@ -3866,10 +3865,9 @@ void fSearchSeries(char *strSearchString)
 
 void fDeleteSeries(char *strPrgNme)
 {
-
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intSeriesID = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iSeriesID = 0;
     bool bSeriesExists = false;
     bool bTitlesExist = false;
 
@@ -3886,14 +3884,14 @@ void fDeleteSeries(char *strPrgNme)
 // get an Author ID to delete
 
     printf("Series ID: ");
-    intSeriesID = GetInt();
+    iSeriesID = GetInt();
 
 // execute the query to check if the Author ID exists
 
-    sprintf(strSQL, "SELECT `Series ID` FROM `Book Series` "
-                    "WHERE `Series ID` = %d", intSeriesID);
+    sprintf(caSQL, "SELECT `Series ID` FROM `Book Series` "
+                    "WHERE `Series ID` = %d", iSeriesID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3929,12 +3927,12 @@ void fDeleteSeries(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Series ID: %d", intSeriesID);
+        printf("No matching Series ID: %d", iSeriesID);
         printf("\n\n");
         fPressEnterToContinue();
         bSeriesExists = false;
@@ -3948,10 +3946,10 @@ void fDeleteSeries(char *strPrgNme)
 
 // execute a query to check if the author has titles
 
-    sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
-                    "WHERE `Series ID` = %d", intSeriesID);
+    sprintf(caSQL, "SELECT `Title ID` FROM `Book Titles` "
+                    "WHERE `Series ID` = %d", iSeriesID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -3986,13 +3984,13 @@ void fDeleteSeries(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned > 0)
+    if(iRowsReturned > 0)
     {
         bTitlesExist = true;
         printf("\n");
-        printf("Titles exists for Series ID: %d", intSeriesID);
+        printf("Titles exists for Series ID: %d", iSeriesID);
         printf("\n\n");
         printf("Series will not be deleted");
         printf("\n\n");
@@ -4009,10 +4007,10 @@ void fDeleteSeries(char *strPrgNme)
 
     if((bTitlesExist == false) && (bSeriesExists == true))
     {
-        sprintf(strSQL, "DELETE FROM `Book Series` "
-                        "WHERE `Series ID` = %d", intSeriesID);
+        sprintf(caSQL, "DELETE FROM `Book Series` "
+                        "WHERE `Series ID` = %d", iSeriesID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4034,7 +4032,7 @@ void fDeleteSeries(char *strPrgNme)
         }
 
         printf("\n");
-        printf("Series ID: %d deleted", intSeriesID);
+        printf("Series ID: %d deleted", iSeriesID);
         printf("\n\n");
         fPressEnterToContinue();
      }
@@ -4045,9 +4043,9 @@ void fDeleteSeries(char *strPrgNme)
 void fDeleteGenre(char *strPrgNme)
 {
 
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intGenreID = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iGenreID = 0;
     bool bGenreExists = false;
     bool bTitlesExist = false;
 
@@ -4064,14 +4062,14 @@ void fDeleteGenre(char *strPrgNme)
 // get an Author ID to delete
 
     printf("Genre ID: ");
-    intGenreID = GetInt();
+    iGenreID = GetInt();
 
 // execute the query to check if the Author ID exists
 
-    sprintf(strSQL, "SELECT `Genre ID` FROM `Book Genres` "
-                    "WHERE `Genre ID` = %d", intGenreID);
+    sprintf(caSQL, "SELECT `Genre ID` FROM `Book Genres` "
+                    "WHERE `Genre ID` = %d", iGenreID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4107,12 +4105,12 @@ void fDeleteGenre(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Genre ID: %d", intGenreID);
+        printf("No matching Genre ID: %d", iGenreID);
         printf("\n\n");
         fPressEnterToContinue();
         bGenreExists = false;
@@ -4126,10 +4124,10 @@ void fDeleteGenre(char *strPrgNme)
 
 // execute a query to check if the author has titles
 
-    sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
-                    "WHERE `Genre ID` = %d", intGenreID);
+    sprintf(caSQL, "SELECT `Title ID` FROM `Book Titles` "
+                    "WHERE `Genre ID` = %d", iGenreID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4164,13 +4162,13 @@ void fDeleteGenre(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned > 0)
+    if(iRowsReturned > 0)
     {
         bTitlesExist = true;
         printf("\n");
-        printf("Titles exists for Genre ID: %d", intGenreID);
+        printf("Titles exists for Genre ID: %d", iGenreID);
         printf("\n\n");
         printf("Genre will not be deleted");
         printf("\n\n");
@@ -4187,10 +4185,10 @@ void fDeleteGenre(char *strPrgNme)
 
     if((bTitlesExist == false) && (bGenreExists == true))
     {
-        sprintf(strSQL, "DELETE FROM `Book Genres` "
-                        "WHERE `Genre ID` = %d", intGenreID);
+        sprintf(caSQL, "DELETE FROM `Book Genres` "
+                        "WHERE `Genre ID` = %d", iGenreID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -4212,7 +4210,7 @@ void fDeleteGenre(char *strPrgNme)
         }
 
         printf("\n");
-        printf("Genre ID: %d deleted", intGenreID);
+        printf("Genre ID: %d deleted", iGenreID);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -4222,21 +4220,21 @@ void fDeleteGenre(char *strPrgNme)
 
 void fSearchGenres(char *strSearchString)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intColCount = 0;
-    int  intRowsReturned = 0;
-    int  intRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iColCount = 0;
+    int  iRowsReturned = 0;
+    int  iRowsPrinted = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Genre ID`, `Genre Name` "
+    sprintf(caSQL, "SELECT  `Genre ID`, `Genre Name` "
                     "FROM `Book Genres` "
                     "WHERE `Genre Name` LIKE '%%%s%%'", strSearchString);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4271,10 +4269,10 @@ void fSearchGenres(char *strSearchString)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
         printf("No matching Genre found");
@@ -4283,9 +4281,9 @@ void fSearchGenres(char *strSearchString)
 // print each row of results
 
     printf("\n");
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
+        iRowsPrinted++;
         printf("%-4s  %s", row[0], row[1]);
         printf("\n");
     }
@@ -4296,10 +4294,9 @@ void fSearchGenres(char *strSearchString)
 
 void fDeleteSource(char *strPrgNme)
 {
-
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intSourceID = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iSourceID = 0;
     bool bSourceExists = false;
     bool bTitlesExist = false;
 
@@ -4316,14 +4313,14 @@ void fDeleteSource(char *strPrgNme)
 // get an Author ID to delete
 
     printf("Source ID: ");
-    intSourceID = GetInt();
+    iSourceID = GetInt();
 
 // execute the query to check if the Author ID exists
 
-    sprintf(strSQL, "SELECT `Source ID` FROM `Book Sources` "
-                    "WHERE `Source ID` = %d", intSourceID);
+    sprintf(caSQL, "SELECT `Source ID` FROM `Book Sources` "
+                    "WHERE `Source ID` = %d", iSourceID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4359,12 +4356,12 @@ void fDeleteSource(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Source ID: %d", intSourceID);
+        printf("No matching Source ID: %d", iSourceID);
         printf("\n\n");
         fPressEnterToContinue();
         bSourceExists = false;
@@ -4378,10 +4375,10 @@ void fDeleteSource(char *strPrgNme)
 
 // execute a query to check if the author has titles
 
-    sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
-                    "WHERE `Source ID` = %d", intSourceID);
+    sprintf(caSQL, "SELECT `Title ID` FROM `Book Titles` "
+                    "WHERE `Source ID` = %d", iSourceID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4416,13 +4413,13 @@ void fDeleteSource(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned > 0)
+    if(iRowsReturned > 0)
     {
         bTitlesExist = true;
         printf("\n");
-        printf("Titles exists for Source ID: %d", intSourceID);
+        printf("Titles exists for Source ID: %d", iSourceID);
         printf("\n\n");
         printf("Source will not be deleted");
         printf("\n\n");
@@ -4439,10 +4436,10 @@ void fDeleteSource(char *strPrgNme)
 
     if((bTitlesExist == false) && (bSourceExists == true))
     {
-        sprintf(strSQL, "DELETE FROM `Book Sources` "
-                        "WHERE `Source ID` = %d", intSourceID);
+        sprintf(caSQL, "DELETE FROM `Book Sources` "
+                        "WHERE `Source ID` = %d", iSourceID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4465,7 +4462,7 @@ void fDeleteSource(char *strPrgNme)
         }
 
         printf("\n");
-        printf("Source ID: %d deleted", intSourceID);
+        printf("Source ID: %d deleted", iSourceID);
         printf("\n\n");
         fPressEnterToContinue();
      }
@@ -4475,21 +4472,21 @@ void fDeleteSource(char *strPrgNme)
 
 void fSearchSources(char *strSearchString)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intColCount = 0;
-    int  intRowsReturned = 0;
-    int  intRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iColCount = 0;
+    int  iRowsReturned = 0;
+    int  iRowsPrinted = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Source ID`, `Source Name` "
+    sprintf(caSQL, "SELECT  `Source ID`, `Source Name` "
                     "FROM `Book Sources` "
                     "WHERE `Source Name` LIKE '%%%s%%'", strSearchString);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4523,10 +4520,10 @@ void fSearchSources(char *strSearchString)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
         printf("No matching Sources found");
@@ -4535,9 +4532,9 @@ void fSearchSources(char *strSearchString)
 // print each row of results
 
     printf("\n");
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
+        iRowsPrinted++;
         printf("%-4s  %s", row[0], row[1]);
         printf("\n");
     }
@@ -4548,10 +4545,9 @@ void fSearchSources(char *strSearchString)
 
 void fDeleteRating(char *strPrgNme)
 {
-
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intRatingID = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iRatingID = 0;
     bool bRatingExists = false;
     bool bTitlesExist = false;
 
@@ -4568,14 +4564,14 @@ void fDeleteRating(char *strPrgNme)
 // get an Author ID to delete
 
     printf("Rating ID: ");
-    intRatingID = GetInt();
+    iRatingID = GetInt();
 
 // execute the query to check if the Rating ID exists
 
-    sprintf(strSQL, "SELECT `Rating ID` FROM `Book Ratings` "
-                    "WHERE `Rating ID` = %d", intRatingID);
+    sprintf(caSQL, "SELECT `Rating ID` FROM `Book Ratings` "
+                    "WHERE `Rating ID` = %d", iRatingID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4611,12 +4607,12 @@ void fDeleteRating(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Rating ID: %d", intRatingID);
+        printf("No matching Rating ID: %d", iRatingID);
         printf("\n\n");
         fPressEnterToContinue();
         bRatingExists = false;
@@ -4630,10 +4626,10 @@ void fDeleteRating(char *strPrgNme)
 
 // execute a query to check if the rating has titles
 
-    sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
-                    "WHERE `Rating ID` = %d", intRatingID);
+    sprintf(caSQL, "SELECT `Title ID` FROM `Book Titles` "
+                    "WHERE `Rating ID` = %d", iRatingID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4668,13 +4664,13 @@ void fDeleteRating(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned > 0)
+    if(iRowsReturned > 0)
     {
         bTitlesExist = true;
         printf("\n");
-        printf("Titles exists for Rating ID: %d", intRatingID);
+        printf("Titles exists for Rating ID: %d", iRatingID);
         printf("\n\n");
         printf("Rating will not be deleted");
         printf("\n\n");
@@ -4691,9 +4687,9 @@ void fDeleteRating(char *strPrgNme)
 
     if((bTitlesExist == false) && (bRatingExists == true))
     {
-        sprintf(strSQL, "DELETE FROM `Book Ratings` "
-                        "WHERE `Rating ID` = %d", intRatingID);
-        if(mysql_query(conn, strSQL) != 0)
+        sprintf(caSQL, "DELETE FROM `Book Ratings` "
+                        "WHERE `Rating ID` = %d", iRatingID);
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -4714,7 +4710,7 @@ void fDeleteRating(char *strPrgNme)
         }
 
         printf("\n");
-        printf("Rating ID: %d deleted", intRatingID);
+        printf("Rating ID: %d deleted", iRatingID);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -4724,21 +4720,21 @@ void fDeleteRating(char *strPrgNme)
 
 void fSearchRatings(char *strSearchString)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intColCount = 0;
-    int  intRowsReturned = 0;
-    int  intRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iColCount = 0;
+    int  iRowsReturned = 0;
+    int  iRowsPrinted = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Rating ID`, `Rating Name` "
+    sprintf(caSQL, "SELECT  `Rating ID`, `Rating Name` "
                     "FROM `Book Ratings` "
                     "WHERE `Rating Name` LIKE '%%%s%%'", strSearchString);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4773,10 +4769,10 @@ void fSearchRatings(char *strSearchString)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
         printf("No matching Ratings found");
@@ -4785,9 +4781,9 @@ void fSearchRatings(char *strSearchString)
 // print each row of results
 
     printf("\n");
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
+        iRowsPrinted++;
         printf("%-4s  %s", row[0], row[1]);
         printf("\n");
     }
@@ -4798,10 +4794,9 @@ void fSearchRatings(char *strSearchString)
 
 void fDeleteStatus(char *strPrgNme)
 {
-
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intStatusID = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iStatusID = 0;
     bool bStatusExists = false;
     bool bTitlesExist = false;
 
@@ -4818,14 +4813,14 @@ void fDeleteStatus(char *strPrgNme)
 // get an Author ID to delete
 
     printf("Status ID: ");
-    intStatusID = GetInt();
+    iStatusID = GetInt();
 
 // execute the query to check if the Author ID exists
 
-    sprintf(strSQL, "SELECT `Status ID` FROM `Book Statuses` "
-                    "WHERE `Status ID` = %d", intStatusID);
+    sprintf(caSQL, "SELECT `Status ID` FROM `Book Statuses` "
+                    "WHERE `Status ID` = %d", iStatusID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4859,12 +4854,12 @@ void fDeleteStatus(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Status ID: %d", intStatusID);
+        printf("No matching Status ID: %d", iStatusID);
         printf("\n\n");
         fPressEnterToContinue();
         bStatusExists = false;
@@ -4878,10 +4873,10 @@ void fDeleteStatus(char *strPrgNme)
 
 // execute a query to check if the author has titles
 
-    sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
-                    "WHERE `Status ID` = %d", intStatusID);
+    sprintf(caSQL, "SELECT `Title ID` FROM `Book Titles` "
+                    "WHERE `Status ID` = %d", iStatusID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -4916,13 +4911,13 @@ void fDeleteStatus(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned > 0)
+    if(iRowsReturned > 0)
     {
         bTitlesExist = true;
         printf("\n");
-        printf("Titles exists for Status ID: %d", intStatusID);
+        printf("Titles exists for Status ID: %d", iStatusID);
         printf("\n\n");
         printf("Status will not be deleted");
         printf("\n\n");
@@ -4943,10 +4938,10 @@ void fDeleteStatus(char *strPrgNme)
 
     if((bTitlesExist == false) && (bStatusExists == true))
     {
-        sprintf(strSQL, "DELETE FROM `Book Statuses` "
-                        "WHERE `Status ID` = %d", intStatusID);
+        sprintf(caSQL, "DELETE FROM `Book Statuses` "
+                        "WHERE `Status ID` = %d", iStatusID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -4966,7 +4961,7 @@ void fDeleteStatus(char *strPrgNme)
         }
 
         printf("\n");
-        printf("Status ID: %d deleted", intStatusID);
+        printf("Status ID: %d deleted", iStatusID);
         printf("\n\n");
         fPressEnterToContinue();
      }
@@ -4976,21 +4971,21 @@ void fDeleteStatus(char *strPrgNme)
 
 void fSearchStatuses(char *strSearchString)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intColCount = 0;
-    int  intRowsReturned = 0;
-    int  intRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iColCount = 0;
+    int  iRowsReturned = 0;
+    int  iRowsPrinted = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Status ID`, `Status Name` "
+    sprintf(caSQL, "SELECT  `Status ID`, `Status Name` "
                     "FROM `Book Statuses` "
                     "WHERE `Status Name` LIKE '%%%s%%'", strSearchString);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5024,10 +5019,10 @@ void fSearchStatuses(char *strSearchString)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
         printf("No matching Status found");
@@ -5036,9 +5031,9 @@ void fSearchStatuses(char *strSearchString)
 // print each row of results
 
     printf("\n");
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
+        iRowsPrinted++;
         printf("%-4s  %s", row[0], row[1]);
         printf("\n");
     }
@@ -5049,14 +5044,13 @@ void fSearchStatuses(char *strSearchString)
 
 void fDeleteClassification(char *strPrgNme)
 {
-
-    char *strServer = "192.168.0.13";
-    char *strUser = "gjarman";
-    char *strPassword = "Mpa4egu$";
-    char *strDatabase = "risingfast";
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intClassificationID = 0;
+    char *sServer = "192.168.0.13";
+    char *sUser = "gjarman";
+    char *sPassword = "Mpa4egu$";
+    char *sDatabase = "risingfast";
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iClassificationID = 0;
     bool bClassificationExists = false;
     bool bTitlesExist = false;
 
@@ -5073,14 +5067,14 @@ void fDeleteClassification(char *strPrgNme)
 // get an Author ID to delete
 
     printf("Classification ID: ");
-    intClassificationID = GetInt();
+    iClassificationID = GetInt();
 
 // execute the query to check if the Author ID exists
 
-    sprintf(strSQL, "SELECT `Classification ID` FROM `Book Classifications` "
-                    "WHERE `Classification ID` = %d", intClassificationID);
+    sprintf(caSQL, "SELECT `Classification ID` FROM `Book Classifications` "
+                    "WHERE `Classification ID` = %d", iClassificationID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5115,12 +5109,12 @@ void fDeleteClassification(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Classification ID: %d", intClassificationID);
+        printf("No matching Classification ID: %d", iClassificationID);
         printf("\n\n");
         fPressEnterToContinue();
         bClassificationExists = false;
@@ -5134,10 +5128,10 @@ void fDeleteClassification(char *strPrgNme)
 
 // execute a query to check if the author has titles
 
-    sprintf(strSQL, "SELECT `Title ID` FROM `Book Titles` "
-                    "WHERE `Classification ID` = %d", intClassificationID);
+    sprintf(caSQL, "SELECT `Title ID` FROM `Book Titles` "
+                    "WHERE `Classification ID` = %d", iClassificationID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5172,13 +5166,13 @@ void fDeleteClassification(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned > 0)
+    if(iRowsReturned > 0)
     {
         bTitlesExist = true;
         printf("\n");
-        printf("Titles exists for Classification ID: %d", intClassificationID);
+        printf("Titles exists for Classification ID: %d", iClassificationID);
         printf("\n\n");
         printf("Classification will not be deleted");
         printf("\n\n");
@@ -5195,10 +5189,10 @@ void fDeleteClassification(char *strPrgNme)
 
     if((bTitlesExist == false) && (bClassificationExists == true))
     {
-        sprintf(strSQL, "DELETE FROM `Book Classifications` "
-                        "WHERE `Classification ID` = %d", intClassificationID);
+        sprintf(caSQL, "DELETE FROM `Book Classifications` "
+                        "WHERE `Classification ID` = %d", iClassificationID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -5218,7 +5212,7 @@ void fDeleteClassification(char *strPrgNme)
         }
 
         printf("\n");
-        printf("Classification ID: %d deleted", intClassificationID);
+        printf("Classification ID: %d deleted", iClassificationID);
         printf("\n\n");
         fPressEnterToContinue();
     }
@@ -5228,21 +5222,21 @@ void fDeleteClassification(char *strPrgNme)
 
 void fSearchClassifications(char *strSearchString)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intColCount = 0;
-    int  intRowsReturned = 0;
-    int  intRowsPrinted = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iColCount = 0;
+    int  iRowsReturned = 0;
+    int  iRowsPrinted = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT  `Classification ID`, `Classification Name` "
+    sprintf(caSQL, "SELECT  `Classification ID`, `Classification Name` "
                     "FROM `Book Classifications` "
                     "WHERE `Classification Name` LIKE '%%%s%%'", strSearchString);
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5276,10 +5270,10 @@ void fSearchClassifications(char *strSearchString)
 
 // fetch the number of fields and rows in the result
 
-    intColCount = mysql_num_fields(res);
-    intRowsReturned = mysql_num_rows(res);
+    iColCount = mysql_num_fields(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
         printf("No matching Classification found");
@@ -5288,9 +5282,9 @@ void fSearchClassifications(char *strSearchString)
 // print each row of results
 
     printf("\n");
-    while((row = mysql_fetch_row(res)) && (intRowsReturned != 0))
+    while((row = mysql_fetch_row(res)) && (iRowsReturned != 0))
     {
-        intRowsPrinted++;
+        iRowsPrinted++;
         printf("%-4s  %s", row[0], row[1]);
         printf("\n");
     }
@@ -5301,19 +5295,19 @@ void fSearchClassifications(char *strSearchString)
 
 void fUpdateAuthor(char *strPrgNme)
 {
-    char *strAuthorName = NULL;
-    char *strEscapedAuthorName = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intAuthorID = 0;
-    int  intAuthorMaxLength = 0;
+    char *sAuthorName = NULL;
+    char *sEscapedAuthorName = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iAuthorID = 0;
+    int  iAuthorMaxLength = 0;
     bool bAuthorExists = false;
     bool bTitlesExist = false;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    intAuthorMaxLength = fGetFieldLength("Book Authors", "Author Name");
+    iAuthorMaxLength = fGetFieldLength("Book Authors", "Author Name");
 
 // retitle the console
 
@@ -5325,16 +5319,16 @@ void fUpdateAuthor(char *strPrgNme)
 // get an Author ID to change
 
     printf("Author ID: ");
-    intAuthorID = GetInt();
+    iAuthorID = GetInt();
 
 // execute the query to check if the Author ID exists
 
-    sprintf(strSQL, "SELECT `Author ID`"
+    sprintf(caSQL, "SELECT `Author ID`"
                          ", `Author Name`"
                     "FROM `Book Authors` "
-                    "WHERE `Author ID` = %d", intAuthorID);
+                    "WHERE `Author ID` = %d", iAuthorID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5371,12 +5365,12 @@ void fUpdateAuthor(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Author ID: %d", intAuthorID);
+        printf("No matching Author ID: %d", iAuthorID);
         printf("\n\n");
         fPressEnterToContinue();
         bAuthorExists = false;
@@ -5389,20 +5383,20 @@ void fUpdateAuthor(char *strPrgNme)
         printf("Author Name: %s", row[1]);
         printf("\n\n");
         do {
-            printf("Changed Author Name (max %d chars) or E(x)it: ", intAuthorMaxLength);
-            strAuthorName = fEscapeSingleQuote(GetString());
-            if(strlen(strAuthorName) > intAuthorMaxLength)
+            printf("Changed Author Name (max %d chars) or E(x)it: ", iAuthorMaxLength);
+            sAuthorName = fEscapeSingleQuote(GetString());
+            if(strlen(sAuthorName) > iAuthorMaxLength)
             {
-                printf("Author Name max %d chars. You entered %d chars", intAuthorMaxLength, (int) strlen(strAuthorName));
+                printf("Author Name max %d chars. You entered %d chars", iAuthorMaxLength, (int) strlen(sAuthorName));
                 printf("\n");
-                strAuthorName[0] = '\0';
+                sAuthorName[0] = '\0';
             }
-        } while (strlen(strAuthorName) == 0);
+        } while (strlen(sAuthorName) == 0);
     }
 
-    if((bAuthorExists == true) && (toupper(strAuthorName[0]) == 'X') && (strlen(strAuthorName) == 1))
+    if((bAuthorExists == true) && (toupper(sAuthorName[0]) == 'X') && (strlen(sAuthorName) == 1))
     {
-        free(strAuthorName);
+        free(sAuthorName);
         return;
     }
 
@@ -5410,11 +5404,11 @@ void fUpdateAuthor(char *strPrgNme)
 
     if((bTitlesExist == false) && (bAuthorExists == true))
     {
-        sprintf(strSQL, "UPDATE `Book Authors`"
+        sprintf(caSQL, "UPDATE `Book Authors`"
                        " SET `Author Name` = '%s'"
-                       " WHERE `Author ID` = %d", strAuthorName, intAuthorID);
+                       " WHERE `Author ID` = %d", sAuthorName, iAuthorID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -5422,25 +5416,25 @@ void fUpdateAuthor(char *strPrgNme)
         } else
         {
             printf("\n");
-            printf("Author ID: %d updated", intAuthorID);
+            printf("Author ID: %d updated", iAuthorID);
             printf("\n\n");
             fPressEnterToContinue();
         }
     }
 
-    free(strAuthorName);
+    free(sAuthorName);
     mysql_free_result(res);
     return;
 }
 
 void fUpdateClassification(char *strPrgNme)
 {
-    char *strClassificationName = NULL;
-    char *strClassificationNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intClassificationID = 0;
-    int  intClassificationMaxLength = 0;
+    char *sClassificationName = NULL;
+    char *sClassificationNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iClassificationID = 0;
+    int  iClassificationMaxLength = 0;
     bool bClassificationExists = false;
     bool bTitlesExist = false;
 
@@ -5457,16 +5451,16 @@ void fUpdateClassification(char *strPrgNme)
 // get an Classification ID to delete
 
     printf("Classification ID: ");
-    intClassificationID = GetInt();
+    iClassificationID = GetInt();
 
 // execute the query to check if the Classification ID exists
 
-    sprintf(strSQL, "SELECT `Classification ID`"
+    sprintf(caSQL, "SELECT `Classification ID`"
                          ", `Classification Name`"
                     "FROM `Book Classifications` "
-                    "WHERE `Classification ID` = %d", intClassificationID);
+                    "WHERE `Classification ID` = %d", iClassificationID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5501,12 +5495,12 @@ void fUpdateClassification(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Classification ID: %d", intClassificationID);
+        printf("No matching Classification ID: %d", iClassificationID);
         printf("\n\n");
         fPressEnterToContinue();
         bClassificationExists = false;
@@ -5519,25 +5513,25 @@ void fUpdateClassification(char *strPrgNme)
         printf("Classification Name: %s", row[1]);
         printf("\n\n");
 
-        intClassificationMaxLength = fGetFieldLength("Book Classifications", "Classification Name");
+        iClassificationMaxLength = fGetFieldLength("Book Classifications", "Classification Name");
 
         do {
-            printf("Changed Classification Name (max %d chars): ", intClassificationMaxLength);
-            strClassificationName = GetString();
-            if(strlen(strClassificationName) > intClassificationMaxLength)
+            printf("Changed Classification Name (max %d chars): ", iClassificationMaxLength);
+            sClassificationName = GetString();
+            if(strlen(sClassificationName) > iClassificationMaxLength)
             {
-                 printf("Classification Name max %d chars. You entered %d chars", intClassificationMaxLength, (int) strlen(strClassificationName));
+                 printf("Classification Name max %d chars. You entered %d chars", iClassificationMaxLength, (int) strlen(sClassificationName));
                  printf("\n");
-                 strClassificationName[0] = '\0';
+                 sClassificationName[0] = '\0';
             }
-        } while(strlen(strClassificationName) == 0);
+        } while(strlen(sClassificationName) == 0);
         
-        strClassificationNameEscaped = fEscapeSingleQuote(strClassificationName);
+        sClassificationNameEscaped = fEscapeSingleQuote(sClassificationName);
     }
 
-    if((bClassificationExists == true) && (toupper(strClassificationName[0]) == 'X') && (strlen(strClassificationName) == 1))
+    if((bClassificationExists == true) && (toupper(sClassificationName[0]) == 'X') && (strlen(sClassificationName) == 1))
     {
-        free(strClassificationName);
+        free(sClassificationName);
         return;
     }
 
@@ -5545,11 +5539,11 @@ void fUpdateClassification(char *strPrgNme)
 
     if((bTitlesExist == false) && (bClassificationExists == true))
     {
-        sprintf(strSQL, "UPDATE `Book Classifications`"
+        sprintf(caSQL, "UPDATE `Book Classifications`"
                        " SET `Classification Name` = '%s'"
-                       " WHERE `Classification ID` = %d", strClassificationNameEscaped, intClassificationID);
+                       " WHERE `Classification ID` = %d", sClassificationNameEscaped, iClassificationID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -5557,26 +5551,26 @@ void fUpdateClassification(char *strPrgNme)
         } else
         {
             printf("\n");
-            printf("Classification ID: %d updated", intClassificationID);
+            printf("Classification ID: %d updated", iClassificationID);
             printf("\n\n");
             fPressEnterToContinue();
         }
     }
 
     mysql_free_result(res);
-    free(strClassificationName);
-    free(strClassificationNameEscaped);
+    free(sClassificationName);
+    free(sClassificationNameEscaped);
     return;
 }
 
 void fUpdateRating(char *strPrgNme)
 {
-    char *strRatingName = NULL;
-    char *strRatingNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intRatingID = 0;
-    int  intRatingMaxLength = 0;
+    char *sRatingName = NULL;
+    char *sRatingNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iRatingID = 0;
+    int  iRatingMaxLength = 0;
     bool bRatingExists = false;
     bool bTitlesExist = false;
 
@@ -5593,16 +5587,16 @@ void fUpdateRating(char *strPrgNme)
 // get an Rating ID to delete
 
     printf("Rating ID: ");
-    intRatingID = GetInt();
+    iRatingID = GetInt();
 
 // execute the query to check if the Rating ID exists
 
-    sprintf(strSQL, "SELECT `Rating ID`"
+    sprintf(caSQL, "SELECT `Rating ID`"
                          ", `Rating Name`"
                     "FROM `Book Ratings` "
-                    "WHERE `Rating ID` = %d", intRatingID);
+                    "WHERE `Rating ID` = %d", iRatingID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5638,12 +5632,12 @@ void fUpdateRating(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Rating ID: %d", intRatingID);
+        printf("No matching Rating ID: %d", iRatingID);
         printf("\n\n");
         fPressEnterToContinue();
         bRatingExists = false;
@@ -5656,26 +5650,26 @@ void fUpdateRating(char *strPrgNme)
         printf("Rating Name: %s", row[1]);
         printf("\n\n");
 
-        intRatingMaxLength = fGetFieldLength("Book Ratings", "Rating Name");
+        iRatingMaxLength = fGetFieldLength("Book Ratings", "Rating Name");
 
         do {
-            printf("Changed Rating Name (max %d chars) or E(x)it: ", intRatingMaxLength);
-            strRatingName = GetString();
-            if(strlen(strRatingName) > intRatingMaxLength)
+            printf("Changed Rating Name (max %d chars) or E(x)it: ", iRatingMaxLength);
+            sRatingName = GetString();
+            if(strlen(sRatingName) > iRatingMaxLength)
             {
-                 printf("Rating Name max %d chars. You entered %d chars", intRatingMaxLength, (int) strlen(strRatingName));
+                 printf("Rating Name max %d chars. You entered %d chars", iRatingMaxLength, (int) strlen(sRatingName));
                  printf("\n");
-                 strRatingName[0] = '\0';
+                 sRatingName[0] = '\0';
             }
-        } while(strlen(strRatingName) == 0);
+        } while(strlen(sRatingName) == 0);
 
-        strRatingNameEscaped = fEscapeSingleQuote(strRatingName);
+        sRatingNameEscaped = fEscapeSingleQuote(sRatingName);
 
     }
 
-    if((bRatingExists == true) && (toupper(strRatingName[0]) == 'X') && (strlen(strRatingName) == 1))
+    if((bRatingExists == true) && (toupper(sRatingName[0]) == 'X') && (strlen(sRatingName) == 1))
     {
-        free(strRatingName);
+        free(sRatingName);
         return;
     }
 
@@ -5684,11 +5678,11 @@ void fUpdateRating(char *strPrgNme)
 
     if((bTitlesExist == false) && (bRatingExists == true))
     {
-        sprintf(strSQL, "UPDATE `Book Ratings`"
+        sprintf(caSQL, "UPDATE `Book Ratings`"
                        " SET `Rating Name` = '%s'"
-                       " WHERE `Rating ID` = %d", strRatingNameEscaped, intRatingID);
+                       " WHERE `Rating ID` = %d", sRatingNameEscaped, iRatingID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -5696,26 +5690,26 @@ void fUpdateRating(char *strPrgNme)
         } else
         {
             printf("\n");
-            printf("Rating ID: %d updated", intRatingID);
+            printf("Rating ID: %d updated", iRatingID);
             printf("\n\n");
             fPressEnterToContinue();
         }
     }
 
     mysql_free_result(res);
-    free(strRatingName);
-    free(strRatingNameEscaped);
+    free(sRatingName);
+    free(sRatingNameEscaped);
     return;
 }
 
 void fUpdateSeries(char *strPrgNme)
 {
-    char *strSeriesName = NULL;
-    char *strSeriesNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intSeriesID = 0;
-    int  intSeriesMaxLength = 0;
+    char *sSeriesName = NULL;
+    char *sSeriesNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iSeriesID = 0;
+    int  iSeriesMaxLength = 0;
     bool bSeriesExists = false;
     bool bTitlesExist = false;
 
@@ -5732,16 +5726,16 @@ void fUpdateSeries(char *strPrgNme)
 // get an Series ID to delete
 
     printf("Series ID: ");
-    intSeriesID = GetInt();
+    iSeriesID = GetInt();
 
 // execute the query to check if the Series ID exists
 
-    sprintf(strSQL, "SELECT `Series ID`"
+    sprintf(caSQL, "SELECT `Series ID`"
                          ", `Series Name`"
                     "FROM `Book Series` "
-                    "WHERE `Series ID` = %d", intSeriesID);
+                    "WHERE `Series ID` = %d", iSeriesID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5777,12 +5771,12 @@ void fUpdateSeries(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Series ID: %d", intSeriesID);
+        printf("No matching Series ID: %d", iSeriesID);
         printf("\n\n");
         fPressEnterToContinue();
         bSeriesExists = false;
@@ -5795,26 +5789,26 @@ void fUpdateSeries(char *strPrgNme)
         printf("Series Name: %s", row[1]);
         printf("\n\n");
 
-        intSeriesMaxLength = fGetFieldLength("Book Series", "Series Name");
+        iSeriesMaxLength = fGetFieldLength("Book Series", "Series Name");
 
         do {
-            printf("Changed Series Name (max %d chars) or E(x)it: ", intSeriesMaxLength);
-            strSeriesName = GetString();
-            if (strlen(strSeriesName) > intSeriesMaxLength)
+            printf("Changed Series Name (max %d chars) or E(x)it: ", iSeriesMaxLength);
+            sSeriesName = GetString();
+            if (strlen(sSeriesName) > iSeriesMaxLength)
             {
-                printf("Series Name max %d chars. You entered %d chars", intSeriesMaxLength, (int) strlen(strSeriesName));
+                printf("Series Name max %d chars. You entered %d chars", iSeriesMaxLength, (int) strlen(sSeriesName));
                 printf("\n");
-                strSeriesName[0] = '\0';
+                sSeriesName[0] = '\0';
             }
-        } while(strlen(strSeriesName) == 0);
+        } while(strlen(sSeriesName) == 0);
 
-        strSeriesNameEscaped = fEscapeSingleQuote(strSeriesName);
+        sSeriesNameEscaped = fEscapeSingleQuote(sSeriesName);
 
     }
 
-    if((bSeriesExists == true) && (toupper(strSeriesName[0]) == 'X') && (strlen(strSeriesName) == 1))
+    if((bSeriesExists == true) && (toupper(sSeriesName[0]) == 'X') && (strlen(sSeriesName) == 1))
     {
-        free(strSeriesName);
+        free(sSeriesName);
         return;
     }
 
@@ -5822,11 +5816,11 @@ void fUpdateSeries(char *strPrgNme)
 
     if((bTitlesExist == false) && (bSeriesExists == true))
     {
-        sprintf(strSQL, "UPDATE `Book Series`"
+        sprintf(caSQL, "UPDATE `Book Series`"
                        " SET `Series Name` = '%s'"
-                       " WHERE `Series ID` = %d", strSeriesNameEscaped, intSeriesID);
+                       " WHERE `Series ID` = %d", sSeriesNameEscaped, iSeriesID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -5834,26 +5828,26 @@ void fUpdateSeries(char *strPrgNme)
         } else
         {
             printf("\n");
-            printf("Series ID: %d updated", intSeriesID);
+            printf("Series ID: %d updated", iSeriesID);
             printf("\n\n");
             fPressEnterToContinue();
         }
     }
 
     mysql_free_result(res);
-    free(strSeriesName);
-    free(strSeriesNameEscaped);
+    free(sSeriesName);
+    free(sSeriesNameEscaped);
     return;
 }
 
 void fUpdateSource(char *strPrgNme)
 {
-    char *strSourceName = NULL;
-    char *strSourceNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intSourceID = 0;
-    int  intSourceMaxLength = 0;
+    char *sSourceName = NULL;
+    char *sSourceNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iSourceID = 0;
+    int  iSourceMaxLength = 0;
     bool bSourceExists = false;
     bool bTitlesExist = false;
 
@@ -5870,16 +5864,16 @@ void fUpdateSource(char *strPrgNme)
 // get an Source ID to delete
 
     printf("Source ID: ");
-    intSourceID = GetInt();
+    iSourceID = GetInt();
 
 // execute the query to check if the Source ID exists
 
-    sprintf(strSQL, "SELECT `Source ID`"
+    sprintf(caSQL, "SELECT `Source ID`"
                          ", `Source Name`"
                     "FROM `Book Sources` "
-                    "WHERE `Source ID` = %d", intSourceID);
+                    "WHERE `Source ID` = %d", iSourceID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -5915,12 +5909,12 @@ void fUpdateSource(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Sourc ID: %d", intSourceID);
+        printf("No matching Sourc ID: %d", iSourceID);
         printf("\n\n");
         fPressEnterToContinue();
         bSourceExists = false;
@@ -5933,26 +5927,26 @@ void fUpdateSource(char *strPrgNme)
         printf("Source Name: %s", row[1]);
         printf("\n\n");
 
-        intSourceMaxLength = fGetFieldLength("Book Sources", "Source Name");
+        iSourceMaxLength = fGetFieldLength("Book Sources", "Source Name");
 
         do {
-            printf("Changed Source Name (max %d chars) or E(x)it: ", intSourceMaxLength);
-            strSourceName = GetString();
-            if (strlen(strSourceName) > intSourceMaxLength)
+            printf("Changed Source Name (max %d chars) or E(x)it: ", iSourceMaxLength);
+            sSourceName = GetString();
+            if (strlen(sSourceName) > iSourceMaxLength)
             {
-                 printf("Source Name max %d chars. You entered %d chars", intSourceMaxLength, (int) strlen(strSourceName));
+                 printf("Source Name max %d chars. You entered %d chars", iSourceMaxLength, (int) strlen(sSourceName));
                  printf("\n");
-                 strSourceName[0] = '\0';
+                 sSourceName[0] = '\0';
             }
-        } while(strlen(strSourceName) == 0);
+        } while(strlen(sSourceName) == 0);
 
-        strSourceNameEscaped = fEscapeSingleQuote(strSourceName);
+        sSourceNameEscaped = fEscapeSingleQuote(sSourceName);
 
     }
 
-    if((bSourceExists == true) && (toupper(strSourceName[0]) == 'X') && (strlen(strSourceName) == 1))
+    if((bSourceExists == true) && (toupper(sSourceName[0]) == 'X') && (strlen(sSourceName) == 1))
     {
-        free(strSourceName);
+        free(sSourceName);
         return;
     }
 
@@ -5960,11 +5954,11 @@ void fUpdateSource(char *strPrgNme)
 
     if((bTitlesExist == false) && (bSourceExists == true))
     {
-        sprintf(strSQL, "UPDATE `Book Sources`"
+        sprintf(caSQL, "UPDATE `Book Sources`"
                        " SET `Source Name` = '%s'"
-                       " WHERE `Source ID` = %d", strSourceNameEscaped, intSourceID);
+                       " WHERE `Source ID` = %d", sSourceNameEscaped, iSourceID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -5972,26 +5966,26 @@ void fUpdateSource(char *strPrgNme)
         } else
         {
             printf("\n");
-            printf("Source ID: %d updated", intSourceID);
+            printf("Source ID: %d updated", iSourceID);
             printf("\n\n");
             fPressEnterToContinue();
         }
     }
 
     mysql_free_result(res);
-    free(strSourceName);
-    free(strSourceNameEscaped);
+    free(sSourceName);
+    free(sSourceNameEscaped);
     return;
 }
 
 void fUpdateStatus(char *strPrgNme)
 {
-    char *strStatusName = NULL;
-    char *strStatusNameEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intStatusID = 0;
-    int  intStatusMaxLength = 0;
+    char *sStatusName = NULL;
+    char *sStatusNameEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iStatusID = 0;
+    int  iStatusMaxLength = 0;
     bool bStatusExists = false;
     bool bTitlesExist = false;
 
@@ -6008,16 +6002,16 @@ void fUpdateStatus(char *strPrgNme)
 // get an Status ID to delete
 
     printf("Status ID: ");
-    intStatusID = GetInt();
+    iStatusID = GetInt();
 
 // execute the query to check if the Status ID exists
 
-    sprintf(strSQL, "SELECT `Status ID`"
+    sprintf(caSQL, "SELECT `Status ID`"
                          ", `Status Name`"
                     "FROM `Book Statuses` "
-                    "WHERE `Status ID` = %d", intStatusID);
+                    "WHERE `Status ID` = %d", iStatusID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -6053,12 +6047,12 @@ void fUpdateStatus(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Status ID: %d", intStatusID);
+        printf("No matching Status ID: %d", iStatusID);
         printf("\n\n");
         fPressEnterToContinue();
         bStatusExists = false;
@@ -6071,25 +6065,25 @@ void fUpdateStatus(char *strPrgNme)
         printf("Status Name: %s", row[1]);
         printf("\n\n");
         
-        intStatusMaxLength = fGetFieldLength("Book Statuses", "Status Name");
+        iStatusMaxLength = fGetFieldLength("Book Statuses", "Status Name");
 
         do {
-            printf("Changed Status Name (max %d chars): ", intStatusMaxLength);
-            strStatusName = GetString();
-            if (strlen(strStatusName) > intStatusMaxLength)
+            printf("Changed Status Name (max %d chars): ", iStatusMaxLength);
+            sStatusName = GetString();
+            if (strlen(sStatusName) > iStatusMaxLength)
             {
-                 printf("Status Name max %d chars. You entered %d chars", intStatusMaxLength, (int) strlen(strStatusName));
+                 printf("Status Name max %d chars. You entered %d chars", iStatusMaxLength, (int) strlen(sStatusName));
                  printf("\n");
-                 strStatusName[0] = '\0';
+                 sStatusName[0] = '\0';
             }
-        } while(strlen(strStatusName) == 0);
+        } while(strlen(sStatusName) == 0);
 
-        strStatusNameEscaped = fEscapeSingleQuote(strStatusName);
+        sStatusNameEscaped = fEscapeSingleQuote(sStatusName);
     }
 
-    if((bStatusExists == true) && (toupper(strStatusName[0]) == 'X') && (strlen(strStatusName) == 1))
+    if((bStatusExists == true) && (toupper(sStatusName[0]) == 'X') && (strlen(sStatusName) == 1))
     {
-        free(strStatusName);
+        free(sStatusName);
         return;
     }
 
@@ -6097,11 +6091,11 @@ void fUpdateStatus(char *strPrgNme)
 
     if((bTitlesExist == false) && (bStatusExists == true))
     {
-        sprintf(strSQL, "UPDATE `Book Statuses`"
+        sprintf(caSQL, "UPDATE `Book Statuses`"
                        " SET `Status Name` = '%s'"
-                       " WHERE `Status ID` = %d", strStatusNameEscaped, intStatusID);
+                       " WHERE `Status ID` = %d", sStatusNameEscaped, iStatusID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -6109,29 +6103,29 @@ void fUpdateStatus(char *strPrgNme)
         } else
         {
             printf("\n");
-            printf("Status ID: %d updated", intStatusID);
+            printf("Status ID: %d updated", iStatusID);
             printf("\n\n");
             printf("Press enter to continue ");
         }
     }
 
     mysql_free_result(res);
-    free(strStatusName);
-    free(strStatusNameEscaped);
+    free(sStatusName);
+    free(sStatusNameEscaped);
     return;
 }
 
 void fUpdateGenre(char *strPrgNme)
 {
-    char *strGenreName = NULL;
-    char *strGenreDesc = NULL;
-    char *strGenreNameEscaped = NULL;
-    char *strGenreDescEscaped = NULL;
-    char strSQL[SQL_LEN] = {'\0'};
-    int  intRowsReturned = 0;
-    int  intGenreID = 0;
-    int  intGenreNameMaxLength = 0;
-    int  intGenreDescMaxLength = 0;
+    char *sGenreName = NULL;
+    char *sGenreDesc = NULL;
+    char *sGenreNameEscaped = NULL;
+    char *sGenreDescEscaped = NULL;
+    char caSQL[SQL_LEN] = {'\0'};
+    int  iRowsReturned = 0;
+    int  iGenreID = 0;
+    int  iGenreNameMaxLength = 0;
+    int  iGenreDescMaxLength = 0;
     bool bGenreExists = false;
     bool bTitlesExist = false;
 
@@ -6148,17 +6142,17 @@ void fUpdateGenre(char *strPrgNme)
 // get an Genre ID to delete
 
     printf("Genre ID: ");
-    intGenreID = GetInt();
+    iGenreID = GetInt();
 
 // execute the query to check if the Genre ID exists
 
-    sprintf(strSQL, "SELECT `Genre ID`"
+    sprintf(caSQL, "SELECT `Genre ID`"
                          ", `Genre Name`"
                          ", `Genre Description`"
                     "FROM `Book Genres` "
-                    "WHERE `Genre ID` = %d", intGenreID);
+                    "WHERE `Genre ID` = %d", iGenreID);
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -6193,12 +6187,12 @@ void fUpdateGenre(char *strPrgNme)
 
 // fetch the number of fields and rows in the result
 
-    intRowsReturned = mysql_num_rows(res);
+    iRowsReturned = mysql_num_rows(res);
 
-    if(intRowsReturned == 0)
+    if(iRowsReturned == 0)
     {
         printf("\n");
-        printf("No matching Genre ID: %d", intGenreID);
+        printf("No matching Genre ID: %d", iGenreID);
         printf("\n\n");
         fPressEnterToContinue();
         bGenreExists = false;
@@ -6213,45 +6207,45 @@ void fUpdateGenre(char *strPrgNme)
         printf("Genre Desc: %s", row[2]);
         printf("\n\n");
 
-        intGenreNameMaxLength = fGetFieldLength("Book Genres", "Genre Name");
-        intGenreDescMaxLength = fGetFieldLength("Book Genres", "Genre Description");
+        iGenreNameMaxLength = fGetFieldLength("Book Genres", "Genre Name");
+        iGenreDescMaxLength = fGetFieldLength("Book Genres", "Genre Description");
 
         do {
-            printf("Changed Genre Name (max %d chars) or E(x)it: ", intGenreNameMaxLength);
-            strGenreName = GetString();
-            if (strlen(strGenreName) > intGenreNameMaxLength)
+            printf("Changed Genre Name (max %d chars) or E(x)it: ", iGenreNameMaxLength);
+            sGenreName = GetString();
+            if (strlen(sGenreName) > iGenreNameMaxLength)
             {
-                 printf("Genre Name max %d chars. You entered %d chars", intGenreNameMaxLength, (int) strlen(strGenreName));
+                 printf("Genre Name max %d chars. You entered %d chars", iGenreNameMaxLength, (int) strlen(sGenreName));
                  printf("\n");
-                 strGenreName[0] = '\0';
+                 sGenreName[0] = '\0';
             }
-        } while(strlen(strGenreName) == 0);
+        } while(strlen(sGenreName) == 0);
 
-        strGenreNameEscaped = fEscapeSingleQuote(strGenreName);
+        sGenreNameEscaped = fEscapeSingleQuote(sGenreName);
 
-        if((toupper(strGenreName[0]) == 'X') && (strlen(strGenreName) == 1))
+        if((toupper(sGenreName[0]) == 'X') && (strlen(sGenreName) == 1))
         {
-            free(strGenreName);
+            free(sGenreName);
             return;
         }
 
         do{
             printf("\n");
-            printf("Changed Genre Description (max %d chars) or E(x)it: ", intGenreDescMaxLength);
-            strGenreDesc = GetString();
-            if (strlen(strGenreDesc) > intGenreDescMaxLength)
+            printf("Changed Genre Description (max %d chars) or E(x)it: ", iGenreDescMaxLength);
+            sGenreDesc = GetString();
+            if (strlen(sGenreDesc) > iGenreDescMaxLength)
             {
-                printf("Genre Desc max %d chars. You entered %d chars", intGenreDescMaxLength, (int) strlen(strGenreDesc));
+                printf("Genre Desc max %d chars. You entered %d chars", iGenreDescMaxLength, (int) strlen(sGenreDesc));
                 printf("\n");
-                strGenreDesc[0] = '\0';
+                sGenreDesc[0] = '\0';
             }
-        } while(strlen(strGenreDesc) == 0);
+        } while(strlen(sGenreDesc) == 0);
 
-        strGenreDescEscaped = fEscapeSingleQuote(strGenreDesc);
+        sGenreDescEscaped = fEscapeSingleQuote(sGenreDesc);
 
-        if((bGenreExists == true) && (toupper(strGenreDesc[0]) == 'X') && (strlen(strGenreDesc) == 1))
+        if((bGenreExists == true) && (toupper(sGenreDesc[0]) == 'X') && (strlen(sGenreDesc) == 1))
         {
-            free(strGenreDesc);
+            free(sGenreDesc);
             return;
         }
 
@@ -6261,12 +6255,12 @@ void fUpdateGenre(char *strPrgNme)
 
     if((bTitlesExist == false) && (bGenreExists == true))
     {
-        sprintf(strSQL, "UPDATE `Book Genres`"
+        sprintf(caSQL, "UPDATE `Book Genres`"
                        " SET `Genre Name` = '%s'"
                       ", `Genre Description` = '%s'"
-                       " WHERE `Genre ID` = %d", strGenreNameEscaped, strGenreDescEscaped, intGenreID);
+                       " WHERE `Genre ID` = %d", sGenreNameEscaped, sGenreDescEscaped, iGenreID);
 
-        if(mysql_query(conn, strSQL) != 0)
+        if(mysql_query(conn, caSQL) != 0)
         {
             printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
@@ -6274,27 +6268,27 @@ void fUpdateGenre(char *strPrgNme)
         } else
         {
             printf("\n");
-            printf("Genre ID: %d updated", intGenreID);
+            printf("Genre ID: %d updated", iGenreID);
             printf("\n\n");
             fPressEnterToContinue();
         }
     }
 
     mysql_free_result(res);
-    free(strGenreName);
-    free(strGenreNameEscaped);
+    free(sGenreName);
+    free(sGenreNameEscaped);
     return;
 }
 
 int  fGetFieldLength(char *strTableName, char *strFieldName)
 {
-    char strSQL[SQL_LEN] = {'\0'};
-    int intMaxFieldLength = 0;
+    char caSQL[SQL_LEN] = {'\0'};
+    int iMaxFieldLength = 0;
 
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    sprintf(strSQL, "SELECT CHARACTER_MAXIMUM_LENGTH"
+    sprintf(caSQL, "SELECT CHARACTER_MAXIMUM_LENGTH"
                     " FROM information_schema.COLUMNS"
                     " WHERE TABLE_SCHEMA ='risingfast'"
                     " AND TABLE_NAME = '%s'"
@@ -6302,7 +6296,7 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
 
 // execute the query and check for no result
 
-    if(mysql_query(conn, strSQL) != 0)
+    if(mysql_query(conn, caSQL) != 0)
     {
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
@@ -6322,10 +6316,10 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
     }
 
     row = mysql_fetch_row(res);
-    intMaxFieldLength = (int) atol(row[0]);
+    iMaxFieldLength = (int) atol(row[0]);
 
     mysql_free_result(res);
-    return intMaxFieldLength;
+    return iMaxFieldLength;
 }
 
 void fGetPwdFromConsole(void)
