@@ -80,14 +80,14 @@ int main(int argc, char** argv)
 {
 // declarations
 
-    char *strPrgNme = strcat(argv[0] + 2, " -- Library and reading log");                               // program name
+    char *sPrgNme = strcat(argv[0] + 2, " -- Library and reading log");                               // program name
     bool bHelp = false;                                                                  // help flag to show help text
     bool bExitMain = false;                                                                 // flag to exit the program
-    char cMainChoice = '0';                                                                      // main menu choice
-    int  iDisplayPageLength = 83;                                                    // display page lines for paging
-    char cDisplayPageWidth = 'N';                                               // display page width wide or narrow
-    char cDipslayPageFormat = 'T';                                             // display page format (T)ab or (C)SV
-    char cDisplayOrder = 'A';                                               // display order asc or desc on Title ID
+    char cMainChoice = '0';                                                                         // main menu choice
+    int  iDisplayPageLength = 83;                                                      // display page lines for paging
+    char cDisplayPageWidth = 'N';                                                  // display page width wide or narrow
+    char cDipslayPageFormat = 'T';                                                // display page format (T)ab or (C)SV
+    char cDisplayOrder = 'A';                                                  // display order asc or desc on Title ID
 
 // Search for input parameters
 
@@ -108,14 +108,14 @@ int main(int argc, char** argv)
 
 // get a password from the console and test the db connection
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     fGetPwdFromConsole();
     if(strcmp("BadSoExit", sgPassword) == 0)
     {
         printf("\n");
         return EXIT_FAILURE;
     }
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
 
 // Initialize a connection and connect to the database$
 
@@ -139,13 +139,13 @@ int main(int argc, char** argv)
     {
         while(cMainChoice == '0')
         {
-            fRetitleConsole(strPrgNme);
+            fRetitleConsole(sPrgNme);
             fShowMainMenu();
             cMainChoice = GetChar();
             if(strchr("12345678xXcCpPuUaAlLtTrR", cMainChoice) == NULL)
             {
                 cMainChoice = '0';
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 printf("\n");
             }
         }
@@ -153,7 +153,7 @@ int main(int argc, char** argv)
         if(strchr("1lL", cMainChoice) != NULL)
         {
             printf("\n");
-            fListTitles(strPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDipslayPageFormat, &cDisplayOrder);
+            fListTitles(sPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDipslayPageFormat, &cDisplayOrder);
             printf("\n");
             cMainChoice = '0';
             bExitMain = false;
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
         else if(strchr("2rR", cMainChoice) != NULL)
         {
             printf("\n");
-            fListAuthors(strPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDisplayOrder);
+            fListAuthors(sPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDisplayOrder);
             printf("\n");
             cMainChoice = '0';
             bExitMain = false;
@@ -169,7 +169,7 @@ int main(int argc, char** argv)
         else if(strchr("3tT", cMainChoice) != NULL)
         {
             printf("\n");
-            fAddTitle(strPrgNme);
+            fAddTitle(sPrgNme);
             printf("\n");
             cMainChoice = '0';
             bExitMain = false;
@@ -177,7 +177,7 @@ int main(int argc, char** argv)
         else if(strchr("aA4", cMainChoice) != NULL)
         {
             printf("\n");
-            fMaintainAttributes(strPrgNme, &iDisplayPageLength);
+            fMaintainAttributes(sPrgNme, &iDisplayPageLength);
             printf("\n");
             cMainChoice = '0';
             bExitMain = false;
@@ -185,7 +185,7 @@ int main(int argc, char** argv)
         else if(strchr("uU5", cMainChoice) != NULL)
         {
             printf("\n");
-            fUpdateTitleAndAttributes(strPrgNme, &iDisplayPageLength);
+            fUpdateTitleAndAttributes(sPrgNme, &iDisplayPageLength);
             printf("\n");
             cMainChoice = '0';
             bExitMain = false;
@@ -193,7 +193,7 @@ int main(int argc, char** argv)
         else if(strchr("cC6", cMainChoice) != NULL)
         {
             printf("\n");
-            fCharacters(strPrgNme);
+            fCharacters(sPrgNme);
             printf("\n");
             cMainChoice = '0';
             bExitMain = false;
@@ -201,7 +201,7 @@ int main(int argc, char** argv)
         else if(strchr("pP7", cMainChoice) != NULL)
         {
             printf("\n");
-            fSetOptions(strPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDipslayPageFormat, &cDisplayOrder);
+            fSetOptions(sPrgNme, &iDisplayPageLength, &cDisplayPageWidth, &cDipslayPageFormat, &cDisplayOrder);
             printf("\n");
             cMainChoice = '0';
             bExitMain = false;
@@ -217,7 +217,7 @@ int main(int argc, char** argv)
     return EXIT_SUCCESS;
 }
 
-void fListTitles(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDipslayPageFormat, char *pcDisplayOrder)
+void fListTitles(char *sPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDipslayPageFormat, char *pcDisplayOrder)
 {
     int iColCount = 0;
     int *iLengths = NULL;
@@ -240,7 +240,7 @@ void fListTitles(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageW
         strcpy(caOrder, "DESC");
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > List Titles > Titles and Authors and Character Counts");
     printf("\n\n");
@@ -418,13 +418,13 @@ void fListTitles(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageW
         fPressEnterToContinue();
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     free(iLengths);
     mysql_free_result(res);
     return;
 }
 
-void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
+void fMaintainAttributes(char *sPrgNme, int *piDisplayPageLength)
 {
 
     char cAttributeChoice = '0';
@@ -439,7 +439,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
     bool bExitAttributes = false;
     bool bAttributeAdded = false;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
 
     while(bExitAttributes == false)
     {
@@ -458,7 +458,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
         {
             while(bAttributeAdded == false)
             {
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 printf("\n");
                 printf("Main Menu > Maintain Attributes > Authors");
                 printf("\n\n");
@@ -467,7 +467,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
-                    if(fAddAuthor(strPrgNme) == 0)
+                    if(fAddAuthor(sPrgNme) == 0)
                     {
                         bAttributeAdded = false;
                     }
@@ -480,17 +480,17 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
-                    fUpdateAuthor(strPrgNme);
+                    fUpdateAuthor(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
-                    fDeleteAuthor(strPrgNme);
+                    fDeleteAuthor(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Authors > List");
                     printf("\n\n");
@@ -500,7 +500,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Authors > Search");
                     printf("\n\n");
@@ -525,7 +525,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
         {
             while(bAttributeAdded == false)
             {
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 printf("\n");
                 printf("Main Menu > Maintain Attributes > Classifications");
                 printf("\n\n");
@@ -534,7 +534,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
-                    if(fAddClassification(strPrgNme) == 0)
+                    if(fAddClassification(sPrgNme) == 0)
                     {
                         bAttributeAdded = false;
                     }
@@ -547,17 +547,17 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
-                    fUpdateClassification(strPrgNme);
+                    fUpdateClassification(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
-                    fDeleteClassification(strPrgNme);
+                    fDeleteClassification(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Classifications > List");
                     printf("\n\n");
@@ -567,7 +567,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Classifications > Search");
                     printf("\n\n");
@@ -592,7 +592,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
         {
             while(bAttributeAdded == false)
             {
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 printf("\n");
                 printf("Main Menu > Maintain Attributes > Ratings");
                 printf("\n\n");
@@ -601,7 +601,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
-                    if(fAddRating(strPrgNme) == 0)
+                    if(fAddRating(sPrgNme) == 0)
                     {
                         bAttributeAdded = false;
                     }
@@ -614,17 +614,17 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
-                    fUpdateRating(strPrgNme);
+                    fUpdateRating(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
-                    fDeleteRating(strPrgNme);
+                    fDeleteRating(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Ratings > List");
                     printf("\n\n");
@@ -634,7 +634,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Ratings > Search");
                     printf("\n\n");
@@ -659,7 +659,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
         {
             while(bAttributeAdded == false)
             {
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 printf("\n");
                 printf("Main Menu > Maintain Attributes > Series");
                 printf("\n\n");
@@ -668,7 +668,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
-                    if(fAddSeries(strPrgNme) == 0)
+                    if(fAddSeries(sPrgNme) == 0)
                     {
                         bAttributeAdded = false;
                     }
@@ -681,17 +681,17 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
-                    fUpdateSeries(strPrgNme);
+                    fUpdateSeries(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
-                    fDeleteSeries(strPrgNme);
+                    fDeleteSeries(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Series > List");
                     printf("\n\n");
@@ -701,7 +701,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Series > Search");
                     printf("\n\n");
@@ -726,7 +726,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
         {
             while(bAttributeAdded == false)
             {
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 printf("\n");
                 printf("Main Menu > Maintain Attribues > Sources");
                 printf("\n\n");
@@ -735,7 +735,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
-                    if(fAddSource(strPrgNme) == 0)
+                    if(fAddSource(sPrgNme) == 0)
                     {
                         bAttributeAdded = false;
                     }
@@ -748,17 +748,17 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
-                    fUpdateSource(strPrgNme);
+                    fUpdateSource(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                     printf("\n");
-                    fDeleteSource(strPrgNme);
+                    fDeleteSource(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Sources > List");
                     printf("\n\n");
@@ -768,7 +768,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Sources > Search");
                     printf("\n\n");
@@ -793,7 +793,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
         {
             while(bAttributeAdded == false)
             {
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 printf("\n");
                 printf("Main Menu > Maintain Attributes > Statuses");
                 printf("\n\n");
@@ -802,7 +802,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
-                    if(fAddStatus(strPrgNme) == 0)
+                    if(fAddStatus(sPrgNme) == 0)
                     {
                         bAttributeAdded = false;
                     }
@@ -815,17 +815,17 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
-                    fUpdateStatus(strPrgNme);
+                    fUpdateStatus(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
                      printf("\n");
-                     fDeleteStatus(strPrgNme);
+                     fDeleteStatus(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Statuses > List");
                     printf("\n\n");
@@ -835,7 +835,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Statuses > Search");
                     printf("\n\n");
@@ -860,7 +860,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
         {
             while(bAttributeAdded == false)
             {
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 printf("\n");
                 printf("Main Menu > Maintain Attributes > Genres");
                 printf("\n\n");
@@ -869,7 +869,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 if(cAddChangeDeleteListSearchExitChoice == 'A')
                 {
                     printf("\n");
-                    if(fAddGenre(strPrgNme) == 0)
+                    if(fAddGenre(sPrgNme) == 0)
                     {
                         bAttributeAdded = false;
                     }
@@ -882,16 +882,16 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'C')
                 {
                     printf("\n");
-                    fUpdateGenre(strPrgNme);
+                    fUpdateGenre(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'D')
                 {
-                    fDeleteGenre(strPrgNme);
+                    fDeleteGenre(sPrgNme);
                 }
                 else if(cAddChangeDeleteListSearchExitChoice == 'L')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Genres > List");
                     printf("\n\n");
@@ -901,7 +901,7 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
                 else if(cAddChangeDeleteListSearchExitChoice == 'S')
                 {
                     printf("\n");
-                    fRetitleConsole(strPrgNme);
+                    fRetitleConsole(sPrgNme);
                     printf("\n");
                     printf("Main Menu > Maintain Attributes > Genres > Search");
                     printf("\n\n");
@@ -927,20 +927,20 @@ void fMaintainAttributes(char *strPrgNme, int *piDisplayPageLength)
             bExitAttributes = true;
         }
 
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
     }
 
     return;
 }
 
-void fSetOptions(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDipslayPageFormat, char *pcDisplayOrder)
+void fSetOptions(char *sPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDipslayPageFormat, char *pcDisplayOrder)
 {
 
     int  iOptionChoice = '0';
     bool bExitOptions = false;
     bool bValidOptionChoice = false;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
 
     while(bExitOptions == false)
     {
@@ -1086,20 +1086,20 @@ void fSetOptions(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageW
             bExitOptions = true;
         }
 
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
     }
 
     return;
 }
 
-int fAddSeries(char *strPrgNme)
+int fAddSeries(char *sPrgNme)
 {
     char *sSeriesName = NULL;
     char *sSeriesNameEscaped = NULL;
     char caSQL[SQL_LEN] = {'\0'};
     int  iSeriesMaxLength = 0;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Series > Add");
     printf("\n\n");
@@ -1121,7 +1121,7 @@ int fAddSeries(char *strPrgNme)
 
     if(strcmp(sSeriesName, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
@@ -1147,21 +1147,21 @@ int fAddSeries(char *strPrgNme)
         return EXIT_FAILURE;
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
 
     free(sSeriesName);
     free(sSeriesNameEscaped);
     return EXIT_SUCCESS;
 }
 
-int fAddAuthor(char *strPrgNme)
+int fAddAuthor(char *sPrgNme)
 {
     char *sAuthorName = NULL;
     char *sEscapedAuthorName = NULL;
     char caSQL[SQL_LEN] = {'\0'};
     int  iAuthorMaxLength = 0;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Authors > Add");
     printf("\n\n");
@@ -1184,7 +1184,7 @@ int fAddAuthor(char *strPrgNme)
 
     if(strcmp(sAuthorName, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
@@ -1210,18 +1210,18 @@ int fAddAuthor(char *strPrgNme)
 
     free(sEscapedAuthorName);
     free(sAuthorName);
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     return EXIT_SUCCESS;
 }
 
-int fAddClassification(char *strPrgNme)
+int fAddClassification(char *sPrgNme)
 {
     char *sClassificationName = NULL;
     char caSQL[SQL_LEN] = {'\0'};
     char *sClassificationNameEscaped = NULL;
     int  iClassificationMaxLength = 0;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Classification > Add");
     printf("\n\n");
@@ -1244,7 +1244,7 @@ int fAddClassification(char *strPrgNme)
 
     if(strcmp(sClassificationName, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
@@ -1269,20 +1269,20 @@ int fAddClassification(char *strPrgNme)
         return EXIT_FAILURE;
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     free(sClassificationNameEscaped);
     free(sClassificationName);
     return EXIT_SUCCESS;
 }
 
-int fAddRating(char *strPrgNme)
+int fAddRating(char *sPrgNme)
 {
     char *sRatingName = NULL;
     char *sRatingNameEscaped = NULL;
     char caSQL[SQL_LEN] = {'\0'};
     int  iRatingMaxLength = 0;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Rating > Add");
     printf("\n\n");
@@ -1304,7 +1304,7 @@ int fAddRating(char *strPrgNme)
 
     if(strcmp(sRatingName, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
@@ -1328,20 +1328,20 @@ int fAddRating(char *strPrgNme)
         return EXIT_FAILURE;
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     free(sRatingName);
     free(sRatingNameEscaped);
     return EXIT_SUCCESS;
 }
 
-int fAddSource(char *strPrgNme)
+int fAddSource(char *sPrgNme)
 {
     char *sSourceName = NULL;
     char *sSourceNameEscaped = NULL;
     char caSQL[SQL_LEN] = {'\0'};
     int  iSourceMaxLength = 0;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Source > Add");
     printf("\n\n");
@@ -1363,7 +1363,7 @@ int fAddSource(char *strPrgNme)
 
     if(strcmp(sSourceName, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
@@ -1387,21 +1387,21 @@ int fAddSource(char *strPrgNme)
         return EXIT_FAILURE;
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
 
     free(sSourceName);
     free(sSourceNameEscaped);
     return EXIT_SUCCESS;
 }
 
-int fAddStatus(char *strPrgNme)
+int fAddStatus(char *sPrgNme)
 {
     char *sStatusName = NULL;
     char *sStatusNameEscaped = NULL;
     char caSQL[SQL_LEN] = {'\0'};
     int  iStatusMaxLength = 0;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Status > Add");
     printf("\n\n");
@@ -1423,7 +1423,7 @@ int fAddStatus(char *strPrgNme)
 
     if(strcmp(sStatusName, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return EXIT_SUCCESS;
     }
     printf("\n");
@@ -1447,13 +1447,13 @@ int fAddStatus(char *strPrgNme)
         return EXIT_FAILURE;
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     free(sStatusName);
     free(sStatusNameEscaped);
     return EXIT_SUCCESS;
 }
 
-int fAddGenre(char *strPrgNme)
+int fAddGenre(char *sPrgNme)
 {
     char *sGenreName = NULL;
     char *sGenreDesc = NULL;
@@ -1463,7 +1463,7 @@ int fAddGenre(char *strPrgNme)
     int  iGenreNameMaxLength = 0;
     int  iGenreDescMaxLength = 0;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Genre > Add:");
     printf("\n\n");
@@ -1486,7 +1486,7 @@ int fAddGenre(char *strPrgNme)
 
     if(strcmp(sGenreName, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return EXIT_SUCCESS;
     }
 
@@ -1505,7 +1505,7 @@ int fAddGenre(char *strPrgNme)
 
     if(strcmp(sGenreDesc, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return EXIT_SUCCESS;
     }
 
@@ -1531,7 +1531,7 @@ int fAddGenre(char *strPrgNme)
         return EXIT_FAILURE;
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     free(sGenreName);
     free(sGenreNameEscaped);
     free(sGenreDesc);
@@ -1539,7 +1539,7 @@ int fAddGenre(char *strPrgNme)
     return EXIT_SUCCESS;
 }
 
-void fAddTitle(char *strPrgNme)
+void fAddTitle(char *sPrgNme)
 {
     char *sTitleName = NULL;
     char *sTitleNameEscaped = NULL;
@@ -1547,7 +1547,7 @@ void fAddTitle(char *strPrgNme)
     char caSQL[SQL_LEN] = {'\0'};
     int  iTitleMaxLength = 0;
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Add Title");
     printf("\n\n");
@@ -1570,7 +1570,7 @@ void fAddTitle(char *strPrgNme)
 
     if(strcmp(sTitleName, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return;
     }
 
@@ -1578,7 +1578,7 @@ void fAddTitle(char *strPrgNme)
     sStartDate = GetString();
     if(strcmp(sStartDate, "x") == 0)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         return;
     }
 
@@ -1625,11 +1625,11 @@ void fAddTitle(char *strPrgNme)
 
     free(sTitleNameEscaped);
     free(sTitleName);
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     return;
 }
 
-void fUpdateTitleAndAttributes(char *strPrgNme, int *piDisplayPageLength)
+void fUpdateTitleAndAttributes(char *sPrgNme, int *piDisplayPageLength)
 {
     int  iTitleID = 0;
     int  iMaxTitleID = 0;
@@ -1656,7 +1656,7 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *piDisplayPageLength)
 
     while(bTitleFound == false)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
 
         printf("\n");
         printf("Main Menu > Update a Title and Attributes");
@@ -1691,7 +1691,7 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *piDisplayPageLength)
         }
         else if(toupper(cUpdateTitleAndAttributesAction) == 'X')
         {
-            fRetitleConsole(strPrgNme);
+            fRetitleConsole(sPrgNme);
             return;
         }
         else
@@ -1701,7 +1701,7 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *piDisplayPageLength)
             bTitleFound = true;
             printf("\n\n");
             fPressEnterToContinue();
-            fRetitleConsole(strPrgNme);
+            fRetitleConsole(sPrgNme);
             return;
         }
     }
@@ -1717,9 +1717,9 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *piDisplayPageLength)
             iTitleID = GetInt();
         }
 
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
         printf("\n");
-        fShowTitle(iTitleID, strPrgNme);
+        fShowTitle(iTitleID, sPrgNme);
         fShowAttributes(iTitleID);
 
         while((strstr("12345678910111213tTaAoOeEgGsScCrRdDfFmMxXhH", sAttribChoice) == NULL))
@@ -1862,7 +1862,7 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *piDisplayPageLength)
         {
             printf("Show Characters: ");
             printf("\n\n");
-            fShowCharacters(iTitleID, strPrgNme);
+            fShowCharacters(iTitleID, sPrgNme);
             sprintf(caSQL, "UPDATE `Book Titles` SET `Comments` = '%s' WHERE `Title ID` = %d", sNewComments, iTitleID);
             strcpy(sAttribChoice, "00");
             printf("\n");
@@ -1891,13 +1891,13 @@ void fUpdateTitleAndAttributes(char *strPrgNme, int *piDisplayPageLength)
             printf("SQL Error in function %s():\n\n%s", __func__, mysql_error(conn));
             printf("\n\n");
             fPressEnterToContinue();
-            fRetitleConsole(strPrgNme);
+            fRetitleConsole(sPrgNme);
             strcpy(sAttribChoice, "00");
         }
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     return;
 }
 
@@ -2131,7 +2131,7 @@ void fShowAttributes(int iTitleID)
     return;
 }
 
-void fShowCharacters(int iTitleID, char *strPrgNme)
+void fShowCharacters(int iTitleID, char *sPrgNme)
 {
     int *iLengths = NULL;
     int iColCount = 0;
@@ -2813,7 +2813,7 @@ void fShowAttributesMenu(void)
     printf("Choice: ");
 }
 
-void fCharacters(char *strPrgNme)
+void fCharacters(char *sPrgNme)
 {
     int  iTitleID = 0;
     char cExitOrContinue = 'C';
@@ -2833,7 +2833,7 @@ void fCharacters(char *strPrgNme)
 
     while(bTitleFound == false)
     {
-        fRetitleConsole(strPrgNme);
+        fRetitleConsole(sPrgNme);
 
         printf("\n");
         printf("Main Menu > Characters");
@@ -2870,7 +2870,7 @@ void fCharacters(char *strPrgNme)
         }
         else if(toupper(cAddCharacterAction) == 'X')
         {
-            fRetitleConsole(strPrgNme);
+            fRetitleConsole(sPrgNme);
             return;
         }
         else
@@ -2880,7 +2880,7 @@ void fCharacters(char *strPrgNme)
             bTitleFound = true;
             printf("\n\n");
             fPressEnterToContinue();
-            fRetitleConsole(strPrgNme);
+            fRetitleConsole(sPrgNme);
             return;
         }
     }
@@ -2890,23 +2890,23 @@ void fCharacters(char *strPrgNme)
         while(bValidChoice == false)
         {
 
-            fRetitleConsole(strPrgNme);
+            fRetitleConsole(sPrgNme);
             printf("\n");
             printf("Main Menu > Characters");
             printf("\n\n");
             printf("Title ID: %d", iTitleID);
             printf("\n\n");
 
-            fShowTitle(iTitleID, strPrgNme);
+            fShowTitle(iTitleID, sPrgNme);
             printf("\n");
-            fShowCharacters(iTitleID, strPrgNme);
+            fShowCharacters(iTitleID, sPrgNme);
 
             printf("\n");
             printf("(A)dd, (C)hange, (D)elete or E(x)it Characters: ");
             cAction = toupper(GetChar());
             if(strchr("xX", cAction) != NULL)
             {
-                fRetitleConsole(strPrgNme);
+                fRetitleConsole(sPrgNme);
                 return;
             }
             else if(strchr("aA", cAction) != NULL)
@@ -3017,11 +3017,11 @@ void fCharacters(char *strPrgNme)
         }
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     return;
 }
 
-void fShowTitle(int iTitleID, char *strPrgNme)
+void fShowTitle(int iTitleID, char *sPrgNme)
 {
     int *iLengths = NULL;
     int iColCount = 0;
@@ -3416,7 +3416,7 @@ void fShowAllSeries(int *piDisplayPageLength)
     return;
 }
 
-void fListAuthors(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDisplayOrder)
+void fListAuthors(char *sPrgNme, int *piDisplayPageLength, char *pcDisplayPageWidth, char *pcDisplayOrder)
 {
     int iColCount = 0;
     int *iLengths = NULL;
@@ -3445,7 +3445,7 @@ void fListAuthors(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPage
                     "GROUP BY A.`Author ID`"
                     "HAVING COUNT(T.`Title Name`) > 0;");
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > List Authors > Authors and Title Counts");
     printf("\n\n");
@@ -3531,7 +3531,7 @@ void fListAuthors(char *strPrgNme, int *piDisplayPageLength, char *pcDisplayPage
         fPressEnterToContinue();
     }
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     mysql_free_result(res);
     return;
 }
@@ -3610,7 +3610,7 @@ void fSearchAuthors(char *strSearchString)
     return;
 }
 
-void fDeleteAuthor(char *strPrgNme)
+void fDeleteAuthor(char *sPrgNme)
 {
 
     char caSQL[SQL_LEN] = {'\0'};
@@ -3624,7 +3624,7 @@ void fDeleteAuthor(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Authors > Delete");
     printf("\n\n");
@@ -3863,7 +3863,7 @@ void fSearchSeries(char *strSearchString)
     return;
 }
 
-void fDeleteSeries(char *strPrgNme)
+void fDeleteSeries(char *sPrgNme)
 {
     char caSQL[SQL_LEN] = {'\0'};
     int  iRowsReturned = 0;
@@ -3876,7 +3876,7 @@ void fDeleteSeries(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Series > Delete");
     printf("\n\n");
@@ -4040,7 +4040,7 @@ void fDeleteSeries(char *strPrgNme)
     return;
 }
 
-void fDeleteGenre(char *strPrgNme)
+void fDeleteGenre(char *sPrgNme)
 {
 
     char caSQL[SQL_LEN] = {'\0'};
@@ -4054,7 +4054,7 @@ void fDeleteGenre(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Genre > Delete");
     printf("\n\n");
@@ -4292,7 +4292,7 @@ void fSearchGenres(char *strSearchString)
     return;
 }
 
-void fDeleteSource(char *strPrgNme)
+void fDeleteSource(char *sPrgNme)
 {
     char caSQL[SQL_LEN] = {'\0'};
     int  iRowsReturned = 0;
@@ -4305,7 +4305,7 @@ void fDeleteSource(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Source > Delete");
     printf("\n\n");
@@ -4543,7 +4543,7 @@ void fSearchSources(char *strSearchString)
     return;
 }
 
-void fDeleteRating(char *strPrgNme)
+void fDeleteRating(char *sPrgNme)
 {
     char caSQL[SQL_LEN] = {'\0'};
     int  iRowsReturned = 0;
@@ -4556,7 +4556,7 @@ void fDeleteRating(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Rating > Delete");
     printf("\n\n");
@@ -4792,7 +4792,7 @@ void fSearchRatings(char *strSearchString)
     return;
 }
 
-void fDeleteStatus(char *strPrgNme)
+void fDeleteStatus(char *sPrgNme)
 {
     char caSQL[SQL_LEN] = {'\0'};
     int  iRowsReturned = 0;
@@ -4805,7 +4805,7 @@ void fDeleteStatus(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Status > Delete");
     printf("\n\n");
@@ -5042,7 +5042,7 @@ void fSearchStatuses(char *strSearchString)
     return;
 }
 
-void fDeleteClassification(char *strPrgNme)
+void fDeleteClassification(char *sPrgNme)
 {
     char *sServer = "192.168.0.13";
     char *sUser = "gjarman";
@@ -5059,7 +5059,7 @@ void fDeleteClassification(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Classifications > Delete");
     printf("\n\n");
@@ -5293,7 +5293,7 @@ void fSearchClassifications(char *strSearchString)
     return;
 }
 
-void fUpdateAuthor(char *strPrgNme)
+void fUpdateAuthor(char *sPrgNme)
 {
     char *sAuthorName = NULL;
     char *sEscapedAuthorName = NULL;
@@ -5311,7 +5311,7 @@ void fUpdateAuthor(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Authors > Change");
     printf("\n\n");
@@ -5427,7 +5427,7 @@ void fUpdateAuthor(char *strPrgNme)
     return;
 }
 
-void fUpdateClassification(char *strPrgNme)
+void fUpdateClassification(char *sPrgNme)
 {
     char *sClassificationName = NULL;
     char *sClassificationNameEscaped = NULL;
@@ -5443,7 +5443,7 @@ void fUpdateClassification(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Classifications > Change");
     printf("\n\n");
@@ -5563,7 +5563,7 @@ void fUpdateClassification(char *strPrgNme)
     return;
 }
 
-void fUpdateRating(char *strPrgNme)
+void fUpdateRating(char *sPrgNme)
 {
     char *sRatingName = NULL;
     char *sRatingNameEscaped = NULL;
@@ -5579,7 +5579,7 @@ void fUpdateRating(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Rating > Change");
     printf("\n\n");
@@ -5702,7 +5702,7 @@ void fUpdateRating(char *strPrgNme)
     return;
 }
 
-void fUpdateSeries(char *strPrgNme)
+void fUpdateSeries(char *sPrgNme)
 {
     char *sSeriesName = NULL;
     char *sSeriesNameEscaped = NULL;
@@ -5718,7 +5718,7 @@ void fUpdateSeries(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Series > Change");
     printf("\n\n");
@@ -5840,7 +5840,7 @@ void fUpdateSeries(char *strPrgNme)
     return;
 }
 
-void fUpdateSource(char *strPrgNme)
+void fUpdateSource(char *sPrgNme)
 {
     char *sSourceName = NULL;
     char *sSourceNameEscaped = NULL;
@@ -5856,7 +5856,7 @@ void fUpdateSource(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Source > Change");
     printf("\n\n");
@@ -5978,7 +5978,7 @@ void fUpdateSource(char *strPrgNme)
     return;
 }
 
-void fUpdateStatus(char *strPrgNme)
+void fUpdateStatus(char *sPrgNme)
 {
     char *sStatusName = NULL;
     char *sStatusNameEscaped = NULL;
@@ -5994,7 +5994,7 @@ void fUpdateStatus(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Status > Change");
     printf("\n\n");
@@ -6115,7 +6115,7 @@ void fUpdateStatus(char *strPrgNme)
     return;
 }
 
-void fUpdateGenre(char *strPrgNme)
+void fUpdateGenre(char *sPrgNme)
 {
     char *sGenreName = NULL;
     char *sGenreDesc = NULL;
@@ -6134,7 +6134,7 @@ void fUpdateGenre(char *strPrgNme)
 
 // retitle the console
 
-    fRetitleConsole(strPrgNme);
+    fRetitleConsole(sPrgNme);
     printf("\n");
     printf("Main Menu > Maintain Attributes > Genres > Change");
     printf("\n\n");
