@@ -113,4 +113,3 @@
     17-Jun-2021 troubleshoot bug with changing ratings using invalid rating ID
     17-Jun-2021 fix bug on return path addting attributes
 #### Enhancements: (0)
-    Make res and row variables local to procedures
