@@ -130,7 +130,7 @@ int main(int argc, char** argv)
         printf("\n");
         fPressEnterToContinue();
         printf("\n");
-        return -1;
+        return  EXIT_FAILURE;
     }
 
 // print the main menu
