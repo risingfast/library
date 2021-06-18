@@ -114,4 +114,5 @@
     17-Jun-2021 fix bug on return path addting attributes
     18-Jun-2021 create function for main menu
     18-Jun-2021 create function for attributes maintenance menu
+    18-Jun-2021 shorten variable name pefixes
 #### Enhancements: (0)
