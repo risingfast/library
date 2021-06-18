@@ -24,7 +24,6 @@ int  fAddStatus(char *);          // add a status, return EXIT_FAILURE if not ad
 int  fAddGenre(char *);            // add a genre, return EXIT_FAILURE if not added or EXIT_SUCCESS
 void fAddTitle(char *);                                      // add a title with default attributes
 void fCharacters(char *);                         // view, add, change delete characters on a title
-void fUpdateTitleAndAttributes(char *, int *);   // update attributes of a Title but not characters
 int  fGetMaxTitleID(void);                                       // get the max value of Title ID's
 int  fGetMinTitleID(void);                                       // get the min value of Title ID's
 void fShowAttributes(int);                                  // show title attributes on the console
@@ -36,6 +35,8 @@ void fShowAllGenres(int *);                                       // show all ge
 void fShowAllStatuses(int *);                                   // show all statuses on the console
 void fShowAllClassifications(int *);                     // show all classifications on the console
 void fShowAllRatings(int *);                                     // show all ratings on the console
+void fShowMainMenu(void);                                                     // show the main menu
+void fShowAttributesMenu(void);                                               // show the main menu
 void fShowTitle(int, char *);                                   // show a title name on the console
 char *fEscapeSingleQuote(char *);                    // escape ' as '' for mysql in string literals
 bool fCheckTitleIDExists(int);                        // check a Title ID and return True if exists
@@ -54,6 +55,7 @@ void fSearchSources(char *);                                 // search sources a
 void fSearchRatings(char *);                                 // search ratings and show a rating ID
 void fSearchStatuses(char *);                               // search statuses and show a status ID
 void fSearchClassifications(char *);         // search classifications and show a classification ID
+void fUpdateTitleAndAttributes(char *, int *);   // update attributes of a Title but not characters
 void fUpdateAuthor(char *);                                                     // update an author
 void fUpdateClassification(char *);                                      // update a classification
 void fUpdateRating(char *);                                                      // update a rating
@@ -138,26 +140,7 @@ int main(int argc, char** argv)
         while(charMainChoice == '0')
         {
             fRetitleConsole(strPrgNme);
-            printf("\n");
-            printf("Main Menu");
-            printf("\n\n");
-            printf("1. (L)ist Titles");
-            printf("\n");
-            printf("2. List Autho(r)s");
-            printf("\n");
-            printf("3. Add a (T)itle");
-            printf("\n");
-            printf("4. Maintain (A)ttributes");
-            printf("\n");
-            printf("5. (U)pdate a Title and Attributes");
-            printf("\n");
-            printf("6. (C)haracters");
-            printf("\n");
-            printf("7. O(p)tions");
-            printf("\n");
-            printf("8. E(x)it");
-            printf("\n\n");
-            printf("Choice: ");
+            fShowMainMenu();
             charMainChoice = GetChar();
             if(strchr("12345678xXcCpPuUaAlLtTrR", charMainChoice) == NULL)
             {
@@ -463,6 +446,8 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
         while(charAttributeChoice == '0')
         {
             bAttributeAdded = false;
+            fShowAttributesMenu();
+/*
             printf("\n");
             printf("Main Menu > Maintain Attributes");
             printf("\n\n");
@@ -483,6 +468,7 @@ void fMaintainAttributes(char *strPrgNme, int *pintDisplayPageLength)
             printf("8. E(x)it");
             printf("\n\n");
             printf("Choice: ");
+*/
             charAttributeChoice = GetChar();
             if(strchr("12345678AaCcRrEeOoSsGgXx", charAttributeChoice) == NULL)
             {
@@ -2484,7 +2470,6 @@ void fShowAllGenres(int *pintDisplayPageLength)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -2576,7 +2561,6 @@ void fShowAllStatuses(int *pintDisplayPageLength)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -2668,7 +2652,6 @@ void fShowAllClassifications(int *pintDisplayPageLength)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -2760,7 +2743,6 @@ void fShowAllRatings(int  *pintDisplayPageLength)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -2802,6 +2784,57 @@ void fShowAllRatings(int  *pintDisplayPageLength)
     mysql_free_result(res);
     return;
 }
+
+void fShowMainMenu(void)
+{
+    printf("\n");
+    printf("Main Menu");
+    printf("\n\n");
+    printf("1. (L)ist Titles");
+    printf("\n");
+    printf("2. List Autho(r)s");
+    printf("\n");
+    printf("3. Add a (T)itle");
+    printf("\n");
+    printf("4. Maintain (A)ttributes");
+    printf("\n");
+    printf("5. (U)pdate a Title and Attributes");
+    printf("\n");
+    printf("6. (C)haracters");
+    printf("\n");
+    printf("7. O(p)tions");
+    printf("\n");
+    printf("8. E(x)it");
+    printf("\n\n");
+    printf("Choice: ");
+
+    return;
+}
+
+void fShowAttributesMenu(void)
+{
+    printf("\n");
+    printf("Main Menu > Maintain Attributes");
+    printf("\n\n");
+    printf("1. (A)uthor");
+    printf("\n");
+    printf("2. (C)lassification");
+    printf("\n");
+    printf("3. (R)ating");
+    printf("\n");
+    printf("4. S(e)ries");
+    printf("\n");
+    printf("5. S(o)urces");
+    printf("\n");
+    printf("6. (S)tatuses");
+    printf("\n");
+    printf("7. (G)enres");
+    printf("\n");
+    printf("8. E(x)it");
+    printf("\n\n");
+    printf("Choice: ");
+}
+
 void fCharacters(char *strPrgNme)
 {
 
@@ -3058,7 +3091,6 @@ void fShowTitle(int intTitleID, char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -3189,11 +3221,8 @@ bool fCheckTitleIDExists(int intTitleID)
     {
         printf("%s() -- No results returned", __func__);
         printf("\n");
-
         bTitleIDFound = false;
-
         fPressEnterToContinue();
-        mysql_free_result(res);
         return EXIT_FAILURE;
     }
 
@@ -3278,7 +3307,6 @@ void fShowAllAuthors(int *pintDisplayPageLength)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -3370,7 +3398,6 @@ void fShowAllSeries(int *pintDisplayPageLength)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -3408,7 +3435,6 @@ void fShowAllSeries(int *pintDisplayPageLength)
         }
     }
     printf("\n");
-
     mysql_free_result(res);
     return;
 }
@@ -3579,7 +3605,6 @@ void fSearchAuthors(char *strSearchString)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
      }
 
@@ -3832,7 +3857,6 @@ void fSearchSeries(char *strSearchString)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
 
      }
@@ -4264,7 +4288,6 @@ void fSearchGenres(char *strSearchString)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4517,7 +4540,6 @@ void fSearchSources(char *strSearchString)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -4768,7 +4790,6 @@ void fSearchRatings(char *strSearchString)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -5020,7 +5041,6 @@ void fSearchStatuses(char *strSearchString)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -5046,7 +5066,7 @@ void fSearchStatuses(char *strSearchString)
     }
 
     mysql_free_result(res);
-        return;
+    return;
 }
 
 void fDeleteClassification(char *strPrgNme)
@@ -5273,7 +5293,6 @@ void fSearchClassifications(char *strSearchString)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -5499,7 +5518,6 @@ void fUpdateClassification(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -5637,7 +5655,6 @@ void fUpdateRating(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -5777,7 +5794,6 @@ void fUpdateSeries(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -5916,7 +5932,6 @@ void fUpdateSource(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -6055,7 +6070,6 @@ void fUpdateStatus(char *strPrgNme)
         printf("\n");
 
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -6195,9 +6209,7 @@ void fUpdateGenre(char *strPrgNme)
     {
         printf("%s() -- No results returned", __func__);
         printf("\n");
-
         fPressEnterToContinue();
-        mysql_free_result(res);
         return;
     }
 
@@ -6327,9 +6339,7 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
     {
         printf("%s() -- no results returned", __func__);
         printf("\n");
-
         fPressEnterToContinue();
-        mysql_free_result(res);
         return EXIT_SUCCESS;
     }
 
@@ -6338,7 +6348,6 @@ int  fGetFieldLength(char *strTableName, char *strFieldName)
 
     mysql_free_result(res);
     return intMaxFieldLength;
-
 }
 
 void fGetPwdFromConsole(void)

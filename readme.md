@@ -112,4 +112,6 @@
     17-Jun-2021 eliminate duplicate mysql_free_result() calls in fDelete attribute calls
     17-Jun-2021 troubleshoot bug with changing ratings using invalid rating ID
     17-Jun-2021 fix bug on return path addting attributes
+    18-Jun-2021 create function for main menu
+    18-Jun-2021 create function for attributes maintenance menu
 #### Enhancements: (0)
