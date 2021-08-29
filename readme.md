@@ -115,4 +115,5 @@
     18-Jun-2021 create function for main menu
     18-Jun-2021 create function for attributes maintenance menu
     18-Jun-2021 shorten variable name pefixes
+    29-Aug-2021 make clean and rebuild
 #### Enhancements: (0)
