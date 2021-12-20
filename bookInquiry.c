@@ -11,6 +11,7 @@
  *      03-Nov-2021 add SQL for recent, classifications, ratings, series, sources, genres and statuses
  *      15-Nov-2021 remove unread books from recents listing
  *      15-Nov-2021 add unreads listing
+ *      19-Dec-2021 add author to series listing
  *  Enhancements:
 */
 
@@ -77,7 +78,9 @@ int main(void) {
 // check for a NULL query string -------------------------------------------------------------------------------------=
 
 //    setenv("QUERY_STRING", "action=Classifications&filter=Non", 1);
-//    setenv("QUERY_STRING", "action=recents&filter=", 1);
+
+//    setenv("QUERY_STRING", "action=series&filter=", 1);
+
     sParams = getenv("QUERY_STRING");
 
     if(sParams == NULL) {
@@ -146,15 +149,6 @@ int main(void) {
         ;
         fPrintResult(sAction, sFilter, caSQL);
     }
-//    else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
-//        sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
-//                       ", BA.`Author Name` as 'Name' "
-//                       "FROM risingfast.`Book Authors` BA "
-//                       "WHERE BA.`Author Name` LIKE '%s' "
-//                       "ORDER BY BA.`Author ID` ASC", sFilter)
-//        ;
-//        fPrintResult(sAction, sFilter, caSQL);
-//    }
     else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
         sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
                        ", BA.`Author Name` as 'Name' "
@@ -216,10 +210,17 @@ int main(void) {
     }
     else if (strstr(getenv("QUERY_STRING"), "series") != NULL) {
         sprintf(caSQL, "SELECT BS.`Series ID` as 'ID' "
-                       ", BS.`Series Name` as 'Name' "
-                       "FROM risingfast.`Book Series` BS "
-                       "WHERE BS.`Series Name` LIKE '%s' "
-                       "ORDER BY BS.`Series ID` ASC", sFilter)
+                       " , BS.`Series Name` as 'Name' "
+                       " , BA.`Author Name` as 'Author Name' "
+                       " , TRUNCATE(SUM(BR.`Rating Value`)/COUNT(BR.`Rating Value`), 0) as 'Rating' "
+                       " , COUNT(BR.`Rating Value`) as 'Count' "
+                       " FROM risingfast.`Book Series` BS "
+                       " LEFT JOIN risingfast.`Book Titles` BT on BS.`Series ID` = BT.`Series ID` "
+                       " LEFT JOIN risingfast.`Book Authors` BA on BT.`Author ID` = BA.`Author ID` "
+                       " LEFT JOIN risingfast.`Book Ratings` BR on BT.`Rating ID` = BR.`Rating ID` "
+                       " WHERE BS.`Series Name` LIKE '%s' "
+                       " GROUP BY BS.`Series ID`, BS.`Series Name`, BA.`Author Name` "
+                       " ORDER BY BS.`Series ID` ASC", sFilter)
         ;
         fPrintResult(sAction, sFilter, caSQL);
     }
