@@ -6,6 +6,7 @@
  *  Log:
  *      10-Nov-2021 started by copying bookDetails.c and modifying
  *      04-Dec-2021 add the character id to output
+ *      26-Dec-2021 add filter to characters
  *  Enhancements:
 */
 
@@ -34,9 +35,12 @@ MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
 int  iTitleID = 0;
-char *sParam = NULL;
+char *sParams = NULL;
 char *sSubstring = NULL;
+char *sFilter =  NULL;
 char caDelimiter[] = "&";
+char caFilterTemp[MAXLEN] = {'\0'};
+char caFilter[MAXLEN + 2] = {'\0'};
 
 void fPrintResult(char *);
 
@@ -65,24 +69,17 @@ int main(void) {
 
 // check for a NULL query string -------------------------------------------------------------------------------------=
 
-//    setenv("QUERY_STRING", "TitleID=105", 1);
+//    setenv("QUERY_STRING", "TitleID=117&Filter=''", 1);
+    setenv("QUERY_STRING", "TitleID=117", 1);
 
-    sParam = getenv("QUERY_STRING");
+    sParams = getenv("QUERY_STRING");
 
-    if(sParam == NULL) {
+    if(sParams == NULL) {
         printf("\n");
         printf("Query string is empty. Terminating program");
         printf("\n\n");
         return 1;
     }
-
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
-//    return 0;
-
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
-
-    sscanf(sParam, "TitleID=%d", &iTitleID);
 
 // test for an empty QUERY_STRING -------------------------------------------------------------------------------------
 
@@ -93,17 +90,39 @@ int main(void) {
         return 0;
     }
 
+//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+
+    sscanf(sParams, "TitleID=%d", &iTitleID);
+
+
+//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------$
+
+    sSubstring = strtok(sParams, caDelimiter);
+    sscanf(sSubstring, "TitleID=%d", &iTitleID);
+
+    sSubstring = strtok(NULL, caDelimiter);
+    sscanf(sSubstring, "Filter=%s", caFilterTemp);
+
+// parse the QUERY_STRING for each argument: Action and Filter ---------------------------------------------------------$
+
+    sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
+
+    if (strlen(caFilterTemp) == 1) {
+        sprintf(caFilter, "%s", caFilterTemp);
+    } else {
+        sprintf(caFilter, "%s%%", caFilterTemp);
+    }
+    sFilter = caFilter;
+
+
 // set a SQL query based on a book ID to retrieve all characters-------------------------------------------------------
 
     sprintf(caSQL, "SELECT BC.`Character ID`, BC.`Character Name` "
                    "FROM risingfast.`Book Characters` BC "
-                   "WHERE BC.`Title ID` = '%d';", iTitleID);
+                   "WHERE BC.`Title ID` = '%d' "
+                   "AND BC.`Character Name` like '%s';", iTitleID, sFilter);
 
-// Call the function to print the SQL results to stdout and terminate the program
-
-//    printf("Query: %s", caSQL);
-//    printf("\n\n");
-//    return 0;
+//    printf("\n%s\n", caSQL);
 
     fPrintResult(caSQL);
     

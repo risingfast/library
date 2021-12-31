@@ -66,7 +66,7 @@ int main(void) {
 
 // check for a NULL query string -------------------------------------------------------------------------------------=
 
-    setenv("QUERY_STRING", "TitleID=117", 1);
+//    setenv("QUERY_STRING", "TitleID=102", 1);
 
     sParam = getenv("QUERY_STRING");
 
@@ -95,12 +95,19 @@ int main(void) {
         
     sprintf(caSQL, "SELECT BT.`Title ID` "
                    ", BT.`Title Name` "
+                   ", BA.`Author ID` "
                    ", BA.`Author Name` "
+                   ", BS1.`Source ID` "
                    ", BS1.`Source Name` "
+                   ", BS2.`Series ID` "
                    ", BS2.`Series Name` "
+                   ", BS3.`Status ID` "
                    ", BS3.`Status Name` "
+                   ", BG.`Genre ID` "
                    ", BG.`Genre Name` "
+                   ", BC.`Classification ID` "
                    ", BC.`Classification Name` "
+                   ", BR.`Rating ID` "
                    ", BR.`Rating Name` "
                    ", BT.`Start` "
                    ", BT.`Finish` "
