@@ -40,8 +40,8 @@ MYSQL_RES *res;
 MYSQL_ROW row;
 
 char caText[MAXLEN] = {'\0'};
-char caTopic[MAXLEN] = {'\0'};
-char *sTopic = NULL;
+char caAction[MAXLEN] = {'\0'};
+char *sAction = NULL;
 char caFilterTemp[MAXLEN] = {'\0'};
 char caFilter[MAXLEN + 2] = {'\0'};
 char *sFilter = NULL;
@@ -77,9 +77,9 @@ int main(void) {
 
 // check for a NULL query string -------------------------------------------------------------------------------------=
 
-//    setenv("QUERY_STRING", "topic=authors&filter=", 1);
+//    setenv("QUERY_STRING", "action=Classifications&filter=Non", 1);
 
-//    setenv("QUERY_STRING", "topic=series&filter=", 1);
+//    setenv("QUERY_STRING", "action=series&filter=", 1);
 
     sParams = getenv("QUERY_STRING");
 
@@ -96,14 +96,14 @@ int main(void) {
 //  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
 
     sSubstring = strtok(sParams, caDelimiter);
-    sscanf(sSubstring, "topic=%s", caTopic);
-    sTopic = caTopic;
+    sscanf(sSubstring, "action=%s", caAction);
+    sAction = caAction;
 
     sSubstring = strtok(NULL, caDelimiter);
     sscanf(sSubstring, "filter=%s", caFilterTemp);
 //    printf("caFilterTemp: %s", caFilterTemp);
 
-// parse the QUERY_STRING for each argument: Topic and Filter ---------------------------------------------------------
+// parse the QUERY_STRING for each argument: Action and Filter ---------------------------------------------------------
 
     sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
 
@@ -138,7 +138,7 @@ int main(void) {
                        "WHERE BT.`Title Name` LIKE '%s' "
                        "ORDER BY BT.`Title ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "characters") != NULL) {
         sprintf(caSQL, "SELECT BC.`Character ID` as 'ID' "
@@ -147,12 +147,11 @@ int main(void) {
                        "WHERE BC.`Character Name` LIKE '%s' "
                        "ORDER BY BC.`Character ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
         sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
                        ", BA.`Author Name` as 'Name' "
-                       ", BA.`Author Sort` as 'Sort' "
                        ", ROUND(SUM(BR.`Rating Value`) / COUNT(BT.`Author ID`), 0) as `Author Rating` "
                        "FROM `Book Authors` BA "
                        "LEFT JOIN risingfast.`Book Titles` BT ON BA.`Author ID` = BT.`Author ID` "
@@ -162,7 +161,7 @@ int main(void) {
                        "GROUP BY BA.`Author ID` "
                        "ORDER BY BA.`Author ID` ASC; ", sFilter)
                        ;
-         fPrintResult(sTopic, sFilter, caSQL);
+         fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "recents") != NULL) {
         sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
@@ -175,7 +174,7 @@ int main(void) {
                        "AND BT.`Start` IS NOT NULL "
                        "ORDER BY BT.`Start` DESC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "unreads") != NULL) {
         sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
@@ -188,7 +187,7 @@ int main(void) {
                        "AND BT.`Start` IS NULL "
                        "ORDER BY BT.`Start` DESC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "classifications") != NULL) {
         sprintf(caSQL, "SELECT BC.`Classification ID` as 'ID' "
@@ -197,7 +196,7 @@ int main(void) {
                        "WHERE BC.`Classification Name` LIKE '%s' "
                        "ORDER BY BC.`Classification ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "ratings") != NULL) {
         sprintf(caSQL, "SELECT BR.`Rating ID` as 'ID' "
@@ -206,7 +205,7 @@ int main(void) {
                        "WHERE BR.`Rating Name` LIKE '%s' "
                        "ORDER BY BR.`Rating ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "series") != NULL) {
         sprintf(caSQL, "SELECT BS.`Series ID` as 'ID' "
@@ -222,7 +221,7 @@ int main(void) {
                        " GROUP BY BS.`Series ID`, BS.`Series Name`, BA.`Author Name` "
                        " ORDER BY BS.`Series ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "sources") != NULL) {
         sprintf(caSQL, "SELECT BS.`Source ID` as 'ID' "
@@ -231,7 +230,7 @@ int main(void) {
                        "WHERE BS.`Source Name` LIKE '%s' "
                        "ORDER BY BS.`Source ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "genres") != NULL) {
         sprintf(caSQL, "SELECT BG.`Genre ID` as 'ID' "
@@ -240,7 +239,7 @@ int main(void) {
                        "WHERE BG.`Genre Name` LIKE '%s' "
                        "ORDER BY BG.`Genre ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "statuses") != NULL) {
         sprintf(caSQL, "SELECT BS.`Status ID` as 'ID' "
@@ -249,16 +248,16 @@ int main(void) {
                        "WHERE BS.`Status Name` LIKE '%s' "
                        "ORDER BY BS.`Status ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sAction, sFilter, caSQL);
     }
     return 0;
 }
 
-void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
+void fPrintResult(char *caAction, char *caFilter, char *caSQL)
 {
     int iColCount = 0;
 
-//    printf("Topic: %s  Filter: %s", caTopic, caFilter);
+//    printf("Action: %s  Filter: %s", caAction, caFilter);
 // execute the query and check for no result
     
     if(mysql_query(conn, caSQL) != 0)
@@ -295,7 +294,7 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
         {
             if(i == 0)
             {
-                printf("%4s,", row[i]);
+                printf("%4s ", row[i]);
             }
             else if (i == iColCount - 1)
             {
@@ -307,14 +306,14 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
             }
             else {
                 if (row[i] != NULL) {
-                    printf("%s,", row[i]);
+                    printf("%s, ", row[i]);
                 } else {
                     ;
                 }
             }
         }
         printf("\n");
-    } 
+    }
 
     mysql_free_result(res);
 }

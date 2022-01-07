@@ -1,17 +1,11 @@
-/*  bookInquiry.c - CGI to show books on the bookInquiry.html webpage
+/*  bookInquiry2.c - CGI to show book information for lists of values
  *  Author: Geoffrey Jarman
- *  Started: 01-Nov-2021
+ *  Started: 04-Dec-2022
  *  References:
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
- *      01-Nov-2021
- *      02-Nov-2021 add SQL for titles
- *      02-Nov-2021 add SQL for characters
- *      02-Nov-2021 add SQL for authors
- *      03-Nov-2021 add SQL for recent, classifications, ratings, series, sources, genres and statuses
- *      15-Nov-2021 remove unread books from recents listing
- *      15-Nov-2021 add unreads listing
- *      19-Dec-2021 add author to series listing
+ *      04-Jan-2022 started
+ *      04-Jan-2022 changed sort on author output
  *  Enhancements:
 */
 
@@ -160,7 +154,7 @@ int main(void) {
                        "WHERE BA.`Author Name` LIKE '%s' "
                        " AND risingfast.BA.`Author Name` != 'Unassigned' "
                        "GROUP BY BA.`Author ID` "
-                       "ORDER BY BA.`Author ID` ASC; ", sFilter)
+                       "ORDER BY BA.`Author Sort` ASC; ", sFilter)
                        ;
          fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -289,9 +283,9 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
     
 // print each row of results
 
-    while(row = mysql_fetch_row(res))
+     while(row = mysql_fetch_row(res))
     {
-        for(int i = 0; i < iColCount; i++)
+        for (int i = 0; i < iColCount; i++)
         {
             if(i == 0)
             {
@@ -314,7 +308,7 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
             }
         }
         printf("\n");
-    } 
+    }
 
     mysql_free_result(res);
 }

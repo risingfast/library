@@ -1,17 +1,10 @@
-/*  bookInquiry.c - CGI to show books on the bookInquiry.html webpage
+/*  bookFetchLOVs.c - CGI to fetch lists of values for book attributes
  *  Author: Geoffrey Jarman
- *  Started: 01-Nov-2021
+ *  Started: 04-Jan-2022
  *  References:
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
- *      01-Nov-2021
- *      02-Nov-2021 add SQL for titles
- *      02-Nov-2021 add SQL for characters
- *      02-Nov-2021 add SQL for authors
- *      03-Nov-2021 add SQL for recent, classifications, ratings, series, sources, genres and statuses
- *      15-Nov-2021 remove unread books from recents listing
- *      15-Nov-2021 add unreads listing
- *      19-Dec-2021 add author to series listing
+ *      04-Jan-2022 copied from bookInquiry2.c
  *  Enhancements:
 */
 
@@ -77,7 +70,7 @@ int main(void) {
 
 // check for a NULL query string -------------------------------------------------------------------------------------=
 
-//    setenv("QUERY_STRING", "topic=authors&filter=", 1);
+//    setenv("QUERY_STRING", "topic=series&filter=", 1);
 
 //    setenv("QUERY_STRING", "topic=series&filter=", 1);
 
@@ -158,9 +151,9 @@ int main(void) {
                        "LEFT JOIN risingfast.`Book Titles` BT ON BA.`Author ID` = BT.`Author ID` "
                        "LEFT JOIN risingfast.`Book Ratings` BR ON BT.`Rating ID` = BR.`Rating ID` "
                        "WHERE BA.`Author Name` LIKE '%s' "
-                       " AND risingfast.BA.`Author Name` != 'Unassigned' "
+//                       " AND risingfast.BA.`Author Name` != 'Unassigned' "
                        "GROUP BY BA.`Author ID` "
-                       "ORDER BY BA.`Author ID` ASC; ", sFilter)
+                       "ORDER BY BA.`Author Sort` ASC; ", sFilter)
                        ;
          fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -211,16 +204,9 @@ int main(void) {
     else if (strstr(getenv("QUERY_STRING"), "series") != NULL) {
         sprintf(caSQL, "SELECT BS.`Series ID` as 'ID' "
                        " , BS.`Series Name` as 'Name' "
-                       " , BA.`Author Name` as 'Author Name' "
-                       " , TRUNCATE(SUM(BR.`Rating Value`)/COUNT(BR.`Rating Value`), 0) as 'Rating' "
-                       " , COUNT(BR.`Rating Value`) as 'Count' "
                        " FROM risingfast.`Book Series` BS "
-                       " LEFT JOIN risingfast.`Book Titles` BT on BS.`Series ID` = BT.`Series ID` "
-                       " LEFT JOIN risingfast.`Book Authors` BA on BT.`Author ID` = BA.`Author ID` "
-                       " LEFT JOIN risingfast.`Book Ratings` BR on BT.`Rating ID` = BR.`Rating ID` "
                        " WHERE BS.`Series Name` LIKE '%s' "
-                       " GROUP BY BS.`Series ID`, BS.`Series Name`, BA.`Author Name` "
-                       " ORDER BY BS.`Series ID` ASC", sFilter)
+                       " ORDER BY BS.`Series Name` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -238,7 +224,7 @@ int main(void) {
                        ", BG.`Genre Name` as 'Name' "
                        "FROM risingfast.`Book Genres` BG "
                        "WHERE BG.`Genre Name` LIKE '%s' "
-                       "ORDER BY BG.`Genre ID` ASC", sFilter)
+                       "ORDER BY BG.`Genre Name` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -289,9 +275,9 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
     
 // print each row of results
 
-    while(row = mysql_fetch_row(res))
+     while(row = mysql_fetch_row(res))
     {
-        for(int i = 0; i < iColCount; i++)
+        for (int i = 0; i < iColCount; i++)
         {
             if(i == 0)
             {
@@ -314,7 +300,7 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
             }
         }
         printf("\n");
-    } 
+    }
 
     mysql_free_result(res);
 }
