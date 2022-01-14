@@ -21,7 +21,7 @@ CFLAGS=-g -o
 SQL1FLAGS=-I/usr/include/mysql
 SQL2FLAGS=-L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl -lresolv
 
-all: mysql-c-library bookInquiry bookInquiry1 bookInquiry2 bookDetails bookDetails2 bookCharacters bookAddAuthor bookAddClassification bookAddRating bookAddSeries bookAddSource bookAddGenre bookAddStatus bookTitleID bookAddCharacter bookChgCharNme bookDelCharacter bookVldtCharId bookDelClassification bookDelRating bookDelSeries bookDelSource bookDelGenre bookDelStatus bookDelAuthor bookVldtStatusId bookChgStatusNme bookVldtGenreId bookChgGenreNme bookVldtSourceId bookChgSourceNme bookVldtSeriesId bookChgSeriesNme bookVldtRatingId bookChgRatingNme bookVldtClassId bookChgClassNme bookVldtAuthorId bookChgAuthorNme bookFetchLOVs
+all: mysql-c-library bookInquiry bookInquiry1 bookInquiry2 bookDetails bookDetails2 bookCharacters bookAddAuthor bookAddClassification bookAddRating bookAddSeries bookAddSource bookAddGenre bookAddStatus bookTitleID bookAddCharacter bookChgCharNme bookDelCharacter bookVldtCharId bookDelClassification bookDelRating bookDelSeries bookDelSource bookDelGenre bookDelStatus bookDelAuthor bookVldtStatusId bookChgStatusNme bookVldtGenreId bookChgGenreNme bookVldtSourceId bookChgSourceNme bookVldtSeriesId bookChgSeriesNme bookVldtRatingId bookChgRatingNme bookVldtClassId bookChgClassNme bookVldtAuthorId bookChgAuthorNme bookFetchLOVs bookAddBook bookDelBook bookUpdtBook
 
 mysql-c-library: mysql-c-library.c rf50.c cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
@@ -146,5 +146,14 @@ bookChgAuthorNme: bookChgAuthorNme.c ../shared/rf50.c ../shared/cs50.c
 bookFetchLOVs: bookFetchLOVs.c ../shared/rf50.c ../shared/cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
+bookAddBook: bookAddBook.c ../shared/rf50.c ../shared/cs50.c
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
+bookDelBook: bookDelBook.c ../shared/rf50.c ../shared/cs50.c
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
+bookUpdtBook: bookUpdtBook.c ../shared/rf50.c ../shared/cs50.c
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
 clean:
-	rm -f *.o *.s *.i mysql-c-library bookInquiry bookInquiry1 bookInquiry2 bookDetails bookDetails2 bookCharacters bookAddAuthor bookAddClassification bookAddRating bookAddSeries bookAddSource bookAddGenre bookAddStatus bookTitleID bookAddCharacter bookChgCharNme bookDelCharacter bookVldtCharId bookDelClassification bookDelRating bookDelSeries bookDelSource bookDelGenre bookDelStatus bookDelAuthor bookVldtStatusId bookChgStatusNme bookVldtGenreId bookChgGenreNme bookVldtSourceId bookChgSourceNme bookVldtSeriesId bookChgSeriesNme bookVldtRatingId bookChgRatingNme bookVldtClassId bookChgClassNme bookVldtAuthorId bookChgAuthorNme bookFetchLOVs
+	rm -f *.o *.s *.i mysql-c-library bookInquiry bookInquiry1 bookInquiry2 bookDetails bookDetails2 bookCharacters bookAddAuthor bookAddClassification bookAddRating bookAddSeries bookAddSource bookAddGenre bookAddStatus bookTitleID bookAddCharacter bookChgCharNme bookDelCharacter bookVldtCharId bookDelClassification bookDelRating bookDelSeries bookDelSource bookDelGenre bookDelStatus bookDelAuthor bookVldtStatusId bookChgStatusNme bookVldtGenreId bookChgGenreNme bookVldtSourceId bookChgSourceNme bookVldtSeriesId bookChgSeriesNme bookVldtRatingId bookChgRatingNme bookVldtClassId bookChgClassNme bookVldtAuthorId bookChgAuthorNme bookFetchLOVs bookAddBook bookDelBook bookUpdtBook
