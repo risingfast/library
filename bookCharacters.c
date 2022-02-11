@@ -24,10 +24,10 @@
 
 // global declarations
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -49,7 +49,7 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n\n");
 
@@ -67,10 +67,10 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "TitleID=117&Filter=''", 1);
-    setenv("QUERY_STRING", "TitleID=117", 1);
+//    setenv("QUERY_STRING", "TitleID=26&Filter=", 1);
+//    setenv("QUERY_STRING", "TitleID=117", 1);
 
     sParams = getenv("QUERY_STRING");
 
@@ -81,7 +81,7 @@ int main(void) {
         return 1;
     }
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");
@@ -90,12 +90,12 @@ int main(void) {
         return 0;
     }
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParams, "TitleID=%d", &iTitleID);
 
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------$
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sSubstring = strtok(sParams, caDelimiter);
     sscanf(sSubstring, "TitleID=%d", &iTitleID);
@@ -103,19 +103,19 @@ int main(void) {
     sSubstring = strtok(NULL, caDelimiter);
     sscanf(sSubstring, "Filter=%s", caFilterTemp);
 
-// parse the QUERY_STRING for each argument: Action and Filter ---------------------------------------------------------$
+// parse the QUERY_STRING for each argument: Action and Filter ---------------------------------------------------------
 
-    sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
+    sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));             // add a leading wildcard to the filter  string
 
     if (strlen(caFilterTemp) == 1) {
         sprintf(caFilter, "%s", caFilterTemp);
     } else {
-        sprintf(caFilter, "%s%%", caFilterTemp);
+        sprintf(caFilter, "%s%%", caFilterTemp);                         // add a trailing wildcard to the filter string
     }
     sFilter = caFilter;
 
 
-// set a SQL query based on a book ID to retrieve all characters-------------------------------------------------------
+// set a SQL query based on a book ID to retrieve all characters--------------------------------------------------------
 
     sprintf(caSQL, "SELECT BC.`Character ID`, BC.`Character Name` "
                    "FROM risingfast.`Book Characters` BC "
