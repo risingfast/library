@@ -12,6 +12,7 @@
  *      15-Nov-2021 remove unread books from recents listing
  *      15-Nov-2021 add unreads listing
  *      19-Dec-2021 add author to series listing
+ *      22-Mar-2022 remove author sort from author listing sql
  *  Enhancements:
 */
 
@@ -152,7 +153,6 @@ int main(void) {
     else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
         sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
                        ", BA.`Author Name` as 'Name' "
-                       ", BA.`Author Sort` as 'Sort' "
                        ", ROUND(SUM(BR.`Rating Value`) / COUNT(BT.`Author ID`), 0) as `Author Rating` "
                        "FROM `Book Authors` BA "
                        "LEFT JOIN risingfast.`Book Titles` BT ON BA.`Author ID` = BT.`Author ID` "
