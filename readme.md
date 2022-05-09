@@ -129,4 +129,4 @@
     07-Jan-2022 backup current version
     11-Feb-2022 backup current version
     03-May-2022 backup current version
-    09-May-2022 renama mysql-c-library to library locally and on github
+    09-May-2022 rename mysql-c-library to library locally and on github
