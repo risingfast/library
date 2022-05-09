@@ -1,0 +1,152 @@
+<!-- bookShow.html to show the contents of the books file formBook.dat                          -->
+<!-- Started: 09/10/2020                                                                        -->
+<!-- Author: Geoffrey Jarman                                                                    -->
+<!-- Log:                                                                                       -->
+<!--     08/20/2020 started                                                                     -->
+<!--     09/11/2020 debug bad show behaviour with misspelled DIV tab                            -->
+<!--     09/11/2020 change options to title and characters                                      -->
+<!--     09/16/2020 add an author option or choice                                              -->
+<!--     10/11/2020 center the navigation links in the main heading                             -->
+<!--     10/12/2020 change the Internals button to a detail/summary region                      -->
+<!--     10/22/2020 center the body of the html on the webpage                                  -->
+<!-- Enhancements:                                                                              -->
+<!--     Add an author listing                                                                  -->
+
+<!DOCTYPE html>
+
+<HTML lang="en">
+
+<!-- html document head ....................................................................... -->
+
+<HEAD>
+    <TITLE>bookShow</TITLE>
+    <META charset="UTF-8">
+    <LINK rel="stylesheet" type="text/css" href="rfstyles.css">
+    <LINK rel="shortcut icon" href="letterRF.png" type="image/png">
+    <META name="description" content= "form and file exercise with javaScript">
+    <META name="keywords" content="html, css, cgi">
+    <META name="generator" content="vim">
+    <META name="author" content="risingfast">
+    <META name="viewport" content= "width=device-width, initial-scale=1.0">
+</HEAD>
+
+<!-- main page header ......................................................................... -->
+
+<BODY>
+
+<!-- page heading and horizontal navigation links ............................................. -->
+
+    <HEADER>
+        <DIV class="header">
+            <H3>www.risingfast.com</H3>
+        </DIV>
+    </HEADER>
+    <NAV>
+        <DIV class="outerTopNav">
+            <DIV class="topnav">
+                <A class="active" HREF="http://www.risingfast.com">Home</A>
+                <A HREF="http://www.risingfast.com/d_ajaxFetch.html">Latest</A>
+                <A HREF="http://www.risingfast.com/d_template.html">Template</A>
+                <A HREF="http://www.risingfast.com/email.html">Email</A>
+                <A HREF="http://www.risingfast.com/about.html">About</A>
+            </DIV>
+        </DIV>
+    </NAV>
+
+<!-- main document content .................................................................... -->
+
+    <MAIN>
+        <SECTION>
+            <DIV style="width:80%; margin:auto; max-width:800px; text-align:center;">
+            <H3>Books List</H3>
+            </DIV>
+        </SECTION>
+
+        <DIV STYLE="width:80%; margin:auto; max-width:800px; text-align:center;">
+            <FIELDSET DATA-ROLE="controlgroup" DATA-TYPE="horizontal">
+                <LEGEND>Action</LEGEND>
+                    <INPUT CLASS="radio" TYPE="radio" ID="none" NAME="Mode" VALUE="None" STYLE="margin: 0px 5px 0px 0px" CHECKED="checked" onClick=getAction()>None
+                    <INPUT CLASS="radio" TYPE="radio" ID="titles" NAME="Mode" VALUE="titles" STYLE="margin: 0px 5px 0px 20px" onClick=getAction()>Titles
+                    <INPUT CLASS="radio" TYPE="radio" ID="characters" NAME="Mode" VALUE="characters" STYLE="margin: 0px 5px 0px 20px" onClick=getAction()>Characters
+                    <INPUT CLASS="radio" TYPE="radio" ID="authors" NAME="Mode" VALUE="authors" STYLE="margin: 0px 5px 0px 20px" onClick=getAction()>Authors
+                <BUTTON onclick="bookShow()" ID="go" STYLE="margin: 0px 20px 0px 20px">Go</BUTTON>
+                <BUTTON onclick="reset()" ID="reset" STYLE="margin: 0px 20px 0px 10px">Reset</BUTTON>
+                </FIELDSET>
+            </DIV>
+            <BR>
+
+<!-- record id input to list a single record .................................................. -->
+
+            <DIV STYLE="width:80%; margin:auto; max-width:800px; text-align:center;">
+                <LABEL FOR="BookTitle" STYLE="width: 40px">Title: </LABEL>
+                <INPUT TYPE="text" ID="BookTitle" NAME="BookTitle" SIZE="95">
+            </DIV>
+            <BR>
+
+<!-- main text output area .................................................................... -->
+
+    <DIV STYLE="width:80%; margin:auto; max-width:800px; text-align:center;">
+        <LABEL FOR="results" STYLE="width:40px">Results:</LABEL><BR>
+        <TEXTAREA ID="results" NAME="results" ROWS="25" COLS="84" WRAP="off" PLACEHOLDER="Results will show here"></TEXTAREA>
+        <BR>
+    </DIV>
+
+<!-- system message box ....................................................................... -->
+
+        <DIV ID="Debug"V STYLE="width:80%; margin:auto; max-width:800px; text-align:center;">
+            <P>
+                <LABEL FOR="messages" STYLE="width:50px">Messages:</LABEL>
+                <INPUT TYPE="text" ID="messages" NAME="messages" PLACEHOLDER="System messages displayed here" SIZE="95"><BR>
+            </P>
+        </DIV>
+
+<!-- buttons to show help ..................................................................... -->
+
+    <DIV STYLE="width:80%; margin:auto; max-width:800px;">
+        <BUTTON onclick="showHelp()">Help</BUTTON>
+    </DIV>
+
+<!-- help text controlled by button ........................................................... -->
+
+        <DIV ID="helpDiv" CLASS="help"V STYLE="width:80%; margin:auto; max-width:800px;">
+            <P>
+                None: no action chosen<BR>
+                List All: list all records<BR>
+                List Record: list one record<BR>
+            </P>
+        </DIV>
+
+<!-- internals ................................................................................ -->
+
+        <BR>
+        <DIV STYLE="width:80%; margin:auto; max-width:800px;">
+            <DETAILS>
+                <SUMMARY style="outline:none">
+                    Internals
+                </SUMMARY> 
+                <P>
+                    html file: /var/www.html/bookShow.html<BR>
+                    css file: /var/www.html/css/rfstyles.css<BR>
+                    form handler: /usr/lib/cgi-bin/bookShow.cgi<BR>
+                    form method: post<BR>
+                    data file: /var/www.html/formBook.dat<BR>
+                    source code: html, javascript, c<BR>
+                </P>
+            </DETAILS>
+        </DIV>
+
+    </MAIN>
+
+<!-- footer ................................................................................... -->
+
+    <FOOTER>
+        <DIV class="footer">
+            <P>&copy; 2020 www.risingfast.com ... /var/www/html/bookShow.html</P>
+        </DIV>
+    </FOOTER>
+
+    <SCRIPT src="bookShow.js"></SCRIPT>
+
+</BODY>
+
+</HTML>

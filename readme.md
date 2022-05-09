@@ -17,9 +17,11 @@
     make, or
     gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c rf50.c
 #### Enhancements: (0)
-    Refresh lists after updating (author, series)
     Remove (null) from the date fields
-    Keep the Fetch buttton alive after fetching a book
+    Add a plot field to books
+    Select an image each time the risingfast site is opened
+    Leave Book ID field whem mode change
+    Add an app to maintain cornerImage subtitles
 #### Log:
     12-Apr-2021 started
     12-Apr-2021 reviewed all
@@ -127,3 +129,4 @@
     07-Jan-2022 backup current version
     11-Feb-2022 backup current version
     03-May-2022 backup current version
+    09-May-2022 renama mysql-c-library to library locally and on github

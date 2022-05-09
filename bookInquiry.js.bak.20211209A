@@ -1,0 +1,1442 @@
+// bookInquiry.js -- script to implement js of bookInquiryhtml
+// Author: Geoff Jarman
+// Started: 01-Nov-2021
+// Log:
+//    01-Nov-2021 started x
+//    04-Nov-2-21 add a Book option
+//    05-Nov-2021 add fGetBookDetails function
+//    06-Nov-2021 add context to Books form modes
+//    06-Nov-2021 clean up comments and code layout
+//    08-Nov-2021 clear fields with mode changes
+//    10-Nov-2021 add function to fetch book characters
+//    10-Nov-2021 add characters text box
+//    10-Nov-2021 reorganize the roles of fSetTopic and fSetMode
+//    12-Nov-2021 add logic for topic divisions
+//    13-Nov-2021 add logic to mode buttongs for all actions
+//    14-Nov-2021 debug Fetch code for attributes
+//    15-Nov-2021 add unreads logic
+//    17-Nov-2021 implement book details
+//    18-Nov-2021 fix the Clear button to revert to the Choose topic
+//    19-Nov-2021 implement add on authors
+//    19-Nov-2021 implement add on classifications
+//    20-Nov-2021 implement add on ratings
+//    21-Nov-2021 implement add on series
+//    21-Nov-2021 implement add on sources
+//    21-Nov-2021 implement add on genres
+//    21-Nov-2021 implement add on statuses
+//    22-Nov-2021 message area added
+//    22-Nov-2021 book ID lookup on character listing
+//    24-Nov-2021 add fSetElement() function
+//    25-Nov-2021 extent fSetElement() function
+//    25-Nov-2021 add fEnableSubmitIfNotNull()
+//    28-Nov-2021 clear book inputs between book modes
+//    28-Nov-2021 disable attribute areas on fetch
+//    29-Nov-2021 add characters for a book
+//    03-Dec-2021 change element naming
+//    04-Dec-2021 add delete character
+//    07-Dec-2021 add update character
+
+// globals
+
+const uri01 = "http://www.risingfast.com/cgi-bin/bookInquiry.cgi";
+const uri02 = "http://www.risingfast.com/cgi-bin/bookDetails.cgi";
+const uri03 = "http://www.risingfast.com/cgi-bin/bookCharacters.cgi";
+const uri04 = "http://www.risingfast.com/cgi-bin/bookAddAuthor.cgi";
+const uri05 = "http://www.risingfast.com/cgi-bin/bookAddClassification.cgi";
+const uri06 = "http://www.risingfast.com/cgi-bin/bookAddRating.cgi";
+const uri07 = "http://www.risingfast.com/cgi-bin/bookAddSeries.cgi";
+const uri08 = "http://www.risingfast.com/cgi-bin/bookAddSource.cgi";
+const uri09 = "http://www.risingfast.com/cgi-bin/bookAddGenre.cgi";
+const uri10 = "http://www.risingfast.com/cgi-bin/bookAddStatus.cgi";
+const uri11 = "http://www.risingfast.com/cgi-bin/bookTitleID.cgi";
+const uri12 = "http://www.risingfast.com/cgi-bin/bookAddCharacter.cgi";
+const uri13 = "http://www.risingfast.com/cgi-bin/bookDelCharacter.cgi";
+const uri14 = "http://www.risingfast.com/cgi-bin/bookCharacterID.cgi";
+const uri15 = "http://www.risingfast.com/cgi-bin/bookChgCharacter.cgi";
+const uri16 = "http://www.risingfast.com/cgi-bin/bookDelClassification.cgi";
+
+let sMode = '';
+let sTopic = '';
+
+// set the topic .......................................................................................................
+
+function fSetTopic() {
+
+    let tc = document.getElementById("topic");
+
+    if (tc.value === "choose") {
+        sTopic = "choose";
+    } else if (tc.value === "books") {
+        fUnhideMultiple("booksDiv", "modesDiv", "submit-div");
+        sTopic = "books";
+    } else if (tc.value === "titles") {
+        fUnhideMultiple("titlesDiv", "modesDiv", "submit-div");
+        sTopic = "titles";
+    } else if (tc.value === "characters") {
+        fUnhideMultiple("chars-div", "modesDiv", "submit-div");
+        sTopic = "characters";
+    } else if (tc.value === "authors") {
+        sTopic = "authors";
+    } else if (tc.value === "recents") {
+        fUnhideMultiple("recentsDiv", "modesDiv", "submit-div");
+        sTopic = "recents";
+    } else if (tc.value === "unreads") {
+        fUnhideMultiple("unreadsDiv", "modesDiv", "submit-div");
+        sTopic = "unreads";
+    } else if (tc.value === "classifications") {
+        fUnhideMultiple("class:div", "modesDiv", "submit-div");
+        sTopic = "classifications";
+    } else if (tc.value === "ratings") {
+        fUnhideMultiple("ratings:div", "modesDiv", "submit-div");
+        sTopic = "ratings";
+    } else if (tc.value === "series") {
+        fUnhideMultiple("series:div", "modesDiv", "submit-div");
+        sTopic = "series";
+    } else if (tc.value === "sources") {
+        fUnhideMultiple("sources:div", "modesDiv", "submit-div");
+        sTopic = "sources";
+    } else if (tc.value === "genres") {
+        fUnhideMultiple("genres:div", "modesDiv", "submit-div");
+        sTopic = "genres";
+    } else if (tc.value === "statuses") {
+        fUnhideMultiple("statuses:div", "modesDiv", "submit-div");
+        sTopic = "statuses";
+    }
+
+    // set the initial mode for any change to another topic change .....................................................
+
+    fSetMode("fetch");
+}
+
+// functon to set the mode which enables fields and behaviours .........................................................
+
+function fSetMode(sNewMode) {
+
+    sTopic = document.getElementById("topic").value;
+    sMode = sNewMode;
+
+    fClearPage();
+
+    if (sTopic === "choose") {
+        ;
+    } else if (sTopic === 'books') {
+
+        fUnhideMultiple("modesDiv", "submit-div");
+        fSetElement("Disable", "submit:submit");
+        fClearBookInputs();
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+
+            //  disable all book fields except Book ID
+
+            fDisableBookFields("titleIDInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Unhide", "booksDiv"); 
+
+            // show instructions in the message area on how to proceed
+
+            document.getElementById("submit:mssge").value = "Enter a Book ID and 'Submit'";
+
+            //  enable the ID field and color light yellow as a required field
+
+            fSetElement("Clear", "titleIDInput");
+            let dt = document.getElementById("titleIDInput");
+            dt.disabled = false;
+            dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
+
+        } else if (sMode === 'query') {
+
+            //  disable the 'query' mode button and color it green
+
+            fDisableModeButton("queryButton");
+            document.getElementById("modeLabel").innerHTML = "query mode";
+
+            //  enable all book fields for 'query' mode except for the TitleIDInput and chrsArea fields
+
+            fEnableBookFields("titleIDInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Disable", "titleIDInput");
+            fSetElement("Disable", "chrsArea");
+            fSetElement("Unhide", "booksDiv"); 
+            let dt = document.getElementById("titleIDInput");
+            dt.style.backgroundColor = "rgba(230,239,239, 0.3)";                                          // white color
+
+            // show instructions in the message area on how to proceed
+
+            document.getElementById("submit:mssge").value = "Enter query values in any editable fields and 'Submit'";
+
+        } else if (sMode === 'add') {
+
+            //  disable the 'add' mode button and color it green
+
+            fDisableModeButton("addButton");
+            document.getElementById("modeLabel").innerHTML = "add mode";
+
+            //  enable all book fields for 'add' mode
+
+            fEnableBookFields("titleIDInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Unhide", "booksDiv"); 
+            
+            //  enable all book fields for 'query' mode except for the TitleIDInput and chrsArea fields
+
+            fEnableBookFields("titleIDInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Disable", "titleIDInput");
+            fSetElement("Disable", "chrsArea");
+            fSetElement("Unhide", "booksDiv"); 
+            let dt = document.getElementById("titleIDInput");
+            dt.style.backgroundColor = "rgba(239,239,239, 0.3)";                                     // light grey color
+
+            // show instructions in the message area on how to proceed
+
+            document.getElementById("submit:mssge").value = "Enter values for a new book and 'Submit'";
+
+        } else if (sMode === 'update') {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+            //  enable all book fields for 'query' mode except for the TitleIDInput and chrsArea fields
+
+            fEnableBookFields("titleIDInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Disable", "titleIDInput");
+            fSetElement("Disable", "chrsArea");
+            fSetElement("Unhide", "booksDiv"); 
+            let dt = document.getElementById("titleIDInput");
+            dt.style.backgroundColor = "rgba(239,239,239, 0.3)";                                     // light grey color
+
+            // show instructions in the message area on how to proceed
+
+            document.getElementById("submit:mssge").value = "Change values in any editable fields and 'Submit'";
+
+        } else if (sMode === 'delete') {
+
+            //  disable all book fields except Book ID
+
+            fDisableModeButton("deleteButton");
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+
+            //  disable and unhide all book fields
+
+            fDisableBookFields("nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Enable", "titleIDInput");
+            fSetElement("Unhide", "booksDiv"); 
+            let dt = document.getElementById("titleIDInput");
+            dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
+            
+            // show instructions in the message area on how to proceed
+
+            document.getElementById("submit:mssge").value = "Enter a Title ID and 'submit' to delete the book";
+
+        }
+
+    } else if (sTopic === "titles") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "titlesDiv", "titlesArea");
+        fSetElement("Clear", "titlesFilter");
+        fSetElement("UnhideInline", "titlesFilter");
+        fSetElement("Clear", "titlesArea");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "titlesFilter");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Enable", "submit:submit");
+            fSetElement("Disable", "addButton");
+            fSetElement("Disable", "updateButton");
+            fSetElement("Disable", "deleteButton");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "'Submit' to fetch titles (or set a filter, then 'Submit')";
+        }
+
+    } else if (sTopic === "recents") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "recentsDiv", "recentsArea");
+        fSetElement("Clear", "recentsFilter");
+        fSetElement("UnhideInline", "recentsFilter");
+        fSetElement("Clear", "recentsArea");
+        fSetElement("Disable", "submit:submit");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Enable", "submit:submit");
+            fSetElement("Disable", "addButton");
+            fSetElement("Disable", "updateButton");
+            fSetElement("Disable", "deleteButton");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+        }
+
+    } else if (sTopic === "unreads") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "unreadsDiv", "unreadsArea");
+        fSetElement("Clear", "unreadsFilter");
+        fSetElement("Clear", "unreadsArea");
+        fSetElement("Disable", "submit:submit");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Clear", "unreadsFilter");
+            fSetElement("Clear", "unreadsArea");
+            fSetElement("Enable", "submit:submit");
+            fSetElement("Disable", "addButton");
+            fSetElement("Disable", "deleteButton");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+        }
+
+    } else if (sTopic === "characters") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "chars-div", "chars:show-chars");
+        fSetElement("Clear", "chars:filter");
+        fSetElement("UnhideInline", "chars:filter");
+        fSetElement("Clear", "chars:show-chars");
+        fSetElement("Disable", "submit:submit");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fSetElement("Unhide", "submit-div");
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "chars:validate");
+            fSetElement("Unhide", "chars:filter-div");
+            fSetElement("Unhide", "chars:validate-book-div");
+            fSetElement("Hide", "chars:del-chars-div");
+            fSetElement("Hide", "chars:add-chars-div");
+            fSetElement("Hide", "chars:updt-chars-div");
+            fSetElement("Hide", "chars:validate");
+            document.getElementById("chars:filter").disabled = true;
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Enter a Book ID and click 'Submit' to fetch " + sTopic + " for a book";
+
+            //  enable the Book ID field and color light yellow as a required field
+
+            fSetElement("Clear", "chars:book-id");
+            fSetElement("Clear", "chars:book-title");
+            let bi = document.getElementById("chars:book-id");
+            bi.disabled = false;
+            bi.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
+            bi.style.borderWidth = "thin";
+
+        } else if (sMode === "add") {
+
+            //  disable the 'add' mode button and color it green
+
+            fDisableModeButton("addButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "chars:filter-div");
+            fSetElement("Hide", "chars:del-chars-div");
+            fSetElement("Hide", "chars:updt-chars-div");
+            fSetElement("Unhide", "chars:validate-book-div");
+            fSetElement("Unhide", "chars:add-chars-div");
+            fSetElement("UnhideInline", "chars:validate");
+            fSetElement("Disable", "chars:char-to-add");
+            fSetElement("Clear", "chars:book-id");
+            fSetElement("Clear", "chars:book-title");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            document.getElementById("modeLabel").innerHTML = "add mode";
+
+        } else if (sMode === "update") {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            fSetElement("Hide", "chars:del-chars-div");
+            fSetElement("Hide", "chars:validate-book-div");
+            fSetElement("Hide", "chars:add-chars-div");
+            fSetElement("Hide", "chars:filter-div");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "chars:char-to-updt");
+            fSetElement("Disable", "chars:char-updtd");
+            fSetElement("Disable", "chars:validate-char-id");
+            fSetElement("Unhide", "chars:updt-chars-div");
+            fSetElement("Clear", "chars:char-id-to-updt");
+            fSetElement("Clear", "chars:char-to-updt");
+            document.getElementById("chars:char-id-to-updt").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            document.getElementById("chars:char-id-to-updt").style.borderWidth = "thin";
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+
+        } else if (sMode === "delete") {
+
+            //  disable the 'delete' mode button and color it green
+            fSetElement("Hide", "chars:del-chars-div");
+            fDisableModeButton("deleteButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Unhide", "chars:filter-div");
+            fSetElement("Hide", "chars:add-chars-div");
+            fSetElement("Hide", "chars:validate-book-div");
+            fSetElement("Hide", "chars:filter-div");
+            fSetElement("Hide", "chars:updt-chars-div");
+            fSetElement("Unhide", "chars:del-chars-div");
+            let ci = document.getElementById("chars:char-id-to-del");
+            ci.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
+            ci.style.borderWidth = "thin";
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+            document.getElementById("submit:mssge").value = "Enter a Character ID and 'Submit'";
+        }
+
+    } else if (sTopic === "authors") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "authorsDiv", "authorsArea");
+        fSetElement("Clear", "authorsFilter");
+        fSetElement("UnhideInline", "authorsFilter");
+        fSetElement("Clear", "authorsArea");
+        fSetElement("Unhide", "addAuthorsDiv");
+        fSetElement("Clear", "series:add-name");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "authorsFilter");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "addAuthorsDiv");
+            fSetElement("Enable", "submit:submit");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+
+        } else if (sMode === "add") {
+
+            //  disable the 'add' mode button and color it green
+
+            fDisableModeButton("addButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "authorsFilter");
+            document.getElementById("modeLabel").innerHTML = "add mode";
+            document.getElementById("submit:mssge").value = "Enter a new author and click 'Submit'";
+
+        } else if (sMode === "update") {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "addAuthorsDiv");
+            fSetElement("Disable", "authorsFilter");
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+
+        } else if (sMode === "delete") {
+
+            //  disable the 'delete' mode button and color it green
+
+            fDisableModeButton("deleteButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "addAuthorsDiv");
+            fSetElement("Disable", "authorsFilter");
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+        }
+
+    } else if (sTopic === "classifications") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "class:div", "class:list");
+        fSetElement("Clear", "class:filter");
+        fSetElement("UnhideInline", "class:filter");
+        fSetElement("Clear", "class:list");
+        fSetElement("Unhide", "class:add-div");
+        fSetElement("UnhideInline", "class:add-name");
+        fSetElement("Clear", "class:add-name");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "class:filter");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "class:add-div");
+            fSetElement("Hide", "class:del-div");
+            fSetElement("Enable", "submit:submit");
+            fSetElement("Unhide", "class:filter-div");
+            fSetElement("Hide", "class:updt-div");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+
+        } else if (sMode === "add") {
+
+            //  disable the 'add' mode button and color it green
+
+            fDisableModeButton("addButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "class:filter-div");
+            fSetElement("Hide", "class:del-div");
+            document.getElementById("modeLabel").innerHTML = "add mode";
+            document.getElementById("submit:mssge").value = "Enter a new classification and click 'Submit'";
+
+        } else if (sMode === "update") {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "class:add-div");
+            fSetElement("Disable", "class:filter");
+            fSetElement("Hide", "class:filter-div");
+            fSetElement("Unhide", "class:updt-div");
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+
+        } else if (sMode === "delete") {
+
+            //  disable the 'delete' mode button and color it green
+
+            fDisableModeButton("deleteButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "class:add-div");
+            fSetElement("Disable", "class:filter");
+            fSetElement("Unhide", "class:del-div");
+            fSetElement("Hide", "class:filter-div");
+            fSetElement("Hide", "class:updt-div");
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+            document.getElementById("submit:mssge").value = "Enter a classification ID to delete and 'Submit'";
+        }
+
+    } else if (sTopic === "ratings") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "ratings:div", "ratings:list");
+        fSetElement("Clear", "ratings:filter");
+        fSetElement("UnhideInline", "ratings:filter");
+        fSetElement("Clear", "ratings:list");
+        fSetElement("Unhide", "ratings:add-div");
+        fSetElement("Clear", "ratings:add-name");
+        fSetElement("UnhideInline", "ratings:add-name");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "ratings:filter");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "ratings:add-div");
+            fSetElement("Enable", "submit:submit");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+
+        } else if (sMode === "add") {
+
+            //  disable the 'add' mode button and color it green
+
+            fDisableModeButton("addButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "ratings:filter");
+            document.getElementById("modeLabel").innerHTML = "add mode";
+            document.getElementById("submit:mssge").value = "Enter a new rating and click 'Submit'";
+
+        } else if (sMode === "update") {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "ratings:filter");
+            fSetElement("Hide", "ratings:add-div");
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+        } else if (sMode === "delete") {
+
+            //  disable the 'delete' mode button and color it green
+
+            fDisableModeButton("deleteButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "ratings:filter");
+            fSetElement("Hide", "ratings:add-div");
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+        }
+
+    } else if (sTopic === "series") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "series:div", "series:list");
+        fSetElement("Clear", "series:filter");
+        fSetElement("UnhideInline", "series:filter");
+        fSetElement("Clear", "series:list");
+        fSetElement("Unhide", "series:add-div");
+        fSetElement("Clear", "series:add-name");
+        fSetElement("UnhideInline", "series:add-name");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "series:filter");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "series:add-div");
+            fSetElement("Enable", "submit:submit");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+
+        } else if (sMode === "add") {
+
+            //  disable the 'add' mode button and color it green
+
+            fDisableModeButton("addButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "series:filter");
+            document.getElementById("modeLabel").innerHTML = "add mode";
+            document.getElementById("submit:mssge").value = "Enter a new series and click 'Submit'";
+
+        } else if (sMode === "update") {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "series:filter");
+            fSetElement("Hide", "series:add-div");
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+
+        } else if (sMode === "delete") {
+
+            //  disable the 'delete' mode button and color it green
+
+            fDisableModeButton("deleteButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "series:filter");
+            fSetElement("Hide", "series:add-div");
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+        }
+
+    } else if (sTopic === "sources") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "sources:div", "sources:list");
+        fSetElement("Clear", "sources:filter");
+        fSetElement("UnhideInline", "sources:filter");
+        fSetElement("Clear", "sources:list");
+        fSetElement("Unhide", "sources:add-div");
+        fSetElement("Clear", "sources:add-name");
+        fSetElement("UnhideInline", "sources:add-name");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "sources:filter");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "sources:add-div");
+            fSetElement("Enable", "submit:submit");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+
+        } else if (sMode === "add") {
+
+            //  disable the 'add' mode button and color it green
+
+            fDisableModeButton("addButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "sources:filter");
+            document.getElementById("modeLabel").innerHTML = "add mode";
+            document.getElementById("submit:mssge").value = "Enter a new source and click 'Submit'";
+
+        } else if (sMode === "update") {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "sources:filter");
+            fSetElement("Hide", "sources:add-div");
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+
+        } else if (sMode === "delete") {
+
+            //  disable the 'delete' mode button and color it green
+
+            fDisableModeButton("deleteButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "sources:filter");
+            fSetElement("Hide", "sources:add-div");
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+        }
+
+    } else if (sTopic === "genres") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "genres:div", "genres:list");
+        fSetElement("Clear", "genres:filter");
+        fSetElement("UnhideInline", "genres:filter");
+        fSetElement("Clear", "genres:list");
+        fSetElement("Unhide", "genres:add-div");
+        fSetElement("Clear", "genres:add-name");
+        fSetElement("UnhideInline", "genres:add-name");
+        fSetElement("Enable", "genres:filter");
+        fSetElement("Disable", "submit:submit");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Hide", "genres:add-div");
+            fSetElement("Enable", "submit:submit");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+
+        } else if (sMode === "add") {
+
+            //  disable the 'new' mode button and color it green
+
+            fDisableModeButton("addButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "genres:filter");
+            document.getElementById("modeLabel").innerHTML = "add mode";
+            document.getElementById("submit:mssge").value = "Enter a new genre and click 'Submit'";
+
+        } else if (sMode === "update") {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "genres:filter");
+            fSetElement("Hide", "genres:add-div");
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+
+        } else if (sMode === "delete") {
+
+            //  disable the 'delete' mode button and color it green
+
+            fDisableModeButton("deleteButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "genres:filter");
+            fSetElement("Hide", "genres:add-div");
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+
+        }
+    } else if (sTopic === "statuses") {
+
+        fUnhideMultiple("modesDiv", "submit-div", "statuses:div", "statuses:list");
+        fSetElement("Clear", "statuses:filter");
+        fSetElement("UnhideInline", "statuses:filter");
+        fSetElement("Clear", "statuses:list");
+        fSetElement("Unhide", "statuses:add-div");
+        fSetElement("Clear", "statuses:add-name");
+        fSetElement("UnhideInline", "statuses:add-name");
+        fSetElement("Disable", "statuses:filter");
+        fSetElement("Disable", "submit:submit");
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green
+
+            fDisableModeButton("fetchButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Enable", "submit:submit");
+            fSetElement("Hide", "statuses:add-div");
+            document.getElementById("modeLabel").innerHTML = "fetch mode";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+
+        } else if (sMode === "add") {
+
+            //  disable the 'add' mode button and color it green
+
+            fDisableModeButton("addButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "statuses:filter");
+            document.getElementById("modeLabel").innerHTML = "add mode";
+            document.getElementById("submit:mssge").value = "Enter a new status and click 'Submit'";
+
+        } else if (sMode === "update") {
+
+            //  disable the 'update' mode button and color it green
+
+            fDisableModeButton("updateButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "statuses:filter");
+            fSetElement("Hide", "statuses:add-div");
+            document.getElementById("modeLabel").innerHTML = "update mode";
+
+
+        } else if (sMode === "delete") {
+
+            //  disable the 'delete' mode button and color it green
+
+            fDisableModeButton("deleteButton");
+            fSetElement("Disable", "queryButton");
+            fSetElement("Disable", "statuses:filter");
+            fSetElement("Hide", "statuses:add-div");
+            document.getElementById("modeLabel").innerHTML = "delete mode";
+        }
+    }
+}
+
+// function to fetch results from the server when Submit button is clicked
+
+async function fonclick_submit_submit() {
+
+    const aTopicsToFetch = ["titles", "authors", "recents", "unreads", "classifications", "ratings", "series", "sources", "genres", "statuses"];
+
+    let sTopic = document.getElementById("topic").value;
+
+    // fetch list results is the topic is a list-type topic
+
+    if ((aTopicsToFetch.includes(sTopic)) && sMode === "fetch") {
+
+        if (sTopic === "titles") {
+            sTextAreaResults = "titlesArea";
+            sInputFilter = "titlesFilter";
+        } else if (sTopic === "recents") {
+            sTextAreaResults = "recentsArea";
+            sInputFilter = "recentsFilter";
+        } else if (sTopic === "unreads") {
+            sTextAreaResults = "unreadsArea";
+            sInputFilter = "unreadsFilterId";
+        } else if (sTopic === "characters") {
+            sTextAreaResults = "chars:show-chars";
+            sInputFilter = "chars:filter";
+        } else if (sTopic === "authors") {
+            sTextAreaResults = "authorsArea";
+            sInputFilter = "authorsFilter";
+        } else if (sTopic === "classifications") {
+            sTextAreaResults = "class:list";
+            sInputFilter = "class:filter";
+        } else if (sTopic === "ratings") {
+            sTextAreaResults = "ratings:list";
+            sInputFilter = "ratings:filter";
+        } else if (sTopic === "series") {
+            sTextAreaResults = "series:list";
+            sInputFilter = "series:filter";
+        } else if (sTopic === "sources") {
+            sTextAreaResults = "sources:list";
+            sInputFilter = "sources:filter";
+        } else if (sTopic === "genres") {
+            sTextAreaResults = "genres:list";
+            sInputFilter = "genres:filter";
+        } else if (sTopic === "statuses") {
+            sTextAreaResults = "statuses:list";
+            sInputFilter = "statuses:filter";
+        }
+
+        sFilterEncoded = encodeURIComponent(document.getElementById(sInputFilter).value);
+        let sRequest = uri01 + '?' + "action=" + document.getElementById("topic").value + '&filter=' + sFilterEncoded;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById(sTextAreaResults).style.display="block";
+            document.getElementById(sTextAreaResults).value=text;
+            if (sTopic === "authors") {
+                document.getElementById("submit:mssge").value=sTopic + " fetched (including author rating out of 10)";
+            } else {
+                document.getElementById("submit:mssge").value=sTopic + " fetched";
+            }
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'books') && sMode === "fetch") {
+        fGetBookDetails();
+        document.getElementById("submit:mssge").value=sTopic.substring(0, 4) + " details fetched";
+    } else if ((sTopic === 'characters') && sMode === "fetch") {
+        let iTitleID = document.getElementById("chars:book-id").value;
+        let sTitleName = await fGetBookTitle(iTitleID);
+        document.getElementById("chars:book-title").value = sTitleName;
+        if (sTitleName === "No title found") {
+            document.getElementById("submit:mssge").value = "Invalid Book ID. No titles exist for this ID";
+            document.getElementById("chars:show-chars").value = '';
+        } else {
+            fGetBookCharacters2();
+        }
+    } else if ((sTopic === 'characters') && sMode === "add") {
+        let sTitleID=  document.getElementById("chars:book-id").value;
+        let sCharacterName = document.getElementById("chars:char-to-add").value;
+        let sRequest = uri12 + '?' + "TitleID=" + sTitleID + "&CharacterName=" + sCharacterName;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("chars:char-to-add").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'characters') && sMode === "update") {
+        let sCharacterID =  document.getElementById("chars:char-id-to-updt").value;
+        let sCharacterName = document.getElementById("chars:char-updtd").value;
+        let sRequest = uri15 + '?' + "CharacterID=" + sCharacterID + "&CharacterName=" + sCharacterName;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("chars:char-updtd").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'characters') && sMode === "delete") {
+        let sCharID = document.getElementById("chars:char-id-to-del").value;
+        let sRequest = uri13 + '?' + "CharID=" + sCharID;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'authors') && sMode === "add") {
+        sAddAuthorEncoded = encodeURIComponent(document.getElementById("addAuthorsInput").value);
+        let sRequest = uri04 + '?' + "author=" + sAddAuthorEncoded;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("addAuthorsInput").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'classifications') && sMode === "add") {
+        sAddClassificationsEncoded = encodeURIComponent(document.getElementById("class:add-name").value);
+        let sRequest = uri05 + '?' + "classification=" + sAddClassificationsEncoded;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("class:add-name").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'classifications') && sMode === "delete") {
+        let sClassID = document.getElementById("class:del-id").value;
+        let sRequest = uri16 + '?' + "ClassID=" + sClassID;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'ratings') && sMode === "add") {
+        sAddRatingsEncoded = encodeURIComponent(document.getElementById("ratings:add-name").value);
+        let sRequest = uri06 + '?' + "rating=" + sAddRatingsEncoded;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("ratings:add-name").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'series') && sMode === "add") {
+        sAddSeriesEncoded = encodeURIComponent(document.getElementById("series:add-name").value);
+        let sRequest = uri07 + '?' + "series=" + sAddSeriesEncoded;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("series:add-name").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'sources') && sMode === "add") {
+        sAddSourcesEncoded = encodeURIComponent(document.getElementById("sources:add-name").value);
+        let sRequest = uri08 + '?' + "source=" + sAddSourcesEncoded;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("sources:add-name").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'genres') && sMode === "add") {
+        sAddGenresEncoded = encodeURIComponent(document.getElementById("genres:add-name").value);
+        let sRequest = uri09 + '?' + "genre=" + sAddGenresEncoded;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("genres:add-name").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    } else if ((sTopic === 'statuses') && sMode === "add") {
+        sAddStatusesEncoded = encodeURIComponent(document.getElementById("statuses:add-name").value);
+        let sRequest = uri10 + '?' + "status=" + sAddStatusesEncoded;
+        let response = await fetch(sRequest);
+        if (response.ok) {
+            let text = await response.text();
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("statuses:add-name").value = '';
+        } else {
+            alert("HttpError: " + response.status);
+        }
+    }
+}
+
+// function to fetch results from the server when Validate button is clicked
+
+async function fonclick_chars_validate_bk_id() {
+
+    // fetch to fetch the title matching a book ID
+
+    let iTitleId = document.getElementById("chars:book-id").value;
+    let sRequest = uri11 + '?' + 'TitleID=' + iTitleId;
+    let response = await fetch(sRequest);
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("chars:book-title").value = text;
+        if (text === "No title found") {
+            document.getElementById("submit:mssge").value = "No book exists for this Title ID";
+        } else {
+            fSetElement("Enable", "chars:char-to-add");
+            fSetElement("Disable", "chars:validate");
+            fSetElement("Hide", "chars:filter-div");
+            fSetElement("Unhide", "chars:add-chars-div");
+            document.getElementById("submit:mssge").value = "Enter the character name to add";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
+}
+
+// function to fetch results from the server when Validate character is clicked
+
+async function fonclick_chars_validate_char_id() {
+
+    // fetch to fetch the title matching a book ID
+
+    let iCharId = document.getElementById("chars:char-id-to-updt").value;
+    let sRequest = uri14 + '?' + 'CharID=' + iCharId;
+    let response = await fetch(sRequest);
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("chars:char-to-updt").value = text;
+        if (text === "No character found") {
+            document.getElementById("submit:mssge").value = "No character exists for this Character ID";
+        } else {
+            fSetElement("Enable", "chars:char-updtd");
+            fSetElement("Disable", "chars:validate-char-id");
+            fSetElement("Disable", "chars:char-to-updt");
+            fSetElement("Hide", "chars:filter-div");
+            document.getElementById("submit:mssge").value = "Enter the changed character name and 'submit'";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
+}
+
+// function to fetch a book detail record ..............................................................................
+
+async function fGetBookDetails() {
+
+    let arrayRows = [];
+    let arrayFields = [];
+    let newtext = '';
+    let sRequest = uri02 + '?' + 'TitleID=' + document.getElementById("titleIDInput").value;
+    let response = await fetch(sRequest);
+    if (response.ok) {
+        let text = await response.text();
+        arrayRows = text.split('\n');
+        arrayFields = arrayRows[1].split('&');
+        document.getElementById("nameInput").value = arrayFields[1];
+        document.getElementById("authorInput").value = arrayFields[2];
+        document.getElementById("sourceInput").value = arrayFields[3];
+        document.getElementById("seriesInput").value = arrayFields[4];
+        document.getElementById("statusInput").value = arrayFields[5];
+        document.getElementById("genreInput").value = arrayFields[6];
+        document.getElementById("clsfnInput").value = arrayFields[7];
+        document.getElementById("ratingInput").value = arrayFields[8];
+        document.getElementById("startInput").value = arrayFields[9];
+        document.getElementById("finishInput").value = arrayFields[10];
+        document.getElementById("cmntsArea").value = arrayFields[11];
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    fGetBookCharacters();
+}
+
+// function to fetch book characters  ..................................................................................
+
+async function fGetBookCharacters() {
+
+    let arrayCharacters = [];
+    let sNewText = '';
+    let sRequest = uri03 + '?' + 'TitleID=' + document.getElementById("titleIDInput").value;
+    let response = await fetch(sRequest);
+    if (response.ok) {
+        let text = await response.text();
+        arrayCharacters = text.split('\n');
+        for (let i = 1; i < arrayCharacters.length; i++) {
+            if (i + 1 - arrayCharacters.length == 0) {
+                sNewText = sNewText + arrayCharacters[i];
+            } else {
+                sNewText = sNewText + arrayCharacters[i] + '\n';
+            }
+        }
+
+         document.getElementById("chrsArea").value = sNewText;
+
+    } else {
+        alert("HttpError: " + response.status);
+    }
+}
+
+// function to fetch book characters and display in characersArea ......................................................
+
+async function fGetBookCharacters2() {
+
+    let arrayCharacters = [];
+    let sNewText = '';
+    let sRequest = uri03 + '?' + 'TitleID=' + document.getElementById("chars:book-id").value;
+    let response = await fetch(sRequest);
+    if (response.ok) {
+        let text = await response.text();
+        arrayCharacters = text.split('\n');
+        for (let i = 1; i < arrayCharacters.length; i++) {
+            if (i + 1 - arrayCharacters.length == 0) {
+                sNewText = sNewText + arrayCharacters[i];
+            } else {
+                sNewText = sNewText + arrayCharacters[i] + '\n';
+            }
+        }
+
+         document.getElementById("chars:show-chars").value = sNewText;
+
+    } else {
+        alert("HttpError: " + response.status);
+    }
+}
+
+// function to fetch book characters and display in characersArea ......................................................
+
+async function fGetBookTitle(iTitleID) {
+
+    let sRequest = uri11 + '?' + 'TitleID=' + iTitleID;
+    let response = await fetch(sRequest);
+    if (response.ok) {
+        let text = await response.text();
+        return text;
+    } else {
+        alert("HttpError: " + response.status);
+    }
+}
+
+// function to set wrap on textarea ....................................................................................
+
+async function fWrapText() {
+    let r = document.getElementById("resultsArea");
+    if(r.wrap != "off") {
+        r.wrap = "off";
+    } else {
+       r.wrap = "on";
+    }
+}
+
+// function to validate Title ID entered before fetching a book record .................................................
+
+function fEnableSubmitButton01(TitleIdInput) {
+
+    TID = document.getElementById(TitleIdInput);
+
+    let iTitleId = TID.value;
+
+    if (iTitleId === '') {
+        fSetElement("Disable", "submit:submit");
+        let dt1 = document.getElementById("titleIDInput");
+        dt1.style.backgroundColor = "rgb(255,255,224)";                                            // light yellow color
+        let dt2 = document.getElementById("chars:book-id");
+        dt2.style.backgroundColor = "rgb(255,255,224)";                                            // light yellow color
+    } else if(isNaN(iTitleId) === false){
+        TID.style.backgroundColor = "rgb(189,245,189)";                                              // pale green color
+        fSetElement("Enable", "submit:submit");
+        fSetElement("Enable", "chars:validate");
+    } else {
+        TID.style.backgroundColor = "rgb(255, 204, 203)";                                             // light red color
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Disable", "chars:validate");
+    }
+}
+
+// function to enable the validate or submit buttons if an entered book ID is a valid format ...........................
+
+function fonKeyUp_chars_book_id() {
+
+    if (document.getElementById("modeLabel").innerHTML === "add mode") {
+        iBookId = document.getElementById("chars:book-id").value;
+        document.getElementById("chars:book-title").value = '';
+        if (iBookId === '') {
+            fSetElement("Disable", "chars:validate");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+        } else if(isNaN(iBookId) === false){
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(189,245,189)";     // pale green color
+            fSetElement("Enable", "chars:validate");
+        } else {
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255, 204, 203)";    // light red color
+            fSetElement("Disable", "chars:validate");
+        }
+    } else if (document.getElementById("modeLabel").innerHTML === "fetch mode") {
+        iBookId = document.getElementById("chars:book-id").value;
+        document.getElementById("chars:book-title").value = '';
+        fSetElement("Disable", "chars:char-to-add");
+        if (iBookId === '') {
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+        } else if(isNaN(iBookId) === false){
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(189,245,189)";     // pale green color
+            fSetElement("Enable", "submit:submit");
+        } else {
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255, 204, 203)";    // light red color
+            fSetElement("Disable", "chars:validate");
+        }
+    }
+}
+
+// function to enable the validate or submit buttons if an entered book ID is a valid format ...........................
+
+function fonKeyUp_chars_char_to_add() {
+
+    if (document.getElementById("modeLabel").innerHTML === "add mode") {
+        iBookId = document.getElementById("chars:book-id").value;
+        fSetElement("Disable", "chars:book-title");
+        let sCharToAdd = document.getElementById("chars:char-to-add");
+        if (sCharToAdd === '') {
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("chars:char-to-add").style.backgroundColor = "rgb(255,255,224)";      //light yellow
+        } else {
+            fSetElement("Enable", "submit:submit");
+        }
+    }
+}
+
+// function to enable the validate or submit buttons if an entered book ID is a valid format ...........................
+
+function fonKeyUp_chars_char_id_to_updt() {
+
+    if (document.getElementById("modeLabel").innerHTML === "update mode") {
+        iBookId = document.getElementById("chars:book-id").value;
+        let iCharToAdd = document.getElementById("chars:char-id-to-updt").value;
+        if (iCharToAdd === '') {
+            fSetElement("Disable", "chars:char-to-updt");
+            fSetElement("Disable", "chars:validate-char-id");
+            document.getElementById("chars:char-id-to-updt").style.backgroundColor = "rgb(255,255,224)";  //light yellow
+        } else if (isNaN(iCharToAdd) === true) {
+            document.getElementById("chars:char-id-to-updt").style.backgroundColor = "rgb(255, 204, 203)";   // light red
+            fSetElement("Disable", "chars:validate-char-id");
+        } else {
+            fSetElement("Enable", "chars:validate-char-id");
+            document.getElementById("chars:char-id-to-updt").style.backgroundColor = "rgb(189,245,189)";    // pale green
+        }
+    }
+}
+
+// function to enable the submit button when a changed character is entered
+
+function fonKeyUp_chars_char_updtd() {
+    let sUpdtChar = document.getElementById("chars:char-updtd").value;
+    if (sUpdtChar != '') {
+        fSetElement("Enable", "submit:submit");
+    } else {
+        fSetElement("Disable", "submit:submit");
+    }
+}
+
+function fonKeyUp_class_updt_id() {
+    ;
+}
+function fonKeyUp_class_updtd_name() {
+    ;
+}
+// function to enable the submit button if an entered character ID is a valid format ...................................
+
+function fonKeyUp_chars_char_to_del() {
+
+    if (document.getElementById("modeLabel").innerHTML === "delete mode") {
+        iCharId = document.getElementById("chars:char-id-to-del").value;
+        if (iCharId === '') {
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("chars:char-id-to-del").style.backgroundColor = "rgb(255,255,224)";  // light yellow
+        } else if (isNaN(iCharId) === true) {
+            document.getElementById("chars:char-id-to-del").style.backgroundColor = "rgb(255, 204, 203)";   // light red
+        } else {
+            fSetElement("Enable", "submit:submit");
+        }
+    }
+}
+
+// function to enable the submit button if an entered classification ID is a valid format ..............................
+
+function fonKeyUp_class_del_id() {
+
+    if (document.getElementById("modeLabel").innerHTML === "delete mode") {
+        iClassId = document.getElementById("class:del-id").value;
+        if (iClassId === '') {
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("class:del-id").style.backgroundColor = "rgb(255,255,224)";  // light yellow
+        } else if (isNaN(iClassId) === true) {
+            document.getElementById("class:del-id").style.backgroundColor = "rgb(255, 204, 203)";   // light red
+        } else {
+            fSetElement("Enable", "submit:submit");
+        }
+    }
+}
+
+// function to enable all the mode buttons .............................................................................
+
+function fEnableAllModeButtons() {
+
+    let fb = document.getElementById("fetchButton");
+    fb.style.backgroundColor = "rgb(239,239,239)";                                                  // white smoke color
+    fb.style.borderWidth = "thin";
+    fb.disabled = false;
+    let qb = document.getElementById("queryButton");
+    qb.style.backgroundColor = "rgb(239,239,239)";                                                  // white smoke color
+    qb.style.borderWidth = "thin";
+    qb.disabled = false;
+    let nb = document.getElementById("addButton");
+    nb.style.backgroundColor = "rgb(239,239,239)";                                                  // white smoke color
+    nb.style.borderWidth = "thin";
+    nb.disabled = false;
+    let ub = document.getElementById("updateButton");
+    ub.style.backgroundColor = "rgb(239,239,239)";                                                  // white smoke color
+    ub.style.borderWidth = "thin";
+    ub.disabled = false;
+    let db = document.getElementById("deleteButton");
+    db.style.backgroundColor = "rgb(239,239,239)";                                                  // white smoke color
+    db.style.borderWidth = "thin";
+    db.disabled = false;
+}
+
+// functions to disable or enable book fields ..........................................................................
+
+function fDisableBookFields() {
+    for(let i = 0; i < arguments.length; i++) {
+        fSetElement("Disable", arguments[i]);
+    }
+}
+
+function fEnableBookFields() {
+    for(let i = 0; i < arguments.length; i++) {
+        fSetElement("Enable", arguments[i]);
+    }
+}
+
+// function to unhide, hide or disable a single HTML element ...........................................................
+
+function fSetElement(sFunction, sElement) {
+    if (sFunction === "Unhide") {
+        document.getElementById(sElement).style.display = "block";
+    } else if (sFunction === "UnhideInline") {
+        document.getElementById(sElement).style.display = "inline";
+    } else if (sFunction === "Hide") {
+        document.getElementById(sElement).style.display = "none";
+    } else if (sFunction === "Disable") {
+        document.getElementById(sElement).disabled = true;
+    } else if (sFunction === "Enable") {
+        document.getElementById(sElement).disabled = false;
+    } else if (sFunction === "Clear") {
+        document.getElementById(sElement).value = '';
+    }
+}
+
+// function to unhide multiple elements ................................................................................
+
+function fUnhideMultiple() {
+    for (let i = 0; i < arguments.length; i++) {
+        fSetElement("Unhide", arguments[i]);
+    }
+}
+
+// function to show or hide (toggle) help text .........................................................................
+
+function fShowHelp() {
+    var x = document.getElementById("helpDiv");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
+// function to clear and hide all elements on the page .................................................................
+
+function fClearPage() {
+    let arrayOfHides = ["booksDiv", "titlesDiv", "recentsDiv", "unreadsDiv", "chars-div"
+                      , "authorsDiv", "addAuthorsDiv", "class:add-div", "class:div"
+                      , "ratings:add-div", "ratings:div", "series:add-div", "series:div", "sources:add-div"
+                      , "sources:div", "genres:add-div", "genres:div", "statuses:add-div", "statuses:div"
+                      , "modesDiv", "submit-div"];
+    for(let i = 0; i < arrayOfHides.length; i++) {
+        fSetElement("Hide", arrayOfHides[i]);
+    }
+    let arrayOfClears = ["titlesFilter", "titlesArea", "recentsFilter", "recentsArea", "chars:filter"
+                       , "chars:show-chars", "authorsFilter", "authorsArea", "series:add-name", "class:add-name"
+                       , "class:filter", "class:list", "ratings:add-name", "ratings:filter"
+                       , "ratings:list", "series:add-name", "series:filter", "series:list", "sources:add-name"
+                       , "sources:filter", "sources:list", "genres:add-name", "genres:filter", "genres:list"
+                       , "statuses:add-name", "statuses:filter", "statuses:list"];
+    for(let i = 0; i < arrayOfClears.length; i++) {
+        fSetElement("Hide", arrayOfClears[i]);
+    }
+    let h = document.getElementById("helpDiv");
+    h.style.display="none"
+    let w = document.getElementById("wrapButton");
+    w.disabled=true;
+}
+
+// function to clear the page and set the topic to 'Choose' to put the page in the initial state .......................
+
+function fClearPageToChoose() {
+    fClearPage();
+    let tc = document.getElementById("topic");
+    tc.value = "choose";
+}
+
+// function to disable one mode button and enable all the other mode buttons ...........................................
+
+function fDisableModeButton(sButton) {
+    fEnableAllModeButtons();
+    fSetElement("Unhide", "modesDiv");
+    let b = document.getElementById(sButton);
+    b.style.backgroundColor = "rgb(189,245,189)";                                                    // pale green color
+    b.style.borderWidth = "thin";
+    b.disabled = true;
+}
+
+// function to enable the submit button if a field is not empty ........................................................
+
+function fEnableSubmitIfNotNull(sElementId) {
+    let elementId = document.getElementById(sElementId);
+    if (sElementId.value != '') {
+        fSetElement("Enable", "submit:submit");
+    } else {
+        fSetElement("Disable", "submit:submit");
+    }
+}
+
+function fClearBookInputs() {
+    let arrayOfClears = ["titleIDInput", "nameInput", "authorInput", "sourceInput", "seriesInput"
+                       , "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput"
+                       , "finishInput", "cmntsArea", "chrsArea"];
+    for(let i = 0; i < arrayOfClears.length; i++) {
+        fSetElement("Clear", arrayOfClears[i]);
+    }
+}
+

@@ -5,8 +5,6 @@
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
  *      04-Jan-2022 copied from bookInquiry2.c
- *      08-May-2022 sort results in alpha order
- *      09-May-2022 fix sort by alpha for authors
  *  Enhancements:
 */
 
@@ -131,7 +129,7 @@ int main(void) {
                        ", BT.Comments "
                        "FROM risingfast.`Book Titles` BT "
                        "WHERE BT.`Title Name` LIKE '%s' "
-                       "ORDER BY BT.`Title Name` ASC", sFilter)
+                       "ORDER BY BT.`Title ID` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -140,24 +138,10 @@ int main(void) {
                        ", BC.`Character Name` as 'Name' "
                        "FROM risingfast.`Book Characters` BC "
                        "WHERE BC.`Character Name` LIKE '%s' "
-                       "ORDER BY BC.`Character Name` ASC", sFilter)
+                       "ORDER BY BC.`Character ID` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
-    else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
-        sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
-                       ", BA.`Author Name` as 'Name' "
-                       ", ROUND(SUM(BR.`Rating Value`) / COUNT(BA.`Author Name`), 0) as `Author Rating` "
-                       "FROM `Book Authors` BA "
-                       "LEFT JOIN risingfast.`Book Titles` BT ON BA.`Author ID` = BT.`Author ID` "
-                       "LEFT JOIN risingfast.`Book Ratings` BR ON BT.`Rating ID` = BR.`Rating ID` "
-                       "WHERE BA.`Author Name` LIKE '%s' "
-                       "GROUP BY BA.`Author Name`, BA.`Author ID` "
-                       "ORDER BY BA.`Author Name` ASC; ", sFilter)
-                       ;
-         fPrintResult(sTopic, sFilter, caSQL);
-    }
-/*
     else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
         sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
                        ", BA.`Author Name` as 'Name' "
@@ -171,7 +155,6 @@ int main(void) {
                        ;
          fPrintResult(sTopic, sFilter, caSQL);
     }
-*/
     else if (strstr(getenv("QUERY_STRING"), "recents") != NULL) {
         sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", BT.Start"
@@ -203,7 +186,7 @@ int main(void) {
                        ", BC.`Classification Name` as 'Name' "
                        "FROM risingfast.`Book Classifications` BC "
                        "WHERE BC.`Classification Name` LIKE '%s' "
-                       "ORDER BY BC.`Classification Name` ASC", sFilter)
+                       "ORDER BY BC.`Classification ID` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -212,7 +195,7 @@ int main(void) {
                        ", BR.`Rating Name` as 'Name' "
                        "FROM risingfast.`Book Ratings` BR "
                        "WHERE BR.`Rating Name` LIKE '%s' "
-                       "ORDER BY BR.`Rating Name` ASC", sFilter)
+                       "ORDER BY BR.`Rating ID` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -230,7 +213,7 @@ int main(void) {
                        ", BS.`Source Name` as 'Name' "
                        "FROM risingfast.`Book Sources` BS "
                        "WHERE BS.`Source Name` LIKE '%s' "
-                       "ORDER BY BS.`Source Name` ASC", sFilter)
+                       "ORDER BY BS.`Source ID` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -248,7 +231,7 @@ int main(void) {
                        ", BS.`Status Name` as 'Name' "
                        "FROM risingfast.`Book Statuses` BS "
                        "WHERE BS.`Status Name` LIKE '%s' "
-                       "ORDER BY BS.`Status Name` ASC", sFilter)
+                       "ORDER BY BS.`Status ID` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }

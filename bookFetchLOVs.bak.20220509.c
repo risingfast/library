@@ -6,7 +6,6 @@
  *  Log:
  *      04-Jan-2022 copied from bookInquiry2.c
  *      08-May-2022 sort results in alpha order
- *      09-May-2022 fix sort by alpha for authors
  *  Enhancements:
 */
 
@@ -147,20 +146,6 @@ int main(void) {
     else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
         sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
                        ", BA.`Author Name` as 'Name' "
-                       ", ROUND(SUM(BR.`Rating Value`) / COUNT(BA.`Author Name`), 0) as `Author Rating` "
-                       "FROM `Book Authors` BA "
-                       "LEFT JOIN risingfast.`Book Titles` BT ON BA.`Author ID` = BT.`Author ID` "
-                       "LEFT JOIN risingfast.`Book Ratings` BR ON BT.`Rating ID` = BR.`Rating ID` "
-                       "WHERE BA.`Author Name` LIKE '%s' "
-                       "GROUP BY BA.`Author Name`, BA.`Author ID` "
-                       "ORDER BY BA.`Author Name` ASC; ", sFilter)
-                       ;
-         fPrintResult(sTopic, sFilter, caSQL);
-    }
-/*
-    else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
-        sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
-                       ", BA.`Author Name` as 'Name' "
                        ", ROUND(SUM(BR.`Rating Value`) / COUNT(BT.`Author ID`), 0) as `Author Rating` "
                        "FROM `Book Authors` BA "
                        "LEFT JOIN risingfast.`Book Titles` BT ON BA.`Author ID` = BT.`Author ID` "
@@ -171,7 +156,6 @@ int main(void) {
                        ;
          fPrintResult(sTopic, sFilter, caSQL);
     }
-*/
     else if (strstr(getenv("QUERY_STRING"), "recents") != NULL) {
         sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", BT.Start"

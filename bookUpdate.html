@@ -1,0 +1,156 @@
+<!-- bookUpdate.html to use a form to update the formBook.dat file                              -->
+<!-- Author: Geoff Jarman                                                                       -->
+<!-- Started: 09/20/2020                                                                        -->
+<!-- Log:                                                                                       -->
+<!--    09/20/2020 Started                                                                      -->
+<!--    09/21/2020 Added fields and query logic to fetch records                                -->
+<!--    09/21/2020 Added action choices                                                         -->
+<!--    09/26/2020 color Submit button red when applicable                                      -->
+<!--    09/26/2020 move the reset button to the button row                                      -->
+<!--    10/11/2020 center navigation links in main heading                                      -->
+<!--    10/12/2020 change Internals button to a detail/summary region                           -->
+<!--    10/22/2020 center the main body of the html on the web page n                           -->
+<!-- Enhancements:                                                                              -->
+
+<!DOCTYPE html>
+
+<HTML lang="en">
+
+<!-- html document head ....................................................................... -->
+
+<HEAD>
+    <TITLE>HTML bookUpdate Form</TITLE>
+    <META charset="UTF-8">
+    <LINK rel="stylesheet" type="text/css" href="rfstyles.css">
+    <LINK rel="shortcut icon" href="letterRF.png" type="image/png">
+    <META name="description" content= "HTML bookUpdate Form">
+    <META name="keywords" content="html, css">
+    <META name="generator" content="vim">
+    <META name="author" content="risingfast">
+    <META name="viewport" content= "width=device-width, initial-scale=1.0">
+</HEAD>
+
+<!-- main page header ......................................................................... -->
+
+<BODY>
+
+<!-- page heading and horizontal navigation links ............................................. -->
+
+    <HEADER>
+        <DIV CLASS="header">
+            <H3>www.risingfast.com</H3>
+        </DIV>
+    </HEADER>
+    <NAV>
+        <DIVi class="outerTopNav">
+            <DIV class="topnav">
+                <A class="active" HREF="http://www.risingfast.com">Home</A> 
+                <A HREF="http://www.risingfast.com/d_ajaxFetch.html">Latest</A>
+                <A HREF="http://www.risingfast.com/d_template.html">Template</A>
+                <A HREF="http://www.risingfast.com/email.html">Email</A>
+                <A HREF="http://www.risingfast.com/about.html">About</A>
+            </DIV>
+        </DIV>
+    </NAV>
+
+ <!-- main document content Actions block.................................................................... -->
+
+    <MAIN>
+        <SECTION>
+            <DIV style="width:80%; margin: auto; max-width:800px; text-align:center;">
+                <H3>Book Update</H3>
+            </DIV>
+        </SECTION>
+
+        <DIV style="width:80%; margin: auto; max-width:800px; text-align:center;">
+            <FIELDSET DATA-ROLE="controlgroup" DATA-TYPE="horizontal">
+                <LEGEND>Action</LEGEND>
+                    <INPUT CLASS="radio" TYPE="radio" ID="none" NAME="Mode" VALUE="none" STYLE="margin: 0px 5px 0px 0px" CHECKED="checked" onClick=initSettings()>None
+                    <INPUT CLASS="radio" TYPE="radio" ID="fetch" NAME="Mode" VALUE="fetch" STYLE="margin: 0px 5px 0px 20px" onClick=fetchSettings()>Fetch
+                    <INPUT CLASS="radio" TYPE="radio" ID="fetchall" NAME="Mode" VALUE="fetchall" STYLE="margin: 0px 5px 0px 20px" onClick=fetchAllSettings()>FetchAll
+                    <INPUT CLASS="radio" TYPE="radio" ID="update" NAME="Mode" VALUE="update" STYLE="margin: 0px 5px 0px 20px" onClick=updateSettings()>Update
+                    <INPUT CLASS="radio" TYPE="radio" ID="delete" NAME="Mode" VALUE="delete" STYLE="margin: 0px 5px 0px 20px" onClick=deleteSettings()>Delete
+            </FIELDSET>
+        </DIV>
+
+<!-- main document content .................................................................... -->
+
+        <DIV ID="Debug" style="width:80%; margin: auto; max-width:800px; text-align:center;">
+            <P>
+                Messages: <INPUT TYPE="text" ID="messages" NAME="messages" PLACEHOLDER="System messages displayed here" SIZE="61"><BR>
+            </P>
+        </DIV>
+
+
+        </FORM>
+        <DIV style="width:80%; margin: auto; max-width:800px;">
+            <FORM NAME="nosubmit" ID="nosubmit" ACTION="javascript:void(0);">      <!-- do not post on submit -->
+                <INPUT Type="Submit" ID="submit" VALUE="Submit" onclick="takeAction()">
+                <INPUT Type="Button" ID="next" VALUE="Next" onclick="fetchNext()">
+                <INPUT Type="Button" ID="previous" VALUE="Previous" onclick="fetchPrevious()">
+                <INPUT Type="Button" ID="reset" VALUE="Reset" onclick="resetSettings()"><BR><BR>
+                <SPAN CLASS="leftcapt">Title:</SPAN><INPUT TYPE="text" ID="title" NAME="title" SIZE=25"><BR>
+                <SPAN CLASS="leftcapt">Author:</SPAN><INPUT TYPE="text" ID="author" NAME="author" SIZE=25"><BR>
+                <SPAN CLASS="leftcapt">Source:</SPAN><INPUT TYPE="text" ID="source" NAME="source" SIZE=15"><BR>
+                <SPAN CLASS="leftcapt">Series:</SPAN><INPUT TYPE="text" ID="series" NAME="series" SIZE=30"><BR>
+                <SPAN CLASS="leftcapt">Start:</SPAN><INPUT TYPE="date" ID="start" NAME="start" SIZE=15"><BR>
+                <SPAN CLASS="leftcapt">Finish:</SPAN><INPUT TYPE="date" ID="finish" NAME="finish" SIZE=15"><BR>
+                <SPAN CLASS="leftcapt">Char01:</SPAN><INPUT TYPE="text" ID="char01" NAME="char01" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char02:</SPAN><INPUT TYPE="text" ID="char02" NAME="char02" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char03:</SPAN><INPUT TYPE="text" ID="char03" NAME="char03" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char04:</SPAN><INPUT TYPE="text" ID="char04" NAME="char04" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char05:</SPAN><INPUT TYPE="text" ID="char05" NAME="char05" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char06:</SPAN><INPUT TYPE="text" ID="char06" NAME="char06" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char07:</SPAN><INPUT TYPE="text" ID="char07" NAME="char07" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char08:</SPAN><INPUT TYPE="text" ID="char08" NAME="char08" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char09:</SPAN><INPUT TYPE="text" ID="char09" NAME="char09" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char10:</SPAN><INPUT TYPE="text" ID="char10" NAME="char10" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char11:</SPAN><INPUT TYPE="text" ID="char11" NAME="char11" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char12:</SPAN><INPUT TYPE="text" ID="char12" NAME="char12" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char13:</SPAN><INPUT TYPE="text" ID="char13" NAME="char13" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char14:</SPAN><INPUT TYPE="text" ID="char14" NAME="char14" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char15:</SPAN><INPUT TYPE="text" ID="char15" NAME="char20" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char16:</SPAN><INPUT TYPE="text" ID="char16" NAME="char16" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char17:</SPAN><INPUT TYPE="text" ID="char17" NAME="char17" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char18:</SPAN><INPUT TYPE="text" ID="char18" NAME="char18" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char19:</SPAN><INPUT TYPE="text" ID="char19" NAME="char19" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char20:</SPAN><INPUT TYPE="text" ID="char20" NAME="char20" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char21:</SPAN><INPUT TYPE="text" ID="char21" NAME="char21" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char22:</SPAN><INPUT TYPE="text" ID="char22" NAME="char22" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char23:</SPAN><INPUT TYPE="text" ID="char23" NAME="char23" SIZE=75"><BR>
+                <SPAN CLASS="leftcapt">Char24:</SPAN><INPUT TYPE="text" ID="char24" NAME="char24" SIZE=75"><BR>
+            </FORM>
+        </DIV>
+        
+<!-- internals controlled by button ........................................................... -->
+        <BR>
+        <DIV ID="Debug" style="width:80%; margin: auto; max-width:800px;">
+            <DETAILS>
+                <SUMMARY style="outline:none">
+                    Internals
+                </SUMMARY>
+                    <P>
+                        html file: /var/www.html/bookUpdate.html<BR>
+                        js file: /var/www/html/bookUpdate.js<BR>
+                        css file: /var/www/html/css/rfstyles.css<BR>
+                        datafile: /usr/lib/cgi-bin/formBook.dat<BR>
+                        cgi file: /usr/lib/cgi-bin/bookUpdate.cgi<BR>
+                    </P>
+            </DETAILS>
+        </DIV>
+    </MAIN>
+
+<!-- footer ................................................................................... -->
+
+    <FOOTER>
+        <DIV CLASS="footer">
+            <P>
+                &copy; 2020 www.risingfast.com ... /var/www/html/bookUpdate.html
+            </P>
+        </DIV>
+    </FOOTER>
+
+    <SCRIPT src="bookUpdate.js"></SCRIPT>
+
+</BODY>
+</HTML>
