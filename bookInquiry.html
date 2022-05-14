@@ -77,6 +77,8 @@
 <!--    06-May-2022 - align submit block                                                                             -->
 <!--    06-May-2022 - make queries immediate                                                                         -->
 <!--    07-May-2022 - wrap book comments                                                                             -->
+<!--    10-May-2022 - move common styles to CSS                                                                      -->
+<!--    11-May-2022 - add <ASIDE3> grid region                                                                       -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ..................................................... -->
 
@@ -542,7 +544,7 @@
 <!-- help div ...................................................................................................... -->
 
                 <DIV id="help:div" style="width:80%; margin: auto; max-width:800px; text-align:left;">
-                    <DIV id="helpDiv" class="help" style="DISPLAY:none">
+                    <DIV id="HELPDIV" class="help">
                         <P>
                             Choose a topic and a mode and click submit to see results<BR>
                             Some modes are disabled for some topics, as not applicable to the topic<BR>
@@ -559,7 +561,6 @@
 
 <!-- internals div ................................................................................................. -->
 
-                <BR>
                <DIV id="internals:div" style="width:80%; margin: auto; max-width:800px;">
                     <DETAILS>
                         <SUMMARY style="outline:none">
@@ -589,6 +590,8 @@
                     <H3 ID=ASIDE1H3>Changes 2021-22</H3>
                 <UL ID="ASIDE1UL">
 
+                    <LI CLASS="ASIDE1LI">11-May: add corner image caption</LI>
+                    <LI CLASS="ASIDE1LI">09-May: clear date (null)'s</LI>
                     <LI CLASS="ASIDE1LI">08-May: refresh LOV's</LI>
                     <LI CLASS="ASIDE1LI">07-May: wrap book comments</LI>
                     <LI CLASS="ASIDE1LI">07-May: define unwrap</LI>
@@ -659,6 +662,20 @@
                      <IMG ID="ASIDE2IMG" SRC="cornerImage.png" ALT="Cannot Load cornerImage.png">
                 </DIV>
             </ASIDE>
+
+<!-- <ASIDE3> region for corner image caption ...................................................................... -->
+
+            <ASIDE id="ASIDE3">
+                <DIV id="ASIDE3DIV">
+                    <P>
+                     Matilda Cook in Magpies uniform before her next netball game 2022
+                    </P>
+                </DIV>
+            </ASIDE>
+
+<!-- <FOOTER> region for page footer .............................................................................. -->
+
+
             <FOOTER ID="FOOTER1">
                 <DIV ID="FOOTER1DIV">
                     <P>&copy; 2020 www.risingfast.com ... /var/www/html/bookInquiries.html</P>

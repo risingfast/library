@@ -62,7 +62,6 @@
 //    07-May-2022 definefUnwrapAllText()
 //    08-May-2022 refresh LOV's()
 //    09-May-2022 clear (null) from start and finish date and comments if empty in books
-//    12-May-2022 change "none" to "" for x.style.display in fShowHelp()
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -2375,11 +2374,11 @@ function fUnhideMultiple() {
 
 function fShowHelp() {
 
-    var x = document.getElementById("HELPDIV");
-    if (x.style.display === "") {
+    var x = document.getElementById("helpDiv");
+    if (x.style.display === "none") {
         x.style.display = "block";
     } else {
-        x.style.display = "";
+        x.style.display = "none";
     }
 }
 
@@ -2404,7 +2403,7 @@ function fClearPage() {
     for(let i = 0; i < arrayOfClears.length; i++) {
         fSetElement("Hide", arrayOfClears[i]);
     }
-    let h = document.getElementById("HELPDIV");
+    let h = document.getElementById("helpDiv");
     h.style.display="none"
     let w = document.getElementById("wrapButton");
     w.disabled=true;

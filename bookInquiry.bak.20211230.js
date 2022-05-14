@@ -53,16 +53,6 @@
 //    29-Dec-2021 consolidate _updt_id()
 //    30-Dec-2021 replace ' with '' in char:add-name
 //    30-Dec-2021 escape ' in updates
-//    02-Jan-2022 fix character filer
-//    04-Jan-2022 implement attribute LOV's
-//    07-Jan-2022 add book
-//    07-Jan-2022 return Title ID on add book
-//    10-Jan-2022 protect ' character in book name and comments for adding a book
-//    06-May-2022 make queries immediate
-//    07-May-2022 definefUnwrapAllText()
-//    08-May-2022 refresh LOV's()
-//    09-May-2022 clear (null) from start and finish date and comments if empty in books
-//    12-May-2022 change "none" to "" for x.style.display in fShowHelp()
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -74,7 +64,6 @@
 //    fGetBookCharacters2() - fetch book characters and display in charactersArea
 //    fGetBookTitle() - fetch book title
 //    function fWrapText() -  set wrap on textarea
-//    function fUnwrapAllText() -  set wrap off on all textarea
 //    fEnableSubmitButton01() - validate Title ID entered before fetching a book record
 //    fonKeyUp_chars_book_id() - enable the validate or submit buttons if an entered book ID is a valid format
 //    fonKeyUp_chars_add_name() - to enable the validate or submit buttons if an entered book ID is a valid format
@@ -86,10 +75,17 @@
 //    fonKeyUp_genres_updtd_name() - enable the submit button when a changed genre is entered
 //    fonKeyUp_statuses_updtd_name() - enable the submit button when a changed status is entered
 //    fonKeyUp_chars_del_id() - enable the submit button if an entered character ID is a valid format
+//    fonclick_author_vldt_id()* - fetch author results from the server when Validate author is clicked
 //    fonKeyUp_author_updtd_name() - enable the submit button when a changed author is entered
 //    fonKeyUp_author_del_id() - enable the submit button if an entered classification ID is a valid format
+//    fonclick_class_vldt_id()* - fetch classification results from the server when Validate classification is clicked
 //    fonKeyUp_class_del_id() - enable the submit button if an entered classification ID is a valid format
+//    fonclick_rating_vldt_id()* - fetch rating results from the server when Validate rating is clicked
 //    fonKeyUp_ratings_del_id() - enable the submit button if an entered rating ID (for deletion) is a valid format
+//    fonclick_series_vldt_id() - fetch series results from the server when Validate status is clicked
+//    fonclick_sources_vldt_id() - fetch source results from the server when Validate status is clicked
+//    fonclick_genres_vldt_id() - fetch results from the server when Validate status is clicked
+//    fonclick_status_vldt_id() - fetch results from the server when Validate status is clicked
 //    fonKeyUp_series_del_id() - enable the submit button if an entered series ID is a valid format
 //    fonKeyUp_sources_del_id() - enable the submit button if an entered source ID is a valid format
 //    fonKeyUp_genres_del_id() - enable the submit button if an entered genre ID is a valid format
@@ -104,11 +100,9 @@
 //    fDisableModeButton() - disable one mode button and enable all the other mode buttons
 //    fEnableSubmitIfNotNull() - enable the submit button if a field is not empty
 //    fClearBookElements() - clear all elements in books:div
-//    fonKeyUp_any_updt_id() - enable the validate button if an entered ID is a valid format for validating an update
-//    fonKeyUp_any_vldt_id() = validate an id for a single topic value and return the value
-//    fFetchTopicList() -- fetch a list from the database for a single topic
+//    fonKeyUp_any_updt_id() - function to enable the validate button if an entered ID is a valid format for validating an update
 
-// define globals for URI's .............................................................................................
+// globals .............................................................................................................
 
 const uri01 = "http://www.risingfast.com/cgi-bin/bookInquiry.cgi";
 const uri02 = "http://www.risingfast.com/cgi-bin/bookDetails2.cgi";
@@ -146,34 +140,9 @@ const uri33 = "http://www.risingfast.com/cgi-bin/bookVldtClassId.cgi";
 const uri34 = "http://www.risingfast.com/cgi-bin/bookChgClassNme.cgi";
 const uri35 = "http://www.risingfast.com/cgi-bin/bookVldtAuthorId.cgi";
 const uri36 = "http://www.risingfast.com/cgi-bin/bookChgAuthorNme.cgi";
-const uri37 = "http://www.risingfast.com/cgi-bin/bookAddBook.cgi";
-const uri38 = "http://www.risingfast.com/cgi-bin/bookDelBook.cgi";
-const uri39 = "http://www.risingfast.com/cgi-bin/bookUpdtBook.cgi";
-
-// define globals for mode and topic variables .........................................................................
 
 let sMode = '';
 let sTopic = '';
-
-// define globals for LOV arrays for book attributes....................................................................
-
-let arrAuthorNames = [];
-let arrSourceNames = [];
-let arrSeriesNames = [];
-let arrGenreNames = [];
-let arrStatusNames = [];
-let arrClassificationNames = [];
-let arrRatingNames = [];
-
-// populate global lists of value array for book attributes.............................................................
-
-fPopulateLOV('authors');
-fPopulateLOV('sources');
-fPopulateLOV('series');
-fPopulateLOV('genres');
-fPopulateLOV('statuses');
-fPopulateLOV('classifications');
-fPopulateLOV('ratings');
 
 // set the topic .......................................................................................................
 
@@ -223,7 +192,6 @@ function fSetTopic() {
     // set the initial mode for any change to another topic change .....................................................
 
     fSetMode("fetch");
-    fonclick_submit_submit();
 }
 
 // functon to set the mode which enables fields and behaviours .........................................................
@@ -248,28 +216,25 @@ function fSetMode(sNewMode) {
             //  disable the 'fetch' mode button and color it green .....................................................
 
             fDisableModeButton("fetchButton");
-            fSetElement("Disable", "queryButton");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
-            document.getElementById("books:titleId").style.width = "35px";
+            document.getElementById("titleIdInput").style.width = "35px";
 
             //  disable all book fields except Book ID .................................................................
 
-            fDisableBookFields("books:titleId", "books:name", "books:authorId", "books:author", "books:sourceId", "books:source"
-                             , "books:seriesId", "books:series", "books:genreId", "books:genre", "books:statusId", "books:status"
-                             , "books:clsfnId", "books:clsfn", "books:ratingId", "books:rating", "books:start", "books:finish"
-                             , "books:cmnts", "books:chrs");
+            fDisableBookFields("titleIdInput", "nameInput", "authorIdInput", "authorInput", "sourceIdInput", "sourceInput"
+                             , "seriesIdInput", "seriesInput", "genreIdInput", "genreInput", "statusIdInput", "statusInput"
+                             , "clsfnIdInput", "clsfnInput", "ratingIdInput", "ratingInput", "startInput", "finishInput"
+                             , "cmntsArea", "chrsArea");
             fSetElement("Unhide", "books:div"); 
 
             // show instructions in the message area on how to proceed .................................................
 
             document.getElementById("submit:mssge").value = "Enter the Book ID and 'Submit'";
-            document.getElementById("books:stage").value = 'Nothing Fetched';
 
             //  enable the ID field and color light yellow as a required field .........................................
 
-            fSetElement("Clear", "books:titleId");
-
-            let dt = document.getElementById("books:titleId");
+            fSetElement("Clear", "titleIdInput");
+            let dt = document.getElementById("titleIdInput");
             dt.disabled = false;
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
 
@@ -280,13 +245,13 @@ function fSetMode(sNewMode) {
             fDisableModeButton("queryButton");
             document.getElementById("modeLabel").innerHTML = "query mode";
 
-            //  enable all book fields for 'query' mode except for the books:TitleId and books:chrs fields ................
+            //  enable all book fields for 'query' mode except for the TitleIdInput and chrsArea fields ................
 
-            fEnableBookFields("books:titleId", "books:name", "books:author", "books:source", "books:series", "books:genre", "books:status", "books:clsfn", "books:rating", "books:start", "books:finish", "books:cmnts", "books:chrs");
-            fSetElement("Disable", "books:titleId");
-            fSetElement("Disable", "books:chrs");
+            fEnableBookFields("titleIdInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Disable", "titleIdInput");
+            fSetElement("Disable", "chrsArea");
             fSetElement("Unhide", "books:div"); 
-            let dt = document.getElementById("books:titleId");
+            let dt = document.getElementById("titleIdInput");
             dt.style.backgroundColor = "rgba(230,239,239, 0.3)";                                          // white color
 
             // show instructions in the message area on how to proceed .................................................
@@ -298,108 +263,65 @@ function fSetMode(sNewMode) {
             //  disable the 'add' mode button and color it green .......................................................
 
             fDisableModeButton("addButton");
-            fSetElement("Disable", "queryButton");
             document.getElementById("modeLabel").innerHTML = "add mode";
 
             //  enable all book fields for 'add' mode
 
-            fEnableBookFields("books:titleId", "books:name", "books:author", "books:source", "books:series", "books:genre", "books:status", "books:clsfn", "books:rating", "books:start", "books:finish", "books:cmnts", "books:chrs");
+            fEnableBookFields("titleIdInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
             fSetElement("Unhide", "books:div"); 
             
-            //  enable all book fields for 'query' mode except for the books:titleId and books:chrs fields ................
+            //  enable all book fields for 'query' mode except for the TitleIdInput and chrsArea fields ................
 
-            fEnableBookFields("books:titleId", "books:name", "books:author", "books:source", "books:series", "books:genre", "books:status", "books:clsfn", "books:rating", "books:start", "books:finish", "books:cmnts", "books:chrs");
-            fSetElement("Disable", "books:titleId");
-            fSetElement("Disable", "books:chrs");
+            fEnableBookFields("titleIdInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Disable", "titleIdInput");
+            fSetElement("Disable", "chrsArea");
             fSetElement("Unhide", "books:div"); 
-
-            fSetElement("Clear", "books:titleId");
-            
-            fSetElement("Enable", "submit:submit");
-            document.getElementById("books:cmnts").readOnly = false;
-            document.getElementById("books:cmnts").disable = false;
-            let dt = document.getElementById("books:titleId");
+            let dt = document.getElementById("titleIdInput");
             dt.style.backgroundColor = "rgba(239,239,239, 0.3)";                                     // light grey color
 
             // show instructions in the message area on how to proceed .................................................
 
             document.getElementById("submit:mssge").value = "Enter values for a new book and 'Submit'";
 
-            // set the initial value of book attributes to 'Unassigned' and get the matching ID
-
-            document.getElementById("books:author").value = 'Unassigned';
-            fPopulateLOVId('authors');
-            
-            document.getElementById("books:source").value = 'Unassigned';
-            fPopulateLOVId('sources');
-            
-            document.getElementById("books:series").value = 'Unassigned';
-            fPopulateLOVId('series');
-
-            document.getElementById("books:genre").value = 'Unassigned';
-            fPopulateLOVId('genres');
-
-            document.getElementById("books:status").value = 'Unassigned';
-            fPopulateLOVId('statuses');
-
-            document.getElementById("books:clsfn").value = 'Unassigned';
-            fPopulateLOVId('classifications');
-
-            document.getElementById("books:rating").value = 'Unassigned';
-            fPopulateLOVId('ratings');
-
         } else if (sMode === 'update') {
 
             //  disable the 'update' mode button and color it green ....................................................
 
             fDisableModeButton("updateButton");
-            fSetElement("Disable", "queryButton");
             document.getElementById("modeLabel").innerHTML = "update mode";
 
-            //  disable all book fields except Book ID for initial fetch ...............................................
+            //  enable all book fields for 'query' mode except for the TitleIdInput and chrsArea fields ................
 
-            fDisableBookFields("books:titleId", "books:name", "books:authorId", "books:author", "books:sourceId", "books:source"
-                             , "books:seriesId", "books:series", "books:genreId", "books:genre", "books:statusId", "books:status"
-                             , "books:clsfnId", "books:clsfn", "books:ratingId", "books:rating", "books:start", "books:finish"
-                             , "books:cmnts", "books:chrs");
+            fEnableBookFields("titleIdInput", "nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Disable", "titleIdInput");
+            fSetElement("Disable", "chrsArea");
             fSetElement("Unhide", "books:div"); 
+            let dt = document.getElementById("titleIdInput");
+            dt.style.backgroundColor = "rgba(239,239,239, 0.3)";                                     // light grey color
 
             // show instructions in the message area on how to proceed .................................................
 
-            document.getElementById("books:stage").value = 'Nothing Fetched';
-            document.getElementById("submit:mssge").value = "Enter the Book ID and 'Submit' to fetch book to update";
-
-            //  enable the ID field and color light yellow as a required field .........................................
-
-            fSetElement("Clear", "books:titleId");
-
-            let dt = document.getElementById("books:titleId");
-            dt.disabled = false;
-            dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
+            document.getElementById("submit:mssge").value = "Change values in any editable fields and 'Submit'";
 
         } else if (sMode === 'delete') {
 
             //  disable all book fields except Book ID .................................................................
 
             fDisableModeButton("deleteButton");
-            fSetElement("Disable", "queryButton");
             document.getElementById("modeLabel").innerHTML = "delete mode";
 
             //  disable and unhide all book fields .....................................................................
 
-            fDisableBookFields("books:name", "books:author", "books:source", "books:series", "books:genre", "books:status", "books:clsfn", "books:rating", "books:start", "books:finish", "books:cmnts", "books:chrs");
-            fSetElement("Enable", "books:titleId");
+            fDisableBookFields("nameInput", "authorInput", "sourceInput", "seriesInput", "genreInput", "statusInput", "clsfnInput", "ratingInput", "startInput", "finishInput", "cmntsArea", "chrsArea");
+            fSetElement("Enable", "titleIdInput");
             fSetElement("Unhide", "books:div"); 
-            let dt = document.getElementById("books:titleId");
+            let dt = document.getElementById("titleIdInput");
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             
-            // clear the books:titleId field ...........................................................................
-
-            fSetElement("Clear", "books:titleId");
-
             // show instructions in the message area on how to proceed .................................................
 
             document.getElementById("submit:mssge").value = "Enter the Title ID and 'submit' to delete the book";
+
         }
 
     } else if (sTopic === "titles") {
@@ -423,8 +345,6 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "deleteButton");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "'Submit' to fetch titles (or set a filter, then 'Submit')";
-            fUnwrapAllText();
-
         }
 
     } else if (sTopic === "recents") {
@@ -447,7 +367,6 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "deleteButton");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
-            fUnwrapAllText();
         }
 
     } else if (sTopic === "unreads") {
@@ -471,7 +390,6 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "deleteButton");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
-            fUnwrapAllText();
         }
 
     } else if (sTopic === "characters") {
@@ -500,7 +418,6 @@ function fSetMode(sNewMode) {
             document.getElementById("chars:filter").disabled = false;
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Enter the Book ID and click 'Submit' to fetch " + sTopic + " for a book";
-            fUnwrapAllText();
 
             //  enable the Book ID field and color light yellow as a required field ....................................
 
@@ -597,10 +514,6 @@ function fSetMode(sNewMode) {
             fSetElement("Enable", "submit:submit");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch authors (or set a filter, then 'Submit')";
-            sInputFilter = "authors:filter";
-            sTextAreaResults = "authors:list";
-            fFetchTopicList(sInputFilter, sTextAreaResults);
-            fUnwrapAllText();
 
         } else if (sMode === "add") {
 
@@ -680,10 +593,6 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "class:updt-div");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch classification (or set a filter, then 'Submit')";
-            sTextAreaResults = "class:list";
-            sInputFilter = "class:filter";
-            fFetchTopicList(sInputFilter, sTextAreaResults);
-            fUnwrapAllText();
 
         } else if (sMode === "add") {
 
@@ -762,10 +671,6 @@ function fSetMode(sNewMode) {
             fSetElement("Enable", "submit:submit");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch ratings (or set a filter, then click 'Submit')";
-            sTextAreaResults = "ratings:list";
-            sInputFilter = "ratings:filter";
-            fFetchTopicList(sInputFilter, sTextAreaResults);
-            fUnwrapAllText();
 
         } else if (sMode === "add") {
 
@@ -845,10 +750,6 @@ function fSetMode(sNewMode) {
             fSetElement("Enable", "submit:submit");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch series (or set a filter, then 'Submit')";
-            sTextAreaResults = "series:list";
-            sInputFilter = "series:filter";
-            fFetchTopicList(sInputFilter, sTextAreaResults);
-            fUnwrapAllText();
 
         } else if (sMode === "add") {
 
@@ -930,10 +831,6 @@ function fSetMode(sNewMode) {
             fSetElement("Enable", "submit:submit");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
-            sTextAreaResults = "sources:list";
-            sInputFilter = "sources:filter";
-            fFetchTopicList(sInputFilter, sTextAreaResults);
-            fUnwrapAllText();
 
         } else if (sMode === "add") {
 
@@ -1016,10 +913,6 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "genres:filter-div");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then 'Submit')";
-            sTextAreaResults = "genres:list";
-            sInputFilter = "genres:filter";
-            fFetchTopicList(sInputFilter, sTextAreaResults);
-            fUnwrapAllText();
 
         } else if (sMode === "add") {
 
@@ -1101,10 +994,6 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "statuses:del-div");
             document.getElementById("modeLabel").innerHTML = "fetch mode";
             document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then 'Submit')";
-            sTextAreaResults = "statuses:list";
-            sInputFilter = "statuses:filter";
-            fFetchTopicList(sInputFilter, sTextAreaResults);
-            fUnwrapAllText();
 
         } else if (sMode === "add") {
 
@@ -1211,144 +1100,43 @@ async function fonclick_submit_submit() {
             sInputFilter = "statuses:filter";
         }
 
-        fFetchTopicList(sInputFilter, sTextAreaResults);
-
-    } else if ((sTopic === 'books') && sMode === "fetch") {
-
-        fPopulateLOV('authors');
-        fPopulateLOV('sources');
-        fPopulateLOV('series');
-        fPopulateLOV('genres');
-        fGetBookDetails();
-        document.getElementById("submit:mssge").value=sTopic.substring(0, 4) + " details fetched";
-        document.getElementById("books:stage").value = 'Book Fetch Submitted';
-        let w = document.getElementById("wrapButton");
-        w.disabled=false;
-    } else if ((sTopic === 'books') && sMode === "add") {
-        let sBookName = document.getElementById("books:name").value;
-        let sBookAuthorId = document.getElementById("books:authorId").value;
-        let sBookSourceId = document.getElementById("books:sourceId").value;
-        let sBookSeriesId = document.getElementById("books:seriesId").value;
-        let sBookGenreId = document.getElementById("books:genreId").value;
-        let sBookStatusId = document.getElementById("books:statusId").value;
-        let sBookClsfnId = document.getElementById("books:clsfnId").value;
-        let sBookRatingId = document.getElementById("books:ratingId").value;
-        let sBookStart = document.getElementById("books:start").value;
-        let sBookFinish = document.getElementById("books:finish").value;
-        let sBookCmnts = document.getElementById("books:cmnts").value;
-        let sRequest = uri37 + '?' + 'bookName=' + sBookName.replace(/'/g, "''") + 
-                               '&' + 'authorId=' + sBookAuthorId + 
-                               '&' + 'sourceId=' + sBookSourceId + 
-                               '&' + 'seriesId=' + sBookSeriesId + 
-                               '&' + 'genreId=' + sBookGenreId + 
-                               '&' + 'statusId=' + sBookStatusId + 
-                               '&' + 'clsfnId=' + sBookClsfnId + 
-                               '&' + 'ratingId=' + sBookRatingId + 
-                               '&' + 'startDte=' + sBookStart + 
-                               '&' + 'finishDte=' + sBookFinish + 
-                               '&' + 'cmnts=' + sBookCmnts.replace(/'/g, "''");
+        let sFilterEncoded = encodeURIComponent(document.getElementById(sInputFilter).value);
+        let sFilterEncoded1 = sFilterEncoded.replace(/'/g, "''");
+        let sRequest = uri01 + '?' + "action=" + document.getElementById("topic").value + '&filter=' + sFilterEncoded1;
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("books:titleId").value = text;
-            document.getElementById("submit:mssge").value = 'Book added';
-            fSetElement("Disable", "submit:submit");
-            fSetElement("Disable", "books:titleId");
-            fSetElement("Disable", "books:name");
-            fSetElement("Disable", "books:author");
-            fSetElement("Disable", "books:source");
-            fSetElement("Disable", "books:series");
-            fSetElement("Disable", "books:genre");
-            fSetElement("Disable", "books:status");
-            fSetElement("Disable", "books:clsfn");
-            fSetElement("Disable", "books:rating");
-            fSetElement("Disable", "books:start");
-            fSetElement("Disable", "books:finish");
-            fSetElement("Disable", "books:cmnts");
+            document.getElementById(sTextAreaResults).style.display="block";
+            document.getElementById(sTextAreaResults).value=text;
+            if (sTopic === "titles") {
+                document.getElementById("submit:mssge").value = "Titles fetched (including start/end dates and comments)";
+            } else if (sTopic === "recents") {
+                document.getElementById("submit:mssge").value = "Recents fetched (in descending start-date order)";
+            } else if (sTopic === "unreads") {
+                document.getElementById("submit:mssge").value = "Unreads fetched (in descending Title ID order)";
+            } else if (sTopic === "authors") {
+                document.getElementById("submit:mssge").value = "Authors fetched (including author rating out of 10)";
+            } else if (sTopic === "classifications") {
+                document.getElementById("submit:mssge").value = "Classifications fetched";
+            } else if (sTopic === "ratings") {
+                document.getElementById("submit:mssge").value = "Ratings fetched";
+            } else if (sTopic === "series") {
+                document.getElementById("submit:mssge").value = "Series fetched (including Author, rating and count of titles)";
+            } else if (sTopic === "sources") {
+                document.getElementById("submit:mssge").value = "Sources fetched";
+            } else if (sTopic === "genres") {
+                document.getElementById("submit:mssge").value = "Genres fetched";
+            } else if (sTopic === "statuses") {
+                document.getElementById("submit:mssge").value = "Statuses fetched";
+            } else {
+                document.getElementById("submit:mssge").value=sTopic + " fetched";
+            }
         } else {
             alert("HttpError: " + response.status);
         }
-    } else if ((sTopic === 'books') && sMode === "update" && document.getElementById("books:stage").value == 'Nothing Fetched') {
-
-        fPopulateLOV('authors');
-        fPopulateLOV('sources');
-        fPopulateLOV('series');
-        fPopulateLOV('genres');
-        fSetElement("Disable", "books:titleId");
+    } else if ((sTopic === 'books') && sMode === "fetch") {
         fGetBookDetails();
-        document.getElementById("books:stage").value = 'Book Fetch Submitted';
-        document.getElementById("submit:mssge").value=sTopic.substring(0, 4) + " details fetched so make updates and submit";
-        fSetElement("Disable", "books:stage");
-        fSetElement("Disable", "books:titleId");
-        fSetElement("Enable", "books:name");
-        fSetElement("Enable", "books:author");
-        fSetElement("Enable", "books:source");
-        fSetElement("Enable", "books:series");
-        fSetElement("Enable", "books:genre");
-        fSetElement("Enable", "books:status");
-        fSetElement("Enable", "books:clsfn");
-        fSetElement("Enable", "books:rating");
-        fSetElement("Enable", "books:start");
-        fSetElement("Enable", "books:finish");
-        fSetElement("Enable", "books:cmnts");
-
-    } else if ((sTopic === 'books') && sMode === "update" && document.getElementById("books:stage").value == 'Book Fetch Submitted') {
-
-        let sBookId = document.getElementById("books:titleId").value;
-        let sBookName = document.getElementById("books:name").value;
-        let sBookAuthorId = document.getElementById("books:authorId").value;
-        let sBookSourceId = document.getElementById("books:sourceId").value;
-        let sBookSeriesId = document.getElementById("books:seriesId").value;
-        let sBookGenreId = document.getElementById("books:genreId").value;
-        let sBookStatusId = document.getElementById("books:statusId").value;
-        let sBookClsfnId = document.getElementById("books:clsfnId").value;
-        let sBookRatingId = document.getElementById("books:ratingId").value;
-        let sBookStart = document.getElementById("books:start").value;
-        let sBookFinish = document.getElementById("books:finish").value;
-        let sBookCmnts = document.getElementById("books:cmnts").value;
-        let sRequest = uri39 + '?' + 'bookId=' + sBookId + 
-                               '&' + 'bookName=' + sBookName.replace(/'/g, "''") + 
-                               '&' + 'authorId=' + sBookAuthorId + 
-                               '&' + 'sourceId=' + sBookSourceId + 
-                               '&' + 'seriesId=' + sBookSeriesId + 
-                               '&' + 'genreId=' + sBookGenreId + 
-                               '&' + 'statusId=' + sBookStatusId + 
-                               '&' + 'clsfnId=' + sBookClsfnId + 
-                               '&' + 'ratingId=' + sBookRatingId + 
-                               '&' + 'startDte=' + sBookStart + 
-                               '&' + 'finishDte=' + sBookFinish + 
-                               '&' + 'cmnts=' + sBookCmnts.replace(/'/g, "''");
-        let response = await fetch(sRequest);
-        if (response.ok) {
-            let text = await response.text();
-            document.getElementById("books:titleId").value = text;
-            document.getElementById("submit:mssge").value = 'Book added';
-            fSetElement("Disable", "books:stage");
-            fSetElement("Disable", "books:titleId");
-            fSetElement("Disable", "books:name");
-            fSetElement("Disable", "books:author");
-            fSetElement("Disable", "books:source");
-            fSetElement("Disable", "books:series");
-            fSetElement("Disable", "books:genre");
-            fSetElement("Disable", "books:status");
-            fSetElement("Disable", "books:clsfn");
-            fSetElement("Disable", "books:rating");
-            fSetElement("Disable", "books:start");
-            fSetElement("Disable", "books:finish");
-            fSetElement("Disable", "books:cmnts");
-            document.getElementById("submit:mssge").value = " Book Updated";
-        }
-    } else if ((sTopic === 'books') && sMode === "delete") {
-
-            let sTitleID = document.getElementById("books:titleId").value;
-            let sRequest = uri38 + '?' + "titleID=" + sTitleID;
-            let response = await fetch(sRequest);
-            if (response.ok) {
-                let text = await response.text();
-                document.getElementById("submit:mssge").value = text;
-            } else {
-                alert("HttpError: " + response.status);
-            }
+        document.getElementById("submit:mssge").value=sTopic.substring(0, 4) + " details fetched";
     } else if ((sTopic === 'characters') && sMode === "fetch") {
         let iTitleID = document.getElementById("chars:book-id").value;
         let sTitleName = await fGetBookTitle(iTitleID);
@@ -1403,7 +1191,6 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
             document.getElementById("authors:add-name").value = '';
-            fPopulateLOV('authors');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1417,7 +1204,6 @@ async function fonclick_submit_submit() {
             document.getElementById("submit:mssge").value = text;
             document.getElementById("authors:updtd-name").value = '';
             document.getElementById("authors:updtd-name").style.backgroundColor = "rgb(255,255,255)";           // white
-            fPopulateLOV('authors');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1428,7 +1214,6 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
-            fPopulateLOV('authors');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1441,7 +1226,6 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
             document.getElementById("class:add-name").value = '';
-            fPopulateLOV('classifications');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1455,7 +1239,6 @@ async function fonclick_submit_submit() {
             document.getElementById("submit:mssge").value = text;
             document.getElementById("class:updtd-name").value = '';
             document.getElementById("class:updtd-name").style.backgroundColor = "rgb(255,255,255)";             // white
-            fPopulateLOV('classifications');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1466,7 +1249,6 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
-            fPopulateLOV('classifications');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1479,7 +1261,6 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
             document.getElementById("ratings:add-name").value = '';
-            fPopulateLOV('ratings');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1493,7 +1274,6 @@ async function fonclick_submit_submit() {
             document.getElementById("submit:mssge").value = text;
             document.getElementById("ratings:updtd-name").value = '';
             document.getElementById("ratings:updtd-name").style.backgroundColor = "rgb(255,255,255)";           // white
-            fPopulateLOV('ratings');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1504,7 +1284,6 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
-            fPopulateLOV('ratings');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1517,7 +1296,6 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
             document.getElementById("series:add-name").value = '';
-            fPopulateLOV('series');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1531,7 +1309,6 @@ async function fonclick_submit_submit() {
             document.getElementById("submit:mssge").value = text;
             document.getElementById("series:updtd-name").value = '';
             document.getElementById("series:updtd-name").style.backgroundColor = "rgb(255,255,255)";            // white
-            fPopulateLOV('series');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1542,7 +1319,6 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
-            fPopulateLOV('series');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1555,7 +1331,6 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
             document.getElementById("sources:add-name").value = '';
-            fPopulateLOV('sources');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1569,7 +1344,6 @@ async function fonclick_submit_submit() {
             document.getElementById("submit:mssge").value = text;
             document.getElementById("sources:updtd-name").value = '';
             document.getElementById("sources:updtd-name").style.backgroundColor = "rgb(255,255,255)";           // white
-            fPopulateLOV('sources');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1580,7 +1354,6 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
-            fPopulateLOV('sources');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1593,7 +1366,6 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
             document.getElementById("genres:add-name").value = '';
-            fPopulateLOV('genres');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1606,7 +1378,7 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
             document.getElementById("genres:updtd-name").value = '';
-            pdocument.getElementById("genres:updtd-name").style.backgroundColor = "rgb(255,255,255)";            // white
+            document.getElementById("genres:updtd-name").style.backgroundColor = "rgb(255,255,255)";            // white
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1617,7 +1389,6 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
-            fPopulateLOV('genres');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1630,7 +1401,6 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
             document.getElementById("statuses:add-name").value = '';
-            fPopulateLOV('statuses');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1644,7 +1414,6 @@ async function fonclick_submit_submit() {
             document.getElementById("submit:mssge").value = text;
             document.getElementById("statuses:updtd-name").value = '';
             document.getElementById("statuses:updtd-name").style.backgroundColor = "rgb(255,255,255)";            // white
-            fPopulateLOV('statuses');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1655,7 +1424,6 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("submit:mssge").value = text;
-            fPopulateLOV('statuses');
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1666,7 +1434,7 @@ async function fonclick_submit_submit() {
 
 async function fonclick_chars_vldt_bk_id() {
 
-    // validate the title matching a book ID and set a Fetch filter or Add Character field .............................
+    // fetch to fetch the title matching a book ID .....................................................................
 
     let iTitleId = document.getElementById("chars:book-id").value;
     let sRequest = uri11 + '?' + 'TitleID=' + iTitleId;
@@ -1677,23 +1445,13 @@ async function fonclick_chars_vldt_bk_id() {
         document.getElementById("chars:book-title").value = text;
         if (text === "No title found") {
             document.getElementById("submit:mssge").value = "No book exists for this Title ID";
-        } else if (document.getElementById("modeLabel").innerHTML == "fetch mode") {
-            fSetElement("Hide", "chars:add-div");
-            fSetElement("Enable", "submit:submit");
-            fSetElement("Enable", "chars:filter");
-            fSetElement("Enable", "chars:add-name");
-            fSetElement("Unhide", "chars:filter-div");
-            document.getElementById("submit:mssge").value = "Enter a character filter (optional) and 'submit'";
-            let w = document.getElementById("wrapButton");
-            w.disabled=false;
-            fonclick_submit_submit();
-        } else if (document.getElementById("modeLabel").innerHTML == "add mode") {
+        } else {
             fSetElement("Unhide", "chars:add-div");
             fSetElement("Enable", "submit:submit");
             fSetElement("Enable", "chars:filter");
             fSetElement("Enable", "chars:add-name");
             fSetElement("Hide", "chars:filter-div");
-            document.getElementById("submit:mssge").value = "Enter a character filter (optional) and 'submit'";
+            document.getElementById("submit:mssge").value = "Enter a new character and 'submit'";
         }
     } else {
         alert("HttpError: " + response.status);
@@ -1738,43 +1496,31 @@ async function fGetBookDetails() {
     let arrayFields = [];
     let newtext = '';
     fClearBookDivElements();
-    let sRequest = uri02 + '?' + 'TitleID=' + document.getElementById("books:titleId").value;
+    let sRequest = uri02 + '?' + 'TitleID=' + document.getElementById("titleIdInput").value;
     let response = await fetch(sRequest);
     if (response.ok) {
         let text = await response.text();
         arrayRows = text.split('\n');
         arrayFields = arrayRows[1].split('&');
         if (arrayFields[1] != undefined) {
-            document.getElementById("books:name").value = arrayFields[1];
-            document.getElementById("books:authorId").value = arrayFields[2];
-            document.getElementById("books:author").value = arrayFields[3];
-            document.getElementById("books:sourceId").value = arrayFields[4];
-            document.getElementById("books:source").value = arrayFields[5];
-            document.getElementById("books:seriesId").value = arrayFields[6];
-            document.getElementById("books:series").value = arrayFields[7];
-            document.getElementById("books:statusId").value = arrayFields[8];
-            document.getElementById("books:status").value = arrayFields[9];
-            document.getElementById("books:genreId").value = arrayFields[10];
-            document.getElementById("books:genre").value = arrayFields[11];
-            document.getElementById("books:clsfnId").value = arrayFields[12];
-            document.getElementById("books:clsfn").value = arrayFields[13];
-            document.getElementById("books:ratingId").value = arrayFields[14];
-            document.getElementById("books:rating").value = arrayFields[15];
-            if (arrayFields(15) != "(null)") {                                           // set the start date empty if (null)
-                document.getElementById("books:start").value = arrayFields[16];
-            } else {
-                document.getElementById("books:start").value = "";
-            }
-            if (arrayFields[17] != "(null)") {                                           // set the finish date empty if (null)
-                document.getElementById("books:finish").value = arrayFields[17];
-            } else {
-                document.getElementById("books:finish").value = "";
-            }
-            if (arrayFields[18] != "(null)") {                                           // set comments empty if (nullL
-                document.getElementById("books:cmnts").value = arrayFields[18];
-            } else {
-                document.getElementById("books:cmnts").value = "";
-            }
+            document.getElementById("nameInput").value = arrayFields[1];
+            document.getElementById("authorIdInput").value = arrayFields[2];
+            document.getElementById("authorInput").value = arrayFields[3];
+            document.getElementById("sourceIdInput").value = arrayFields[4];
+            document.getElementById("sourceInput").value = arrayFields[5];
+            document.getElementById("seriesIdInput").value = arrayFields[6];
+            document.getElementById("seriesInput").value = arrayFields[7];
+            document.getElementById("statusIdInput").value = arrayFields[8];
+            document.getElementById("statusInput").value = arrayFields[9];
+            document.getElementById("genreIdInput").value = arrayFields[10];
+            document.getElementById("genreInput").value = arrayFields[11];
+            document.getElementById("clsfnIdInput").value = arrayFields[12];
+            document.getElementById("clsfnInput").value = arrayFields[13];
+            document.getElementById("ratingIdInput").value = arrayFields[14];
+            document.getElementById("ratingInput").value = arrayFields[15];
+            document.getElementById("startInput").value = arrayFields[16];
+            document.getElementById("finishInput").value = arrayFields[17];
+            document.getElementById("cmntsArea").value = arrayFields[18];
         } else {
             document.getElementById("submit:mssge").value = "No matching book found for this title ID";
         }
@@ -1790,7 +1536,7 @@ async function fGetBookCharacters() {
 
     let arrayCharacters = [];
     let sNewText = '';
-    let sRequest = uri03 + '?' + 'TitleID=' + document.getElementById("books:titleId").value + "&Filter=";
+    let sRequest = uri03 + '?' + 'TitleID=' + document.getElementById("titleIdInput").value + "&Filter=''";
     let response = await fetch(sRequest);
     if (response.ok) {
         let text = await response.text();
@@ -1803,7 +1549,7 @@ async function fGetBookCharacters() {
             }
         }
 
-         document.getElementById("books:chrs").value = sNewText;
+         document.getElementById("chrsArea").value = sNewText;
 
     } else {
         alert("HttpError: " + response.status);
@@ -1816,7 +1562,7 @@ async function fGetBookCharacters2() {
 
     let arrayCharacters = [];
     let sNewText = '';
-    let sRequest = uri03 + '?' + 'TitleID=' + document.getElementById("chars:book-id").value + '&Filter=' + (document.getElementById("chars:filter").value).replace(/'/g, "''");
+    let sRequest = uri03 + '?' + 'TitleID=' + document.getElementById("chars:book-id").value + '&Filter=' + document.getElementById("chars:filter").value;
     let response = await fetch(sRequest);
     if (response.ok) {
         let text = await response.text();
@@ -1853,148 +1599,26 @@ async function fGetBookTitle(iTitleID) {
 
 // function to set wrap on textarea ....................................................................................
 
-function fWrapText() {
-    let r1 = document.getElementById("titles:list");
-    let r2 = document.getElementById("recents:list");
-    let r3 = document.getElementById("chars:list");
-    let r4 = document.getElementById("authors:list");
-    let r5 = document.getElementById("class:list");
-    let r6 = document.getElementById("ratings:list");
-    let r7 = document.getElementById("series:list");
-    let r8 = document.getElementById("sources:list");
-    let r9 = document.getElementById("genres:list");
-    let ra = document.getElementById("statuses:list");
-    let rb = document.getElementById("unreads:list");
-    let rc = document.getElementById("books:chrs");
-    let w = document.getElementById("wrapButton");
-    if((r1.style.whiteSpace == "pre") && (sTopic == "titles")) {
-        r1.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r1.style.whitespace != "pre") && (sTopic == "titles")) {
-        r1.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
+async function fWrapText() {
+    let r = document.getElementById("resultsArea");
+    if(r.wrap != "off") {
+        r.wrap = "off";
+    } else {
+       r.wrap = "on";
     }
-    if((r2.style.whiteSpace == "pre") && (sTopic == "recents")) {
-        r2.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r2.style.whitespace != "pre") && (sTopic == "recents")) {
-        r2.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((r3.style.whiteSpace == "pre") && (sTopic == "characters")) {
-        r3.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r3.style.whiteSpace != "pre") && (sTopic == "characters")) {
-        r3.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((r4.style.whiteSpace == "pre") && (sTopic == "authors")) {
-        r4.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r4.style.whiteSpace != "pre") && (sTopic == "authors")) {
-        r4.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((r5.style.whiteSpace == "pre") && (sTopic == "classifications")) {
-        r5.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r5.style.whiteSpace != "pre") && (sTopic == "classifications")) {
-        r5.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((r6.style.whiteSpace == "pre") && (sTopic == "ratings")) {
-        r6.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r6.style.whiteSpace != "pre") && (sTopic == "ratings")) {
-        r6.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((r7.style.whiteSpace == "pre") && (sTopic == "series")) {
-        r7.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r7.style.whiteSpace != "pre") && (sTopic == "series")) {
-        r7.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((r8.style.whiteSpace == "pre") && (sTopic == "sources")) {
-        r8.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r8.style.whiteSpace != "pre") && (sTopic == "sources")) {
-        r8.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((r9.style.whiteSpace == "pre") && (sTopic == "genres")) {
-        r9.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((r9.style.whiteSpace != "pre") && (sTopic == "genres")) {
-        r9.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((ra.style.whiteSpace == "pre") && (sTopic == "statuses")) {
-        ra.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((ra.style.whiteSpace != "pre") && (sTopic == "statuses")) {
-        ra.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((rb.style.whiteSpace == "pre") && (sTopic == "unreads")) {
-        rb.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((rb.style.whiteSpace != "pre") && (sTopic == "unreads")) {
-        rb.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-    if((rc.style.whiteSpace == "pre") && (sTopic == "books")) {
-        rc.style.whiteSpace = "pre-wrap";
-        w.innerHTML = "Unwrap";
-    } else if ((rc.style.whiteSpace != "pre") && (sTopic == "books")) {
-        rc.style.whiteSpace = "pre";
-        w.innerHTML = "Wrap";
-    }
-}
-
-//    function to set wrap off on all textareas
-
-function fUnwrapAllText() {
-    let r1 = document.getElementById("titles:list");
-    let r2 = document.getElementById("recents:list");
-    let r3 = document.getElementById("chars:list");
-    let r4 = document.getElementById("authors:list");
-    let r5 = document.getElementById("class:list");
-    let r6 = document.getElementById("ratings:list");
-    let r7 = document.getElementById("series:list");
-    let r8 = document.getElementById("sources:list");
-    let r9 = document.getElementById("genres:list");
-    let ra = document.getElementById("statuses:list");
-    let rb = document.getElementById("unreads:list");
-    let rc = document.getElementById("books:chrs");
-    let w = document.getElementById("wrapButton");
-    r1.style.whiteSpace = "pre";
-    r2.style.whiteSpace = "pre";
-    r3.style.whiteSpace = "pre";
-    r4.style.whiteSpace = "pre";
-    r5.style.whiteSpace = "pre";
-    r6.style.whiteSpace = "pre";
-    r7.style.whiteSpace = "pre";
-    r8.style.whiteSpace = "pre";
-    r9.style.whiteSpace = "pre";
-    ra.style.whiteSpace = "pre";
-    rb.style.whiteSpace = "pre";
-    rc.style.whiteSpace = "pre";
-    w.innerHTML = "Wrap";
 }
 
 // function to validate Title ID entered before fetching a book record .................................................
 
-function fEnableSubmitButton01(titleId) {
+function fEnableSubmitButton01(TitleIdInput) {
 
-    TID = document.getElementById(titleId);
+    TID = document.getElementById(TitleIdInput);
 
     let iTitleId = TID.value;
 
     if (iTitleId === '') {
         fSetElement("Disable", "submit:submit");
-        let dt1 = document.getElementById("books:titleId");
+        let dt1 = document.getElementById("titleIdInput");
         dt1.style.backgroundColor = "rgb(255,255,224)";                                            // light yellow color
         let dt2 = document.getElementById("chars:book-id");
         dt2.style.backgroundColor = "rgb(255,255,224)";                                            // light yellow color
@@ -2161,6 +1785,34 @@ function fonKeyUp_chars_del_id() {
     }
 }
 
+// function to fetch author results from the server when Validate author is clicked ....................................
+
+async function fonclick_author_vldt_id() {
+
+    // fetch the author name matching a author ID
+
+    let iAuthorId = document.getElementById("authors:updt-id").value;
+    let sRequest = uri35 + '?' + 'authorID=' + iAuthorId;
+    let response = await fetch(sRequest);
+    document.getElementById("authors:updtd-name").value = '';
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("authors:updt-name").value = text;
+        if (text === "No authors found") {
+            document.getElementById("submit:mssge").value = "No author exists for this Author ID";
+            fSetElement("Disable", "authors:updtd-name");
+        } else {
+            fSetElement("Enable", "authors:updtd-name");
+            document.getElementById("authors:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+            document.getElementById("authors:updtd-name").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the changed Author Name and 'submit'";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
+}
+
 // function to enable the submit button when a changed author is entered ...............................................
 
 function fonKeyUp_author_updtd_name() {
@@ -2191,6 +1843,34 @@ function fonKeyUp_author_del_id() {
     }
 }
 
+// function to fetch classification results from the server when Validate classification is clicked ....................
+
+async function fonclick_class_vldt_id() {
+
+    // fetch the class name matching a class ID ........................................................................
+
+    let iClassId = document.getElementById("class:updt-id").value;
+    let sRequest = uri33 + '?' + 'classID=' + iClassId;
+    let response = await fetch(sRequest);
+    document.getElementById("class:updtd-name").value = '';
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("class:updt-name").value = text;
+        if (text === "No classification found") {
+            document.getElementById("submit:mssge").value = "No classification exists for this classification ID";
+            fSetElement("Disable", "class:updtd-name");
+        } else {
+            fSetElement("Enable", "class:updtd-name");
+            document.getElementById("class:updtd-name").style.backgroundColor = "rgb(255,255,224)";      // light yellow
+            document.getElementById("class:updtd-name").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the changed classification name and 'submit'";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
+}
+
 // function to enable the submit button if an entered classification ID is a valid format ..............................
 
 function fonKeyUp_class_del_id() {
@@ -2209,6 +1889,34 @@ function fonKeyUp_class_del_id() {
     }
 }
 
+// function to fetch rating results from the server when Validate rating is clicked ....................................
+
+async function fonclick_rating_vldt_id() {
+
+    // fetch the rating name matching a rating ID ......................................................................
+
+    let iRatingId = document.getElementById("ratings:updt-id").value;
+    let sRequest = uri31 + '?' + 'ratingID=' + iRatingId;
+    let response = await fetch(sRequest);
+    document.getElementById("ratings:updtd-name").value = '';
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("ratings:updt-name").value = text;
+        if (text === "No rating found") {
+            document.getElementById("submit:mssge").value = "No rating exists for this rating ID";
+            fSetElement("Disable", "ratings:updtd-name");
+        } else {
+            fSetElement("Enable", "ratings:updtd-name");
+            document.getElementById("ratings:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+            document.getElementById("ratings:updtd-name").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the changed rating name and 'submit'";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
+}
+
 // function to enable the submit button if an entered rating ID (for deletion) is a valid format .......................
 
 function fonKeyUp_ratings_del_id() {
@@ -2225,6 +1933,121 @@ function fonKeyUp_ratings_del_id() {
             document.getElementById("ratings:del-id").style.backgroundColor = "rgb(189,245,189)";          // pale green
         }
     }
+}
+
+// function to fetch series results from the server when Validate status is clicked ....................................
+
+async function fonclick_series_vldt_id() {
+
+    // fetch the series name matching a series ID ......................................................................
+
+    let iSeriesId = document.getElementById("series:updt-id").value;
+    let sRequest = uri29 + '?' + 'seriesID=' + iSeriesId;
+    let response = await fetch(sRequest);
+    document.getElementById("series:updtd-name").value = '';
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("series:updt-name").value = text;
+        if (text === "No series found") {
+            document.getElementById("submit:mssge").value = "No series exists for this series ID";
+            fSetElement("Disable", "series:updtd-name");
+        } else {
+            fSetElement("Enable", "series:updtd-name");
+            document.getElementById("series:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+            document.getElementById("series:updtd-name").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the changed series name and 'submit'";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
+}
+
+// function to fetch source results from the server when Validate status is clicked ....................................
+
+async function fonclick_sources_vldt_id() {
+
+    // fetch the source name matching a source ID ......................................................................
+
+    let iSourcesId = document.getElementById("sources:updt-id").value;
+    let sRequest = uri27 + '?' + 'sourceID=' + iSourceId;
+    let response = await fetch(sRequest);
+    document.getElementById("sources:updtd-name").value = '';
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("sources:updt-name").value = text;
+        fSetElement("Enable", "sources:updtd-name");
+        if (text === "No source found") {
+            document.getElementById("submit:mssge").value = "No source exists for this source ID";
+            fSetElement("Disable", "sources:updtd-name");
+        } else {
+            fSetElement("Enable", "sources:updtd-name");
+            document.getElementById("sources:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+            document.getElementById("sources:updtd-name").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the changed source name and 'submit'";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
+}
+
+// function to fetch results from the server when Validate status is clicked ...........................................
+
+async function fonclick_genres_vldt_id() {
+
+    // fetch the genre name matching a genre ID ........................................................................
+
+    let iGenresId = document.getElementById("genres:updt-id").value;
+    let sRequest = uri25 + '?' + 'genreID=' + iGenreId;
+    let response = await fetch(sRequest);
+    document.getElementById("genres:updtd-name").value = '';
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("genres:updt-name").value = text;
+        fSetElement("Enable", "genres:updtd-name");
+        if (text === "No genre found") {
+            document.getElementById("submit:mssge").value = "No genre exists for this genre ID";
+            fSetElement("Disable", "genres:updtd-name");
+        } else {
+            fSetElement("Enable", "genres:updtd-name");
+            document.getElementById("genres:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+            document.getElementById("genres:updtd-name").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the changed genre name and 'submit'";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
+}
+
+// function to fetch results from the server when Validate status is clicked ...........................................
+
+async function fonclick_status_vldt_id() {
+
+    // fetch to fetch the title matching a book ID
+
+    let iStatusId = document.getElementById("statuses:updt-id").value;
+    let sRequest = uri23 + '?' + 'statusID=' + iStatusId;
+    let response = await fetch(sRequest);
+    document.getElementById("statuses:updtd-name").value = '';
+    if (response.ok) {
+        let text = await response.text();
+        document.getElementById("statuses:updt-name").value = text;
+        fSetElement("Enable", "statuses:updtd-name");
+        if (text === "No status found") {
+            document.getElementById("submit:mssge").value = "No character exists for this Status ID";
+            fSetElement("Disable", "statuses:updtd-name");
+        } else {
+            fSetElement("Enable", "statuses:updtd-name");
+            document.getElementById("statuses:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+            document.getElementById("statuses:updtd-name").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the changed status name and 'submit'";
+        }
+    } else {
+        alert("HttpError: " + response.status);
+    }
+    return;
 }
 
 // function to enable the submit button if an entered series ID is a valid format ......................................
@@ -2375,11 +2198,11 @@ function fUnhideMultiple() {
 
 function fShowHelp() {
 
-    var x = document.getElementById("HELPDIV");
-    if (x.style.display === "") {
+    var x = document.getElementById("helpDiv");
+    if (x.style.display === "none") {
         x.style.display = "block";
     } else {
-        x.style.display = "";
+        x.style.display = "none";
     }
 }
 
@@ -2404,7 +2227,7 @@ function fClearPage() {
     for(let i = 0; i < arrayOfClears.length; i++) {
         fSetElement("Hide", arrayOfClears[i]);
     }
-    let h = document.getElementById("HELPDIV");
+    let h = document.getElementById("helpDiv");
     h.style.display="none"
     let w = document.getElementById("wrapButton");
     w.disabled=true;
@@ -2447,10 +2270,10 @@ function fEnableSubmitIfNotNull(sElementId) {
 
 function fClearBookDivElements() {
 
-    let arrayOfClears = ["books:name", "books:authorId", "books:author", "books:sourceId", "books:source"
-                       , "books:seriesId", "books:series" , "books:genreId", "books:genre", "books:statusId", "books:status"
-                       , "books:clsfnId", "books:clsfn", "books:ratingId", "books:rating", "books:start" , "books:finish"
-                       , "books:cmnts", "books:chrs"];
+    let arrayOfClears = ["nameInput", "authorIdInput", "authorInput", "sourceIdInput", "sourceInput"
+                       , "seriesIdInput", "seriesInput" , "genreIdInput", "genreInput", "statusIdInput", "statusInput"
+                       , "clsfnIdInput", "clsfnInput", "ratingIdInput", "ratingInput", "startInput" , "finishInput"
+                       , "cmntsArea", "chrsArea"];
     for(let i = 0; i < arrayOfClears.length; i++) {
         fSetElement("Clear", arrayOfClears[i]);
     }
@@ -2632,7 +2455,7 @@ function fonKeyUp_any_updt_id() {
     }
 }
 
-//    fonKeyUp_any_vldt_id() = validate an id for a single topic value and return the value
+// function to fetch author results from the server when Validate author is clicked ....................................
 
 async function fonclick_any_vldt_id() {
 
@@ -2656,7 +2479,7 @@ async function fonclick_any_vldt_id() {
         } else {
             alert("HttpError: " + response.status);
         }
-        return;
+    return;
     } else if ((document.getElementById("modeLabel").innerHTML === "update mode") && (document.getElementById("topic").value === "classifications")) {
         let iClassId = document.getElementById("class:updt-id").value;
         let sRequest = uri33 + '?' + 'classID=' + iClassId;
@@ -2677,7 +2500,7 @@ async function fonclick_any_vldt_id() {
         } else {
             alert("HttpError: " + response.status);
         }
-        return;
+    return;
     } else if ((document.getElementById("modeLabel").innerHTML === "update mode") && (document.getElementById("topic").value === "ratings")) {
         let iRatingId = document.getElementById("ratings:updt-id").value;
         let sRequest = uri31 + '?' + 'ratingID=' + iRatingId;
@@ -2698,455 +2521,7 @@ async function fonclick_any_vldt_id() {
         } else {
             alert("HttpError: " + response.status);
         }
-        return;
-    } else if ((document.getElementById("modeLabel").innerHTML === "update mode") && (document.getElementById("topic").value === "series")) {
-        let iSeriesId = document.getElementById("series:updt-id").value;
-        let sRequest = uri29 + '?' + 'seriesID=' + iSeriesId;
-        let response = await fetch(sRequest);
-        document.getElementById("series:updtd-name").value = '';
-        if (response.ok) {
-            let text = await response.text();
-            document.getElementById("series:updt-name").value = text;
-            if (text === "No series found") {
-                document.getElementById("submit:mssge").value = "No series exists for this series ID";
-                fSetElement("Disable", "series:updtd-name");
-            } else {
-                fSetElement("Enable", "series:updtd-name");
-                document.getElementById("series:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
-                document.getElementById("series:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit:mssge").value = "Enter the changed series name and 'submit'";
-            }
-        } else {
-            alert("HttpError: " + response.status);
-        }
-        return;
-    } else if ((document.getElementById("modeLabel").innerHTML === "update mode") && (document.getElementById("topic").value === "sources")) {
-        let iSourcesId = document.getElementById("sources:updt-id").value;
-        let sRequest = uri27 + '?' + 'sourceID=' + iSourceId;
-        let response = await fetch(sRequest);
-        document.getElementById("sources:updtd-name").value = '';
-        if (response.ok) {
-            let text = await response.text();
-            document.getElementById("sources:updt-name").value = text;
-            fSetElement("Enable", "sources:updtd-name");
-            if (text === "No source found") {
-                document.getElementById("submit:mssge").value = "No source exists for this source ID";
-                fSetElement("Disable", "sources:updtd-name");
-            } else {
-                fSetElement("Enable", "sources:updtd-name");
-                document.getElementById("sources:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
-                document.getElementById("sources:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit:mssge").value = "Enter the changed source name and 'submit'";
-            }
-        } else {
-            alert("HttpError: " + response.status);
-        }
-        return;
-    } else if ((document.getElementById("modeLabel").innerHTML === "update mode") && (document.getElementById("topic").value === "genres")) {
-        let iGenresId = document.getElementById("genres:updt-id").value;
-        let sRequest = uri25 + '?' + 'genreID=' + iGenreId;
-        let response = await fetch(sRequest);
-        document.getElementById("genres:updtd-name").value = '';
-        if (response.ok) {
-            let text = await response.text();
-            document.getElementById("genres:updt-name").value = text;
-            fSetElement("Enable", "genres:updtd-name");
-            if (text === "No genre found") {
-                document.getElementById("submit:mssge").value = "No genre exists for this genre ID";
-                fSetElement("Disable", "genres:updtd-name");
-            } else {
-                fSetElement("Enable", "genres:updtd-name");
-                document.getElementById("genres:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
-                document.getElementById("genres:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit:mssge").value = "Enter the changed genre name and 'submit'";
-            }
-        } else {
-            alert("HttpError: " + response.status);
-        }
-        return;
-    } else if ((document.getElementById("modeLabel").innerHTML === "update mode") && (document.getElementById("topic").value === "statuses")) {
-        let iStatusId = document.getElementById("statuses:updt-id").value;
-        let sRequest = uri23 + '?' + 'statusID=' + iStatusId;
-        let response = await fetch(sRequest);
-        document.getElementById("statuses:updtd-name").value = '';
-        if (response.ok) {
-            let text = await response.text();
-            document.getElementById("statuses:updt-name").value = text;
-            fSetElement("Enable", "statuses:updtd-name");
-            if (text === "No status found") {
-                document.getElementById("submit:mssge").value = "No character exists for this Status ID";
-                fSetElement("Disable", "statuses:updtd-name");
-            } else {
-                fSetElement("Enable", "statuses:updtd-name");
-                document.getElementById("statuses:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
-                document.getElementById("statuses:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit:mssge").value = "Enter the changed status name and 'submit'";
-            }
-        } else {
-            alert("HttpError: " + response.status);
-        }
-        return;
-    }
-}
-
-// function to fetch lists of values and populate the LOV's for Books
-
-async function fPopulateLOV(strAttribute) {
-
-    if (strAttribute == 'authors') {                                           // start procedure to populate authors
-
-        if (arrAuthorNames.length > 0) {
-            return;
-        }
-    
-        let text = '';                                                         // fetch the list of authors as lines of text
-        const uri01 = "http://www.risingfast.com/cgi-bin/bookFetchLOVs.cgi"
-        const sRequest = uri01 + '?' + 'topic=' + 'authors' + '&filter= ';
-        let response = await fetch(sRequest);
-        if (response.ok) {
-            text = await response.text();
-        } else {
-              alert("HttpError: " + response.status);
-        }
-    
-        arrAuthorNames = text.split("\n");                                     // split the author lines of text into a 2-dim array
-        const y = document.getElementById("books:author");
-        for (let i = 0; i < arrAuthorNames.length; i++) {
-            arrAuthorNames[i] = arrAuthorNames[i].split(",");
-        }
-    
-        arrAuthorNames.pop();
-    
-        for (let i = 0; i < arrAuthorNames.length; i++) {                      // add each author name to the list of author options in books
-            var option = document.createElement("option");
-            option.text = arrAuthorNames[i][1].trim();
-            y.add(option);
-        
-        }
-
-        return;
-
-    } else if (strAttribute == 'sources') {                                    // start procedure to populate sources
-
-        if (arrSourceNames.length > 0) {
-            return;
-        }
-    
-        let text = '';                                                         // fetch the list of sources as lines of text
-        const uri01 = "http://www.risingfast.com/cgi-bin/bookFetchLOVs.cgi"
-        const sRequest = uri01 + '?' + 'topic=' + 'sources' + '&filter= ';
-        let response = await fetch(sRequest);
-        if (response.ok) {
-            text = await response.text();
-        } else {
-              alert("HttpError: " + response.status);
-        }
-    
-        arrSourceNames = text.split("\n");                                     // split the source lines of text into a 2-dim array
-        const y = document.getElementById("books:source");
-        for (let i = 0; i < arrSourceNames.length; i++) {
-            arrSourceNames[i] = arrSourceNames[i].split(",");
-        }
-    
-        arrSourceNames.pop();
-    
-        for (let i = 0; i < arrSourceNames.length; i++) {                      // add each source to the list of source options in books
-            var option = document.createElement("option");
-            option.text = arrSourceNames[i][1].trim();
-            y.add(option);
-        
-        }
-
-    } else if (strAttribute == 'series') {                                     // start procedure to populate series
-
-        if (arrSeriesNames.length > 0) {
-            return;
-        }
-    
-        let text = '';                                                         // fetch the list of series as lines of text
-        const uri01 = "http://www.risingfast.com/cgi-bin/bookFetchLOVs.cgi"
-        const sRequest = uri01 + '?' + 'topic=' + 'series' + '&filter= ';
-        let response = await fetch(sRequest);
-        if (response.ok) {
-            text = await response.text();
-        } else {
-              alert("HttpError: " + response.status);
-        }
-    
-        arrSeriesNames = text.split("\n");                                     // split the series lines of text into a 2-dim array
-        const y = document.getElementById("books:series");
-        for (let i = 0; i < arrSeriesNames.length; i++) {
-            arrSeriesNames[i] = arrSeriesNames[i].split(",");
-        }
-    
-        arrSeriesNames.pop();
-    
-        for (let i = 0; i < arrSeriesNames.length; i++) {                      // add each series to the list of series options in books
-            var option = document.createElement("option");
-            option.text = arrSeriesNames[i][1].trim();
-            y.add(option);
-        
-        }
-
-    } else if (strAttribute == 'genres') {                                     // start procedure to populate genres
-
-        if (arrGenreNames.length > 0) {
-            return;
-        }
-    
-        let text = '';                                                         // fetch the list of genres as lines of text
-        const uri01 = "http://www.risingfast.com/cgi-bin/bookFetchLOVs.cgi"
-        const sRequest = uri01 + '?' + 'topic=' + 'genres' + '&filter= ';
-        let response = await fetch(sRequest);
-        if (response.ok) {
-            text = await response.text();
-        } else {
-              alert("HttpError: " + response.status);
-        }
-    
-        arrGenreNames = text.split("\n");                                      // split the genre lines into a 2-dim array
-        const y = document.getElementById("books:genre");
-        for (let i = 0; i < arrGenreNames.length; i++) {
-            arrGenreNames[i] = arrGenreNames[i].split(",");
-        }
-    
-        arrGenreNames.pop();
-    
-        for (let i = 0; i < arrGenreNames.length; i++) {                       // add each genre to the list of genre options in books
-            var option = document.createElement("option");
-            option.text = arrGenreNames[i][1].trim();
-            y.add(option);
-        
-        }
-
-    } else if (strAttribute == 'statuses') {                                   // start the procedure to populate statuses
-
-        if (arrStatusNames.length > 0) {
-            return;
-        }
-    
-        let text = '';                                                         // fetch the list of statuses as lines of text
-        const uri01 = "http://www.risingfast.com/cgi-bin/bookFetchLOVs.cgi"
-        const sRequest = uri01 + '?' + 'topic=' + 'statuses' + '&filter= ';
-        let response = await fetch(sRequest);
-        if (response.ok) {
-            text = await response.text();
-        } else {
-              alert("HttpError: " + response.status);
-        }
-    
-        arrStatusNames = text.split("\n");                                     // split the status lines into a 2-dim array
-        const y = document.getElementById("books:status");
-        for (let i = 0; i < arrStatusNames.length; i++) {
-            arrStatusNames[i] = arrStatusNames[i].split(",");
-        }
-    
-        arrStatusNames.pop();
-    
-        for (let i = 0; i < arrStatusNames.length; i++) {                      // add each status to the list of status options in books
-            var option = document.createElement("option");
-            option.text = arrStatusNames[i][1].trim();
-            y.add(option);
-        
-        }
-
-    } else if (strAttribute == 'classifications') {                            // start the procedure to populate classifications
-
-        if (arrClassificationNames.length > 0) {
-            return;
-        }
-    
-        let text = '';                                                         // fetch the list of classifications as lines of text
-        const uri01 = "http://www.risingfast.com/cgi-bin/bookFetchLOVs.cgi"
-        const sRequest = uri01 + '?' + 'topic=' + 'classifications' + '&filter= ';
-        let response = await fetch(sRequest);
-        if (response.ok) {
-            text = await response.text();
-        } else {
-              alert("HttpError: " + response.status);
-        }
-    
-        arrClassificationNames = text.split("\n");                             // split the classification list into a 2-dim array
-        const y = document.getElementById("books:clsfn");
-        for (let i = 0; i < arrClassificationNames.length; i++) {
-            arrClassificationNames[i] = arrClassificationNames[i].split(",");
-        }
-    
-        arrClassificationNames.pop();
-    
-        for (let i = 0; i < arrClassificationNames.length; i++) {              // add each classification to the list of classification options in books
-            var option = document.createElement("option");
-            option.text = arrClassificationNames[i][1].trim();
-            y.add(option);
-        
-        }
-
-    } else if (strAttribute == 'ratings') {                                    // start the procedure to populate ratings
-
-        if (arrRatingNames.length > 0) {
-            return;
-        }
-    
-        let text = '';                                                         // fetch the list of ratings as lines of text
-        const uri01 = "http://www.risingfast.com/cgi-bin/bookFetchLOVs.cgi"
-        const sRequest = uri01 + '?' + 'topic=' + 'ratings' + '&filter= ';
-        let response = await fetch(sRequest);
-        if (response.ok) {
-            text = await response.text();
-        } else {
-              alert("HttpError: " + response.status);
-        }
-    
-        arrRatingNames = text.split("\n");                                     // split the ratings list into a 2-dim array
-        const y = document.getElementById("books:rating");
-        for (let i = 0; i < arrRatingNames.length; i++) {
-            arrRatingNames[i] = arrRatingNames[i].split(",");
-        }
-    
-        arrRatingNames.pop();
-    
-        for (let i = 0; i < arrRatingNames.length; i++) {                      // add each rating to the list of rating options in books
-            var option = document.createElement("option");
-            option.text = arrRatingNames[i][1].trim();
-            y.add(option);
-        
-        }
-    }
-
     return;
-}
-
-function fPopulateLOVId(strAttribute) {
-
-    if (strAttribute == 'authors') {
-
-        for (let i = 0; i < arrAuthorNames.length; i++) {
-
-            if (arrAuthorNames[i][1] == document.getElementById("books:author").value) 
-            {
-                document.getElementById("books:authorId").value = arrAuthorNames[i][0].trim();
-                break;
-            }
-        }
-
-    } else if (strAttribute == 'sources') {
-
-        for (let i = 0; i < arrSourceNames.length; i++) {
-
-            if (arrSourceNames[i][1] == document.getElementById("books:source").value) 
-            {
-                document.getElementById("books:sourceId").value = arrSourceNames[i][0].trim();
-                break;
-            }
-        }
-
-    } else if (strAttribute == 'series') {
-
-        for (let i = 0; i < arrSeriesNames.length; i++) {
-
-            if (arrSeriesNames[i][1] == document.getElementById("books:series").value) 
-            {
-                document.getElementById("books:seriesId").value = arrSeriesNames[i][0].trim();
-                break;
-            }
-        }
-
-    } else if (strAttribute == 'genres') {
-
-        for (let i = 0; i < arrGenreNames.length; i++) {
-
-            if (arrGenreNames[i][1] == document.getElementById("books:genre").value) 
-            {
-                document.getElementById("books:genreId").value = arrGenreNames[i][0].trim();
-                break;
-            }
-        }
-
-    } else if (strAttribute == 'statuses') {
-
-        for (let i = 0; i < arrStatusNames.length; i++) {
-
-            if (arrStatusNames[i][1] == document.getElementById("books:status").value) 
-            {
-                document.getElementById("books:statusId").value = arrStatusNames[i][0].trim();
-                break;
-            }
-        }
-
-    } else if (strAttribute == 'classifications') {
-
-        for (let i = 0; i < arrClassificationNames.length; i++) {
-
-            if (arrClassificationNames[i][1] == document.getElementById("books:clsfn").value) 
-            {
-                document.getElementById("books:clsfnId").value = arrClassificationNames[i][0].trim();
-                break;
-            }
-        }
-
-    } else if (strAttribute == 'ratings') {
-
-        for (let i = 0; i < arrRatingNames.length; i++) {
-
-            if (arrRatingNames[i][1] == document.getElementById("books:rating").value) 
-            {
-                document.getElementById("books:ratingId").value = arrRatingNames[i][0].trim();
-                break;
-            }
-        }
-
-    }
-
-    return;
-}
-
-async function fFetchTopicList(sInputFilter, sTextAreaResults) {
-    let tempText = [];
-    let row = []
-    let sFilterEncoded = encodeURIComponent(document.getElementById(sInputFilter).value);
-    let sFilterEncoded1 = sFilterEncoded.replace(/'/g, "''");
-    let sRequest = uri01 + '?' + "topic=" + document.getElementById("topic").value + '&filter=' + sFilterEncoded1;
-    let response = await fetch(sRequest);
-    if (response.ok) {
-        let text = await response.text();
-        if (sTopic == "authors") {
-            tempText = text.split('\n');
-            text = '';
-            for (let i = 0; i < tempText.length - 1; i++) {
-                row = tempText[i].split(',');
-                text = text + row[0] + ', ' + row[1] + ", " + row[2] + '\n';
-            }
-        }
-        document.getElementById(sTextAreaResults).style.display="block";
-        document.getElementById(sTextAreaResults).value=text;
-
-        let w = document.getElementById("wrapButton");
-        w.disabled=false;
-
-        if (sTopic === "titles") {
-            document.getElementById("submit:mssge").value = "Titles fetched (including start/end dates and comments)";
-        } else if (sTopic === "recents") {
-            document.getElementById("submit:mssge").value = "Recents fetched (in descending start-date order)";
-        } else if (sTopic === "unreads") {
-            document.getElementById("submit:mssge").value = "Unreads fetched (in descending Title ID order)";
-        } else if (sTopic === "authors") {
-            document.getElementById("submit:mssge").value = "Authors fetched (including author rating out of 10)";
-        } else if (sTopic === "classifications") {
-            document.getElementById("submit:mssge").value = "Classifications fetched";
-        } else if (sTopic === "ratings") {
-            document.getElementById("submit:mssge").value = "Ratings fetched";
-        } else if (sTopic === "series") {
-            document.getElementById("submit:mssge").value = "Series fetched (including Author, rating and count of titles)";
-        } else if (sTopic === "sources") {
-            document.getElementById("submit:mssge").value = "Sources fetched";
-        } else if (sTopic === "genres") {
-            document.getElementById("submit:mssge").value = "Genres fetched";
-        } else if (sTopic === "statuses") {
-            document.getElementById("submit:mssge").value = "Statuses fetched";
-        } else {
-            document.getElementById("submit:mssge").value=sTopic + " fetched";
-        }
-    } else {
-        alert("HttpError: " + response.status);
     }
 }
+

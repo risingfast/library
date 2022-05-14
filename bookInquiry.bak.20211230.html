@@ -64,19 +64,6 @@
 <!--    27-Dec-2021 - fix add character bug                                                                          -->
 <!--    27-Dec-2021 - escape ' in additions                                                                          -->
 <!--    27-Dec-2021 - escape ' in updates                                                                            -->
-<!--    02-Jan-2022 - fix character filter                                                                           -->
-<!--    02-Jan-2022 - implement attribute LOV's                                                                      -->
-<!--    07-Jan-2022 - add book                                                                                       -->
-<!--    10-Jan-2022 - protect ' character adding a book                                                              -->
-<!--    11-Jan-2022 - rename books div elements                                                                      -->
-<!--    11-Jan-2022 - implement delete                                                                               -->
-<!--    05-May-2022 - remove <SECTION></SECTION> tags on validation                                                  -->
-<!--    05-May-2022 - remove </INPUT> tags on validation                                                             -->
-<!--    05-May-2022 - remove float:left property form textareas                                                      -->
-<!--    05-May-2022 - resize text boxes                                                                              -->
-<!--    06-May-2022 - align submit block                                                                             -->
-<!--    06-May-2022 - make queries immediate                                                                         -->
-<!--    07-May-2022 - wrap book comments                                                                             -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ..................................................... -->
 
@@ -104,32 +91,36 @@
 
             <MAIN ID="MAIN1">
 
-                <DIV style="width:80%; margin: auto; max-width:800px; text-align:center;">
-                    <H3>Book Inquiry</H3>
-                </DIV>
+                <SECTION>
+                    <DIV style="width:80%; margin: auto; max-width:800px; text-align:center;">
+                        <H3>Book Inquiry</H3>
+                    </DIV>
+                </SECTION>
 
-<!-- options div ................................................................................................... -->
+<!-- entry fields and options div .................................................................................. -->
 
-                <DIV style="width:80%; margin: auto; max-width:800px; text-align:left">
-                        <DIV>
-                            <LABEL for="topic" style="display:inline-block;width:45px">Topic:</LABEL>
-                            <SELECT id="topic" STYLE="margin-left:10px; margin-bottom:0px" name="topic" onchange="fSetTopic()">
-                                <OPTION value="choose" selected>Choose</OPTION>
-                                <OPTION value="books">Books</OPTION>
-                                <OPTION value="titles">Titles</OPTION>
-                                <OPTION value="recents">Recents</OPTION>
-                                <OPTION value="unreads">Unreads</OPTION>
-                                <OPTION value="characters">Characters</OPTION>
-                                <OPTION value="authors">Authors</OPTION>
-                                <OPTION value="classifications">Classifications</OPTION>
-                                <OPTION value="ratings">Ratings</OPTION>
-                                <OPTION value="series">Series</OPTION>
-                                <OPTION value="sources">Sources</OPTION>
-                                <OPTION value="genres">Genres</OPTION>
-                                <OPTION value="statuses">Statuses</OPTION>
-                            </SELECT>
-                        </DIV>
-                </DIV>
+                <SECTION>
+                    <DIV style="width:80%; margin: auto; max-width:800px; text-align:left">
+                            <DIV>
+                                <LABEL for="topic" style="display:inline-block;width:45px">Topic:</LABEL>
+                                <SELECT id="topic" STYLE="margin-left:10px; margin-bottom:0px" name="topic" onchange="fSetTopic()">
+                                    <OPTION value="choose" selected>Choose</OPTION>
+                                    <OPTION value="books">Books</OPTION>
+                                    <OPTION value="titles">Titles</OPTION>
+                                    <OPTION value="recents">Recents</OPTION>
+                                    <OPTION value="unreads">Unreads</OPTION>
+                                    <OPTION value="characters">Characters</OPTION>
+                                    <OPTION value="authors">Authors</OPTION>
+                                    <OPTION value="classifications">Classifications</OPTION>
+                                    <OPTION value="ratings">Ratings</OPTION>
+                                    <OPTION value="series">Series</OPTION>
+                                    <OPTION value="sources">Sources</OPTION>
+                                    <OPTION value="genres">Genres</OPTION>
+                                    <OPTION value="statuses">Statuses</OPTION>
+                                </SELECT>
+                            </DIV>
+                    </DIV>
+                </SECTION>
 
 <!-- mode buttons div .............................................................................................. -->
 
@@ -148,11 +139,11 @@
                 <DIV id="titles:div" style="display:none">
                     <DIV ID="titles:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL  for="titles:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="titles:filter" name="titles:filter" required style="width:88%;margin-top:10px;margin-left:17px;margin-bottom:10px">
+                        <INPUT id="titles:filter" name="titles:filter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
-                    <DIV ID="titles:list-div" style="width:80%; margin:auto; max-width:800px">
-                        <textarea ID="titles:list" readonly disabled ROWS="25" style="font-family:lucida console;font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea> 
+                    <DIV ID="titles:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <TEXTAREA id="titles:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -161,11 +152,11 @@
                 <DIV id="recents:div" style="display:none">
                     <DIV ID="recents:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL  for="recents:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="recents:filter" name="recents:filter" required style="width:88%; margin-top: 10px;margin-left:17px; margin-bottom:10px">
+                        <INPUT id="recents:filter" name="recents:filter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV ID="recents:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea ID="recents:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA ID="recents:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -174,11 +165,11 @@
                 <DIV id="unreads:div" style="display:none">
                     <DIV ID="unreads:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="unreads:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="unreads:filter" name="unreadsFilter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
+                        <INPUT id="unreads:filter" name="unreadsFilter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV ID="unreads:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea ID="unreads:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA ID="unreads:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -187,8 +178,8 @@
                 <DIV id="chars:div" style="display:none">
                     <DIV ID="chars:vldt-book-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="chars:book-id" style="margin-left:0px;width:45px" >Book ID:</LABEL>
-                        <INPUT id="chars:book-id" required style="width:5%;margin-top:5px;margin-left:17px;margin-bottom:0px" onKeyUp="fonKeyUp_chars_book_id()">
-                        <INPUT id="chars:book-title" required style="width:58%;margin-top:5px;margin-left:6px;margin-bottom:5px" disabled>
+                        <INPUT id="chars:book-id" required style="width:5%;margin-top:5px;margin-left:17px;margin-bottom:0px" autofocus onKeyUp="fonKeyUp_chars_book_id()">
+                        <INPUT id="chars:book-title" required style="width:58%;margin-top:5px;margin-left:6px;margin-bottom:5px" disabled autofocus>
                         <BUTTON id="chars:vldt-book-id" style="margin-top:5px;" disabled onclick="fonclick_chars_vldt_bk_id()">Validate</BUTTON>
                     </DIV>
                     <DIV id="chars:add-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
@@ -213,11 +204,11 @@
                     </DIV>
                     <DIV ID="chars:filter-div" style="width:80%; margin:auto; max-width:800px;text-align:left">
                         <LABEL for="chars:filter" style="margin-left:20px;width:45px" >Filter:</LABEL>
-                        <INPUT id="chars:filter" name="chars:filter" required style="width:88%; margin-top:10px;margin-left:17px;margin-bottom:10px">
+                        <INPUT id="chars:filter" required style="width:65%;margin-top:0px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV ID="chars:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea ID="chars:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA ID="chars:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -226,11 +217,11 @@
                 <DIV id="authors:div" style="display:none">
                     <DIV ID="authors:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL  for="authors:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="authors:filter" name="authorsFilter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
+                        <INPUT id="authors:filter" name="authorsFilter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV ID="authors:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="authors:add-name" style="margin-left:0px;width:45px" >Add Author:</LABEL>
-                        <INPUT id="authors:add-name" name="newAuthorsInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('authors:add-name')">
+                        <INPUT id="authors:add-name" name="newAuthorsInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('authors:add-name')" autofocus>
                     </DIV>
                     <DIV id="authors:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <SPAN style="display:block">
@@ -249,8 +240,8 @@
                         <INPUT id="authors:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_author_del_id()">
                     </DIV>
                     <DIV ID="authors:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea ID="authors:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA ID="authors:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -259,11 +250,11 @@
                 <DIV id="class:div" style="display:none">
                     <DIV ID="class:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="class:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="class:filter" name="class:filter"    required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
+                        <INPUT id="class:filter" name="class:filter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV ID="class:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="class:add-name" style="margin-left:0px;width:45px" >Add Class:</LABEL>
-                        <INPUT id="class:add-name" name="class:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('class:add-name')">
+                        <INPUT id="class:add-name" name="class:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('class:add-name')" autofocus>
                     </DIV>
                     <DIV id="class:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <SPAN style="display:block">
@@ -282,8 +273,8 @@
                         <INPUT id="class:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_class_del_id()">
                     </DIV>
                     <DIV ID="class:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea ID="class:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA ID="class:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -292,11 +283,11 @@
                 <DIV id="ratings:div" style="display:none">
                     <DIV ID="ratings:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="ratings:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="ratings:filter" name="ratings:filter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
+                        <INPUT id="ratings:filter" name="ratings:filter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV ID="ratings:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="ratings:add-name" style="margin-left:0px;width:45px" >Add Rating:</LABEL>
-                        <INPUT id="ratings:add-name" name="ratings:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('ratings:add-name')">
+                        <INPUT id="ratings:add-name" name="ratings:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('ratings:add-name')" autofocus>
                     </DIV>
                     <DIV id="ratings:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <SPAN style="display:block">
@@ -315,8 +306,8 @@
                         <INPUT id="ratings:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_ratings_del_id()">
                     </DIV>
                     <DIV ID="ratings:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea ID="ratings:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA ID="ratings:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -325,18 +316,18 @@
                 <DIV id="series:div" style="display:none">
                     <DIV ID="series:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="series:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="series:filter" name="series:filter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
+                        <INPUT id="series:filter" name="series:filter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV ID="series:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="series:add-name" style="margin-left:0px;width:45px" >Add Series:</LABEL>
-                        <INPUT id="series:add-name" name="series:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('series:add-name')">
+                        <INPUT id="series:add-name" name="series:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('series:add-name')" autofocus>
                     </DIV>
                     <DIV id="series:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <SPAN style="display:block">
                             <LABEL for="series:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Series ID:</LABEL>
                             <INPUT id="series:updt-id" required style="width:5%;margin-top:5px;margin-left:10px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
                             <INPUT id="series:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
-                            <BUTTON id="series:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</BUTTON>
+                            <BUTTON id="series:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_series_vldt_id()">Validate</BUTTON>
                         </SPAN>
                         <SPAN style="display:block">
                             <LABEL for="series:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</LABEL>
@@ -348,8 +339,8 @@
                         <INPUT id="series:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_series_del_id()">
                     </DIV>
                     <DIV ID="series:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea ID="series:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA ID="series:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -358,18 +349,18 @@
                 <DIV id="sources:div" style="display:none">
                     <DIV ID="sources:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="sources:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="sources:filter" name="sourcesFilter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
+                        <INPUT id="sources:filter" name="sourcesFilter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV ID="sources:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="sources:add-name" style="margin-left:0px;width:45px" >Add Source:</LABEL>
-                        <INPUT id="sources:add-name" name="sources:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('sources:add-name')">
+                        <INPUT id="sources:add-name" name="sources:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('sources:add-name')" autofocus>
                     </DIV>
                     <DIV id="sources:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <SPAN style="display:block">
                             <LABEL for="sources:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Source ID:</LABEL>
                             <INPUT id="sources:updt-id" required style="width:5%;margin-top:5px;margin-left:5px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
                             <INPUT id="sources:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
-                            <BUTTON id="sources:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</BUTTON>
+                            <BUTTON id="sources:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_sources_vldt_id()">Validate</BUTTON>
                         </SPAN>
                         <SPAN style="display:block">
                             <LABEL for="sources:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</LABEL>
@@ -381,8 +372,8 @@
                         <INPUT id="sources:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_sources_del_id()">
                     </DIV>
                     <DIV ID="sources:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea ID="sources:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA ID="sources:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -391,18 +382,18 @@
                 <DIV id="genres:div" style="display:none">
                     <DIV id="genres:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="genres:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="genres:filter" name="genres:filter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
+                        <INPUT id="genres:filter" name="genres:filter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV id="genres:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="genres:add-name" style="margin-left:0px;width:45px" >Add Genre:</LABEL>
-                        <INPUT id="genres:add-name" name="newGenresInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('genres:add-name')">
+                        <INPUT id="genres:add-name" name="newGenresInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('genres:add-name')" autofocus>
                     </DIV>
                     <DIV id="genres:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <SPAN style="display:block">
                             <LABEL for="genres:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Genre ID:</LABEL>
                             <INPUT id="genres:updt-id" required style="width:5%;margin-top:5px;margin-left:10px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
                             <INPUT id="genres:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
-                            <BUTTON id="genres:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</BUTTON>
+                            <BUTTON id="genres:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_genres_vldt_id()">Validate</BUTTON>
                         </SPAN>
                         <SPAN style="display:block">
                             <LABEL for="genres:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</LABEL>
@@ -414,8 +405,8 @@
                         <INPUT id="genres:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_genres_del_id()">
                     </DIV>
                     <DIV id="genres:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea id="genres:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA id="genres:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -424,18 +415,18 @@
                 <DIV id="statuses:div" style="display:none">
                     <DIV id="statuses:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="statuses:filter" style="margin-left:0px;width:45px" >Filter:</LABEL>
-                        <INPUT id="statuses:filter" name="statuses:filter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
+                        <INPUT id="statuses:filter" name="statuses:filter" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" autofocus>
                     </DIV>
                     <DIV id="statuses:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
                         <LABEL for="statuses:add-name" style="margin-left:0px;width:45px" >Add Status:</LABEL>
-                        <INPUT id="statuses:add-name" name="newStatusesInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('statuses:add-name')">
+                        <INPUT id="statuses:add-name" name="newStatusesInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('statuses:add-name')" autofocus>
                     </DIV>
                     <DIV id="statuses:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <SPAN style="display:block">
                             <LABEL for="statuses:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Status ID:</LABEL>
                             <INPUT id="statuses:updt-id" required style="width:5%;margin-top:5px;margin-left:10px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
                             <INPUT id="statuses:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
-                            <BUTTON id="statuses:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</BUTTON>
+                            <BUTTON id="statuses:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_status_vldt_id()">Validate</BUTTON>
                         </SPAN>
                         <SPAN style="display:block">
                             <LABEL for="statuses:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</LABEL>
@@ -447,8 +438,8 @@
                         <INPUT id="statuses:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_statuses_del_id()">
                     </DIV>
                     <DIV id="statuses:list-div" style="width:80%;margin:auto;max-width:800px">
-                        <textarea id="statuses:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <TEXTAREA id="statuses:list" ROWS="25" style="font-family:lucida console;font-size:14px;width:100%;margin:auto;white-space:nowrap">
+                        </TEXTAREA>
                     </DIV>
                 </DIV>
 
@@ -456,83 +447,77 @@
 
                 <DIV ID="books:div" style="width:80%; margin:auto;display:none">
                     <DIV style="display:block;margin:5px 0px 2px 0px">
-                        <LABEL for="books:stage" style="display:inline-block;width:55px">Stage:</LABEL>
-                        <INPUT id="books:stage" style="display:inline-block;width:35;border-width:thin">
+                        <LABEL for="titleIdInput" style="display:inline-block;width:55px">ID:</LABEL>
+                        <INPUT id="titleIdInput" style="display:inline-block;width:35;border-width:thin" onkeyup="fEnableSubmitButton01('titleIdInput')"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:titleId" style="display:inline-block;width:55px">ID:</LABEL>
-                        <INPUT id="books:titleId" style="display:inline-block;width:35;border-width:thin" onkeyup="fEnableSubmitButton01('books:titleId')">
+                        <LABEL for="nameInput" style="display:inline-block;width:55px">Title: </LABEL>
+                        <INPUT id="nameInput" style="display:inline-block;width:400px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:name" style="display:inline-block;width:55px">Title: </LABEL>
-                        <INPUT id="books:name" style="display:inline-block;width:400px">
+                        <LABEL for="authorInput" style="display:inline-block;width:55px">Author: </LABEL>
+                        <INPUT id="authorIdInput" style="display:inline-block;width:35px"></INPUT>
+                        <INPUT id="authorInput" style="display:inline-block;width:352px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:author" style="display:inline-block;width:55px">Author: </LABEL>
-                        <INPUT id="books:authorId" style="display:inline-block;width:35px">
-                        <SELECT id="books:author" style="display:inline-block;width:352px" onchange="fPopulateLOVId('authors')"></SELECT>
+                        <LABEL for="sourceInput" style="display:inline-block;width:55px">Source: </LABEL>
+                        <INPUT id="sourceIdInput" style="display:inline-block;width:35px"></INPUT>
+                        <INPUT id="sourceInput" style="display:inline-block;width:200px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:source" style="display:inline-block;width:55px">Source: </LABEL>
-                        <INPUT id="books:sourceId" style="display:inline-block;width:35px">
-                        <SELECT id="books:source" style="display:inline-block;width:200px" onchange="fPopulateLOVId('sources')"></SELECT>
+                        <LABEL for="seriesInput" style="display:inline-block;width:55px">Series: </LABEL>
+                        <INPUT id="seriesIdInput" style="display:inline-block;width:35px"></INPUT>
+                        <INPUT id="seriesInput" style="display:inline-block;width:352px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:series" style="display:inline-block;width:55px">Series: </LABEL>
-                        <INPUT id="books:seriesId" style="display:inline-block;width:35px">
-                        <SELECT id="books:series" style="display:inline-block;width:352px" onchange="fPopulateLOVId('series')"></SELECT>
+                        <LABEL for="genreInput" style="display:inline-block;width:55px">Genre: </LABEL>
+                        <INPUT id="genreIdInput" style="display:inline-block;width:35px"></INPUT>
+                        <INPUT id="genreInput" style="display:inline-block;width:200px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:genre" style="display:inline-block;width:55px">Genre: </LABEL>
-                        <INPUT id="books:genreId" style="display:inline-block;width:35px">
-                        <SELECT id="books:genre" style="display:inline-block;width:200px" onchange="fPopulateLOVId('genres')"></SELECT>
+                        <LABEL for="statusInput" style="display:inline-block;width:55px">Status: </LABEL>
+                        <INPUT id="statusIdInput" style="display:inline-block;width:35px"></INPUT>
+                        <INPUT id="statusInput" style="display:inline-block;width:200px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:status" style="display:inline-block;width:55px">Status: </LABEL>
-                        <INPUT id="books:statusId" style="display:inline-block;width:35px">
-                        <SELECT id="books:status" style="display:inline-block;width:200px" onchange="fPopulateLOVId('statuses')"></SELECT>
+                        <LABEL for="clsfnInput" style="display:inline-block;width:55px">Clsfn: </LABEL>
+                        <INPUT id="clsfnIdInput" style="display:inline-block;width:35px"></INPUT>
+                        <INPUT id="clsfnInput" style="display:inline-block;width:200px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:clsfn" style="display:inline-block;width:55px">Clsfn: </LABEL>
-                        <INPUT id="books:clsfnId" style="display:inline-block;width:35px">
-                        <SELECT id="books:clsfn" style="display:inline-block;width:200px" onchange="fPopulateLOVId('classifications')"></SELECT>
+                        <LABEL for="ratingInput" style="display:inline-block;width:55px">Rating: </LABEL>
+                        <INPUT id="ratingIdInput" style="display:inline-block;width:35px"></INPUT>
+                        <INPUT id="ratingInput" style="display:inline-block;width:200px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:rating" style="display:inline-block;width:55px">Rating: </LABEL>
-                        <INPUT id="books:ratingId" style="display:inline-block;width:35px">
-                        <SELECT id="books:rating" style="display:inline-block;width:200px" onchange="fPopulateLOVId('ratings')"></SELECT>
+                        <LABEL for="startInput" style="display:inline-block;width:55px">Start: </LABEL>
+                        <INPUT id="startInput" style="display:inline-block;width:100px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:start" style="display:inline-block;width:55px">Start: </LABEL>
-                        <INPUT id="books:start" style="display:inline-block;width:100px">
+                        <LABEL for="finishInput" style="display:inline-block;width:55px">Finish: </LABEL>
+                        <INPUT id="finishInput" style="display:inline-block;width:100px"></INPUT>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:finish" style="display:inline-block;width:55px">Finish: </LABEL>
-                        <INPUT id="books:finish" style="display:inline-block;width:100px">
+                        <LABEL for="cmntsArea" style="display:inline-block;width:55px">Cmnts: </LABEL>
+                        <TEXTAREA id="cmntsArea" rows="2" style="font-family:calibri;font-size:15px;display:inline-block;width:400px;vertical-align:top"></TEXTAREA>
                     </DIV>
                     <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:cmnts" style="display:inline-block;width:55px">Cmnts: </LABEL>
-                        <textarea id="books:cmnts" readonly disabled rows="3"style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre-wrap">
-                        </textarea>
-                    </DIV>
-                    <DIV style="display:block;margin:2px 0px 2px 0px">
-                        <LABEL for="books:chrs" style="display:inline-block;width:55px">Chars: </LABEL>
-                        <textarea id="books:chrs" readonly disabled rows="20" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
-                        </textarea>
+                        <LABEL for="chrsArea" style="display:inline-block;width:55px">Chars: </LABEL>
+                        <TEXTAREA id="chrsArea" rows="5" style="font-family:calibri;font-size:15px;display:inline-block;width:400px;vertical-align:top"></TEXTAREA>
                     </DIV>
                 </DIV>
 
 <!-- submit button and messages div ................................................................................ -->
 
-                <DIV id="submit:div" style="display:block; width:80%; margin:auto; margin-top:10px; max-width:800px; text-align:left;">
+                <DIV id="submit:div" style="width:80%;display:none;margin:auto; max-width:800px; text-align:left;">
                     <BUTTON id="submit:submit" style="margin:5px 0px 5px 0px" onclick="fonclick_submit_submit()" disabled>Submit</BUTTON>
                     <LABEL for="submit:mssge" style="display:inline-block;width:55px;margin:0px 10px 0px 10px">Message</LABEL>
-                    <INPUT ID="submit:mssge" style="font-family:calibri;font-size:15px;display:inline-block;width:75%" disabled>
+                    <INPUT ID="submit:mssge" style="font-family:calibri;font-size:15px;display:inline-block;width:70%" disabled></INPUT>
                 </DIV>
 
 <!-- buttons to clear the page and show and hide help .............................................................. -->
 
-                <DIV style="display:inline-block; width:80%; margin-left: 100px; max-width:800px; text-align:left;">
+                <DIV style="width:80%; margin: auto; max-width:800px; text-align:left;">
                     <BUTTON id="wrapButton" style="margin-top:10px" onclick="fWrapText()">Wrap</BUTTON>
                     <BUTTON id="clearButton" style="margin-top:10px" onclick="fClearPageToChoose()">Clear</BUTTON>
                     <BUTTON id="helpButton" style="margin-top:10px" onclick="fShowHelp()">Help</BUTTON>
@@ -544,12 +529,10 @@
                 <DIV id="help:div" style="width:80%; margin: auto; max-width:800px; text-align:left;">
                     <DIV id="helpDiv" class="help" style="DISPLAY:none">
                         <P>
-                            Choose a topic and a mode and click submit to see results<BR>
-                            Some modes are disabled for some topics, as not applicable to the topic<BR>
-                            Choosing a new topic will default the mode initially to 'Fetch'<BR>
-                            The 'submit' button will remain disabled unless required information is entered<BR>
-                            A filter is available in 'Fetch' mode to filter results<BR>
-                            The filter is case-sensitive but does not support wildcards or regex expressions<BR>
+                            Choose a topic than choose an action and click submit to see results<BR>
+                            The 'submit' button will remain disabled sufficient information is entered<BR>
+                            Enter text in the filter and click 'Submit' to see filtered results<BR>
+                            The filter is case-sensitive and does not support wildcards or regex expressions<BR>
                             The filter allows multiple words and spaces<BR>
                             <BR>
                             Click 'Wrap' to word-wrap or turn off word-wrap on the displayed sheet contents<BR>
@@ -560,24 +543,26 @@
 <!-- internals div ................................................................................................. -->
 
                 <BR>
-               <DIV id="internals:div" style="width:80%; margin: auto; max-width:800px;">
-                    <DETAILS>
-                        <SUMMARY style="outline:none">
-                            Internals
-                        </SUMMARY>
-                        <P STYLE="PADDING-LEFT:17px">
-                            html file: /var/www.html/bookInquiry.html<BR>
-                            js file: /var/www.html/bookInquiry.js<BR>
-                            css file: /var/www/html/css/index.css<BR>
-                            cgi file: /usr/lib/cgi-bin/bookInquiry.cgi<BR>
-                            cgi file: /usr/lib/cgi-bin/bookDetails.cgi<BR>
-                            cgi file: /usr/lib/cgi-bin/bookCharacters.cgi<BR>
-                            corner image: /var/www/html/cornerImage.png<BR>
-                            background image: /var/www/html/background.jpg<BR>
-                            CGI source code: C<BR>
-                        </P>
-                    </DETAILS>
-                </DIV>
+                <SECTION>
+                   <DIV id="internals:div" style="width:80%; margin: auto; max-width:800px;">
+                        <DETAILS>
+                            <SUMMARY style="outline:none">
+                                Internals
+                            </SUMMARY>
+                            <P STYLE="PADDING-LEFT:17px">
+                                html file: /var/www.html/bookInquiry.html<BR>
+                                js file: /var/www.html/bookInquiry.js<BR>
+                                css file: /var/www/html/css/index.css<BR>
+                                cgi file: /usr/lib/cgi-bin/bookInquiry.cgi<BR>
+                                cgi file: /usr/lib/cgi-bin/bookDetails.cgi<BR>
+                                cgi file: /usr/lib/cgi-bin/bookCharacters.cgi<BR>
+                                corner image: /var/www/html/cornerImage.png<BR>
+                                background image: /var/www/html/background.jpg<BR>
+                                CGI source code: C<BR>
+                            </P>
+                        </DETAILS>
+                    </DIV>
+                </SECTION>
 
                 <SCRIPT src="bookInquiry.js"></SCRIPT>
 
@@ -586,20 +571,8 @@
 <!-- <ASIDE1> region for change log ................................................................................ -->
 
             <ASIDE ID="ASIDE1">
-                    <H3 ID=ASIDE1H3>Changes 2021-22</H3>
+                    <H3 ID=ASIDE1H3>Changes 2021</H3>
                 <UL ID="ASIDE1UL">
-
-                    <LI CLASS="ASIDE1LI">09-May: clear date (null)'s</LI>
-                    <LI CLASS="ASIDE1LI">08-May: refresh LOV's</LI>
-                    <LI CLASS="ASIDE1LI">07-May: wrap book comments</LI>
-                    <LI CLASS="ASIDE1LI">07-May: define unwrap</LI>
-                    <LI CLASS="ASIDE1LI">06-May: make fetches immediate</LI>
-                    <LI CLASS="ASIDE1LI">06-May: align submit button</LI>
-                    <LI CLASS="ASIDE1LI">15-Jan: disable query mode</LI>
-                    <LI CLASS="ASIDE1LI">11-Jan: implement delete</LI>
-                    <LI CLASS="ASIDE1LI">11-Jan: protect ' adding a book</LI>
-                    <LI CLASS="ASIDE1LI">07-Jan: add book</LI>
-                    <LI CLASS="ASIDE1LI">04-Jan: implement attribute LOV's</LI>
                     <LI CLASS="ASIDE1LI">30-Dec: escape ' in updates</LI>
                     <LI CLASS="ASIDE1LI">29-Dec: combine _updt_id()'s</LI>
                     <LI CLASS="ASIDE1LI">27-Dec: escape ' character</LI>

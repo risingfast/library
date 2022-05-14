@@ -17,10 +17,9 @@
     make, or
     gcc -g -o mysql-c-library $(mysql_config --cflags) mysql-c-library.c $(mysql_config --libs) cs50.c rf50.c
 #### Enhancements: (0)
-    Remove (null) from the date fields
+    Leave Book ID field whem mode change
     Add a plot field to books
     Select an image each time the risingfast site is opened
-    Leave Book ID field whem mode change
     Add an app to maintain cornerImage subtitles
 #### Log:
     12-Apr-2021 started
@@ -88,6 +87,7 @@
     09-May-2021 left-justify number columns in listings past Author listing
     10-May-2021 streamline error printing with __func__
     10-May-2021 streamline error detection blocks
+    09-May-2022 remove (null) from the date fields
     11-May-2021 block adding empty attributes by hitting enter without text
     12-May-2021 debug fEscapeSingleQuote() function
     12-May-2021 continue debug of fEscapeSingleQuote() function
@@ -130,3 +130,5 @@
     11-Feb-2022 backup current version
     03-May-2022 backup current version
     09-May-2022 rename mysql-c-library to library locally and on github
+    14-May-2022 backup current version
+
