@@ -79,7 +79,6 @@
 <!--    07-May-2022 - wrap book comments                                                                             -->
 <!--    10-May-2022 - move common styles to CSS                                                                      -->
 <!--    11-May-2022 - add <ASIDE3> grid region                                                                       -->
-<!--    16-May-2022 - expand clear button function                                                                   -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ..................................................... -->
 
@@ -113,23 +112,25 @@
 
 <!-- options div ................................................................................................... -->
 
-                <DIV id="topics">
-                    <LABEL for="topic" style="display:inline-block;width:45px">Topic:</LABEL>
-                        <SELECT id="topic" STYLE="margin-left:10px; margin-bottom:0px" name="topic" onchange="fSetTopic()">
-                            <OPTION value="choose" selected>Choose</OPTION>
-                            <OPTION value="books">Books</OPTION>
-                            <OPTION value="titles">Titles</OPTION>
-                            <OPTION value="recents">Recents</OPTION>
-                            <OPTION value="unreads">Unreads</OPTION>
-                            <OPTION value="characters">Characters</OPTION>
-                            <OPTION value="authors">Authors</OPTION>
-                            <OPTION value="classifications">Classifications</OPTION>
-                            <OPTION value="ratings">Ratings</OPTION>
-                            <OPTION value="series">Series</OPTION>
-                            <OPTION value="sources">Sources</OPTION>
-                            <OPTION value="genres">Genres</OPTION>
-                            <OPTION value="statuses">Statuses</OPTION>
-                        </SELECT>
+                <DIV style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <DIV>
+                            <LABEL for="topic" style="display:inline-block;width:45px">Topic:</LABEL>
+                            <SELECT id="topic" STYLE="margin-left:10px; margin-bottom:0px" name="topic" onchange="fSetTopic()">
+                                <OPTION value="choose" selected>Choose</OPTION>
+                                <OPTION value="books">Books</OPTION>
+                                <OPTION value="titles">Titles</OPTION>
+                                <OPTION value="recents">Recents</OPTION>
+                                <OPTION value="unreads">Unreads</OPTION>
+                                <OPTION value="characters">Characters</OPTION>
+                                <OPTION value="authors">Authors</OPTION>
+                                <OPTION value="classifications">Classifications</OPTION>
+                                <OPTION value="ratings">Ratings</OPTION>
+                                <OPTION value="series">Series</OPTION>
+                                <OPTION value="sources">Sources</OPTION>
+                                <OPTION value="genres">Genres</OPTION>
+                                <OPTION value="statuses">Statuses</OPTION>
+                            </SELECT>
+                        </DIV>
                 </DIV>
 
 <!-- mode buttons div .............................................................................................. -->
@@ -531,18 +532,19 @@
                     <INPUT ID="submit:mssge" style="font-family:calibri;font-size:15px;display:inline-block;width:75%" disabled>
                 </DIV>
 
-<!-- buttons to clear the page and show and hide help and internals ................................................ -->
+<!-- buttons to clear the page and show and hide help .............................................................. -->
 
-                <DIV id="MOREBTTNS">
-                    <BUTTON id="helpButton"onclick="fShowHelp()">Help</BUTTON>
-                    <BUTTON id="clearButton" onclick="fClearBookFields()">Clear</BUTTON>
-                    <BUTTON id="wrapButton" onclick="fWrapText()">Wrap</BUTTON>
+                <DIV style="display:inline-block; width:80%; margin-left: 100px; max-width:800px; text-align:left;">
+                    <BUTTON id="wrapButton" style="margin-top:10px" onclick="fWrapText()">Wrap</BUTTON>
+                    <BUTTON id="clearButton" style="margin-top:10px" onclick="fClearPageToChoose()">Clear</BUTTON>
+                    <BUTTON id="helpButton" style="margin-top:10px" onclick="fShowHelp()">Help</BUTTON>
                     <BR>
                 </DIV>
 
-<!-- help text controlled by a button............................................................................... -->
+<!-- help div ...................................................................................................... -->
 
-                    <DIV id="HELPDIV">
+                <DIV id="help:div" style="width:80%; margin: auto; max-width:800px; text-align:left;">
+                    <DIV id="HELPDIV" class="help">
                         <P>
                             Choose a topic and a mode and click submit to see results<BR>
                             Some modes are disabled for some topics, as not applicable to the topic<BR>
@@ -555,11 +557,12 @@
                             Click 'Wrap' to word-wrap or turn off word-wrap on the displayed sheet contents<BR>
                         </P>
                     </DIV>
+                </DIV>
 
 <!-- internals div ................................................................................................. -->
 
-               <DIV id="INTERNALS">
-                    <DETAILS id="internals-details">
+               <DIV id="internals:div" style="width:80%; margin: auto; max-width:800px;">
+                    <DETAILS>
                         <SUMMARY style="outline:none">
                             Internals
                         </SUMMARY>
@@ -578,7 +581,6 @@
                 </DIV>
 
                 <SCRIPT src="bookInquiry.js"></SCRIPT>
-                <SCRIPT src="common.js"></SCRIPT>
 
             </MAIN>
 
@@ -588,7 +590,6 @@
                     <H3 ID=ASIDE1H3>Changes 2021-22</H3>
                 <UL ID="ASIDE1UL">
 
-                    <LI CLASS="ASIDE1LI">16-May: expand clear function</LI>
                     <LI CLASS="ASIDE1LI">11-May: add corner image caption</LI>
                     <LI CLASS="ASIDE1LI">09-May: clear date (null)'s</LI>
                     <LI CLASS="ASIDE1LI">08-May: refresh LOV's</LI>

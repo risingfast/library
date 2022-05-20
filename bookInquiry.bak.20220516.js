@@ -2410,12 +2410,11 @@ function fClearPage() {
     w.disabled=true;
 }
 
-// fClearBookFields() - function to clear the page and set the topic to 'Choose' to put the page in the initial state 
+// fClearPageToChoose() - function to clear the page and set the topic to 'Choose' to put the page in the initial state 
 
-function fClearBookFields() {
+function fClearPageToChoose() {
 
     fClearPage();
-    fClearExtras();
     let tc = document.getElementById("topic");
     tc.value = "choose";
 }
