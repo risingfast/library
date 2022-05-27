@@ -1,0 +1,81 @@
+/* bookInquiry.css - a css layout for bookInquiry.css                                                                                     */
+/* started - 24-May-2022                                                                                             */
+/* References:                                                                                                       */
+/*         HTML & CSS for Beginners Part 22: How to create a basic layout - the CSS                                  */
+/* Log                                                                                                               */
+/*     24-May-2022 - started                                                                                         */
+
+#heading-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    max-width: 800px;
+    text-align: center;
+}
+
+#fgetresults-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#results-div {
+    width: 80%;
+    margin: auto; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+    max-width: 800px;
+}
+
+#resultarea {
+    width: 100%;
+    background-color: lightgrey;
+}
+
+/* ----------------------------------------------------------------------- old ends ---------------------------------*/
+
+#topics-label {
+    display: inline-block;
+    width: 45px;
+}
+
+#topic-select {
+    margin-left: 10px;
+    margin-bottom: 0px;
+}
+
+#modes-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#modesfetch-button {
+    margin-top: 5px;
+}
+
+#modesquery-button {
+    margin-top: 5px;
+}
+
+#modesadd-button {
+    margin-top: 5px;
+}
+
+#modesupdate-button {
+    margin-top: 5px;
+}
+
+#modesdelete-button {
+    margin-top: 5px;
+}
+
+#mode-label {
+    display: inline-block;
+}

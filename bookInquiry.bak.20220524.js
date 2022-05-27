@@ -179,44 +179,44 @@ fPopulateLOV('ratings');
 
 function fSetTopic() {
 
-    let tc = document.getElementById("topics-select");
+    let tc = document.getElementById("topic-select");
 
     if (tc.value === "choose") {
         sTopic = "choose";
     } else if (tc.value === "books") {
-        fUnhideMultiple("books-div", "modes-div", "submit-div");
+        fUnhideMultiple("books:div", "modes-div", "submit:div");
         sTopic = "books";
     } else if (tc.value === "titles") {
-        fUnhideMultiple("titles-div", "modes-div", "submit-div");
+        fUnhideMultiple("titles:div", "modes-div", "submit:div");
         sTopic = "titles";
     } else if (tc.value === "characters") {
-        fUnhideMultiple("characters-div", "modes-div", "submit-div");
+        fUnhideMultiple("chars:div", "modes-div", "submit:div");
         sTopic = "characters";
     } else if (tc.value === "authors") {
         sTopic = "authors";
     } else if (tc.value === "recents") {
-        fUnhideMultiple("recents-div", "modes-div", "submit-div");
+        fUnhideMultiple("recents:div", "modes-div", "submit:div");
         sTopic = "recents";
     } else if (tc.value === "unreads") {
-        fUnhideMultiple("unreads-div", "modes-div", "submit-div");
+        fUnhideMultiple("unreads:div", "modes-div", "submit:div");
         sTopic = "unreads";
     } else if (tc.value === "classifications") {
-        fUnhideMultiple("classifications-div", "modes-div", "submit-div");
+        fUnhideMultiple("class:div", "modes-div", "submit:div");
         sTopic = "classifications";
     } else if (tc.value === "ratings") {
-        fUnhideMultiple("ratings:div", "modes-div", "submit-div");
+        fUnhideMultiple("ratings:div", "modes-div", "submit:div");
         sTopic = "ratings";
     } else if (tc.value === "series") {
-        fUnhideMultiple("series:div", "modes-div", "submit-div");
+        fUnhideMultiple("series:div", "modes-div", "submit:div");
         sTopic = "series";
     } else if (tc.value === "sources") {
-        fUnhideMultiple("sources:div", "modes-div", "submit-div");
+        fUnhideMultiple("sources:div", "modes-div", "submit:div");
         sTopic = "sources";
     } else if (tc.value === "genres") {
-        fUnhideMultiple("genres:div", "modes-div", "submit-div");
+        fUnhideMultiple("genres:div", "modes-div", "submit:div");
         sTopic = "genres";
     } else if (tc.value === "statuses") {
-        fUnhideMultiple("statuses:div", "modes-div", "submit-div");
+        fUnhideMultiple("statuses:div", "modes-div", "submit:div");
         sTopic = "statuses";
     }
 
@@ -230,7 +230,7 @@ function fSetTopic() {
 
 function fSetMode(sNewMode) {
 
-    sTopic = document.getElementById("topics-select").value;
+    sTopic = document.getElementById("topic-select").value;
     sMode = sNewMode;
 
     fClearPage();
@@ -239,8 +239,8 @@ function fSetMode(sNewMode) {
         ;
     } else if (sTopic === 'books') {
 
-        fUnhideMultiple("modes-div", "submit-div");
-        fSetElement("Disable", "submit-button");
+        fUnhideMultiple("modes-div", "submit:div");
+        fSetElement("Disable", "submit:submit");
         fClearBookDivElements();
 
         if (sMode === 'fetch') {
@@ -258,11 +258,11 @@ function fSetMode(sNewMode) {
                              , "books:seriesId", "books:series", "books:genreId", "books:genre", "books:statusId", "books:status"
                              , "books:clsfnId", "books:clsfn", "books:ratingId", "books:rating", "books:start", "books:finish"
                              , "books:cmnts", "books:chrs");
-            fSetElement("Unhide", "books-div"); 
+            fSetElement("Unhide", "books:div"); 
 
             // show instructions in the message area on how to proceed .................................................
 
-            document.getElementById("submit-message").value = "Enter the Book ID and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the Book ID and 'Submit'";
             document.getElementById("books:stage").value = 'Nothing Fetched';
 
             //  enable the ID field and color light yellow as a required field .........................................
@@ -285,13 +285,13 @@ function fSetMode(sNewMode) {
             fEnableBookFields("books:titleId", "books:name", "books:author", "books:source", "books:series", "books:genre", "books:status", "books:clsfn", "books:rating", "books:start", "books:finish", "books:cmnts", "books:chrs");
             fSetElement("Disable", "books:titleId");
             fSetElement("Disable", "books:chrs");
-            fSetElement("Unhide", "books-div"); 
+            fSetElement("Unhide", "books:div"); 
             let dt = document.getElementById("books:titleId");
             dt.style.backgroundColor = "rgba(230,239,239, 0.3)";                                          // white color
 
             // show instructions in the message area on how to proceed .................................................
 
-            document.getElementById("submit-message").value = "Enter query values in any editable fields and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter query values in any editable fields and 'Submit'";
 
         } else if (sMode === 'add') {
 
@@ -304,18 +304,18 @@ function fSetMode(sNewMode) {
             //  enable all book fields for 'add' mode
 
             fEnableBookFields("books:titleId", "books:name", "books:author", "books:source", "books:series", "books:genre", "books:status", "books:clsfn", "books:rating", "books:start", "books:finish", "books:cmnts", "books:chrs");
-            fSetElement("Unhide", "books-div"); 
+            fSetElement("Unhide", "books:div"); 
             
             //  enable all book fields for 'query' mode except for the books:titleId and books:chrs fields ................
 
             fEnableBookFields("books:titleId", "books:name", "books:author", "books:source", "books:series", "books:genre", "books:status", "books:clsfn", "books:rating", "books:start", "books:finish", "books:cmnts", "books:chrs");
             fSetElement("Disable", "books:titleId");
             fSetElement("Disable", "books:chrs");
-            fSetElement("Unhide", "books-div"); 
+            fSetElement("Unhide", "books:div"); 
 
             fSetElement("Clear", "books:titleId");
             
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("books:cmnts").readOnly = false;
             document.getElementById("books:cmnts").disable = false;
             let dt = document.getElementById("books:titleId");
@@ -323,7 +323,7 @@ function fSetMode(sNewMode) {
 
             // show instructions in the message area on how to proceed .................................................
 
-            document.getElementById("submit-message").value = "Enter values for a new book and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter values for a new book and 'Submit'";
 
             // set the initial value of book attributes to 'Unassigned' and get the matching ID
 
@@ -362,12 +362,12 @@ function fSetMode(sNewMode) {
                              , "books:seriesId", "books:series", "books:genreId", "books:genre", "books:statusId", "books:status"
                              , "books:clsfnId", "books:clsfn", "books:ratingId", "books:rating", "books:start", "books:finish"
                              , "books:cmnts", "books:chrs");
-            fSetElement("Unhide", "books-div"); 
+            fSetElement("Unhide", "books:div"); 
 
             // show instructions in the message area on how to proceed .................................................
 
             document.getElementById("books:stage").value = 'Nothing Fetched';
-            document.getElementById("submit-message").value = "Enter the Book ID and 'Submit' to fetch book to update";
+            document.getElementById("submit:mssge").value = "Enter the Book ID and 'Submit' to fetch book to update";
 
             //  enable the ID field and color light yellow as a required field .........................................
 
@@ -389,7 +389,7 @@ function fSetMode(sNewMode) {
 
             fDisableBookFields("books:name", "books:author", "books:source", "books:series", "books:genre", "books:status", "books:clsfn", "books:rating", "books:start", "books:finish", "books:cmnts", "books:chrs");
             fSetElement("Enable", "books:titleId");
-            fSetElement("Unhide", "books-div"); 
+            fSetElement("Unhide", "books:div"); 
             let dt = document.getElementById("books:titleId");
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             
@@ -399,17 +399,17 @@ function fSetMode(sNewMode) {
 
             // show instructions in the message area on how to proceed .................................................
 
-            document.getElementById("submit-message").value = "Enter the Title ID and 'submit' to delete the book";
+            document.getElementById("submit:mssge").value = "Enter the Title ID and 'submit' to delete the book";
         }
 
     } else if (sTopic === "titles") {
 
-        fUnhideMultiple("modes-div", "submit-div", "titles-div", "titlesarea-textarea");
-        fSetElement("Clear", "titlesfilter-input");
-        fSetElement("UnhideInline", "titlesfilter-input");
-        fSetElement("Clear", "titlesarea-textarea");
-        fSetElement("Disable", "submit-button");
-        fSetElement("Enable", "titlesfilter-input");
+        fUnhideMultiple("modes-div", "submit:div", "titles:div", "titles:list");
+        fSetElement("Clear", "titles:filter");
+        fSetElement("UnhideInline", "titles:filter");
+        fSetElement("Clear", "titles:list");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "titles:filter");
 
         if (sMode === 'fetch') {
 
@@ -417,23 +417,23 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             fSetElement("Disable", "modesadd-button");
             fSetElement("Disable", "modesupdate-button");
             fSetElement("Disable", "modesdelete-button");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "'Submit' to fetch titles (or set a filter, then 'Submit')";
+            document.getElementById("submit:mssge").value = "'Submit' to fetch titles (or set a filter, then 'Submit')";
             fUnwrapAllText();
 
         }
 
     } else if (sTopic === "recents") {
 
-        fUnhideMultiple("modes-div", "submit-div", "recents-div", "recentsarea-textarea");
-        fSetElement("Clear", "recentsfilter-input");
-        fSetElement("UnhideInline", "recentsfilter-input");
-        fSetElement("Clear", "recentsarea-textarea");
-        fSetElement("Disable", "submit-button");
+        fUnhideMultiple("modes-div", "submit:div", "recents:div", "recents:list");
+        fSetElement("Clear", "recents:filter");
+        fSetElement("UnhideInline", "recents:filter");
+        fSetElement("Clear", "recents:list");
+        fSetElement("Disable", "submit:submit");
 
         if (sMode === 'fetch') {
 
@@ -441,21 +441,21 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             fSetElement("Disable", "modesadd-button");
             fSetElement("Disable", "modesupdate-button");
             fSetElement("Disable", "modesdelete-button");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
             fUnwrapAllText();
         }
 
     } else if (sTopic === "unreads") {
 
-        fUnhideMultiple("modes-div", "submit-div", "unreads-div", "unreadsarea-textarea");
-        fSetElement("Clear", "unreadsfilter-input");
-        fSetElement("Clear", "unreadsarea-textarea");
-        fSetElement("Disable", "submit-button");
+        fUnhideMultiple("modes-div", "submit:div", "unreads:div", "unreads:list");
+        fSetElement("Clear", "unreads:filter");
+        fSetElement("Clear", "unreads:list");
+        fSetElement("Disable", "submit:submit");
 
         if (sMode === 'fetch') {
 
@@ -463,50 +463,50 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Clear", "unreadsfilter-input");
-            fSetElement("Clear", "unreadsarea-textarea");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Clear", "unreads:filter");
+            fSetElement("Clear", "unreads:list");
+            fSetElement("Enable", "submit:submit");
             fSetElement("Disable", "modesadd-button");
             fSetElement("Disable", "modesupdate-button");
             fSetElement("Disable", "modesdelete-button");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
             fUnwrapAllText();
         }
 
     } else if (sTopic === "characters") {
 
-        fUnhideMultiple("modes-div", "submit-div", "characters-div", "charactersarea-textarea");
-        fSetElement("Clear", "charactersfilter-input");
-        fSetElement("UnhideInline", "charactersfilter-input");
-        fSetElement("Clear", "charactersarea-textarea");
-        fSetElement("Disable", "submit-button");
+        fUnhideMultiple("modes-div", "submit:div", "chars:div", "chars:list");
+        fSetElement("Clear", "chars:filter");
+        fSetElement("UnhideInline", "chars:filter");
+        fSetElement("Clear", "chars:list");
+        fSetElement("Disable", "submit:submit");
 
         if (sMode === 'fetch') {
 
             //  disable the 'fetch' mode button and color it green .....................................................
 
-            fSetElement("Unhide", "submit-div");
+            fSetElement("Unhide", "submit:div");
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "charactersvalidatebook-button");
-            fSetElement("Unhide", "charactersfilter-div");
-            fSetElement("Unhide", "charactersbook-div");
-            fSetElement("Hide", "charactersdelete-div");
-            fSetElement("Hide", "charactersadd-div");
-            fSetElement("Hide", "charactersupdate-div");
-            fSetElement("UnhideInline", "charactersvalidatebook-button");
-            document.getElementById("charactersfilter-input").disabled = false;
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "chars:vldt-book-id");
+            fSetElement("Unhide", "chars:filter-div");
+            fSetElement("Unhide", "chars:vldt-book-div");
+            fSetElement("Hide", "chars:del-div");
+            fSetElement("Hide", "chars:add-div");
+            fSetElement("Hide", "chars:updt-div");
+            fSetElement("UnhideInline", "chars:vldt-book-id");
+            document.getElementById("chars:filter").disabled = false;
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Enter the Book ID and click 'Submit' to fetch " + sTopic + " for a book";
+            document.getElementById("submit:mssge").value = "Enter the Book ID and click 'Submit' to fetch " + sTopic + " for a book";
             fUnwrapAllText();
 
             //  enable the Book ID field and color light yellow as a required field ....................................
 
-            fSetElement("Clear", "charactersbookid-input");
-            fSetElement("Clear", "charactersbooktitle-input");
-            let bi = document.getElementById("charactersbookid-input");
+            fSetElement("Clear", "chars:book-id");
+            fSetElement("Clear", "chars:book-title");
+            let bi = document.getElementById("chars:book-id");
             bi.disabled = false;
             bi.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             bi.style.borderWidth = "thin";
@@ -517,72 +517,72 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Hide", "charactersfilter-div");
-            fSetElement("Hide", "charactersdelete-div");
-            fSetElement("Hide", "charactersupdate-div");
-            fSetElement("Unhide", "charactersbook-div");
-            fSetElement("Unhide", "charactersadd-div");
-            fSetElement("UnhideInline", "charactersvalidatebook-button");
-            fSetElement("Disable", "charactersadd-input");
-            fSetElement("Clear", "charactersbookid-input");
-            fSetElement("Clear", "charactersbooktitle-input");
-            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            fSetElement("Hide", "chars:filter-div");
+            fSetElement("Hide", "chars:del-div");
+            fSetElement("Hide", "chars:updt-div");
+            fSetElement("Unhide", "chars:vldt-book-div");
+            fSetElement("Unhide", "chars:add-div");
+            fSetElement("UnhideInline", "chars:vldt-book-id");
+            fSetElement("Disable", "chars:add-name");
+            fSetElement("Clear", "chars:book-id");
+            fSetElement("Clear", "chars:book-title");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("mode-label").innerHTML = "add mode";
-            document.getElementById("submit-message").value = "Enter the Book ID and 'Validate' to enter characters for a book";
+            document.getElementById("submit:mssge").value = "Enter the Book ID and 'Validate' to enter characters for a book";
 
         } else if (sMode === "update") {
 
             //  disable the 'update' mode button and color it green ....................................................
 
             fDisableModeButton("modesupdate-button");
-            fSetElement("Hide", "charactersdelete-div");
-            fSetElement("Hide", "charactersbook-div");
-            fSetElement("Hide", "charactersadd-div");
-            fSetElement("Hide", "charactersfilter-div");
+            fSetElement("Hide", "chars:del-div");
+            fSetElement("Hide", "chars:vldt-book-div");
+            fSetElement("Hide", "chars:add-div");
+            fSetElement("Hide", "chars:filter-div");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Disable", "charactersupdatename-input");
-            fSetElement("Disable", "charactersupdatedname-input");
+            fSetElement("Disable", "chars:updt-name");
+            fSetElement("Disable", "chars:updtd-name");
 //            fSetElement("Disable", "chars:vldt-char-id");
-            fSetElement("Unhide", "charactersupdate-div");
-            fSetElement("Clear", "charactersupdateid-input");
-            fSetElement("Clear", "charactersupdatename-input");
-            document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
-            document.getElementById("charactersupdateid-input").style.borderWidth = "thin";
+            fSetElement("Unhide", "chars:updt-div");
+            fSetElement("Clear", "chars:updt-id");
+            fSetElement("Clear", "chars:updt-name");
+            document.getElementById("chars:updt-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            document.getElementById("chars:updt-id").style.borderWidth = "thin";
             document.getElementById("mode-label").innerHTML = "update mode";
-            document.getElementById("submit-message").value = "Enter the Book ID and 'Validate' to update characters for a book";
+            document.getElementById("submit:mssge").value = "Enter the Book ID and 'Validate' to update characters for a book";
 
 
         } else if (sMode === "delete") {
 
             //  disable the 'delete' mode button and color it green ....................................................
 
-            fSetElement("Hide", "charactersdelete-div");
+            fSetElement("Hide", "chars:del-div");
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Unhide", "charactersfilter-div");
-            fSetElement("Hide", "charactersadd-div");
-            fSetElement("Hide", "charactersbook-div");
-            fSetElement("Hide", "charactersfilter-div");
-            fSetElement("Hide", "charactersupdate-div");
-            fSetElement("Unhide", "charactersdelete-div");
-            fSetElement("Clear", "charactersdeleteid-input");
-            let ci = document.getElementById("charactersdeleteid-input");
+            fSetElement("Unhide", "chars:filter-div");
+            fSetElement("Hide", "chars:add-div");
+            fSetElement("Hide", "chars:vldt-book-div");
+            fSetElement("Hide", "chars:filter-div");
+            fSetElement("Hide", "chars:updt-div");
+            fSetElement("Unhide", "chars:del-div");
+            fSetElement("Clear", "chars:del-id");
+            let ci = document.getElementById("chars:del-id");
             ci.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             ci.style.borderWidth = "thin";
             document.getElementById("mode-label").innerHTML = "delete mode";
-            document.getElementById("submit-message").value = "Enter the Character ID and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the Character ID and 'Submit'";
         }
 
     } else if (sTopic === "authors") {
 
-        fUnhideMultiple("modes-div", "submit-div", "authors-div", "authorslist-textarea");
-        fSetElement("Clear", "authorsfilter-input");
-        fSetElement("UnhideInline", "authorsfilter-input");
-        fSetElement("Clear", "authorslist-textarea");
-        fSetElement("Unhide", "authorsadd-div");
+        fUnhideMultiple("modes-div", "submit:div", "authors:div", "authors:list");
+        fSetElement("Clear", "authors:filter");
+        fSetElement("UnhideInline", "authors:filter");
+        fSetElement("Clear", "authors:list");
+        fSetElement("Unhide", "authors:add-div");
         fSetElement("Clear", "series:add-name");
-        fSetElement("Disable", "submit-button");
-        fSetElement("Enable", "authorsfilter-input");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "authors:filter");
 
         if (sMode === 'fetch') {
 
@@ -590,15 +590,15 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Unhide", "authorsfilter-div");
-            fSetElement("Hide", "authorsadd-div");
-            fSetElement("Hide", "authorsupdate-div");
-            fSetElement("Hide", "authorsdelete-div");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Unhide", "authors:filter-div");
+            fSetElement("Hide", "authors:add-div");
+            fSetElement("Hide", "authors:updt-div");
+            fSetElement("Hide", "authors:del-div");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch authors (or set a filter, then 'Submit')";
-            sInputFilter = "authorsfilter-input";
-            sTextAreaResults = "authorslist-textarea";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch authors (or set a filter, then 'Submit')";
+            sInputFilter = "authors:filter";
+            sTextAreaResults = "authors:list";
             fFetchTopicList(sInputFilter, sTextAreaResults);
             fUnwrapAllText();
 
@@ -608,14 +608,14 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Disable", "authorsfilter-input");
-            fSetElement("Unhide", "authorsadd-div");
-            fSetElement("Hide", "authorsfilter-div");
-            fSetElement("Hide", "authorsupdate-div");
-            fSetElement("Hide", "authorsdelete-div");
-            document.getElementById("submit-message").value = "Enter the new author and click 'Submit'";
-            document.getElementById("authorsadd-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
-            document.getElementById("authorsadd-input").style.borderWidth = "thin";
+            fSetElement("Disable", "authors:filter");
+            fSetElement("Unhide", "authors:add-div");
+            fSetElement("Hide", "authors:filter-div");
+            fSetElement("Hide", "authors:updt-div");
+            fSetElement("Hide", "authors:del-div");
+            document.getElementById("submit:mssge").value = "Enter the new author and click 'Submit'";
+            document.getElementById("authors:add-name").style.backgroundColor = "rgb(255,255,224)";      // light yellow
+            document.getElementById("authors:add-name").style.borderWidth = "thin";
             document.getElementById("mode-label").innerHTML = "add mode";
 
         } else if (sMode === "update") {
@@ -624,19 +624,19 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Disable", "authorsupdatename-input");
-            fSetElement("Disable", "authorsupdated-input");
-            fSetElement("Hide", "authorsfilter-div");
-            fSetElement("Hide", "authorsadd-div");
-            fSetElement("Unhide", "authorsupdate-div");
-            fSetElement("Hide", "authorsdelete-div");
-            fSetElement("Disable", "authorsfilter-input");
-            document.getElementById("authorsupdateid-input").value = '';
-            document.getElementById("authorsupdatename-input").value = '';
-            document.getElementById("authorsupdateid-input").style.borderWidth = "thin";
-            document.getElementById("authorsupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            fSetElement("Disable", "authors:updt-name");
+            fSetElement("Disable", "authors:updtd-name");
+            fSetElement("Hide", "authors:filter-div");
+            fSetElement("Hide", "authors:add-div");
+            fSetElement("Unhide", "authors:updt-div");
+            fSetElement("Hide", "authors:del-div");
+            fSetElement("Disable", "authors:filter");
+            document.getElementById("authors:updt-id").value = '';
+            document.getElementById("authors:updt-name").value = '';
+            document.getElementById("authors:updt-id").style.borderWidth = "thin";
+            document.getElementById("authors:updt-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("mode-label").innerHTML = "update mode";
-            document.getElementById("submit-message").value = "Enter the existing author and click 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing author and click 'Submit'";
 
         } else if (sMode === "delete") {
 
@@ -644,28 +644,28 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Unhide", "authorsdelete-div");
-            fSetElement("Hide", "authorsfilter-div");
-            fSetElement("Hide", "authorsadd-div");
-            fSetElement("Hide", "authorsupdate-div");
+            fSetElement("Unhide", "authors:del-div");
+            fSetElement("Hide", "authors:filter-div");
+            fSetElement("Hide", "authors:add-div");
+            fSetElement("Hide", "authors:updt-div");
             document.getElementById("mode-label").innerHTML = "delete mode";
-            document.getElementById("authorsdelete-input").value = '';
-            document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
-            document.getElementById("authorsdelete-input").style.borderWidth = "thin";
-            document.getElementById("submit-message").value = "Enter the Author ID to delete and 'Submit'";
+            document.getElementById("authors:del-id").value = '';
+            document.getElementById("authors:del-id").style.backgroundColor = "rgb(255,255,224)";        // light yellow
+            document.getElementById("authors:del-id").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the Author ID to delete and 'Submit'";
         }
 
     } else if (sTopic === "classifications") {
 
-        fUnhideMultiple("modes-div", "submit-div", "classifications-div", "classificationslist-textarea");
-        fSetElement("Clear", "classificationsfilter-input");
-        fSetElement("UnhideInline", "classificationsfilter-input");
-        fSetElement("Clear", "classificationslist-textarea");
-        fSetElement("Unhide", "classificationsadd-div");
-        fSetElement("UnhideInline", "classificationsadd-input");
-        fSetElement("Clear", "classificationsadd-input");
-        fSetElement("Disable", "submit-button");
-        fSetElement("Enable", "classificationsfilter-input");
+        fUnhideMultiple("modes-div", "submit:div", "class:div", "class:list");
+        fSetElement("Clear", "class:filter");
+        fSetElement("UnhideInline", "class:filter");
+        fSetElement("Clear", "class:list");
+        fSetElement("Unhide", "class:add-div");
+        fSetElement("UnhideInline", "class:add-name");
+        fSetElement("Clear", "class:add-name");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Enable", "class:filter");
 
         if (sMode === 'fetch') {
 
@@ -673,15 +673,15 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Hide", "classificationsadd-div");
-            fSetElement("Hide", "classificationsdelete-div");
-            fSetElement("Enable", "submit-button");
-            fSetElement("Unhide", "classificationsfilter-div");
-            fSetElement("Hide", "classificationsupdate-div");
+            fSetElement("Hide", "class:add-div");
+            fSetElement("Hide", "class:del-div");
+            fSetElement("Enable", "submit:submit");
+            fSetElement("Unhide", "class:filter-div");
+            fSetElement("Hide", "class:updt-div");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch classification (or set a filter, then 'Submit')";
-            sTextAreaResults = "classificationslist-textarea";
-            sInputFilter = "classificationsfilter-input";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch classification (or set a filter, then 'Submit')";
+            sTextAreaResults = "class:list";
+            sInputFilter = "class:filter";
             fFetchTopicList(sInputFilter, sTextAreaResults);
             fUnwrapAllText();
 
@@ -691,13 +691,13 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Hide", "classificationsfilter-div");
-            fSetElement("Hide", "classificationsdelete-div");
-            fSetElement("Hide", "classificationsupdate-div");
-            document.getElementById("classificationsadd-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
-            document.getElementById("classificationsadd-input").style.borderWidth = "thin";
+            fSetElement("Hide", "class:filter-div");
+            fSetElement("Hide", "class:del-div");
+            fSetElement("Hide", "class:updt-div");
+            document.getElementById("class:add-name").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            document.getElementById("class:add-name").style.borderWidth = "thin";
             document.getElementById("mode-label").innerHTML = "add mode";
-            document.getElementById("submit-message").value = "Enter the new classification and click 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the new classification and click 'Submit'";
 
         } else if (sMode === "update") {
 
@@ -705,18 +705,18 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Hide", "classificationsadd-div");
-            fSetElement("Unhide", "classificationsupdate-div");
-            fSetElement("Hide", "classificationsdelete-div");
-            fSetElement("Hide", "classificationsfilter-div");
-            fSetElement("Disable", "classificationsupdatename-input");
-            fSetElement("Disable", "classificationsupdated-input");
-            document.getElementById("classificationsupdateid-input").value = '';
-            document.getElementById("classificationsupdatename-input").value = '';
-            document.getElementById("classificationsupdateid-input").style.borderWidth = "thin";
-            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            fSetElement("Hide", "class:add-div");
+            fSetElement("Unhide", "class:updt-div");
+            fSetElement("Hide", "class:del-div");
+            fSetElement("Hide", "class:filter-div");
+            fSetElement("Disable", "class:updt-name");
+            fSetElement("Disable", "class:updtd-name");
+            document.getElementById("class:updt-id").value = '';
+            document.getElementById("class:updt-name").value = '';
+            document.getElementById("class:updt-id").style.borderWidth = "thin";
+            document.getElementById("class:updt-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("mode-label").innerHTML = "update mode";
-            document.getElementById("submit-message").value = "Enter the existing classification and click 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing classification and click 'Submit'";
 
 
         } else if (sMode === "delete") {
@@ -725,28 +725,28 @@ function fSetMode(sNewMode) {
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
-            fSetElement("Hide", "classificationsadd-div");
-            fSetElement("Disable", "classificationsfilter-input");
-            fSetElement("Unhide", "classificationsdelete-div");
-            fSetElement("Hide", "classificationsfilter-div");
-            fSetElement("Hide", "classificationsupdate-div");
-            document.getElementById("classificationsdelete-input").value = '';
-            document.getElementById("classificationsdelete-input").style.backgroundColor = "rgb(255,255,224)";          // light yellow
-            document.getElementById("classificationsdelete-input").style.borderWidth = "thin";
+            fSetElement("Hide", "class:add-div");
+            fSetElement("Disable", "class:filter");
+            fSetElement("Unhide", "class:del-div");
+            fSetElement("Hide", "class:filter-div");
+            fSetElement("Hide", "class:updt-div");
+            document.getElementById("class:del-id").value = '';
+            document.getElementById("class:del-id").style.backgroundColor = "rgb(255,255,224)";          // light yellow
+            document.getElementById("class:del-id").style.borderWidth = "thin";
             document.getElementById("mode-label").innerHTML = "delete mode";
-            document.getElementById("submit-message").value = "Enter the classification ID to delete and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the classification ID to delete and 'Submit'";
         }
 
     } else if (sTopic === "ratings") {
 
-        fUnhideMultiple("modes-div", "submit-div", "ratings:div", "ratings:list");
+        fUnhideMultiple("modes-div", "submit:div", "ratings:div", "ratings:list");
         fSetElement("Clear", "ratings:filter");
         fSetElement("UnhideInline", "ratings:filter");
         fSetElement("Clear", "ratings:list");
         fSetElement("Unhide", "ratings:add-div");
         fSetElement("Clear", "ratings:add-name");
         fSetElement("UnhideInline", "ratings:add-name");
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
         fSetElement("Enable", "ratings:filter");
 
         if (sMode === 'fetch') {
@@ -759,9 +759,9 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "ratings:updt-div");
             fSetElement("Hide", "ratings:del-div");
             fSetElement("Unhide", "ratings:filter-div");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch ratings (or set a filter, then click 'Submit')";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch ratings (or set a filter, then click 'Submit')";
             sTextAreaResults = "ratings:list";
             sInputFilter = "ratings:filter";
             fFetchTopicList(sInputFilter, sTextAreaResults);
@@ -780,7 +780,7 @@ function fSetMode(sNewMode) {
             document.getElementById("ratings:add-name").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("ratings:add-name").style.borderWidth = "thin";
             document.getElementById("mode-label").innerHTML = "add mode";
-            document.getElementById("submit-message").value = "Enter the new rating and click 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the new rating and click 'Submit'";
 
         } else if (sMode === "update") {
 
@@ -800,7 +800,7 @@ function fSetMode(sNewMode) {
             document.getElementById("ratings:updt-id").style.backgroundColor = "rgb(255,255,224)";       // light yellow
             document.getElementById("ratings:updt-id").style.borderWidth = "thin";
             document.getElementById("ratings:updt-name").style.borderWidth = "thin";
-            document.getElementById("submit-message").value = "Enter the existing rating and click 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing rating and click 'Submit'";
 
         } else if (sMode === "delete") {
 
@@ -817,18 +817,18 @@ function fSetMode(sNewMode) {
             document.getElementById("ratings:del-id").style.backgroundColor = "rgb(255,255,224)";        // light yellow
             document.getElementById("ratings:del-id").style.borderWidth = "thin";
             document.getElementById("ratings:del-id").value = '';
-            document.getElementById("submit-message").value = "Enter the rating ID to delete and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the rating ID to delete and 'Submit'";
         }
 
     } else if (sTopic === "series") {
 
-        fUnhideMultiple("modes-div", "submit-div", "series:div", "series:list");
+        fUnhideMultiple("modes-div", "submit:div", "series:div", "series:list");
         fSetElement("Clear", "series:filter");
         fSetElement("UnhideInline", "series:filter");
         fSetElement("Clear", "series:list");
         fSetElement("Clear", "series:add-name");
         fSetElement("UnhideInline", "series:add-name");
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
         fSetElement("Enable", "series:filter");
 
         if (sMode === 'fetch') {
@@ -842,9 +842,9 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "series:updt-div");
             fSetElement("Hide", "series:del-div");
             fSetElement("Unhide", "series:list-div");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch series (or set a filter, then 'Submit')";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch series (or set a filter, then 'Submit')";
             sTextAreaResults = "series:list";
             sInputFilter = "series:filter";
             fFetchTopicList(sInputFilter, sTextAreaResults);
@@ -862,7 +862,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "series:del-div");
             fSetElement("unHide", "series:list-div");
             document.getElementById("mode-label").innerHTML = "add mode";
-            document.getElementById("submit-message").value = "Enter the new series and click 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the new series and click 'Submit'";
             document.getElementById("series:add-name").style.backgroundColor = "rgb(255,255,224)";       // light yellow
             document.getElementById("series:add-name").style.borderWidth = "thin";
 
@@ -885,7 +885,7 @@ function fSetMode(sNewMode) {
             document.getElementById("series:updt-id").style.backgroundColor = "rgb(255,255,224)";       // light yellow
             document.getElementById("series:updt-id").style.borderWidth = "thin";
             document.getElementById("series:updt-name").style.borderWidth = "thin";
-            document.getElementById("submit-message").value = "Enter the existing series ID and click 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing series ID and click 'Submit'";
 
         } else if (sMode === "delete") {
 
@@ -902,19 +902,19 @@ function fSetMode(sNewMode) {
             document.getElementById("series:del-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("series:del-id").style.borderWidth = "thin";
             document.getElementById("series:del-id").value = '';
-            document.getElementById("submit-message").value = "Enter the Series ID to delete and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the Series ID to delete and 'Submit'";
         }
 
     } else if (sTopic === "sources") {
 
-        fUnhideMultiple("modes-div", "submit-div", "sources:div", "sources:list");
+        fUnhideMultiple("modes-div", "submit:div", "sources:div", "sources:list");
         fSetElement("Clear", "sources:filter");
         fSetElement("UnhideInline", "sources:filter");
         fSetElement("Clear", "sources:list");
         fSetElement("Unhide", "sources:add-div");
         fSetElement("Clear", "sources:add-name");
         fSetElement("UnhideInline", "sources:add-name");
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
         fSetElement("Enable", "sources:filter");
 
         if (sMode === 'fetch') {
@@ -927,9 +927,9 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "sources:add-div");
             fSetElement("Hide", "sources:del-div");
             fSetElement("Hide", "sources:updt-div");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
             sTextAreaResults = "sources:list";
             sInputFilter = "sources:filter";
             fFetchTopicList(sInputFilter, sTextAreaResults);
@@ -951,7 +951,7 @@ function fSetMode(sNewMode) {
             document.getElementById("sources:add-name").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("sources:add-name").style.borderWidth = "thin";
             document.getElementById("sources:add-name").value = '';
-            document.getElementById("submit-message").value = "Enter the new source and click 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the new source and click 'Submit'";
 
         } else if (sMode === "update") {
 
@@ -971,7 +971,7 @@ function fSetMode(sNewMode) {
             document.getElementById("sources:updt-id").style.borderWidth = "thin";
             document.getElementById("sources:updt-name").value = '';
             document.getElementById("sources:updt-id").value = '';
-            document.getElementById("submit-message").value = "Enter the existing source and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing source and 'Submit'";
             
         } else if (sMode === "delete") {
 
@@ -988,12 +988,12 @@ function fSetMode(sNewMode) {
             document.getElementById("sources:del-id").style.backgroundColor = "rgb(255,255,224)";        // light yellow
             document.getElementById("sources:del-id").style.borderWidth = "thin";
             document.getElementById("sources:del-id").value = '';
-            document.getElementById("submit-message").value = "Enter the Source ID to delete and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the Source ID to delete and 'Submit'";
         }
 
     } else if (sTopic === "genres") {
 
-        fUnhideMultiple("modes-div", "submit-div", "genres:div", "genres:list");
+        fUnhideMultiple("modes-div", "submit:div", "genres:div", "genres:list");
         fSetElement("Clear", "genres:filter");
         fSetElement("UnhideInline", "genres:filter");
         fSetElement("Clear", "genres:list");
@@ -1001,7 +1001,7 @@ function fSetMode(sNewMode) {
         fSetElement("Clear", "genres:add-name");
         fSetElement("UnhideInline", "genres:add-name");
         fSetElement("Enable", "genres:filter");
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
 
         if (sMode === 'fetch') {
 
@@ -1012,10 +1012,10 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "genres:add-div");
             fSetElement("Hide", "genres:updt-div");
             fSetElement("Hide", "genres:del-div");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             fSetElement("Unhide", "genres:filter-div");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then 'Submit')";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then 'Submit')";
             sTextAreaResults = "genres:list";
             sInputFilter = "genres:filter";
             fFetchTopicList(sInputFilter, sTextAreaResults);
@@ -1037,7 +1037,7 @@ function fSetMode(sNewMode) {
             document.getElementById("genres:add-name").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("genres:add-name").style.borderWidth = "thin";
             document.getElementById("genres:add-name").value = '';
-            document.getElementById("submit-message").value = "Enter a new genre and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter a new genre and 'Submit'";
 
         } else if (sMode === "update") {
 
@@ -1056,7 +1056,7 @@ function fSetMode(sNewMode) {
             document.getElementById("genres:updt-id").value = '';
             document.getElementById("genres:updt-name").value = '';
             document.getElementById("genres:updtd-name").value = '';
-            document.getElementById("submit-message").value = "Enter the existing genre and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing genre and 'Submit'";
 
         } else if (sMode === "delete") {
 
@@ -1073,19 +1073,19 @@ function fSetMode(sNewMode) {
             document.getElementById("genres:del-id").value = '';
             document.getElementById("genres:del-id").style.borderWidth = "thin";
             document.getElementById("genres:del-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
-            document.getElementById("submit-message").value = "Enter the existing Genre ID and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing Genre ID and 'Submit'";
 
         }
     } else if (sTopic === "statuses") {
 
-        fUnhideMultiple("modes-div", "submit-div", "statuses:div", "statuses:list");
+        fUnhideMultiple("modes-div", "submit:div", "statuses:div", "statuses:list");
         fSetElement("Clear", "statuses:filter");
         fSetElement("UnhideInline", "statuses:filter");
         fSetElement("Clear", "statuses:list");
         fSetElement("Unhide", "statuses:add-div");
         fSetElement("Clear", "statuses:add-name");
         fSetElement("UnhideInline", "statuses:add-name");
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
 
         if (sMode === 'fetch') {
 
@@ -1094,13 +1094,13 @@ function fSetMode(sNewMode) {
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
             fSetElement("Enable", "statuses:filter");
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             fSetElement("Unhide", "statuses:filter-div");
             fSetElement("Hide", "statuses:add-div");
             fSetElement("Hide", "statuses:updt-div");
             fSetElement("Hide", "statuses:del-div");
             document.getElementById("mode-label").innerHTML = "fetch mode";
-            document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then 'Submit')";
+            document.getElementById("submit:mssge").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then 'Submit')";
             sTextAreaResults = "statuses:list";
             sInputFilter = "statuses:filter";
             fFetchTopicList(sInputFilter, sTextAreaResults);
@@ -1117,7 +1117,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "statuses:updt-div");
             fSetElement("Hide", "statuses:del-div");
             document.getElementById("mode-label").innerHTML = "add mode";
-            document.getElementById("submit-message").value = "Enter a new Status Name and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter a new Status Name and 'Submit'";
             document.getElementById("statuses:add-name").style.backgroundColor = "rgb(255,255,224)";     // light yellow
             document.getElementById("statuses:add-name").style.borderWidth = "thin";
             document.getElementById("statuses:add-name").value = '';
@@ -1139,7 +1139,7 @@ function fSetMode(sNewMode) {
             document.getElementById("statuses:updt-id").value = '';
             document.getElementById("statuses:updt-name").value = '';
             document.getElementById("statuses:updtd-name").value = '';
-            document.getElementById("submit-message").value = "Enter the existing Status ID and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing Status ID and 'Submit'";
 
 
         } else if (sMode === "delete") {
@@ -1157,7 +1157,7 @@ function fSetMode(sNewMode) {
             document.getElementById("statuses:del-id").value = '';
             document.getElementById("statuses:del-id").style.borderWidth = "thin";
             document.getElementById("statuses:del-id").style.backgroundColor = "rgb(255,255,224)";       // light yellow
-            document.getElementById("submit-message").value = "Enter the existing Status ID and 'Submit'";
+            document.getElementById("submit:mssge").value = "Enter the existing Status ID and 'Submit'";
         }
     }
 }
@@ -1168,7 +1168,7 @@ async function fonclick_submit_submit() {
 
     const aTopicsToFetch = ["titles", "authors", "recents", "unreads", "classifications", "ratings", "series", "sources", "genres", "statuses"];
 
-    let sTopic = document.getElementById("topics-select").value;
+    let sTopic = document.getElementById("topic-select").value;
     let sInputFilter = '';
     let sTextAreaResults = '';
 
@@ -1177,23 +1177,23 @@ async function fonclick_submit_submit() {
     if ((aTopicsToFetch.includes(sTopic)) && sMode === "fetch") {
 
         if (sTopic === "titles") {
-            sTextAreaResults = "titlesarea-textarea";
-            sInputFilter = "titlesfilter-input";
+            sTextAreaResults = "titles:list";
+            sInputFilter = "titles:filter";
         } else if (sTopic === "recents") {
-            sTextAreaResults = "recentsarea-textarea";
-            sInputFilter = "recentsfilter-input";
+            sTextAreaResults = "recents:list";
+            sInputFilter = "recents:filter";
         } else if (sTopic === "unreads") {
-            sTextAreaResults = "unreadsarea-textarea";
-            sInputFilter = "unreadsfilter-input";
+            sTextAreaResults = "unreads:list";
+            sInputFilter = "unreads:filter";
         } else if (sTopic === "characters") {
-            sTextAreaResults = "charactersarea-textarea";
-            sInputFilter = "charactersfilter-input";
+            sTextAreaResults = "chars:list";
+            sInputFilter = "chars:filter";
         } else if (sTopic === "authors") {
-            sTextAreaResults = "authorslist-textarea";
-            sInputFilter = "authorsfilter-input";
+            sTextAreaResults = "authors:list";
+            sInputFilter = "authors:filter";
         } else if (sTopic === "classifications") {
-            sTextAreaResults = "classificationslist-textarea";
-            sInputFilter = "classificationsfilter-input";
+            sTextAreaResults = "class:list";
+            sInputFilter = "class:filter";
         } else if (sTopic === "ratings") {
             sTextAreaResults = "ratings:list";
             sInputFilter = "ratings:filter";
@@ -1220,7 +1220,7 @@ async function fonclick_submit_submit() {
         fPopulateLOV('series');
         fPopulateLOV('genres');
         fGetBookDetails();
-        document.getElementById("submit-message").value=sTopic.substring(0, 4) + " details fetched";
+        document.getElementById("submit:mssge").value=sTopic.substring(0, 4) + " details fetched";
         document.getElementById("books:stage").value = 'Book Fetch Submitted';
         let w = document.getElementById("wrapButton");
         w.disabled=false;
@@ -1251,8 +1251,8 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("books:titleId").value = text;
-            document.getElementById("submit-message").value = 'Book added';
-            fSetElement("Disable", "submit-button");
+            document.getElementById("submit:mssge").value = 'Book added';
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "books:titleId");
             fSetElement("Disable", "books:name");
             fSetElement("Disable", "books:author");
@@ -1277,7 +1277,7 @@ async function fonclick_submit_submit() {
         fSetElement("Disable", "books:titleId");
         fGetBookDetails();
         document.getElementById("books:stage").value = 'Book Fetch Submitted';
-        document.getElementById("submit-message").value=sTopic.substring(0, 4) + " details fetched so make updates and submit";
+        document.getElementById("submit:mssge").value=sTopic.substring(0, 4) + " details fetched so make updates and submit";
         fSetElement("Disable", "books:stage");
         fSetElement("Disable", "books:titleId");
         fSetElement("Enable", "books:name");
@@ -1322,7 +1322,7 @@ async function fonclick_submit_submit() {
         if (response.ok) {
             let text = await response.text();
             document.getElementById("books:titleId").value = text;
-            document.getElementById("submit-message").value = 'Book added';
+            document.getElementById("submit:mssge").value = 'Book added';
             fSetElement("Disable", "books:stage");
             fSetElement("Disable", "books:titleId");
             fSetElement("Disable", "books:name");
@@ -1336,7 +1336,7 @@ async function fonclick_submit_submit() {
             fSetElement("Disable", "books:start");
             fSetElement("Disable", "books:finish");
             fSetElement("Disable", "books:cmnts");
-            document.getElementById("submit-message").value = " Book Updated";
+            document.getElementById("submit:mssge").value = " Book Updated";
         }
     } else if ((sTopic === 'books') && sMode === "delete") {
 
@@ -1345,127 +1345,127 @@ async function fonclick_submit_submit() {
             let response = await fetch(sRequest);
             if (response.ok) {
                 let text = await response.text();
-                document.getElementById("submit-message").value = text;
+                document.getElementById("submit:mssge").value = text;
             } else {
                 alert("HttpError: " + response.status);
             }
     } else if ((sTopic === 'characters') && sMode === "fetch") {
-        let iTitleID = document.getElementById("charactersbookid-input").value;
+        let iTitleID = document.getElementById("chars:book-id").value;
         let sTitleName = await fGetBookTitle(iTitleID);
-        document.getElementById("charactersbooktitle-input").value = sTitleName;
+        document.getElementById("chars:book-title").value = sTitleName;
         if (sTitleName === "No title found") {
-            document.getElementById("submit-message").value = "Invalid Book ID. No titles exist for this ID";
-            document.getElementById("charactersarea-textarea").value = '';
+            document.getElementById("submit:mssge").value = "Invalid Book ID. No titles exist for this ID";
+            document.getElementById("chars:list").value = '';
         } else {
             fGetBookCharacters2();
         }
     } else if ((sTopic === 'characters') && sMode === "add") {
-        let sTitleID=  document.getElementById("charactersbookid-input").value;
-        let sCharacterName = document.getElementById("charactersadd-input").value;
+        let sTitleID=  document.getElementById("chars:book-id").value;
+        let sCharacterName = document.getElementById("chars:add-name").value;
         let sRequest = uri12 + '?' + "TitleID=" + sTitleID + "&CharacterName=" + sCharacterName.replace(/'/g, "''");
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
-            document.getElementById("charactersadd-input").value = '';
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("chars:add-name").value = '';
         } else {
             alert("HttpError: " + response.status);
         }
     } else if ((sTopic === 'characters') && sMode === "update") {
-        let sCharacterID =  document.getElementById("charactersupdateid-input").value;
-        let sCharacterName = document.getElementById("charactersupdatedname-input").value;
+        let sCharacterID =  document.getElementById("chars:updt-id").value;
+        let sCharacterName = document.getElementById("chars:updtd-name").value;
         let sRequest = uri15 + '?' + "CharacterID=" + sCharacterID + "&CharacterName=" + sCharacterName.replace(/'/g, "''");
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
-            document.getElementById("charactersupdatedname-input").value = '';
-            document.getElementById("charactersupdatedname-input").style.backgroundColor = "rgb(255,255,255)";             // white
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("chars:updtd-name").value = '';
+            document.getElementById("chars:updtd-name").style.backgroundColor = "rgb(255,255,255)";             // white
         } else {
             alert("HttpError: " + response.status);
         }
     } else if ((sTopic === 'characters') && sMode === "delete") {
-        let sCharID = document.getElementById("charactersdeleteid-input").value;
+        let sCharID = document.getElementById("chars:del-id").value;
         let sRequest = uri13 + '?' + "CharID=" + sCharID;
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
         } else {
             alert("HttpError: " + response.status);
         }
     } else if ((sTopic === 'authors') && sMode === "add") {
-        sAddAuthorEncoded = encodeURIComponent(document.getElementById("authorsadd-input").value);
+        sAddAuthorEncoded = encodeURIComponent(document.getElementById("authors:add-name").value);
         sAddAuthorEncoded1 = sAddAuthorEncoded.replace(/'/g, "''");
         let sRequest = uri04 + '?' + "author=" + sAddAuthorEncoded1;
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
-            document.getElementById("authorsadd-input").value = '';
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("authors:add-name").value = '';
             fPopulateLOV('authors');
         } else {
             alert("HttpError: " + response.status);
         }
     } else if ((sTopic === 'authors') && sMode === "update") {
-        let sAuthorId =  document.getElementById("authorsupdateid-input").value;
-        let sAuthorName = document.getElementById("authorsupdated-input").value;
+        let sAuthorId =  document.getElementById("authors:updt-id").value;
+        let sAuthorName = document.getElementById("authors:updtd-name").value;
         let sRequest = uri36 + '?' + "authorID=" + sAuthorId + "&authorName=" + sAuthorName.replace(/'/g, "''");
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
-            document.getElementById("authorsupdated-input").value = '';
-            document.getElementById("authorsupdated-input").style.backgroundColor = "rgb(255,255,255)";           // white
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("authors:updtd-name").value = '';
+            document.getElementById("authors:updtd-name").style.backgroundColor = "rgb(255,255,255)";           // white
             fPopulateLOV('authors');
         } else {
             alert("HttpError: " + response.status);
         }
     } else if ((sTopic === 'authors') && sMode === "delete") {
-        let sAuthorID = document.getElementById("authorsdelete-input").value;
+        let sAuthorID = document.getElementById("authors:del-id").value;
         let sRequest = uri22 + '?' + "authorID=" + sAuthorID;
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             fPopulateLOV('authors');
         } else {
             alert("HttpError: " + response.status);
         }
     } else if ((sTopic === 'classifications') && sMode === "add") {
-        sAddClassificationsEncoded = encodeURIComponent(document.getElementById("classificationsadd-input").value);
+        sAddClassificationsEncoded = encodeURIComponent(document.getElementById("class:add-name").value);
         sAddClassificationsEncoded1 = sAddClassificationsEncoded.replace(/'/g, "''");
         let sRequest = uri05 + '?' + "classification=" + sAddClassificationsEncoded1;
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
-            document.getElementById("classificationsadd-input").value = '';
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("class:add-name").value = '';
             fPopulateLOV('classifications');
         } else {
             alert("HttpError: " + response.status);
         }
     } else if ((sTopic === 'classifications') && sMode === "update") {
-        let sClassId =  document.getElementById("classificationsupdateid-input").value;
-        let sClassName = document.getElementById("classificationsupdated-input").value;
+        let sClassId =  document.getElementById("class:updt-id").value;
+        let sClassName = document.getElementById("class:updtd-name").value;
         let sRequest = uri34 + '?' + "classID=" + sClassId + "&className=" + sClassName.replace(/'/g, "''");
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
-            document.getElementById("classificationsupdated-input").value = '';
-            document.getElementById("classificationsupdated-input").style.backgroundColor = "rgb(255,255,255)";             // white
+            document.getElementById("submit:mssge").value = text;
+            document.getElementById("class:updtd-name").value = '';
+            document.getElementById("class:updtd-name").style.backgroundColor = "rgb(255,255,255)";             // white
             fPopulateLOV('classifications');
         } else {
             alert("HttpError: " + response.status);
         }
     } else if ((sTopic === 'classifications') && sMode === "delete") {
-        let sClassID = document.getElementById("classificationsdelete-input").value;
+        let sClassID = document.getElementById("class:del-id").value;
         let sRequest = uri16 + '?' + "ClassID=" + sClassID;
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             fPopulateLOV('classifications');
         } else {
             alert("HttpError: " + response.status);
@@ -1477,7 +1477,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("ratings:add-name").value = '';
             fPopulateLOV('ratings');
         } else {
@@ -1490,7 +1490,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("ratings:updtd-name").value = '';
             document.getElementById("ratings:updtd-name").style.backgroundColor = "rgb(255,255,255)";           // white
             fPopulateLOV('ratings');
@@ -1503,7 +1503,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             fPopulateLOV('ratings');
         } else {
             alert("HttpError: " + response.status);
@@ -1515,7 +1515,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("series:add-name").value = '';
             fPopulateLOV('series');
         } else {
@@ -1528,7 +1528,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("series:updtd-name").value = '';
             document.getElementById("series:updtd-name").style.backgroundColor = "rgb(255,255,255)";            // white
             fPopulateLOV('series');
@@ -1541,7 +1541,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             fPopulateLOV('series');
         } else {
             alert("HttpError: " + response.status);
@@ -1553,7 +1553,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("sources:add-name").value = '';
             fPopulateLOV('sources');
         } else {
@@ -1566,7 +1566,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("sources:updtd-name").value = '';
             document.getElementById("sources:updtd-name").style.backgroundColor = "rgb(255,255,255)";           // white
             fPopulateLOV('sources');
@@ -1579,7 +1579,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             fPopulateLOV('sources');
         } else {
             alert("HttpError: " + response.status);
@@ -1591,7 +1591,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("genres:add-name").value = '';
             fPopulateLOV('genres');
         } else {
@@ -1604,7 +1604,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("genres:updtd-name").value = '';
             pdocument.getElementById("genres:updtd-name").style.backgroundColor = "rgb(255,255,255)";            // white
         } else {
@@ -1616,7 +1616,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             fPopulateLOV('genres');
         } else {
             alert("HttpError: " + response.status);
@@ -1628,7 +1628,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("statuses:add-name").value = '';
             fPopulateLOV('statuses');
         } else {
@@ -1641,7 +1641,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             document.getElementById("statuses:updtd-name").value = '';
             document.getElementById("statuses:updtd-name").style.backgroundColor = "rgb(255,255,255)";            // white
             fPopulateLOV('statuses');
@@ -1654,7 +1654,7 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("submit-message").value = text;
+            document.getElementById("submit:mssge").value = text;
             fPopulateLOV('statuses');
         } else {
             alert("HttpError: " + response.status);
@@ -1668,32 +1668,32 @@ async function fonclick_chars_vldt_bk_id() {
 
     // validate the title matching a book ID and set a Fetch filter or Add Character field .............................
 
-    let iTitleId = document.getElementById("charactersbookid-input").value;
+    let iTitleId = document.getElementById("chars:book-id").value;
     let sRequest = uri11 + '?' + 'TitleID=' + iTitleId;
-    document.getElementById("charactersarea-textarea").value = '';
+    document.getElementById("chars:list").value = '';
     let response = await fetch(sRequest);
     if (response.ok) {
         let text = await response.text();
-        document.getElementById("charactersbooktitle-input").value = text;
+        document.getElementById("chars:book-title").value = text;
         if (text === "No title found") {
-            document.getElementById("submit-message").value = "No book exists for this Title ID";
+            document.getElementById("submit:mssge").value = "No book exists for this Title ID";
         } else if (document.getElementById("mode-label").innerHTML == "fetch mode") {
-            fSetElement("Hide", "charactersadd-div");
-            fSetElement("Enable", "submit-button");
-            fSetElement("Enable", "charactersfilter-input");
-            fSetElement("Enable", "charactersadd-input");
-            fSetElement("Unhide", "charactersfilter-div");
-            document.getElementById("submit-message").value = "Enter a character filter (optional) and 'submit'";
+            fSetElement("Hide", "chars:add-div");
+            fSetElement("Enable", "submit:submit");
+            fSetElement("Enable", "chars:filter");
+            fSetElement("Enable", "chars:add-name");
+            fSetElement("Unhide", "chars:filter-div");
+            document.getElementById("submit:mssge").value = "Enter a character filter (optional) and 'submit'";
             let w = document.getElementById("wrapButton");
             w.disabled=false;
             fonclick_submit_submit();
         } else if (document.getElementById("mode-label").innerHTML == "add mode") {
-            fSetElement("Unhide", "charactersadd-div");
-            fSetElement("Enable", "submit-button");
-            fSetElement("Enable", "charactersfilter-input");
-            fSetElement("Enable", "charactersadd-input");
-            fSetElement("Hide", "charactersfilter-div");
-            document.getElementById("submit-message").value = "Enter a character filter (optional) and 'submit'";
+            fSetElement("Unhide", "chars:add-div");
+            fSetElement("Enable", "submit:submit");
+            fSetElement("Enable", "chars:filter");
+            fSetElement("Enable", "chars:add-name");
+            fSetElement("Hide", "chars:filter-div");
+            document.getElementById("submit:mssge").value = "Enter a character filter (optional) and 'submit'";
         }
     } else {
         alert("HttpError: " + response.status);
@@ -1707,22 +1707,22 @@ async function fonclick_chars_vldt_char_id() {
 
     // fetch to fetch the title matching a book ID .....................................................................
 
-    let iCharId = document.getElementById("charactersupdateid-input").value;
+    let iCharId = document.getElementById("chars:updt-id").value;
     let sRequest = uri14 + '?' + 'CharID=' + iCharId;
     let response = await fetch(sRequest);
-    document.getElementById("charactersupdatedname-input").value = '';
+    document.getElementById("chars:updtd-name").value = '';
     if (response.ok) {
         let text = await response.text();
-        document.getElementById("charactersupdatename-input").value = text;
+        document.getElementById("chars:updt-name").value = text;
         if (text === "No character found") {
-            document.getElementById("submit-message").value = "No character exists for this Character ID";
+            document.getElementById("submit:mssge").value = "No character exists for this Character ID";
         } else {
-            fSetElement("Enable", "charactersupdatedname-input");
-            fSetElement("Disable", "charactersupdatename-input");
-            fSetElement("Hide", "charactersfilter-div");
-            document.getElementById("charactersupdatedname-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
-            document.getElementById("charactersupdatedname-input").style.borderWidth = "thin";
-            document.getElementById("submit-message").value = "Enter the changed character name and 'submit'";
+            fSetElement("Enable", "chars:updtd-name");
+            fSetElement("Disable", "chars:updt-name");
+            fSetElement("Hide", "chars:filter-div");
+            document.getElementById("chars:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+            document.getElementById("chars:updtd-name").style.borderWidth = "thin";
+            document.getElementById("submit:mssge").value = "Enter the changed character name and 'submit'";
         }
     } else {
         alert("HttpError: " + response.status);
@@ -1776,7 +1776,7 @@ async function fGetBookDetails() {
                 document.getElementById("books:cmnts").value = "";
             }
         } else {
-            document.getElementById("submit-message").value = "No matching book found for this title ID";
+            document.getElementById("submit:mssge").value = "No matching book found for this title ID";
         }
     } else {
         alert("HttpError: " + response.status);
@@ -1816,7 +1816,7 @@ async function fGetBookCharacters2() {
 
     let arrayCharacters = [];
     let sNewText = '';
-    let sRequest = uri03 + '?' + 'TitleID=' + document.getElementById("charactersbookid-input").value + '&Filter=' + (document.getElementById("charactersfilter-input").value).replace(/'/g, "''");
+    let sRequest = uri03 + '?' + 'TitleID=' + document.getElementById("chars:book-id").value + '&Filter=' + (document.getElementById("chars:filter").value).replace(/'/g, "''");
     let response = await fetch(sRequest);
     if (response.ok) {
         let text = await response.text();
@@ -1829,8 +1829,8 @@ async function fGetBookCharacters2() {
             }
         }
 
-         document.getElementById("charactersarea-textarea").value = sNewText;
-         document.getElementById("submit-message").value = "Characters fetched for the entered book title";
+         document.getElementById("chars:list").value = sNewText;
+         document.getElementById("submit:mssge").value = "Characters fetched for the entered book title";
 
     } else {
         alert("HttpError: " + response.status);
@@ -1854,17 +1854,17 @@ async function fGetBookTitle(iTitleID) {
 // function to set wrap on textarea ....................................................................................
 
 function fWrapText() {
-    let r1 = document.getElementById("titlesarea-textarea");
-    let r2 = document.getElementById("recentsarea-textarea");
-    let r3 = document.getElementById("charactersarea-textarea");
-    let r4 = document.getElementById("authorslist-textarea");
-    let r5 = document.getElementById("classificationslist-textarea");
+    let r1 = document.getElementById("titles:list");
+    let r2 = document.getElementById("recents:list");
+    let r3 = document.getElementById("chars:list");
+    let r4 = document.getElementById("authors:list");
+    let r5 = document.getElementById("class:list");
     let r6 = document.getElementById("ratings:list");
     let r7 = document.getElementById("series:list");
     let r8 = document.getElementById("sources:list");
     let r9 = document.getElementById("genres:list");
     let ra = document.getElementById("statuses:list");
-    let rb = document.getElementById("unreadsarea-textarea");
+    let rb = document.getElementById("unreads:list");
     let rc = document.getElementById("books:chrs");
     let w = document.getElementById("wrapButton");
     if((r1.style.whiteSpace == "pre") && (sTopic == "titles")) {
@@ -1956,17 +1956,17 @@ function fWrapText() {
 //    function to set wrap off on all textareas
 
 function fUnwrapAllText() {
-    let r1 = document.getElementById("titlesarea-textarea");
-    let r2 = document.getElementById("recentsarea-textarea");
-    let r3 = document.getElementById("charactersarea-textarea");
-    let r4 = document.getElementById("authorslist-textarea");
-    let r5 = document.getElementById("classificationslist-textarea");
+    let r1 = document.getElementById("titles:list");
+    let r2 = document.getElementById("recents:list");
+    let r3 = document.getElementById("chars:list");
+    let r4 = document.getElementById("authors:list");
+    let r5 = document.getElementById("class:list");
     let r6 = document.getElementById("ratings:list");
     let r7 = document.getElementById("series:list");
     let r8 = document.getElementById("sources:list");
     let r9 = document.getElementById("genres:list");
     let ra = document.getElementById("statuses:list");
-    let rb = document.getElementById("unreadsarea-textarea");
+    let rb = document.getElementById("unreads:list");
     let rc = document.getElementById("books:chrs");
     let w = document.getElementById("wrapButton");
     r1.style.whiteSpace = "pre";
@@ -1993,19 +1993,19 @@ function fEnableSubmitButton01(titleId) {
     let iTitleId = TID.value;
 
     if (iTitleId === '') {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
         let dt1 = document.getElementById("books:titleId");
         dt1.style.backgroundColor = "rgb(255,255,224)";                                            // light yellow color
-        let dt2 = document.getElementById("charactersbookid-input");
+        let dt2 = document.getElementById("chars:book-id");
         dt2.style.backgroundColor = "rgb(255,255,224)";                                            // light yellow color
     } else if(isNaN(iTitleId) === false){
         TID.style.backgroundColor = "rgb(189,245,189)";                                              // pale green color
-        fSetElement("Enable", "submit-button");
-        fSetElement("Enable", "charactersvalidatebook-button");
+        fSetElement("Enable", "submit:submit");
+        fSetElement("Enable", "chars:vldt-book-id");
     } else {
         TID.style.backgroundColor = "rgb(255, 204, 203)";                                             // light red color
-        fSetElement("Disable", "submit-button");
-        fSetElement("Disable", "charactersvalidatebook-button");
+        fSetElement("Disable", "submit:submit");
+        fSetElement("Disable", "chars:vldt-book-id");
     }
 }
 
@@ -2014,34 +2014,34 @@ function fEnableSubmitButton01(titleId) {
 function fonKeyUp_chars_book_id() {
 
     if (document.getElementById("mode-label").innerHTML === "add mode") {
-        iBookId = document.getElementById("charactersbookid-input").value;
-        document.getElementById("charactersbooktitle-input").value = '';
+        iBookId = document.getElementById("chars:book-id").value;
+        document.getElementById("chars:book-title").value = '';
         if (iBookId === '') {
-            fSetElement("Disable", "charactersvalidatebook-button");
-            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            fSetElement("Disable", "chars:vldt-book-id");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
         } else if(isNaN(iBookId) === false){
-            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(189,245,189)";     // pale green color
-            fSetElement("Enable", "charactersvalidatebook-button");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(189,245,189)";     // pale green color
+            fSetElement("Enable", "chars:vldt-book-id");
         } else {
-            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255, 204, 203)";    // light red color
-            fSetElement("Disable", "charactersvalidatebook-button");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255, 204, 203)";    // light red color
+            fSetElement("Disable", "chars:vldt-book-id");
         }
     } else if (document.getElementById("mode-label").innerHTML === "fetch mode") {
-        iBookId = document.getElementById("charactersbookid-input").value;
-        document.getElementById("charactersbooktitle-input").value = '';
-        fSetElement("Disable", "charactersadd-input");
+        iBookId = document.getElementById("chars:book-id").value;
+        document.getElementById("chars:book-title").value = '';
+        fSetElement("Disable", "chars:add-name");
         if (iBookId === '') {
-            fSetElement("Disable", "charactersvalidatebook-button");
-            fSetElement("Disable", "submit-button");
-            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            fSetElement("Disable", "chars:vldt-book-id");
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
         } else if(isNaN(iBookId) === false){
-            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(189,245,189)";     // pale green color
-            fSetElement("Enable", "charactersvalidatebook-button");
-            fSetElement("Disable", "submit-button");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(189,245,189)";     // pale green color
+            fSetElement("Enable", "chars:vldt-book-id");
+            fSetElement("Disable", "submit:submit");
         } else {
-            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255, 204, 203)";    // light red color
-            fSetElement("Disable", "charactersvalidatebook-button");
-            fSetElement("Disable", "submit-button");
+            document.getElementById("chars:book-id").style.backgroundColor = "rgb(255, 204, 203)";    // light red color
+            fSetElement("Disable", "chars:vldt-book-id");
+            fSetElement("Disable", "submit:submit");
         }
     }
 }
@@ -2051,14 +2051,14 @@ function fonKeyUp_chars_book_id() {
 function fonKeyUp_chars_add_name() {
 
     if (document.getElementById("mode-label").innerHTML === "add mode") {
-        iBookId = document.getElementById("charactersbookid-input").value;
-        fSetElement("Disable", "charactersbooktitle-input");
-        let sCharToAdd = document.getElementById("charactersadd-input");
+        iBookId = document.getElementById("chars:book-id").value;
+        fSetElement("Disable", "chars:book-title");
+        let sCharToAdd = document.getElementById("chars:add-name");
         if (sCharToAdd === '') {
-            fSetElement("Disable", "submit-button");
-            document.getElementById("charactersadd-input").style.backgroundColor = "rgb(255,255,224)";         //light yellow
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("chars:add-name").style.backgroundColor = "rgb(255,255,224)";         //light yellow
         } else {
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
         }
     }
 }
@@ -2067,11 +2067,11 @@ function fonKeyUp_chars_add_name() {
 
 function fonKeyUp_chars_updtd_name() {
 
-    let sUpdtChar = document.getElementById("charactersupdatedname-input").value;
+    let sUpdtChar = document.getElementById("chars:updtd-name").value;
     if (sUpdtChar != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
 }
 
@@ -2079,11 +2079,11 @@ function fonKeyUp_chars_updtd_name() {
 
 function fonKeyUp_class_updtd_name() {
 
-    let sUpdtdClass = document.getElementById("classificationsupdated-input").value;
+    let sUpdtdClass = document.getElementById("class:updtd-name").value;
     if (sUpdtdClass != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
     ;
 }
@@ -2093,9 +2093,9 @@ function fonKeyUp_class_updtd_name() {
 function fonKeyUp_rating_updtd_name() {
     let sUpdtdRating = document.getElementById("ratings:updtd-name").value;
     if (sUpdtdRating != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
 }
 
@@ -2104,9 +2104,9 @@ function fonKeyUp_rating_updtd_name() {
 function fonKeyUp_series_updtd_name() {
     let sUpdtdSeries = document.getElementById("series:updtd-name").value;
     if (sUpdtdSeries != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
 }
 
@@ -2115,9 +2115,9 @@ function fonKeyUp_series_updtd_name() {
 function fonKeyUp_sources_updtd_name() {
     let sUpdtdSource = document.getElementById("sources:updtd-name").value;
     if (sUpdtdSource != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
 }
 
@@ -2126,9 +2126,9 @@ function fonKeyUp_sources_updtd_name() {
 function fonKeyUp_genres_updtd_name() {
     let sUpdtChar = document.getElementById("genres:updtd-name").value;
     if (sUpdtChar != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
 }
 
@@ -2137,9 +2137,9 @@ function fonKeyUp_genres_updtd_name() {
 function fonKeyUp_statuses_updtd_name() {
     let sUpdtChar = document.getElementById("statuses:updtd-name").value;
     if (sUpdtChar != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
 }
 
@@ -2148,15 +2148,15 @@ function fonKeyUp_statuses_updtd_name() {
 function fonKeyUp_chars_del_id() {
 
     if (document.getElementById("mode-label").innerHTML === "delete mode") {
-        iCharId = document.getElementById("charactersdeleteid-input").value;
+        iCharId = document.getElementById("chars:del-id").value;
         if (iCharId === '') {
-            fSetElement("Disable", "submit-button");
-            document.getElementById("charactersdeleteid-input").style.backgroundColor = "rgb(255,255,224)";          // light yellow
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("chars:del-id").style.backgroundColor = "rgb(255,255,224)";          // light yellow
         } else if (isNaN(iCharId) === true) {
-            document.getElementById("charactersdeleteid-input").style.backgroundColor = "rgb(255, 204, 203)";           // light red
+            document.getElementById("chars:del-id").style.backgroundColor = "rgb(255, 204, 203)";           // light red
         } else {
-            fSetElement("Enable", "submit-button");
-            document.getElementById("charactersdeleteid-input").style.backgroundColor = "rgb(189,245,189)";            // pale green
+            fSetElement("Enable", "submit:submit");
+            document.getElementById("chars:del-id").style.backgroundColor = "rgb(189,245,189)";            // pale green
         }
     }
 }
@@ -2165,11 +2165,11 @@ function fonKeyUp_chars_del_id() {
 
 function fonKeyUp_author_updtd_name() {
 
-    let sUpdtdClass = document.getElementById("authorsupdated-input").value;
+    let sUpdtdClass = document.getElementById("authors:updtd-name").value;
     if (sUpdtdClass != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
 }
 
@@ -2178,15 +2178,15 @@ function fonKeyUp_author_updtd_name() {
 function fonKeyUp_author_del_id() {
 
     if (document.getElementById("mode-label").innerHTML === "delete mode") {
-        iClassId = document.getElementById("authorsdelete-input").value;
+        iClassId = document.getElementById("authors:del-id").value;
         if (iClassId === '') {
-            fSetElement("Disable", "submit-button");
-            document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("authors:del-id").style.backgroundColor = "rgb(255,255,224)";        // light yellow
         } else if (isNaN(iClassId) === true) {
-            document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(255, 204, 203)";         // light red
+            document.getElementById("authors:del-id").style.backgroundColor = "rgb(255, 204, 203)";         // light red
         } else {
-            fSetElement("Enable", "submit-button");
-            document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(189,245,189)";          // pale green
+            fSetElement("Enable", "submit:submit");
+            document.getElementById("authors:del-id").style.backgroundColor = "rgb(189,245,189)";          // pale green
         }
     }
 }
@@ -2196,15 +2196,15 @@ function fonKeyUp_author_del_id() {
 function fonKeyUp_class_del_id() {
 
     if (document.getElementById("mode-label").innerHTML === "delete mode") {
-        iClassId = document.getElementById("classificationsdelete-input").value;
+        iClassId = document.getElementById("class:del-id").value;
         if (iClassId === '') {
-            fSetElement("Disable", "submit-button");
-            document.getElementById("classificationsdelete-input").style.backgroundColor = "rgb(255,255,224)";          // light yellow
+            fSetElement("Disable", "submit:submit");
+            document.getElementById("class:del-id").style.backgroundColor = "rgb(255,255,224)";          // light yellow
         } else if (isNaN(iClassId) === true) {
-            document.getElementById("classificationsdelete-input").style.backgroundColor = "rgb(255, 204, 203)";           // light red
+            document.getElementById("class:del-id").style.backgroundColor = "rgb(255, 204, 203)";           // light red
         } else {
-            fSetElement("Enable", "submit-button");
-            document.getElementById("classificationsdelete-input").style.backgroundColor = "rgb(189,245,189)";            // pale green
+            fSetElement("Enable", "submit:submit");
+            document.getElementById("class:del-id").style.backgroundColor = "rgb(189,245,189)";            // pale green
         }
     }
 }
@@ -2216,12 +2216,12 @@ function fonKeyUp_ratings_del_id() {
     if (document.getElementById("mode-label").innerHTML === "delete mode") {
         iRatingId = document.getElementById("ratings:del-id").value;
         if (iRatingId === '') {
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             document.getElementById("ratings:del-id").style.backgroundColor = "rgb(255,255,224)";        // light yellow
         } else if (isNaN(iRatingId) === true) {
             document.getElementById("ratings:del-id").style.backgroundColor = "rgb(255, 204, 203)";         // light red
         } else {
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("ratings:del-id").style.backgroundColor = "rgb(189,245,189)";          // pale green
         }
     }
@@ -2234,12 +2234,12 @@ function fonKeyUp_series_del_id() {
     if (document.getElementById("mode-label").innerHTML === "delete mode") {
         iSeriesId = document.getElementById("series:del-id").value;
         if (iSeriesId === '') {
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             document.getElementById("series:del-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
         } else if (isNaN(iSeriesId) === true) {
             document.getElementById("series:del-id").style.backgroundColor = "rgb(255, 204, 203)";          // light red
         } else {
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("series:del-id").style.backgroundColor = "rgb(189,245,189)";           // pale green
         }
     }
@@ -2252,12 +2252,12 @@ function fonKeyUp_sources_del_id() {
     if (document.getElementById("mode-label").innerHTML === "delete mode") {
         iSourceId = document.getElementById("sources:del-id").value;
         if (iSourceId === '') {
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             document.getElementById("sources:del-id").style.backgroundColor = "rgb(255,255,224)";        // light yellow
         } else if (isNaN(iSourceId) === true) {
             document.getElementById("sources:del-id").style.backgroundColor = "rgb(255, 204, 203)";         // light red
         } else {
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("sources:del-id").style.backgroundColor = "rgb(189,245,189)";          // pale green
         }
     }
@@ -2270,12 +2270,12 @@ function fonKeyUp_genres_del_id() {
     if (document.getElementById("mode-label").innerHTML === "delete mode") {
         iGenreId = document.getElementById("genres:del-id").value;
         if (iGenreId === '') {
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             document.getElementById("genres:del-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
         } else if (isNaN(iGenreId) === true) {
             document.getElementById("genres:del-id").style.backgroundColor = "rgb(255, 204, 203)";          // light red
         } else {
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("genres:del-id").style.backgroundColor = "rgb(189,245,189)";           // pale green
         }
     }
@@ -2288,12 +2288,12 @@ function fonKeyUp_statuses_del_id() {
     if (document.getElementById("mode-label").innerHTML === "delete mode") {
         iStatusId = document.getElementById("statuses:del-id").value;
         if (iStatusId === '') {
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             document.getElementById("statuses:del-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
         } else if (isNaN(iStatusId) === true) {
             document.getElementById("statuses:del-id").style.backgroundColor = "rgb(255, 204, 203)";          // light red
         } else {
-            fSetElement("Enable", "submit-button");
+            fSetElement("Enable", "submit:submit");
             document.getElementById("statuses:del-id").style.backgroundColor = "rgb(189,245,189)";           // pale green
         }
     }
@@ -2387,17 +2387,17 @@ function fShowHelp() {
 
 function fClearPage() {
 
-    let arrayOfHides = ["books-div", "titles-div", "recents-div", "unreads-div", "characters-div"
-                      , "authors-div", "authorsadd-div", "classificationsadd-div", "classifications-div"
+    let arrayOfHides = ["books:div", "titles:div", "recents:div", "unreads:div", "chars:div"
+                      , "authors:div", "authors:add-div", "class:add-div", "class:div"
                       , "ratings:add-div", "ratings:div", "series:add-div", "series:div", "sources:add-div"
                       , "sources:div", "genres:add-div", "genres:div", "statuses:add-div", "statuses:div"
-                      , "modes-div", "submit-div"];
+                      , "modes-div", "submit:div"];
     for(let i = 0; i < arrayOfHides.length; i++) {
         fSetElement("Hide", arrayOfHides[i]);
     }
-    let arrayOfClears = ["titlesfilter-input", "titlesarea-textarea", "recentsfilter-input", "recentsarea-textarea", "charactersfilter-input"
-                       , "charactersarea-textarea", "authorsfilter-input", "authorslist-textarea", "series:add-name", "classificationsadd-input"
-                       , "classificationsfilter-input", "classificationslist-textarea", "ratings:add-name", "ratings:filter"
+    let arrayOfClears = ["titles:filter", "titles:list", "recents:filter", "recents:list", "chars:filter"
+                       , "chars:list", "authors:filter", "authors:list", "series:add-name", "class:add-name"
+                       , "class:filter", "class:list", "ratings:add-name", "ratings:filter"
                        , "ratings:list", "series:add-name", "series:filter", "series:list", "sources:add-name"
                        , "sources:filter", "sources:list", "genres:add-name", "genres:filter", "genres:list"
                        , "statuses:add-name", "statuses:filter", "statuses:list"];
@@ -2416,7 +2416,7 @@ function fClearBookFields() {
 
     fClearPage();
     fClearExtras();
-    let tc = document.getElementById("topics-select");
+    let tc = document.getElementById("topic-select");
     tc.value = "choose";
 }
 
@@ -2438,9 +2438,9 @@ function fEnableSubmitIfNotNull(sElementId) {
 
     let elementId = document.getElementById(sElementId);
     if (elementId.value != '') {
-        fSetElement("Enable", "submit-button");
+        fSetElement("Enable", "submit:submit");
     } else {
-        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "submit:submit");
     }
 }
 
@@ -2461,171 +2461,171 @@ function fClearBookDivElements() {
 
 function fonKeyUp_any_updt_id() {
 
-    if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "characters")) {
-        iBookId = document.getElementById("charactersbookid-input").value;
-        let iCharToAdd = document.getElementById("charactersupdateid-input").value;
+    if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "characters")) {
+        iBookId = document.getElementById("chars:book-id").value;
+        let iCharToAdd = document.getElementById("chars:updt-id").value;
         if (iCharToAdd === '') {
-            document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(255,255,224)";          //light yellow
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "charactersupdatename-input");
-            fSetElement("Disable", "charactersupdatedname-input");
-            fSetElement("Disable", "charactersvalidateid-button");
+            document.getElementById("chars:updt-id").style.backgroundColor = "rgb(255,255,224)";          //light yellow
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "chars:updt-name");
+            fSetElement("Disable", "chars:updtd-name");
+            fSetElement("Disable", "chars:vldt-id");
         } else if (isNaN(iCharToAdd) === true) {
-            document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";          // light red
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "charactersupdatename-input");
-            fSetElement("Disable", "charactersupdatedname-input");
-            fSetElement("Disable", "charactersvalidateid-button");
+            document.getElementById("chars:updt-id").style.backgroundColor = "rgb(255, 204, 203)";          // light red
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "chars:updt-name");
+            fSetElement("Disable", "chars:updtd-name");
+            fSetElement("Disable", "chars:vldt-id");
         } else {
-            document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(189,245,189)";           // pale green
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "charactersupdatename-input");
-            fSetElement("Disable", "charactersupdatedname-input");
-            fSetElement("Enable", "charactersvalidateid-button");
+            document.getElementById("chars:updt-id").style.backgroundColor = "rgb(189,245,189)";           // pale green
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "chars:updt-name");
+            fSetElement("Disable", "chars:updtd-name");
+            fSetElement("Enable", "chars:vldt-id");
         }
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "authors")) {
-        iAuthorId = document.getElementById("authorsupdateid-input").value;
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "authors")) {
+        iAuthorId = document.getElementById("authors:updt-id").value;
         if (iAuthorId === '') {
-            document.getElementById("authorsupdateid-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "authorsupdatename-input");
-            fSetElement("Disable", "authorsupdated-input");
-            fSetElement("Disable", "authorsupdate-button");
+            document.getElementById("authors:updt-id").style.backgroundColor = "rgb(255,255,224)";       // light yellow
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "authors:updt-name");
+            fSetElement("Disable", "authors:updtd-name");
+            fSetElement("Disable", "authors:vldt-id");
         } else if (isNaN(iAuthorId) === true) {
-            document.getElementById("authorsupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";        // light red
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "authorsupdatename-input");
-            fSetElement("Disable", "authorsupdated-input");
-            fSetElement("Disable", "authorsupdate-button");
+            document.getElementById("authors:updt-id").style.backgroundColor = "rgb(255, 204, 203)";        // light red
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "authors:updt-name");
+            fSetElement("Disable", "authors:updtd-name");
+            fSetElement("Disable", "authors:vldt-id");
         } else {
-            document.getElementById("authorsupdateid-input").style.backgroundColor = "rgb(189,245,189)";         // pale green
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "authorsupdatename-input");
-            fSetElement("Disable", "authorsupdated-input");
-            fSetElement("Enable", "authorsupdate-button");
+            document.getElementById("authors:updt-id").style.backgroundColor = "rgb(189,245,189)";         // pale green
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "authors:updt-name");
+            fSetElement("Disable", "authors:updtd-name");
+            fSetElement("Enable", "authors:vldt-id");
         }
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "classifications")) {
-        iClassId = document.getElementById("classificationsupdateid-input").value;
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "classifications")) {
+        iClassId = document.getElementById("class:updt-id").value;
         if (iClassId === '') {
-            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "classificationsupdatename-input");
-            fSetElement("Disable", "classificationsupdated-input");
-            fSetElement("Disable", "classificationsupdate-button");
+            document.getElementById("class:updt-id").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "class:updt-name");
+            fSetElement("Disable", "class:updtd-name");
+            fSetElement("Disable", "class:vldt-id");
         } else if (isNaN(iClassId) === true) {
-            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";          // light red
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "classificationsupdatename-input");
-            fSetElement("Disable", "classificationsupdated-input");
-            fSetElement("Disable", "classificationsupdate-button");
+            document.getElementById("class:updt-id").style.backgroundColor = "rgb(255, 204, 203)";          // light red
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "class:updt-name");
+            fSetElement("Disable", "class:updtd-name");
+            fSetElement("Disable", "class:vldt-id");
         } else {
-            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(189,245,189)";           // pale green
-            fSetElement("Disable", "submit-button");
-            fSetElement("Disable", "classificationsupdatename-input");
-            fSetElement("Disable", "classificationsupdated-input");
-            fSetElement("Enable", "classificationsupdate-button");
+            document.getElementById("class:updt-id").style.backgroundColor = "rgb(189,245,189)";           // pale green
+            fSetElement("Disable", "submit:submit");
+            fSetElement("Disable", "class:updt-name");
+            fSetElement("Disable", "class:updtd-name");
+            fSetElement("Enable", "class:vldt-id");
         }
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "ratings")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "ratings")) {
         iRatingId = document.getElementById("ratings:updt-id").value;
         if (iRatingId === '') {
             document.getElementById("ratings:updt-id").style.backgroundColor = "rgb(255,255,224)";       // light yellow
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "ratings:updt-name");
             fSetElement("Disable", "ratings:updtd-name");
             fSetElement("Disable", "ratings:vldt-id");
         } else if (isNaN(iRatingId) === true) {
             document.getElementById("ratings:updt-id").style.backgroundColor = "rgb(255, 204, 203)";        // light red
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "ratings:updt-name");
             fSetElement("Disable", "ratings:updtd-name");
             fSetElement("Disable", "ratings:vldt-id");
         } else {
             document.getElementById("ratings:updt-id").style.backgroundColor = "rgb(189,245,189)";         // pale green
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "ratings:updt-name");
             fSetElement("Disable", "ratings:updtd-name");
             fSetElement("Enable", "ratings:vldt-id");
         }
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "series")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "series")) {
         iSeriesId = document.getElementById("series:updt-id").value;
         if (iSeriesId === '') {
             document.getElementById("series:updt-id").style.backgroundColor = "rgb(255,255,224)";        // light yellow
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "series:updt-name");
             fSetElement("Disable", "series:updtd-name");
             fSetElement("Disable", "series:vldt-id");
         } else if (isNaN(iSeriesId) === true) {
             document.getElementById("series:updt-id").style.backgroundColor = "rgb(255, 204, 203)";         // light red
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "series:updt-name");
             fSetElement("Disable", "series:updtd-name");
             fSetElement("Disable", "series:vldt-id");
         } else {
             document.getElementById("series:updt-id").style.backgroundColor = "rgb(189,245,189)";          // pale green
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "series:updt-name");
             fSetElement("Disable", "series:updtd-name");
             fSetElement("Enable", "series:vldt-id");
         }
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "sources")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "sources")) {
         iSourceId = document.getElementById("sources:updt-id").value;
         if (iSourceId === '') {
             document.getElementById("sources:updt-id").style.backgroundColor = "rgb(255,255,224)";       // light yellow
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "sources:updt-name");
             fSetElement("Disable", "sources:updtd-name");
             fSetElement("Disable", "sources:vldt-id");
         } else if (isNaN(iSourceId) === true) {
             document.getElementById("sources:updt-id").style.backgroundColor = "rgb(255, 204, 203)";        // light red
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "sources:updt-name");
             fSetElement("Disable", "sources:updtd-name");
             fSetElement("Disable", "sources:vldt-id");
         } else {
             document.getElementById("sources:updt-id").style.backgroundColor = "rgb(189,245,189)";         // pale green
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "sources:updt-name");
             fSetElement("Disable", "sources:updtd-name");
             fSetElement("Enable", "sources:vldt-id");
         }
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "genres")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "genres")) {
         iGenreId = document.getElementById("genres:updt-id").value;
         if (iGenreId === '') {
             document.getElementById("genres:updt-id").style.backgroundColor = "rgb(255,255,224)";        // light yellow
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "genres:updt-name");
             fSetElement("Disable", "genres:updtd-name");
             fSetElement("Disable", "genres:vldt-id");
         } else if (isNaN(iGenreId) === true) {
             document.getElementById("genres:updt-id").style.backgroundColor = "rgb(255, 204, 203)";         // light red
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "genres:updt-name");
             fSetElement("Disable", "genres:updtd-name");
             fSetElement("Disable", "genres:vldt-id");
         } else {
             document.getElementById("genres:updt-id").style.backgroundColor = "rgb(189,245,189)";          // pale green
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "genres:updt-name");
             fSetElement("Disable", "genres:updtd-name");
             fSetElement("Enable", "genres:vldt-id");
         }
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "statuses")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "statuses")) {
         iStatusId = document.getElementById("statuses:updt-id").value;
         if (iStatusId === '') {
             document.getElementById("statuses:updt-id").style.backgroundColor = "rgb(255,255,224)";      // light yellow
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "statuses:updt-name");
             fSetElement("Disable", "statuses:updtd-name");
             fSetElement("Disable", "statuses:vldt-id");
         } else if (isNaN(iStatusId) === true) {
             document.getElementById("statuses:updt-id").style.backgroundColor = "rgb(255, 204, 203)";       // light red
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "statuses:updt-name");
             fSetElement("Disable", "statuses:updtd-name");
             fSetElement("Disable", "statuses:vldt-id");
         } else {
             document.getElementById("statuses:updt-id").style.backgroundColor = "rgb(189,245,189)";        // pale green
-            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "submit:submit");
             fSetElement("Disable", "statuses:updt-name");
             fSetElement("Disable", "statuses:updtd-name");
             fSetElement("Enable", "statuses:vldt-id");
@@ -2637,49 +2637,49 @@ function fonKeyUp_any_updt_id() {
 
 async function fonclick_any_vldt_id() {
 
-    if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "authors")) {
-        let iAuthorId = document.getElementById("authorsupdateid-input").value;
+    if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "authors")) {
+        let iAuthorId = document.getElementById("authors:updt-id").value;
         let sRequest = uri35 + '?' + 'authorID=' + iAuthorId;
         let response = await fetch(sRequest);
-        document.getElementById("authorsupdated-input").value = '';
+        document.getElementById("authors:updtd-name").value = '';
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("authorsupdatename-input").value = text;
+            document.getElementById("authors:updt-name").value = text;
             if (text === "No authors found") {
-                document.getElementById("submit-message").value = "No author exists for this Author ID";
-                fSetElement("Disable", "authorsupdated-input");
+                document.getElementById("submit:mssge").value = "No author exists for this Author ID";
+                fSetElement("Disable", "authors:updtd-name");
             } else {
-                fSetElement("Enable", "authorsupdated-input");
-                document.getElementById("authorsupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
-                document.getElementById("authorsupdated-input").style.borderWidth = "thin";
-                document.getElementById("submit-message").value = "Enter the changed Author Name and 'submit'";
+                fSetElement("Enable", "authors:updtd-name");
+                document.getElementById("authors:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+                document.getElementById("authors:updtd-name").style.borderWidth = "thin";
+                document.getElementById("submit:mssge").value = "Enter the changed Author Name and 'submit'";
             }
         } else {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "classifications")) {
-        let iClassId = document.getElementById("classificationsupdateid-input").value;
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "classifications")) {
+        let iClassId = document.getElementById("class:updt-id").value;
         let sRequest = uri33 + '?' + 'classID=' + iClassId;
         let response = await fetch(sRequest);
-        document.getElementById("classificationsupdated-input").value = '';
+        document.getElementById("class:updtd-name").value = '';
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("classificationsupdatename-input").value = text;
+            document.getElementById("class:updt-name").value = text;
             if (text === "No classification found") {
-                document.getElementById("submit-message").value = "No classification exists for this classification ID";
-                fSetElement("Disable", "classificationsupdated-input");
+                document.getElementById("submit:mssge").value = "No classification exists for this classification ID";
+                fSetElement("Disable", "class:updtd-name");
             } else {
-                fSetElement("Enable", "classificationsupdated-input");
-                document.getElementById("classificationsupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
-                document.getElementById("classificationsupdated-input").style.borderWidth = "thin";
-                document.getElementById("submit-message").value = "Enter the changed classification name and 'submit'";
+                fSetElement("Enable", "class:updtd-name");
+                document.getElementById("class:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+                document.getElementById("class:updtd-name").style.borderWidth = "thin";
+                document.getElementById("submit:mssge").value = "Enter the changed classification name and 'submit'";
             }
         } else {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "ratings")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "ratings")) {
         let iRatingId = document.getElementById("ratings:updt-id").value;
         let sRequest = uri31 + '?' + 'ratingID=' + iRatingId;
         let response = await fetch(sRequest);
@@ -2688,19 +2688,19 @@ async function fonclick_any_vldt_id() {
             let text = await response.text();
             document.getElementById("ratings:updt-name").value = text;
             if (text === "No rating found") {
-                document.getElementById("submit-message").value = "No rating exists for this rating ID";
+                document.getElementById("submit:mssge").value = "No rating exists for this rating ID";
                 fSetElement("Disable", "ratings:updtd-name");
             } else {
                 fSetElement("Enable", "ratings:updtd-name");
                 document.getElementById("ratings:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("ratings:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit-message").value = "Enter the changed rating name and 'submit'";
+                document.getElementById("submit:mssge").value = "Enter the changed rating name and 'submit'";
             }
         } else {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "series")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "series")) {
         let iSeriesId = document.getElementById("series:updt-id").value;
         let sRequest = uri29 + '?' + 'seriesID=' + iSeriesId;
         let response = await fetch(sRequest);
@@ -2709,19 +2709,19 @@ async function fonclick_any_vldt_id() {
             let text = await response.text();
             document.getElementById("series:updt-name").value = text;
             if (text === "No series found") {
-                document.getElementById("submit-message").value = "No series exists for this series ID";
+                document.getElementById("submit:mssge").value = "No series exists for this series ID";
                 fSetElement("Disable", "series:updtd-name");
             } else {
                 fSetElement("Enable", "series:updtd-name");
                 document.getElementById("series:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("series:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit-message").value = "Enter the changed series name and 'submit'";
+                document.getElementById("submit:mssge").value = "Enter the changed series name and 'submit'";
             }
         } else {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "sources")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "sources")) {
         let iSourcesId = document.getElementById("sources:updt-id").value;
         let sRequest = uri27 + '?' + 'sourceID=' + iSourceId;
         let response = await fetch(sRequest);
@@ -2731,19 +2731,19 @@ async function fonclick_any_vldt_id() {
             document.getElementById("sources:updt-name").value = text;
             fSetElement("Enable", "sources:updtd-name");
             if (text === "No source found") {
-                document.getElementById("submit-message").value = "No source exists for this source ID";
+                document.getElementById("submit:mssge").value = "No source exists for this source ID";
                 fSetElement("Disable", "sources:updtd-name");
             } else {
                 fSetElement("Enable", "sources:updtd-name");
                 document.getElementById("sources:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("sources:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit-message").value = "Enter the changed source name and 'submit'";
+                document.getElementById("submit:mssge").value = "Enter the changed source name and 'submit'";
             }
         } else {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "genres")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "genres")) {
         let iGenresId = document.getElementById("genres:updt-id").value;
         let sRequest = uri25 + '?' + 'genreID=' + iGenreId;
         let response = await fetch(sRequest);
@@ -2753,19 +2753,19 @@ async function fonclick_any_vldt_id() {
             document.getElementById("genres:updt-name").value = text;
             fSetElement("Enable", "genres:updtd-name");
             if (text === "No genre found") {
-                document.getElementById("submit-message").value = "No genre exists for this genre ID";
+                document.getElementById("submit:mssge").value = "No genre exists for this genre ID";
                 fSetElement("Disable", "genres:updtd-name");
             } else {
                 fSetElement("Enable", "genres:updtd-name");
                 document.getElementById("genres:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("genres:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit-message").value = "Enter the changed genre name and 'submit'";
+                document.getElementById("submit:mssge").value = "Enter the changed genre name and 'submit'";
             }
         } else {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "statuses")) {
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topic-select").value === "statuses")) {
         let iStatusId = document.getElementById("statuses:updt-id").value;
         let sRequest = uri23 + '?' + 'statusID=' + iStatusId;
         let response = await fetch(sRequest);
@@ -2775,13 +2775,13 @@ async function fonclick_any_vldt_id() {
             document.getElementById("statuses:updt-name").value = text;
             fSetElement("Enable", "statuses:updtd-name");
             if (text === "No status found") {
-                document.getElementById("submit-message").value = "No character exists for this Status ID";
+                document.getElementById("submit:mssge").value = "No character exists for this Status ID";
                 fSetElement("Disable", "statuses:updtd-name");
             } else {
                 fSetElement("Enable", "statuses:updtd-name");
                 document.getElementById("statuses:updtd-name").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("statuses:updtd-name").style.borderWidth = "thin";
-                document.getElementById("submit-message").value = "Enter the changed status name and 'submit'";
+                document.getElementById("submit:mssge").value = "Enter the changed status name and 'submit'";
             }
         } else {
             alert("HttpError: " + response.status);
@@ -3106,7 +3106,7 @@ async function fFetchTopicList(sInputFilter, sTextAreaResults) {
     let row = []
     let sFilterEncoded = encodeURIComponent(document.getElementById(sInputFilter).value);
     let sFilterEncoded1 = sFilterEncoded.replace(/'/g, "''");
-    let sRequest = uri01 + '?' + "topic=" + document.getElementById("topics-select").value + '&filter=' + sFilterEncoded1;
+    let sRequest = uri01 + '?' + "topic=" + document.getElementById("topic-select").value + '&filter=' + sFilterEncoded1;
     let response = await fetch(sRequest);
     if (response.ok) {
         let text = await response.text();
@@ -3125,27 +3125,27 @@ async function fFetchTopicList(sInputFilter, sTextAreaResults) {
         w.disabled=false;
 
         if (sTopic === "titles") {
-            document.getElementById("submit-message").value = "Titles fetched (including start/end dates and comments)";
+            document.getElementById("submit:mssge").value = "Titles fetched (including start/end dates and comments)";
         } else if (sTopic === "recents") {
-            document.getElementById("submit-message").value = "Recents fetched (in descending start-date order)";
+            document.getElementById("submit:mssge").value = "Recents fetched (in descending start-date order)";
         } else if (sTopic === "unreads") {
-            document.getElementById("submit-message").value = "Unreads fetched (in descending Title ID order)";
+            document.getElementById("submit:mssge").value = "Unreads fetched (in descending Title ID order)";
         } else if (sTopic === "authors") {
-            document.getElementById("submit-message").value = "Authors fetched (including author rating out of 10)";
+            document.getElementById("submit:mssge").value = "Authors fetched (including author rating out of 10)";
         } else if (sTopic === "classifications") {
-            document.getElementById("submit-message").value = "Classifications fetched";
+            document.getElementById("submit:mssge").value = "Classifications fetched";
         } else if (sTopic === "ratings") {
-            document.getElementById("submit-message").value = "Ratings fetched";
+            document.getElementById("submit:mssge").value = "Ratings fetched";
         } else if (sTopic === "series") {
-            document.getElementById("submit-message").value = "Series fetched (including Author, rating and count of titles)";
+            document.getElementById("submit:mssge").value = "Series fetched (including Author, rating and count of titles)";
         } else if (sTopic === "sources") {
-            document.getElementById("submit-message").value = "Sources fetched";
+            document.getElementById("submit:mssge").value = "Sources fetched";
         } else if (sTopic === "genres") {
-            document.getElementById("submit-message").value = "Genres fetched";
+            document.getElementById("submit:mssge").value = "Genres fetched";
         } else if (sTopic === "statuses") {
-            document.getElementById("submit-message").value = "Statuses fetched";
+            document.getElementById("submit:mssge").value = "Statuses fetched";
         } else {
-            document.getElementById("submit-message").value=sTopic + " fetched";
+            document.getElementById("submit:mssge").value=sTopic + " fetched";
         }
     } else {
         alert("HttpError: " + response.status);

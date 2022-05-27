@@ -111,15 +111,15 @@
 
             <main id="MAIN1">
 
-                <div id="heading-div">
+                <div style="width:80%; margin: auto; max-width:800px; text-align:center;">
                     <H3>Book Inquiry</H3>
                 </div>
 
 <!-- options div ................................................................................................... -->
 
-                <div id="topics-div">
+                <div id="topics">
                     <label id="topics-label" for="topic-select">Topic:</label>
-                        <select id="topics-select" name="topic" onchange="fSetTopic()">
+                        <select id="topic-select" name="topic" onchange="fSetTopic()">
                             <option value="choose" selected>Choose</option>
                             <option value="books">Books</option>
                             <option value="titles">Titles</option>
@@ -150,144 +150,144 @@
 
 <!-- titles div .................................................................................................... -->
 
-                <div id="titles-div">
-                    <div id="titlesfilter-div">
-                        <label  id="titlesfilter-label" for="titlesfilter-input">Filter:</label>
-                        <input id="titlesfilter-input" name="titles:filter" required>
+                <div id="titles:div" style="display:none">
+                    <div id="titles:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label  for="titles:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="titles:filter" name="titles:filter" required style="width:88%;margin-top:10px;margin-left:17px;margin-bottom:10px">
                     </div>
-                    <div id="titlesarea-div">
-                        <textarea id="titlesarea-textarea" readonly disabled ROWS="50">
+                    <div id="titles:list-div" style="width:80%; margin:auto; max-width:800px">
+                        <textarea id="titles:list" readonly disabled ROWS="25" style="font-family:lucida console;font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea> 
                     </div>
                 </div>
 
 <!-- recents div ................................................................................................... -->
 
-                <div id="recents-div">
-                    <div id="recentsfilter-div">
-                        <label  id="recentsfilter-label" for="recentsfilter-input">Filter:</label>
-                        <input id="recentsfilter-input" name="recents:filter" required>
+                <div id="recents:div" style="display:none">
+                    <div id="recents:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label  for="recents:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="recents:filter" name="recents:filter" required style="width:88%; margin-top: 10px;margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="recentsarea-div">
-                        <textarea id="recentsarea-textarea" readonly disabled ROWS="25">
+                    <div id="recents:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="recents:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
 
 <!-- unreads div ................................................................................................... -->
 
-                <div id="unreads-div">
-                    <div id="unreadsfilter-div">
-                        <label id="unreadsfilter-label" for="unreadsfilter-input" >Filter:</label>
-                        <input id="unreadsfilter-input" name="unreadsFilter" required>
+                <div id="unreads:div" style="display:none">
+                    <div id="unreads:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="unreads:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="unreads:filter" name="unreadsFilter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="unreadsarea-div">
-                        <textarea id="unreadsarea-textarea" readonly disabled ROWS="25">
+                    <div id="unreads:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="unreads:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
 
 <!-- characters div ................................................................................................ -->
 
-                <div id="characters-div">
-                    <div id="charactersbook-div">
-                        <LABEL id="charactersbookid-label" for="charactersbookid-input">Book ID:</label>
-                        <input id="charactersbookid-input" required onKeyUp="fonKeyUp_chars_book_id()">
-                        <input id="charactersbooktitle-input" required disabled>
-                        <button id="charactersvalidatebook-button" disabled onclick="fonclick_chars_vldt_bk_id()">Validate</button>
+                <div id="chars:div" style="display:none">
+                    <div id="chars:vldt-book-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <LABEL for="chars:book-id" style="margin-left:0px;width:45px" >Book ID:</label>
+                        <input id="chars:book-id" required style="width:5%;margin-top:5px;margin-left:17px;margin-bottom:0px" onKeyUp="fonKeyUp_chars_book_id()">
+                        <input id="chars:book-title" required style="width:58%;margin-top:5px;margin-left:6px;margin-bottom:5px" disabled>
+                        <button id="chars:vldt-book-id" style="margin-top:5px;" disabled onclick="fonclick_chars_vldt_bk_id()">Validate</button>
                     </div>
-                    <div id="charactersadd-div">
-                        <label id="charactersadd-label" for="chars:add-name">Character:</label>
-                        <input id="charactersadd-input" required onKeyUp="fonKeyUp_chars_add_name()">
+                    <div id="chars:add-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="chars:add-name" style="margin-left:0px;width:35px" >Character:</label>
+                        <input id="chars:add-name" required style="width:77%;margin-top:0px;margin-left:10px;margin-bottom:5px" onKeyUp="fonKeyUp_chars_add_name()">
                     </div>
-                    <div id="charactersupdate-div">
+                    <div id="chars:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <span style="display:block">
-                            <label id="charactersupdate-label" for="charactersupdateid-input">Char ID:</label>
-                            <input id="charactersupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
-                            <input id="charactersupdatename-input" required disabled>
-                            <button id="charactersvalidateid-button" disabled onclick="fonclick_chars_vldt_char_id()">Validate</button>
+                            <label for="chars:updt-id" style="margin-left:0px;margin-top:5px;width:45px" >Char ID:</label>
+                            <input id="chars:updt-id" required style="width:5%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
+                            <input id="chars:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
+                            <button id="chars:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_chars_vldt_char_id()">Validate</button>
                         </span>
                         <span style="display:block">
-                            <label id="charactersupdatedname-label" for="charactersupdatedname-input">Update:</label>
-                            <input id="charactersupdatedname-input" required onKeyUp="fonKeyUp_chars_updtd_name()">
+                            <label for="chars:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</label>
+                            <input id="chars:updtd-name" required style="display:inline-block;margin-left:27px;margin-bottom:5px;width:75%" onKeyUp="fonKeyUp_chars_updtd_name()">
                         </span>
                     </div>
-                    <div id="charactersdelete-div">
-                        <label id="charactersdeleteid-label" for="charactersdeleteid-inputd">Char ID:</label>
-                        <input id="charactersdeleteid-input" required onKeyUp="fonKeyUp_chars_del_id()">
+                    <div id="chars:del-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="chars:del-id" style="margin-left:0px;margin-top:5px;width:45px" >Char ID:</label>
+                        <input id="chars:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_chars_del_id()">
                     </div>
-                    <div id="charactersfilter-div">
-                        <label id="charactersfilter-label" for="chars:filter">Filter:</label>
-                        <input id="charactersfilter-input" name="chars:filter" required>
+                    <div id="chars:filter-div" style="width:80%; margin:auto; max-width:800px;text-align:left">
+                        <label for="chars:filter" style="margin-left:20px;width:45px" >Filter:</label>
+                        <input id="chars:filter" name="chars:filter" required style="width:88%; margin-top:10px;margin-left:17px;margin-bottom:10px">
                     </div>
-                    <div id="charactersarea-div">
-                        <textarea id="charactersarea-textarea" readonly disabled ROWS="25">
+                    <div id="chars:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="chars:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
 
 <!-- authors div ................................................................................................... -->
 
-                <div id="authors-div">
-                    <div id="authorsfilter-div">
-                        <label  id="authorsfilter-label" for="authorsfilter-input">Filter:</label>
-                        <input id="authorsfilter-input" name="authorsFilter" required>
+                <div id="authors:div" style="display:none">
+                    <div id="authors:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label  for="authors:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="authors:filter" name="authorsFilter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="authorsadd-div">
-                        <label  id="authorsadd-label" for="authorsadd-input">Add Author:</label>
-                        <input id="authorsadd-input" name="newAuthorsInput" required onKeyUp="fEnableSubmitIfNotNull('authorsadd-input')">
+                    <div id="authors:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="authors:add-name" style="margin-left:0px;width:45px" >Add Author:</label>
+                        <input id="authors:add-name" name="newAuthorsInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('authors:add-name')">
                     </div>
-                    <div id="authorsupdate-div">
+                    <div id="authors:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <span style="display:block">
-                            <label id="authorsupdate-label" for="authorsupdateid-input">Author ID:</label>
-                            <input id="authorsupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
-                            <input id="authorsupdatename-input" required disabled>
-                            <button id="authorsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            <label for="authors:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Author ID:</label>
+                            <input id="authors:updt-id" required style="width:5%;margin-top:5px;margin-left:5px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
+                            <input id="authors:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
+                            <button id="authors:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                         </span>
                         <span style="display:block">
-                            <label id="authorsupdated-label" for="authorsupdated-input">Update:</label>
-                            <input id="authorsupdated-input" required onKeyUp="fonKeyUp_author_updtd_name()">
+                            <label for="authors:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</label>
+                            <input id="authors:updtd-name" required style="display:inline-block;margin-left:27px;margin-bottom:5px;width:75%" onKeyUp="fonKeyUp_author_updtd_name()">
                         </span>
                     </div>
-                    <div id="authorsdelete-div">
-                        <label id="authorsdelete-label" for="authorsdelete-input">Author ID:</label>
-                        <input id="authorsdelete-input" required onKeyUp="fonKeyUp_author_del_id()">
+                    <div id="authors:del-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="authors:del-id" style="margin-left:0px;margin-top:5px;width:32px" >Author ID:</label>
+                        <input id="authors:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_author_del_id()">
                     </div>
-                    <div id="authorslist-div">
-                        <textarea id="authorslist-textarea" readonly disabled ROWS="25">
+                    <div id="authors:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="authors:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
 
 <!-- classifications div ........................................................................................... -->
 
-                <div id="classifications-div">
-                    <div id="classificationsfilter-div">
-                        <label id="classificationsfilter-label" for="classificationsfilter-input">Filter:</label>
-                        <input id="classificationsfilter-input" name="class:filter" required>
+                <div id="class:div" style="display:none">
+                    <div id="class:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="class:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="class:filter" name="class:filter"    required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="classificationsadd-div">
-                        <label id="classificationsadd-label" for="classificationsadd-input">Add Class:</label>
-                        <input id="classificationsadd-input" name="class:add-name" required onKeyUp="fEnableSubmitIfNotNull('classificationsadd-input')">
+                    <div id="class:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="class:add-name" style="margin-left:0px;width:45px" >Add Class:</label>
+                        <input id="class:add-name" name="class:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('class:add-name')">
                     </div>
-                    <div id="classificationsupdate-div">
+                    <div id="class:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <span style="display:block">
-                            <label id="classificationsupdate-label" for="classificationsupdateid-input">Class ID:</label>
-                            <input id="classificationsupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
-                            <input id="classificationsupdatename-input" required disabled>
-                            <button id="classificationsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            <label for="class:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Class ID:</label>
+                            <input id="class:updt-id" required style="width:5%;margin-top:5px;margin-left:14px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
+                            <input id="class:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
+                            <button id="class:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                         </span>
                         <span style="display:block">
-                            <label id="classificationsupdated-label" for="classificationsupdated-input">Update:</label>
-                            <input id="classificationsupdated-input" required onKeyUp="fonKeyUp_class_updtd_name()">
+                            <label for="class:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</label>
+                            <input id="class:updtd-name" required style="display:inline-block;margin-left:27px;margin-bottom:5px;width:75%" onKeyUp="fonKeyUp_class_updtd_name()">
                         </span>
                     </div>
-                    <div id="classificationsdelete-div">
-                        <label id="classificationsdelete-label" for="classificationsdelete-input">Class ID:</label>
-                        <input id="classificationsdelete-input" required onKeyUp="fonKeyUp_class_del_id()">
+                    <div id="class:del-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="class:del-id" style="margin-left:0px;margin-top:5px;width:32px" >Class ID:</label>
+                        <input id="class:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_class_del_id()">
                     </div>
-                    <div id="classificationslist-div">
-                        <textarea id="classificationslist-textarea" readonly disabled ROWS="25">
+                    <div id="class:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="class:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
@@ -459,69 +459,69 @@
 
 <!-- books div ..................................................................................................... -->
 
-                <div id="books-div" id="books:div">
-                    <div id="booksstage-div">
-                        <label id="booksstage-label" for="books:stage">Stage:</label>
+                <div id="books:div" style="width:80%; margin:auto;display:none">
+                    <div style="display:block;margin:5px 0px 2px 0px">
+                        <label for="books:stage" style="display:inline-block;width:55px">Stage:</label>
                         <input id="books:stage" style="display:inline-block;width:35;border-width:thin">
                     </div>
-                    <div id="booksid-div">
-                        <label id="booksid-label" for="books:titleId">ID:</label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:titleId" style="display:inline-block;width:55px">ID:</label>
                         <input id="books:titleId" style="display:inline-block;width:35;border-width:thin" onkeyup="fEnableSubmitButton01('books:titleId')">
                     </div>
-                    <div id="booksname-div">
-                        <Label id="booksname-label" for="books:name">Title: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <Label for="books:name" style="display:inline-block;width:55px">Title: </label>
                         <input id="books:name" style="display:inline-block;width:400px">
                     </div>
-                    <div id="booksauthor-div">
-                        <label id="booksauthor-label" for="books:author">Author: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:author" style="display:inline-block;width:55px">Author: </label>
                         <input id="books:authorId" style="display:inline-block;width:35px">
                         <select id="books:author" style="display:inline-block;width:352px" onchange="fPopulateLOVId('authors')"></select>
                     </div>
-                    <div id="bookssource-div">
-                        <label id="bookssource-label" for="books:source">Source: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:source" style="display:inline-block;width:55px">Source: </label>
                         <input id="books:sourceId" style="display:inline-block;width:35px">
                         <select id="books:source" style="display:inline-block;width:200px" onchange="fPopulateLOVId('sources')"></select>
                     </div>
-                    <div id="booksseries-div">
-                        <label id="booksseries-label" for="books:series">Series: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:series" style="display:inline-block;width:55px">Series: </label>
                         <input id="books:seriesId" style="display:inline-block;width:35px">
                         <select id="books:series" style="display:inline-block;width:352px" onchange="fPopulateLOVId('series')"></select>
                     </div>
-                    <div id="booksgenre-div">
-                        <label id="booksgenre-label" for="books:genre">Genre: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:genre" style="display:inline-block;width:55px">Genre: </label>
                         <input id="books:genreId" style="display:inline-block;width:35px">
                         <select id="books:genre" style="display:inline-block;width:200px" onchange="fPopulateLOVId('genres')"></select>
                     </div>
-                    <div id="booksstatus-div">
-                        <labeL id="booksstatus-label" for="books:status">Status: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <labeL for="books:status" style="display:inline-block;width:55px">Status: </label>
                         <input id="books:statusId" style="display:inline-block;width:35px">
                         <select id="books:status" style="display:inline-block;width:200px" onchange="fPopulateLOVId('statuses')"></select>
                     </div>
-                    <div id="booksclassification-div">
-                        <label id="booksclassification-label" for="books:clsfn">Clsfn: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:clsfn" style="display:inline-block;width:55px">Clsfn: </label>
                         <input id="books:clsfnId" style="display:inline-block;width:35px">
                         <select id="books:clsfn" style="display:inline-block;width:200px" onchange="fPopulateLOVId('classifications')"></select>
                     </div>
-                    <div id="booksrating-div">
-                        <label id="booksrating-label" for="books:rating">Rating: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:rating" style="display:inline-block;width:55px">Rating: </label>
                         <input id="books:ratingId" style="display:inline-block;width:35px">
                         <select id="books:rating" style="display:inline-block;width:200px" onchange="fPopulateLOVId('ratings')"></select>
                     </div>
-                    <div id="booksstart-div">
-                        <label id="booksstart-label" for="books:start">Start: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:start" style="display:inline-block;width:55px">Start: </label>
                         <input id="books:start" style="display:inline-block;width:100px">
                     </div>
-                    <div id="booksfinish-div">
-                        <label id="booksfinish-label" for="books:finish">Finish: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:finish" style="display:inline-block;width:55px">Finish: </label>
                         <input id="books:finish" style="display:inline-block;width:100px">
                     </div>
-                    <div id="bookscomments-div">
-                        <label id="bookscomments-label" for="books:cmnts">Cmnts: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:cmnts" style="display:inline-block;width:55px">Cmnts: </label>
                         <textarea id="books:cmnts" readonly disabled rows="3"style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre-wrap">
                         </textarea>
                     </div>
-                    <div id="bookscharacters-div">
-                        <label id="bookscharacters-label" for="books:chrs">Chars: </label>
+                    <div style="display:block;margin:2px 0px 2px 0px">
+                        <label for="books:chrs" style="display:inline-block;width:55px">Chars: </label>
                         <textarea id="books:chrs" readonly disabled rows="20" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
@@ -529,10 +529,10 @@
 
 <!-- submit button and messages div ................................................................................ -->
 
-                <div id="submit-div">
-                    <button id="submit-button"  onclick="fonclick_submit_submit()" disabled>Submit</button>
-                    <label id="submit-label" for="submit-message">Message</label>
-                    <input id="submit-message" disabled>
+                <div id="submit:div" style="display:block; width:80%; margin:auto; margin-top:10px; max-width:800px; text-align:left;">
+                    <button id="submit:submit" style="margin:5px 0px 5px 0px" onclick="fonclick_submit_submit()" disabled>Submit</button>
+                    <label for="submit:mssge" style="display:inline-block;width:55px;margin:0px 10px 0px 10px">Message</label>
+                    <input id="submit:mssge" style="font-family:calibri;font-size:15px;display:inline-block;width:75%" disabled>
                 </div>
 
 <!-- buttons to clear the page and show and hide help and internals ................................................ -->
@@ -594,7 +594,7 @@
                     <h3 id=ASIDE1H3>Changes 2021-22</h3>
                 <ul id="ASIDE1UL">
 
-                    <li CLASS="ASIDE1LI">24-May: move local styles</li>
+                    <li CLASS="ASIDE1LI">24-May: move styles to bookInquiry.css</li>
                     <li CLASS="ASIDE1LI">22-May: lowercase html tags</li>
                     <li CLASS="ASIDE1LI">19-May: add common.css</li>
                     <li CLASS="ASIDE1LI">16-May: expand clear function</li>
