@@ -84,11 +84,10 @@
 <!--    19-May-2022 - add common.css                                                                                 -->
 <!--    22-May-2022 - lowercase html tags                                                                            -->
 <!--    24-May-2022 - move styles to bookInquiry.css                                                                 -->
-<!--    31-May-2022 - add cornerimage rotation                                                                       -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ..................................................... -->
 
-<body onload="fSetCornerImage()">
+<body>
     <div id="WRAPPER1">
         <div id="WRAPPER2">
             <headeR id="HEADER1">
@@ -120,7 +119,7 @@
 
                 <div id="topics-div">
                     <label id="topics-label" for="topic-select">Topic:</label>
-                        <select id="topics-select" onchange="fSetTopic()">
+                        <select id="topics-select" name="topic" onchange="fSetTopic()">
                             <option value="choose" selected>Choose</option>
                             <option value="books">Books</option>
                             <option value="titles">Titles</option>
@@ -154,7 +153,7 @@
                 <div id="titles-div">
                     <div id="titlesfilter-div">
                         <label  id="titlesfilter-label" for="titlesfilter-input">Filter:</label>
-                        <input id="titlesfilter-input" required>
+                        <input id="titlesfilter-input" name="titles:filter" required>
                     </div>
                     <div id="titlesarea-div">
                         <textarea id="titlesarea-textarea" readonly disabled ROWS="50">
@@ -167,10 +166,10 @@
                 <div id="recents-div">
                     <div id="recentsfilter-div">
                         <label  id="recentsfilter-label" for="recentsfilter-input">Filter:</label>
-                        <input id="recentsfilter-input" required>
+                        <input id="recentsfilter-input" name="recents:filter" required>
                     </div>
                     <div id="recentsarea-div">
-                        <textarea id="recentsarea-textarea" readonly disabled ROWS="45">
+                        <textarea id="recentsarea-textarea" readonly disabled ROWS="25">
                         </textarea>
                     </div>
                 </div>
@@ -180,10 +179,10 @@
                 <div id="unreads-div">
                     <div id="unreadsfilter-div">
                         <label id="unreadsfilter-label" for="unreadsfilter-input" >Filter:</label>
-                        <input id="unreadsfilter-input" required>
+                        <input id="unreadsfilter-input" name="unreadsFilter" required>
                     </div>
                     <div id="unreadsarea-div">
-                        <textarea id="unreadsarea-textarea" readonly disabled ROWS="15">
+                        <textarea id="unreadsarea-textarea" readonly disabled ROWS="25">
                         </textarea>
                     </div>
                 </div>
@@ -219,7 +218,7 @@
                     </div>
                     <div id="charactersfilter-div">
                         <label id="charactersfilter-label" for="chars:filter">Filter:</label>
-                        <input id="charactersfilter-input" required>
+                        <input id="charactersfilter-input" name="chars:filter" required>
                     </div>
                     <div id="charactersarea-div">
                         <textarea id="charactersarea-textarea" readonly disabled ROWS="25">
@@ -232,11 +231,11 @@
                 <div id="authors-div">
                     <div id="authorsfilter-div">
                         <label  id="authorsfilter-label" for="authorsfilter-input">Filter:</label>
-                        <input id="authorsfilter-input" required>
+                        <input id="authorsfilter-input" name="authorsFilter" required>
                     </div>
                     <div id="authorsadd-div">
                         <label  id="authorsadd-label" for="authorsadd-input">Add Author:</label>
-                        <input id="authorsadd-input" required onKeyUp="fEnableSubmitIfNotNull('authorsadd-input')">
+                        <input id="authorsadd-input" name="newAuthorsInput" required onKeyUp="fEnableSubmitIfNotNull('authorsadd-input')">
                     </div>
                     <div id="authorsupdate-div">
                         <span style="display:block">
@@ -255,7 +254,7 @@
                         <input id="authorsdelete-input" required onKeyUp="fonKeyUp_author_del_id()">
                     </div>
                     <div id="authorslist-div">
-                        <textarea id="authorslist-textarea" readonly disabled ROWS="45">
+                        <textarea id="authorslist-textarea" readonly disabled ROWS="25">
                         </textarea>
                     </div>
                 </div>
@@ -265,11 +264,11 @@
                 <div id="classifications-div">
                     <div id="classificationsfilter-div">
                         <label id="classificationsfilter-label" for="classificationsfilter-input">Filter:</label>
-                        <input id="classificationsfilter-input" required>
+                        <input id="classificationsfilter-input" name="class:filter" required>
                     </div>
                     <div id="classificationsadd-div">
                         <label id="classificationsadd-label" for="classificationsadd-input">Add Class:</label>
-                        <input id="classificationsadd-input" required onKeyUp="fEnableSubmitIfNotNull('classificationsadd-input')">
+                        <input id="classificationsadd-input" name="class:add-name" required onKeyUp="fEnableSubmitIfNotNull('classificationsadd-input')">
                     </div>
                     <div id="classificationsupdate-div">
                         <span style="display:block">
@@ -288,172 +287,172 @@
                         <input id="classificationsdelete-input" required onKeyUp="fonKeyUp_class_del_id()">
                     </div>
                     <div id="classificationslist-div">
-                        <textarea id="classificationslist-textarea" readonly disabled ROWS="5">
+                        <textarea id="classificationslist-textarea" readonly disabled ROWS="25">
                         </textarea>
                     </div>
                 </div>
 
 <!-- ratings div ................................................................................................... -->
 
-                <div id="ratings-div">
-                    <div id="ratingsfilter-div">
-                        <label id="ratingfilter-label" for="ratingsfilter-input">Filter:</label>
-                        <input id="ratingsfilter-input" required>
+                <div id="ratings:div" style="display:none">
+                    <div id="ratings:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="ratings:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="ratings:filter" name="ratings:filter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="ratingsadd-div">
-                        <label id="ratingsadd-label" for="ratingsadd-input">Add Rating:</label>
-                        <input id="ratingsadd-input" required onKeyUp="fEnableSubmitIfNotNull('ratingsadd-input')">
+                    <div id="ratings:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="ratings:add-name" style="margin-left:0px;width:45px" >Add Rating:</label>
+                        <input id="ratings:add-name" name="ratings:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('ratings:add-name')">
                     </div>
-                    <div id="ratingsupdate-div">
+                    <div id="ratings:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <span style="display:block">
-                            <label id="ratingsupdate-label" for="ratingsupdateid-input" >Rating ID:</label>
-                            <input id="ratingsupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
-                            <input id="ratingsupdatename-input" required disabled>
-                            <button id="ratingsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            <label for="ratings:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Rating ID:</label>
+                            <input id="ratings:updt-id" required style="width:5%;margin-top:5px;margin-left:7px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
+                            <input id="ratings:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
+                            <button id="ratings:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                         </span>
                         <span style="display:block">
-                            <labeL id="ratingsupdated-label" for="ratingsupdated-input" >Update:</label>
-                            <input id="ratingsupdated-input" required onKeyUp="fonKeyUp_rating_updtd_name()">
+                            <labeL for="ratings:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</label>
+                            <inpuT id="ratings:updtd-name" required style="display:inline-block;margin-left:27px;margin-bottom:5px;width:75%" onKeyUp="fonKeyUp_rating_updtd_name()">
                         </span>
                     </div>
-                    <div id="ratingsdelete-div">
-                        <label id="ratingsdelete-label" for="ratingsdelete-input">Rating ID:</labeL>
-                        <input id="ratingsdelete-input" required onKeyUp="fonKeyUp_ratings_del_id()">
+                    <div id="ratings:del-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="ratings:del-id" style="margin-left:0px;margin-top:5px;width:32px" >Rating ID:</labeL>
+                        <input id="ratings:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_ratings_del_id()">
                     </div>
-                    <div id="ratingslist-div">
-                        <textarea id="ratingslist-textarea" readonly disabled ROWS="7">
+                    <div id="ratings:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="ratings:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
 
 <!-- series div .................................................................................................... -->
 
-                <div id="series-div">
-                    <div id="seriesfilter-div">
-                        <label id="seriesfilter-label" for="seriesfilter-input">Filter:</label>
-                        <input id="seriesfilter-input" required>
+                <div id="series:div" style="display:none">
+                    <div id="series:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="series:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="series:filter" name="series:filter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="seriesadd-div">
-                        <label id="seriesadd-label" for="seriesadd-input">Add Series:</label>
-                        <input id="seriesadd-input" required onKeyUp="fEnableSubmitIfNotNull('seriesadd-input')">
+                    <div id="series:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="series:add-name" style="margin-left:0px;width:45px" >Add Series:</label>
+                        <input id="series:add-name" name="series:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('series:add-name')">
                     </div>
-                    <div id="seriesupdate-div">
+                    <div id="series:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <span style="display:block">
-                            <label id="seriesupdate-label" for="seriesupdateid-input">Series ID:</label>
-                            <input id="seriesupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
-                            <input id="seriesupdatename-input" required>
-                            <button id="seriesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            <label for="series:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Series ID:</label>
+                            <input id="series:updt-id" required style="width:5%;margin-top:5px;margin-left:10px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
+                            <input id="series:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
+                            <button id="series:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                         </span>
                         <span style="display:block">
-                            <label id="seriesupdated-label" for="seriesupdated-input">Update:</label>
-                            <input id="seriesupdated-input" required onKeyUp="fonKeyUp_series_updtd_name()">
+                            <label for="series:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</label>
+                            <input id="series:updtd-name" required style="display:inline-block;margin-left:27px;margin-bottom:5px;width:75%" onKeyUp="fonKeyUp_series_updtd_name()">
                         </span>
                     </div>
-                    <div id="seriesdelete-div">
-                        <label id="seriesdelete-label" for="seriesdelete-input">Series ID:</label>
-                        <input id="seriesdelete-input" required onKeyUp="fonKeyUp_series_del_id()">
+                    <div id="series:del-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="series:del-id" style="margin-left:0px;margin-top:5px;width:32px" >Series ID:</label>
+                        <input id="series:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_series_del_id()">
                     </div>
-                    <div id="serieslist-div">
-                        <textarea id="serieslist-textarea" readonly disabled ROWS="45">
+                    <div id="series:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="series:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
 
 <!-- sources div ................................................................................................... -->
 
-                <div id="sources-div">
-                    <div id="sourcesfilter-div">
-                        <label id="sourcesfilter-label" for="sourcesfilter-input">Filter:</label>
-                        <input id="sourcesfilter-input" required>
+                <div id="sources:div" style="display:none">
+                    <div id="sources:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="sources:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="sources:filter" name="sourcesFilter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="sourcesadd-div">
-                        <label id="sourcesadd-label" for="sourcesadd-input">Add Source:</label>
-                        <input id="sourcesadd-input" required onKeyUp="fEnableSubmitIfNotNull('sourcesadd-input')">
+                    <div id="sources:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="sources:add-name" style="margin-left:0px;width:45px" >Add Source:</label>
+                        <input id="sources:add-name" name="sources:add-name" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('sources:add-name')">
                     </div>
-                    <div id="sourcesupdate-div">
+                    <div id="sources:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <span style="display:block">
-                            <label id="sourcesupdate-label" for="sourcesupdateid-input">Source ID:</label>
-                            <input id="sourcesupdateid-input" required  onKeyUp="fonKeyUp_any_updt_id()">
-                            <input id="sourcesupdatename-input" required disabled>
-                            <button id="sourcesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            <label for="sources:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Source ID:</label>
+                            <input id="sources:updt-id" required style="width:5%;margin-top:5px;margin-left:5px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
+                            <input id="sources:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
+                            <button id="sources:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                         </span>
                         <span style="display:block">
-                            <label id="sourcesupdated-label" for="sourcesupdated-input">Update:</label>
-                            <input id="sourcesupdated-input" required onKeyUp="fonKeyUp_sources_updtd_name()">
+                            <label for="sources:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</label>
+                            <input id="sources:updtd-name" required style="display:inline-block;margin-left:27px;margin-bottom:5px;width:75%" onKeyUp="fonKeyUp_sources_updtd_name()">
                         </span>
                     </div>
-                    <div id="sourcesdelete-div">
-                        <label id="sourcesdelete-label" for="sourcesdelete-input">Source ID:</label>
-                        <input id="sourcesdelete-input" required onKeyUp="fonKeyUp_sources_del_id()">
+                    <div id="sources:del-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="sources:del-id" style="margin-left:0px;margin-top:5px;width:32px" >Source ID:</label>
+                        <input id="sources:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_sources_del_id()">
                     </div>
-                    <div id="sourceslist-div">
-                        <textarea id="sourceslist-textarea" readonly disabled ROWS="13">
+                    <div id="sources:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="sources:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
 
 <!-- genres div .................................................................................................... -->
 
-                <div id="genres-div">
-                    <div id="genresfilter-div">
-                        <label id="genresfilter-label" for="genresfilter-input">Filter:</label>
-                        <input id="genresfilter-input" required>
+                <div id="genres:div" style="display:none">
+                    <div id="genres:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="genres:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="genres:filter" name="genres:filter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="genresadd-div">
-                        <label id="genresadd-label" for="genresadd-input">Add Genre:</label>
-                        <input id="genresadd-input" required onKeyUp="fEnableSubmitIfNotNull('genresadd-input')">
+                    <div id="genres:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="genres:add-name" style="margin-left:0px;width:45px" >Add Genre:</label>
+                        <input id="genres:add-name" name="newGenresInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('genres:add-name')">
                     </div>
-                    <div id="genresupdate-div">
+                    <div id="genres:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <span style="display:block">
-                            <label id="genresupdate-label" for="genresupdateid-input">Genre ID:</label>
-                            <input id="genresupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
-                            <input id="genresupdatename-input" required disabled>
-                            <button id="genresupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            <label for="genres:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Genre ID:</label>
+                            <input id="genres:updt-id" required style="width:5%;margin-top:5px;margin-left:10px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
+                            <input id="genres:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
+                            <button id="genres:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                         </span>
                         <span style="display:block">
-                            <label id="genresupdated-label" for="genresupdated-input">Update:</label>
-                            <input id="genresupdated-input" required onKeyUp="fonKeyUp_genres_updtd_name()">
+                            <label for="genres:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</label>
+                            <input id="genres:updtd-name" required style="display:inline-block;margin-left:27px;margin-bottom:5px;width:75%" onKeyUp="fonKeyUp_genres_updtd_name()">
                         </span>
                     </div>
-                    <div id="genresdelete-div">
-                        <label id="genresdelete-label" for="genresdelete-input">Genre ID:</label>
-                        <input id="genresdelete-input" required onKeyUp="fonKeyUp_genres_del_id()">
+                    <div id="genres:del-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="genres:del-id" style="margin-left:0px;margin-top:5px;width:32px" >Genre ID:</label>
+                        <input id="genres:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_genres_del_id()">
                     </div>
-                    <div id="genreslist-div">
-                        <textarea id="genreslist-textarea" readonly disabled ROWS="22">
+                    <div id="genres:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="genres:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
 
 <!-- statuses div .................................................................................................. -->
 
-                <div id="statuses-div">
-                    <div id="statusesfilter-div">
-                        <label id="statusesfilter-label" for="statusesfilter-input">Filter:</label>
-                        <input id="statusesfilter-input" required>
+                <div id="statuses:div" style="display:none">
+                    <div id="statuses:filter-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="statuses:filter" style="margin-left:0px;width:45px" >Filter:</label>
+                        <input id="statuses:filter" name="statuses:filter" required style="width:88%; margin-top:10px; margin-left:17px; margin-bottom:10px">
                     </div>
-                    <div id="statusesadd-div">
-                        <label id="statusesadd-label" for="statusesadd-input">Add Status:</label>
-                        <input id="statusesadd-input" required onKeyUp="fEnableSubmitIfNotNull('statusesadd-input')">
+                    <div id="statuses:add-div" style="width:80%; margin: auto; max-width:800px; text-align:left">
+                        <label for="statuses:add-name" style="margin-left:0px;width:45px" >Add Status:</label>
+                        <input id="statuses:add-name" name="newStatusesInput" required style="width:65%;margin-top:5px;margin-left:17px;margin-bottom:5px" onKeyUp="fEnableSubmitIfNotNull('statuses:add-name')">
                     </div>
-                    <div id="statusesupdate-div">
+                    <div id="statuses:updt-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
                         <span style="display:block">
-                            <label id="statusesupdateid-label" for="statusesupdateid-input">Status ID:</label>
-                            <input id="statusesupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
-                            <input id="statusesupdatename-input" required disabled>
-                            <button id="statusesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            <label for="statuses:updt-id" style="margin-left:0px;margin-top:5px;width:32px" >Status ID:</label>
+                            <input id="statuses:updt-id" required style="width:5%;margin-top:5px;margin-left:10px;margin-bottom:5px" onKeyUp="fonKeyUp_any_updt_id()">
+                            <input id="statuses:updt-name" required style="width:58%;margin-top:5px;margin-left:3px;margin-bottom:5px" disabled>
+                            <button id="statuses:vldt-id" style="margin-top:5px;" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                         </span>
                         <span style="display:block">
-                            <label id="statusesupdated-label" for="statusesupdated-input">Update:</label>
-                            <input id="statusesupdated-input" required onKeyUp="fonKeyUp_statuses_updtd_name()">
+                            <label for="statuses:updtd-name" style="display:inline-block;margin-right:0px;margin-top:0px;width:47px" >Update:</label>
+                            <input id="statuses:updtd-name" required style="display:inline-block;margin-left:27px;margin-bottom:5px;width:75%" onKeyUp="fonKeyUp_statuses_updtd_name()">
                         </span>
                     </div>
-                    <div id="statusesdelete-div">
-                        <label id="statusesdelete-label" for="statusesdelete-input">Status ID:</label>
-                        <input id="statusesdelete-input" required onKeyUp="fonKeyUp_statuses_del_id()">
+                    <div id="statuses:del-div" style="width:80%;margin:auto;max-width:800px;text-align:left;display:none">
+                        <label for="statuses:del-id" style="margin-left:0px;margin-top:5px;width:32px" >Status ID:</label>
+                        <input id="statuses:del-id" required style="width:5%;margin-top:5px;margin-left:25px;margin-bottom:5px" onKeyUp="fonKeyUp_statuses_del_id()">
                     </div>
-                    <div id="statuseslist-div">
-                        <textarea id="statuseslist-textarea" readonly disabled ROWS="9">
+                    <div id="statuses:list-div" style="width:80%;margin:auto;max-width:800px">
+                        <textarea id="statuses:list" readonly disabled ROWS="25" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
@@ -462,68 +461,68 @@
 
                 <div id="books-div" id="books:div">
                     <div id="booksstage-div">
-                        <label id="booksstage-label" for="booksstage-input">Stage:</label>
-                        <input id="booksstage-input">
+                        <label id="booksstage-label" for="books:stage">Stage:</label>
+                        <input id="books:stage" style="display:inline-block;width:35;border-width:thin">
                     </div>
                     <div id="booksid-div">
-                        <label id="booksid-label" for="booksid-input">ID:</label>
-                        <input id="booksid-input" onkeyup="fEnableSubmitButton01('booksid-input')">
+                        <label id="booksid-label" for="books:titleId">ID:</label>
+                        <input id="books:titleId" style="display:inline-block;width:35;border-width:thin" onkeyup="fEnableSubmitButton01('books:titleId')">
                     </div>
                     <div id="booksname-div">
-                        <Label id="booksname-label" for="booksname-input">Title: </label>
-                        <input id="booksname-input">
+                        <Label id="booksname-label" for="books:name">Title: </label>
+                        <input id="books:name" style="display:inline-block;width:400px">
                     </div>
                     <div id="booksauthor-div">
-                        <label id="booksauthor-label" for="booksauthor-input">Author: </label>
-                        <input id="booksauthor-input">
-                        <select id="booksauthor-select" onchange="fPopulateLOVId('authors')"></select>
+                        <label id="booksauthor-label" for="books:author">Author: </label>
+                        <input id="books:authorId" style="display:inline-block;width:35px">
+                        <select id="books:author" style="display:inline-block;width:352px" onchange="fPopulateLOVId('authors')"></select>
                     </div>
                     <div id="bookssource-div">
                         <label id="bookssource-label" for="books:source">Source: </label>
-                        <input id="bookssource-input">
-                        <select id="bookssource-select" onchange="fPopulateLOVId('sources')"></select>
+                        <input id="books:sourceId" style="display:inline-block;width:35px">
+                        <select id="books:source" style="display:inline-block;width:200px" onchange="fPopulateLOVId('sources')"></select>
                     </div>
                     <div id="booksseries-div">
                         <label id="booksseries-label" for="books:series">Series: </label>
-                        <input id="booksseries-input">
-                        <select id="booksseries-select" onchange="fPopulateLOVId('series')"></select>
+                        <input id="books:seriesId" style="display:inline-block;width:35px">
+                        <select id="books:series" style="display:inline-block;width:352px" onchange="fPopulateLOVId('series')"></select>
                     </div>
                     <div id="booksgenre-div">
                         <label id="booksgenre-label" for="books:genre">Genre: </label>
-                        <input id="booksgenre-input">
-                        <select id="booksgenre-select" onchange="fPopulateLOVId('genres')"></select>
+                        <input id="books:genreId" style="display:inline-block;width:35px">
+                        <select id="books:genre" style="display:inline-block;width:200px" onchange="fPopulateLOVId('genres')"></select>
                     </div>
                     <div id="booksstatus-div">
                         <labeL id="booksstatus-label" for="books:status">Status: </label>
-                        <input id="booksstatus-input">
-                        <select id="booksstatus-select" onchange="fPopulateLOVId('statuses')"></select>
+                        <input id="books:statusId" style="display:inline-block;width:35px">
+                        <select id="books:status" style="display:inline-block;width:200px" onchange="fPopulateLOVId('statuses')"></select>
                     </div>
                     <div id="booksclassification-div">
                         <label id="booksclassification-label" for="books:clsfn">Clsfn: </label>
-                        <input id="booksclassification-input">
-                        <select id="booksclassification-select" onchange="fPopulateLOVId('classifications')"></select>
+                        <input id="books:clsfnId" style="display:inline-block;width:35px">
+                        <select id="books:clsfn" style="display:inline-block;width:200px" onchange="fPopulateLOVId('classifications')"></select>
                     </div>
                     <div id="booksrating-div">
                         <label id="booksrating-label" for="books:rating">Rating: </label>
-                        <input id="booksrating-input">
-                        <select id="booksrating-select" onchange="fPopulateLOVId('ratings')"></select>
+                        <input id="books:ratingId" style="display:inline-block;width:35px">
+                        <select id="books:rating" style="display:inline-block;width:200px" onchange="fPopulateLOVId('ratings')"></select>
                     </div>
                     <div id="booksstart-div">
-                        <label id="booksstart-label" for="booksstart-input">Start: </label>
-                        <input id="booksstart-input">
+                        <label id="booksstart-label" for="books:start">Start: </label>
+                        <input id="books:start" style="display:inline-block;width:100px">
                     </div>
                     <div id="booksfinish-div">
                         <label id="booksfinish-label" for="books:finish">Finish: </label>
-                        <input id="booksfinish-input">
+                        <input id="books:finish" style="display:inline-block;width:100px">
                     </div>
                     <div id="bookscomments-div">
                         <label id="bookscomments-label" for="books:cmnts">Cmnts: </label>
-                        <textarea id="bookscomments-textarea" readonly disabled rows="3">
+                        <textarea id="books:cmnts" readonly disabled rows="3"style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre-wrap">
                         </textarea>
                     </div>
                     <div id="bookscharacters-div">
                         <label id="bookscharacters-label" for="books:chrs">Chars: </label>
-                        <textarea id="bookscharacters-textarea" readonly disabled rows="20">
+                        <textarea id="books:chrs" readonly disabled rows="20" style="font-family:lucida console; font-size:14px; width:100%; margin-left:0px; white-space:pre">
                         </textarea>
                     </div>
                 </div>
@@ -595,9 +594,6 @@
                     <h3 id=ASIDE1H3>Changes 2021-22</h3>
                 <ul id="ASIDE1UL">
 
-                    <li CLASS="ASIDE1LI">31-May: add cornerimage rotation</li>
-                    <li CLASS="ASIDE1LI">29-May: fix ratings filter</li>
-                    <li CLASS="ASIDE1LI">29-May: editable book comments</li>
                     <li CLASS="ASIDE1LI">24-May: move local styles</li>
                     <li CLASS="ASIDE1LI">22-May: lowercase html tags</li>
                     <li CLASS="ASIDE1LI">19-May: add common.css</li>
@@ -679,7 +675,7 @@
 
             <aside id="ASIDE3">
                 <div id="ASIDE3DIV">
-                    <p id="ASIDE3-PARA">
+                    <p>
                      Matilda Cook in Magpies uniform before her next netball game 2022
                     </p>
                 </div>

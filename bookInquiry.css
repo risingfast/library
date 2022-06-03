@@ -4,6 +4,7 @@
 /*         HTML & CSS for Beginners Part 22: How to create a basic layout - the CSS                                  */
 /* Log                                                                                                               */
 /*     24-May-2022 - started                                                                                         */
+/*     28-May-2022 - migrate styles from inline html                                                                 */
 
 #results-div {
     width: 80%;
@@ -32,6 +33,8 @@
 #topics-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
     text-align: left;
 }
@@ -44,34 +47,37 @@
 #topics-select {
     margin-left: 10px;
     margin-bottom: 0px;
+    margin-right: 10px;
 }
 
 #modes-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
     text-align: left;
     display: none;
 }
 
 #modesfetch-button {
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 #modesquery-button {
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 #modesadd-button {
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 #modesupdate-button {
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 #modesdelete-button {
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 #mode-label {
@@ -85,6 +91,8 @@
 #titlesfilter-div {
     width: 80%; 
     margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px; 
     text-align: left;
 }
@@ -95,10 +103,8 @@
 }
 
 #titlesfilter-input {
-    width: 88%;
-    margin-top: 10px;
+    width: 40%;
     margin-left: 17px;
-    margin-bottom: 10px;
 }
 
 #titlesarea-div {
@@ -108,7 +114,7 @@
 }
 
 #titlesarea-textarea {
-    font-family: lucida console;
+    font-family: "lucida console";
     font-size: 14px;
     width: 100%;
     margin-left: 0px;
@@ -122,15 +128,15 @@
 #recentsfilter-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
     text-align:left;
 }
 
 #recentsfilter-input {
-    width: 88%; 
-    margin-top: 10px;
+    width: 40%; 
     margin-left: 17px;
-    margin-bottom: 10px;
 }
 
 #recentsarea-div {
@@ -140,7 +146,7 @@
 }
 
 #recentsarea-textarea {
-    font-family:lucida console;
+    font-family: "lucida console";
     font-size: 14px;
     width: 100%;
     margin-left: 0px;
@@ -154,6 +160,8 @@
 #unreadsfilter-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px; 
+    margin-bottom: 10px;
     max-width: 800px;
     text-align: left;
 }
@@ -163,10 +171,8 @@
 }
 
 #unreadsfilter-input {
-    width: 88%; 
-    margin-top: 10px; 
+    width: 40%; 
     margin-left: 17px; 
-    margin-bottom: 10px;
 }
 
 #unreadsarea-div {
@@ -176,7 +182,7 @@
 }
 
 #unreadsarea-textarea {
-    font-family: lucida console;
+    font-family: "lucida console";
     font-size: 14px;
     width: 100%;
     margin-left: 0px;
@@ -190,31 +196,28 @@
 #charactersbook-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
-    text-align: left;
 }
 
 #charactersbookid-label {
+    display: inline-block;
     margin-left: 0px;
-    width: 45px;
+    width: 60px;
 }
 
 #charactersbookid-input {
     width: 5%;
-    margin-top: 10px;
-    margin-left: 17px;
-    margin-bottom: 0px;
+    margin-left: 10px;
 }
 
 #charactersbooktitle-input{
     width: 58%;
-    margin-top: 10px;
     margin-left: 6px;
-    margin-bottom:5px;
 }
 
 #charactersvalidatebook-button {
-    margin-top: 10px;
 }
 
 #charactersadd-div {
@@ -308,20 +311,20 @@ i#charactersupdatedname-label {
 #charactersfilter-div {
     width: 80%; 
     margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
     text-align: left;
 }
 
 #charactersfilter-label {
-    margin-left: 20px;
-    width: 45px;
+    display: inline-block;
+    width: 60px;
 }
 
 #charactersfilter-input {
-    width: 88%;
-    margin-top: 10px;
-    margin-left: 17px;
-    margin-bottom: 10px;
+    width: 40%;
+    margin-left: 10px;
 }
 
 #charactersarea-div {
@@ -331,7 +334,7 @@ i#charactersupdatedname-label {
 }
 
 #charactersarea-textarea {
-    font-family: lucida console;
+    font-family: "lucida console";
     font-size: 14px;
     width: 100%;
     margin-left: 0px;
@@ -345,6 +348,8 @@ i#charactersupdatedname-label {
 #authorsfilter-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
     text-align: left
 }
@@ -355,10 +360,8 @@ i#charactersupdatedname-label {
 }
 
 #authorsfilter-input {
-    width: 88%;
-    margin-top: 10px;
+    width: 40%;
     margin-left: 17px;
-    margin-bottom: 10px;
 }
 
 #authorsadd-div {
@@ -454,7 +457,7 @@ i#charactersupdatedname-label {
 }
 
 #authorslist-textarea {
-    font-family: lucida console;
+    font-family: "lucida console";
     font-size: 14px;
     width: 100%;
     margin-left: 0px;
@@ -491,6 +494,8 @@ i#charactersupdatedname-label {
 #classificationsfilter-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
     text-align: left;
 }
@@ -501,13 +506,11 @@ i#charactersupdatedname-label {
 }
 
 #classificationsfilter-input {
-    width: 88%;
-    margin-top: 10px;
+    width: 40%;
     margin-left: 17px;
-    margin-bottom: 10px;
 }
 
-classificationsadd-div {
+#classificationsadd-div {
     width: 80%;
     margin: auto;
     max-width: 800px;
@@ -600,10 +603,627 @@ classificationsadd-div {
 }
 
 #classificationslist-textarea {
-    font-family: lucida console;
+    font-family: "lucida console";
     font-size: 14px;
     width: 100%;
     margin-left: 0px;
+}
+
+#ratings-div {
+    display: none;
+}
+
+#ratingsfilter-div {
+    width:80%; 
+    margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width:800px; 
+    text-align:left;
+}
+
+#ratingsfilter-label {
+    margin-left: 0px;
+    width: 45px; 
+}
+
+#ratingsfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#ratingsadd-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+#ratingsadd-label {
+    margin-left: 0px;
+    width: 45p;
+}
+
+#ratingsadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#ratingsupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#ratingsupdate-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#ratingsupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 7px;
+    margin-bottom: 5px;
+}
+
+#ratingsupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#ratingsupdate-button {
+    margin-top: 5px;
+}
+
+#ratingsupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#ratingsupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#ratingsdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#ratingsdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#ratingsdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#ratingslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#ratingslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px; 
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#series-div {
+    display: none;
+}
+
+#seriesfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#seriesfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#seriesfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#seriesadd-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#seriesadd-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#seriesadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#seriesupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#seriesupdate-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#seriesupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+#seriesupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#seriesupdate-button {
+    margin-top:5px;
+}
+
+#seriesupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#seriesupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#seriesdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#seriesdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width:32px;
+}
+
+#seriesdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+    }
+
+#serieslist-div {
+    width:80%;
+    margin:auto;
+    max-width:800px;
+}
+
+#serieslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#sources-div {
+    display:none;
+}
+
+#sourcesfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#sourcesfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#sourcesfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#sourcesadd-div {
+    width: 80%; 
+    margin: auto;
+    max-width: 800px; 
+    text-align: left;
+}
+
+#sourcesadd-label {
+    margin-left:0px;
+    width:45px;
+}
+
+#sourcesadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#sourcesupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#sourcesupdate-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#sourcesupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+#sourcesupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#sourcesupdate-button {
+    margin-top:5px;
+}
+
+#sourcesupdated-label {
+     display: inline-block;
+     margin-right: 0px;
+     margin-top: 0px;
+     width: 47px;
+}
+
+#sourcesupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#sourcesdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#sourcesdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#sourcesdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#sourceslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#sourceslist-textarea {
+    font-family: "lucida console"; 
+    font-size: 14px; 
+    width: 100%; 
+    margin-left: 0px; 
+    white-space: pre;
+}
+
+#genres-div {
+    display:none;
+}
+
+#genresfilter-div {
+    width: 80%; 
+    margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px; 
+    text-align: left;
+}
+
+#genresfilter-label {
+     margin-left: 0px;
+     width: 45px;
+}
+
+#genresfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#genresadd-div {
+    width: 80%; 
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+#genresadd-label {
+    margin-left: 0px;
+    width: 45px; 
+}
+
+#genresadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#genresupdate-div {
+    width:80%;
+    margin:auto;
+    max-width:800px;
+    text-align:left;
+    display:none;
+}
+
+#genresupdateid-label {
+    margin-left:0px;
+    margin-top:5px;
+    width:32px;
+}
+
+#genresupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+#genresupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#genresupdate-button {
+    margin-top:5px;
+}
+
+#genresupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#genresupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#genresdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#genresdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#genresdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#genreslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#genreslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#statuses-div {
+    display: none;
+}
+
+#statusesfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#statusesfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#statusesfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#statusesadd-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+#statusesadd-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#statusesadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#statusesupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#statusesupdateid-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#statusesupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+#statusesupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#statusesupdate-button {
+    margin-top: 5px;
+}
+
+#statusesupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#statusesupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#statusesdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#statusesdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px
+}
+
+#statusesdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#statuseslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#statuseslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
 }
 
 #books-div {
@@ -622,6 +1242,12 @@ classificationsadd-div {
     width: 55px;
 }
 
+#booksstate-input {
+    display: inline-block;
+    width: 35;
+    border-width: thin;
+}
+
 #bookdid-div {
     display: block;
     margin: 10px 0px 10px 0px;
@@ -630,6 +1256,12 @@ classificationsadd-div {
 #booksid-label {
     display: inline-block;
     width: 55px;
+}
+
+#booksid-input {
+    display: inline-block;
+    width: 35;
+    border-width: thin;
 }
 
 #booksname-div {
@@ -642,6 +1274,11 @@ classificationsadd-div {
     width: 55px;
 }
 
+#booksname-input {
+    display: inline-block;
+    width: 400px;
+}
+
 #booksauthor-div {
     display: block;
     margin: 10px 0px 10px 0px;
@@ -650,6 +1287,17 @@ classificationsadd-div {
 #booksauthor-label {
     display: inline-block;
     width: 55px;
+}
+
+#booksauthor-input {
+    display:inline-block;
+    width:35px;
+}
+
+#booksauthor-select {
+    display:inline-block;
+    width:352px;
+    height:22px;
 }
 
 #bookssource-div {
@@ -662,6 +1310,17 @@ classificationsadd-div {
     width: 55px;
 }
 
+#bookssource-input {
+    display: inline-block;
+    width: 35px;
+}
+
+#bookssource-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
+}
+
 #booksseries-div {
     display: block;
     margin: 10px 0px 10px 0px;
@@ -670,6 +1329,17 @@ classificationsadd-div {
 #booksseries-label {
     display: inline-block;
     width: 55px;
+}
+
+#booksseries-input{
+    display: inline-block;
+    width: 35px;
+}
+
+#booksseries-select {
+    display: inline-block;
+    width: 352px;
+    height:22px;
 }
 
 #booksgenre-div {
@@ -682,6 +1352,17 @@ classificationsadd-div {
     width: 55px;
 }
 
+#booksgenre-input {
+    display: inline-block;
+    width: 35px
+}
+
+#booksgenre-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
+}
+
 #booksstatus-div {
     display: block;
     margin: 10px 0px 10px 0px;
@@ -690,6 +1371,17 @@ classificationsadd-div {
 #booksstatus-label {
     display: inline-block;
     width: 55px;
+}
+
+#booksstatus-input {
+    display: inline-block;
+    width: 35px;
+}
+
+#booksstatus-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
 }
 
 #booksclassification-div {
@@ -702,6 +1394,17 @@ classificationsadd-div {
     width: 55px;
 }
 
+#booksclassification-input {
+    display: inline-block;
+    width: 35px;
+}
+
+#booksclassification-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
+}
+
 #booksrating-div {
     display: block;
     margin: 10px 0px 10px 0px;
@@ -710,6 +1413,17 @@ classificationsadd-div {
 #booksrating-label {
     display: inline-block;
     width: 55px;
+}
+
+#booksrating-input {
+    display: inline-block;
+    width: 35px;
+}
+
+#booksrating-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
 }
 
 #booksstart-div {
@@ -722,6 +1436,11 @@ classificationsadd-div {
     width: 55px;
 }
 
+#booksstart-input {
+    display: inline-block;
+    width: 100px;
+}
+
 #booksfinish-div {
     display: block;
     margin: 10px 0px 10px 0px;
@@ -730,6 +1449,11 @@ classificationsadd-div {
 #booksfinish-label {
     display: inline-block;
     width: 55px;
+}
+
+#booksfinish-input {
+    display: inline-block;
+    width: 100px;
 }
 
 #bookscomments-div {
@@ -742,6 +1466,14 @@ classificationsadd-div {
     width: 55px;
 }
 
+#bookscomments-textarea{
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre-wrap;
+}
+
 #bookscharacters-div {
     display: block;
     margin: 10px 0px 10px 0px;
@@ -752,11 +1484,13 @@ classificationsadd-div {
     width: 55px;
 }
 
-
-
-
-
-
+#bookscharacters-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
 
 #submit-message {
     font-family: calibri;

@@ -64,7 +64,6 @@
 //    09-May-2022 clear (null) from start and finish date and comments if empty in books
 //    12-May-2022 change "none" to "" for x.style.display in fShowHelp()
 //    29-May-2022 make bookcomments editable in update mode
-//    31-May-2022 set cornerimage rotation
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -151,7 +150,6 @@ const uri36 = "http://www.risingfast.com/cgi-bin/bookChgAuthorNme.cgi";
 const uri37 = "http://www.risingfast.com/cgi-bin/bookAddBook.cgi";
 const uri38 = "http://www.risingfast.com/cgi-bin/bookDelBook.cgi";
 const uri39 = "http://www.risingfast.com/cgi-bin/bookUpdtBook.cgi";
-const uri40 = "http://www.risingfast.com/cgi-bin/setCornerImage.cgi";
 
 // define globals for mode and topic variables .........................................................................
 
@@ -3155,23 +3153,3 @@ async function fFetchTopicList(sInputFilter, sTextAreaResults) {
         alert("HttpError: " + response.status);
     }
 }
-
-
-// function to ajax fetch the current corner image and captiona
-
-async function fSetCornerImage() {
-    let response = await fetch(uri40);
-    if (response.ok) {
-        let text = await response.text();
-        let array = text.split("\n");
-        array.pop();                      // remove the last element (empty element) created by the split("\n")
-        let intRecords = array.length/3;
-        let intRecordSelected = Math.trunc(Math.random() * intRecords);
-        document.getElementById("ASIDE2IMG").src=array[intRecordSelected * 3]
-        document.getElementById("ASIDE3-PARA").innerHTML=array[(intRecordSelected * 3) + 1];
-    } else {
-        alert("HttpError: " + response.status);
-    }
-}
-
-
