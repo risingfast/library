@@ -1,0 +1,1501 @@
+/* bookInquiry.css - a css layout for bookInquiry.css                                                                                     */
+/* started - 24-May-2022                                                                                             */
+/* References:                                                                                                       */
+/*         HTML & CSS for Beginners Part 22: How to create a basic layout - the CSS                                  */
+/* Log                                                                                                               */
+/*     24-May-2022 - started                                                                                         */
+/*     28-May-2022 - migrate styles from inline html                                                                 */
+
+#results-div {
+    width: 80%;
+    margin: auto; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+    max-width: 800px;
+}
+
+#resultarea {
+    width: 100%;
+    background-color: lightgrey;
+}
+
+/* ----------------------------------------------------------------------- old ends ---------------------------------*/
+
+#heading-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: center;
+}
+
+#topics-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#topics-label {
+    display: inline-block;
+    width: 45px;
+}
+
+#topics-select {
+    margin-left: 10px;
+    margin-bottom: 0px;
+    margin-right: 10px;
+}
+
+#modes-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#modesfetch-button {
+    margin-top: 0px;
+}
+
+#modesquery-button {
+    margin-top: 0px;
+}
+
+#modesadd-button {
+    margin-top: 0px;
+}
+
+#modesupdate-button {
+    margin-top: 0px;
+}
+
+#modesdelete-button {
+    margin-top: 0px;
+}
+
+#mode-label {
+    display: inline-block;
+}
+
+#titles-div {
+    display: none;
+}
+
+#titlesfilter-div {
+    width: 80%; 
+    margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px; 
+    text-align: left;
+}
+
+#titlesfilter-label {
+    margin-left: 0px;
+    width:45px;
+}
+
+#titlesfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#titlesarea-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#titlesarea-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#recents-div {
+    display: none;
+}
+
+#recentsfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align:left;
+}
+
+#recentsfilter-input {
+    width: 40%; 
+    margin-left: 17px;
+}
+
+#recentsarea-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#recentsarea-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space:pre
+}
+
+#unreads-div {
+    display: none;
+}
+
+#unreadsfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px; 
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+#unreadsfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#unreadsfilter-input {
+    width: 40%; 
+    margin-left: 17px; 
+}
+
+#unreadsarea-div {
+    width: 80%;
+    margin: auto;
+    max-width:800px;
+}
+
+#unreadsarea-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#characters-div {
+    display: none;
+}
+
+#charactersbook-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+}
+
+#charactersbookid-label {
+    display: inline-block;
+    margin-left: 0px;
+    width: 60px;
+}
+
+#charactersbookid-input {
+    width: 5%;
+    margin-left: 10px;
+}
+
+#charactersbooktitle-input{
+    width: 58%;
+    margin-left: 6px;
+}
+
+#charactersvalidatebook-button {
+}
+
+#charactersadd-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display:none;
+}
+
+#charactersadd-label {
+    margin-left: 0px;
+    width: 35px;
+}
+
+#charactersadd-input {
+    width: 77%;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+#charactersupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#charactersupdate-label {
+    margin-left: 0px;
+    margin-top: 10px;
+    width: 45px;
+}
+
+#charactersupdateid-input {
+    width: 5%;
+    margin-top: 10px;
+    margin-left: 17px;
+    margin-bottom: 10px;
+}
+
+#charactersupdatename-input {
+    width: 58%;
+    margin-top: 10px;
+    margin-left: 3px;
+    margin-bottom: 10px;
+}
+
+#charactersvalidateid-button {
+    margin-top:10px;
+}
+
+i#charactersupdatedname-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#charactersupdatedname-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#charactersdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#charactersdeleteid-label {
+    margin-left: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 45px;
+}
+
+#charactersdeleteid-input {
+    width: 5%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 25px;
+}
+
+#charactersfilter-div {
+    width: 80%; 
+    margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#charactersfilter-label {
+    display: inline-block;
+    width: 60px;
+}
+
+#charactersfilter-input {
+    width: 40%;
+    margin-left: 10px;
+}
+
+#charactersarea-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#charactersarea-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#authors-div {
+    display: none;
+}
+
+#authorsfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left
+}
+
+#authorsfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#authorsfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#authorsadd-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+#authorsadd-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#authorsadd-input {
+    width: 65%;
+    margin-top: 10px;
+    margin-left: 17px;
+    margin-bottom: 10px;
+}
+
+#authorsupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#authorsupdate-label {
+    margin-left: 0px;
+    margin-top: 10px;
+    width: 32px;
+}
+
+#authorsupdateid-input {
+    width: 5%;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+#authorsupdatename-input {
+    width: 58%;
+    margin-top: 10px;
+    margin-left: 3px;
+    margin-bottom: 10px;
+}
+
+#authorsupdate-button {
+    margin-top: 10px;
+}
+
+#authorsupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#authorsupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 10px;
+    width: 75%;
+}
+
+#authorsdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: `none;
+}
+
+#authorsdelete-label {
+    margin-left: 0px;
+    margin-top: 10px;
+    width: 32px;
+}
+
+#authorsdelete-input {
+    width:5%;
+    margin-top: 10px;
+    margin-left: 25px;
+    margin-bottom: 10px;
+}
+
+#authorslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#authorslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#submit-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#submit-button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#submit-label {
+    display: inline-block;
+    width: 55px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+#classifications-div {
+    display:none;
+}
+
+#classificationsfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#classificationsfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#classificationsfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#classificationsadd-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+#classificationsadd-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#classificationsadd-input {
+    width: 65%;
+    margin-top: 10px;
+    margin-left: 17px;
+    margin-bottom:5px;
+}
+
+#classificationsupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#classificationsupdate-label {
+    margin-left: 0px;
+    margin-top: 10px;
+    width: 32px;
+}
+
+#classificationsupdateid-input {
+    width:5%;
+    margin-top:5px;
+    margin-left:14px;
+    margin-bottom:5px;
+}
+
+#classificationsupdatename-input {
+    width: 58%;
+    margin-top: 10px;
+    margin-left: 3px;
+    margin-bottom: 10px;
+}
+
+#classificationsupdate-button {
+    margin-top: 10px;
+}
+
+#classificationsupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#classificationsupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#classificationsdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#classificationsdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#classificationsdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#classificationslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#classificationslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+}
+
+#ratings-div {
+    display: none;
+}
+
+#ratingsfilter-div {
+    width:80%; 
+    margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width:800px; 
+    text-align:left;
+}
+
+#ratingsfilter-label {
+    margin-left: 0px;
+    width: 45px; 
+}
+
+#ratingsfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#ratingsadd-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+#ratingsadd-label {
+    margin-left: 0px;
+    width: 45p;
+}
+
+#ratingsadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#ratingsupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#ratingsupdate-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#ratingsupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 7px;
+    margin-bottom: 5px;
+}
+
+#ratingsupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#ratingsupdate-button {
+    margin-top: 5px;
+}
+
+#ratingsupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#ratingsupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#ratingsdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#ratingsdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#ratingsdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#ratingslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#ratingslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px; 
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#series-div {
+    display: none;
+}
+
+#seriesfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#seriesfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#seriesfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#seriesadd-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#seriesadd-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#seriesadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#seriesupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#seriesupdate-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#seriesupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+#seriesupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#seriesupdate-button {
+    margin-top:5px;
+}
+
+#seriesupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#seriesupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#seriesdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#seriesdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width:32px;
+}
+
+#seriesdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+    }
+
+#serieslist-div {
+    width:80%;
+    margin:auto;
+    max-width:800px;
+}
+
+#serieslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#sources-div {
+    display:none;
+}
+
+#sourcesfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#sourcesfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#sourcesfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#sourcesadd-div {
+    width: 80%; 
+    margin: auto;
+    max-width: 800px; 
+    text-align: left;
+}
+
+#sourcesadd-label {
+    margin-left:0px;
+    width:45px;
+}
+
+#sourcesadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#sourcesupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#sourcesupdate-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#sourcesupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+#sourcesupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#sourcesupdate-button {
+    margin-top:5px;
+}
+
+#sourcesupdated-label {
+     display: inline-block;
+     margin-right: 0px;
+     margin-top: 0px;
+     width: 47px;
+}
+
+#sourcesupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#sourcesdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#sourcesdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#sourcesdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#sourceslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#sourceslist-textarea {
+    font-family: "lucida console"; 
+    font-size: 14px; 
+    width: 100%; 
+    margin-left: 0px; 
+    white-space: pre;
+}
+
+#genres-div {
+    display:none;
+}
+
+#genresfilter-div {
+    width: 80%; 
+    margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px; 
+    text-align: left;
+}
+
+#genresfilter-label {
+     margin-left: 0px;
+     width: 45px;
+}
+
+#genresfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#genresadd-div {
+    width: 80%; 
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+#genresadd-label {
+    margin-left: 0px;
+    width: 45px; 
+}
+
+#genresadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#genresupdate-div {
+    width:80%;
+    margin:auto;
+    max-width:800px;
+    text-align:left;
+    display:none;
+}
+
+#genresupdateid-label {
+    margin-left:0px;
+    margin-top:5px;
+    width:32px;
+}
+
+#genresupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+#genresupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#genresupdate-button {
+    margin-top:5px;
+}
+
+#genresupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#genresupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#genresdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#genresdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#genresdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#genreslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#genreslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#statuses-div {
+    display: none;
+}
+
+#statusesfilter-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+}
+
+#statusesfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#statusesfilter-input {
+    width: 40%;
+    margin-left: 17px;
+}
+
+#statusesadd-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+#statusesadd-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#statusesadd-input {
+    width: 65%;
+    margin-top: 5px;
+    margin-left: 17px;
+    margin-bottom: 5px;
+}
+
+#statusesupdate-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#statusesupdateid-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
+}
+
+#statusesupdateid-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+#statusesupdatename-input {
+    width: 58%;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+#statusesupdate-button {
+    margin-top: 5px;
+}
+
+#statusesupdated-label {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 47px;
+}
+
+#statusesupdated-input {
+    display: inline-block;
+    margin-left: 27px;
+    margin-bottom: 5px;
+    width: 75%;
+}
+
+#statusesdelete-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#statusesdelete-label {
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px
+}
+
+#statusesdelete-input {
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+#statuseslist-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#statuseslist-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#books-div {
+    width: 80%; 
+    margin: auto;
+    display: none;
+}
+
+#booksstage-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksstage-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksstate-input {
+    display: inline-block;
+    width: 35;
+    border-width: thin;
+}
+
+#bookdid-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksid-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksid-input {
+    display: inline-block;
+    width: 35;
+    border-width: thin;
+}
+
+#booksname-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksname-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksname-input {
+    display: inline-block;
+    width: 400px;
+}
+
+#booksauthor-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksauthor-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksauthor-input {
+    display:inline-block;
+    width:35px;
+}
+
+#booksauthor-select {
+    display:inline-block;
+    width:352px;
+    height:22px;
+}
+
+#bookssource-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#bookssource-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#bookssource-input {
+    display: inline-block;
+    width: 35px;
+}
+
+#bookssource-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
+}
+
+#booksseries-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksseries-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksseries-input{
+    display: inline-block;
+    width: 35px;
+}
+
+#booksseries-select {
+    display: inline-block;
+    width: 352px;
+    height:22px;
+}
+
+#booksgenre-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksgenre-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksgenre-input {
+    display: inline-block;
+    width: 35px
+}
+
+#booksgenre-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
+}
+
+#booksstatus-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksstatus-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksstatus-input {
+    display: inline-block;
+    width: 35px;
+}
+
+#booksstatus-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
+}
+
+#booksclassification-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksclassification-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksclassification-input {
+    display: inline-block;
+    width: 35px;
+}
+
+#booksclassification-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
+}
+
+#booksrating-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksrating-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksrating-input {
+    display: inline-block;
+    width: 35px;
+}
+
+#booksrating-select {
+    display: inline-block;
+    width: 200px;
+    height:22px;
+}
+
+#booksstart-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksstart-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksstart-input {
+    display: inline-block;
+    width: 100px;
+}
+
+#booksfinish-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksfinish-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#booksfinish-input {
+    display: inline-block;
+    width: 100px;
+}
+
+#bookscomments-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#bookscomments-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#bookscomments-textarea{
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre-wrap;
+}
+
+#bookscharacters-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#bookscharacters-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#bookscharacters-textarea {
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre;
+}
+
+#submit-message {
+    font-family: calibri;
+    font-size: 15px;
+    display: inline-block;
+    width: 75%;
+}
+

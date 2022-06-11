@@ -65,6 +65,7 @@
 //    12-May-2022 change "none" to "" for x.style.display in fShowHelp()
 //    29-May-2022 make bookcomments editable in update mode
 //    31-May-2022 set cornerimage rotation
+//    06-Jun-2022 add fSetFocusOnSubmit()
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -1764,7 +1765,7 @@ async function fGetBookDetails() {
             document.getElementById("booksclassification-select").value = arrayFields[13];
             document.getElementById("booksrating-input").value = arrayFields[14];
             document.getElementById("booksrating-select").value = arrayFields[15];
-            if (arrayFields[15] != "(null)") {                                           // set the start date empty if (null)
+            if (arrayFields[16] != "(null)") {                                           // set the start date empty if (null)
                 document.getElementById("booksstart-input").value = arrayFields[16];
             } else {
                 document.getElementById("booksstart-input").value = "";
@@ -3174,4 +3175,7 @@ async function fSetCornerImage() {
     }
 }
 
+function fSetFocusOnSubmit() {
+    document.getElementById("submit-button").focus();
+}
 

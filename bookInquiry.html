@@ -85,6 +85,7 @@
 <!--    22-May-2022 - lowercase html tags                                                                            -->
 <!--    24-May-2022 - move styles to bookInquiry.css                                                                 -->
 <!--    31-May-2022 - add cornerimage rotation                                                                       -->
+<!--    06-Jun-2022 - set focus on filter input                                                                      -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ..................................................... -->
 
@@ -154,7 +155,7 @@
                 <div id="titles-div">
                     <div id="titlesfilter-div">
                         <label  id="titlesfilter-label" for="titlesfilter-input">Filter:</label>
-                        <input id="titlesfilter-input" required>
+                        <input id="titlesfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="titlesarea-div">
                         <textarea id="titlesarea-textarea" readonly disabled ROWS="50">
@@ -167,7 +168,7 @@
                 <div id="recents-div">
                     <div id="recentsfilter-div">
                         <label  id="recentsfilter-label" for="recentsfilter-input">Filter:</label>
-                        <input id="recentsfilter-input" required>
+                        <input id="recentsfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="recentsarea-div">
                         <textarea id="recentsarea-textarea" readonly disabled ROWS="45">
@@ -180,7 +181,7 @@
                 <div id="unreads-div">
                     <div id="unreadsfilter-div">
                         <label id="unreadsfilter-label" for="unreadsfilter-input" >Filter:</label>
-                        <input id="unreadsfilter-input" required>
+                        <input id="unreadsfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="unreadsarea-div">
                         <textarea id="unreadsarea-textarea" readonly disabled ROWS="15">
@@ -219,7 +220,7 @@
                     </div>
                     <div id="charactersfilter-div">
                         <label id="charactersfilter-label" for="chars:filter">Filter:</label>
-                        <input id="charactersfilter-input" required>
+                        <input id="charactersfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="charactersarea-div">
                         <textarea id="charactersarea-textarea" readonly disabled ROWS="25">
@@ -232,7 +233,7 @@
                 <div id="authors-div">
                     <div id="authorsfilter-div">
                         <label  id="authorsfilter-label" for="authorsfilter-input">Filter:</label>
-                        <input id="authorsfilter-input" required>
+                        <input id="authorsfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="authorsadd-div">
                         <label  id="authorsadd-label" for="authorsadd-input">Add Author:</label>
@@ -265,7 +266,7 @@
                 <div id="classifications-div">
                     <div id="classificationsfilter-div">
                         <label id="classificationsfilter-label" for="classificationsfilter-input">Filter:</label>
-                        <input id="classificationsfilter-input" required>
+                        <input id="classificationsfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="classificationsadd-div">
                         <label id="classificationsadd-label" for="classificationsadd-input">Add Class:</label>
@@ -298,7 +299,7 @@
                 <div id="ratings-div">
                     <div id="ratingsfilter-div">
                         <label id="ratingfilter-label" for="ratingsfilter-input">Filter:</label>
-                        <input id="ratingsfilter-input" required>
+                        <input id="ratingsfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="ratingsadd-div">
                         <label id="ratingsadd-label" for="ratingsadd-input">Add Rating:</label>
@@ -331,7 +332,7 @@
                 <div id="series-div">
                     <div id="seriesfilter-div">
                         <label id="seriesfilter-label" for="seriesfilter-input">Filter:</label>
-                        <input id="seriesfilter-input" required>
+                        <input id="seriesfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="seriesadd-div">
                         <label id="seriesadd-label" for="seriesadd-input">Add Series:</label>
@@ -364,7 +365,7 @@
                 <div id="sources-div">
                     <div id="sourcesfilter-div">
                         <label id="sourcesfilter-label" for="sourcesfilter-input">Filter:</label>
-                        <input id="sourcesfilter-input" required>
+                        <input id="sourcesfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="sourcesadd-div">
                         <label id="sourcesadd-label" for="sourcesadd-input">Add Source:</label>
@@ -397,7 +398,7 @@
                 <div id="genres-div">
                     <div id="genresfilter-div">
                         <label id="genresfilter-label" for="genresfilter-input">Filter:</label>
-                        <input id="genresfilter-input" required>
+                        <input id="genresfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="genresadd-div">
                         <label id="genresadd-label" for="genresadd-input">Add Genre:</label>
@@ -430,7 +431,7 @@
                 <div id="statuses-div">
                     <div id="statusesfilter-div">
                         <label id="statusesfilter-label" for="statusesfilter-input">Filter:</label>
-                        <input id="statusesfilter-input" required>
+                        <input id="statusesfilter-input" required onchange="fSetFocusOnSubmit()">
                     </div>
                     <div id="statusesadd-div">
                         <label id="statusesadd-label" for="statusesadd-input">Add Status:</label>
