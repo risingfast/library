@@ -13,6 +13,7 @@
  *      15-Nov-2021 add unreads listing
  *      19-Dec-2021 add author to series listing
  *      22-Mar-2022 remove author sort from author listing sql
+ *      11=Jun-2022 move to Google Cloud MySQL
  *  Enhancements:
 */
 
@@ -31,8 +32,10 @@
 
 // global declarations
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
+// char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
+char *sgServer = "35.188.123.150";                                                               //mysqlServer IP address
+// char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
+char *sgUsername = "root";                                                              // mysqlSerer logon username
 char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
 char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
 
