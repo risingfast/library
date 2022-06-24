@@ -1,0 +1,194 @@
+<!-- formBook.html to catalog characters in a book for reference                                -->
+<!-- Started: 08/18/2020                                                                        -->
+<!-- Author: Geoffrey Jarman                                                                    -->
+<!-- Log:                                                                                       -->
+<!--     08/20/2020 format dates for Started and Finished fields                                -->
+<!--     08/20/2020 add fields for additional characters and reduce whitespace                  -->
+<!--     08/27/2020 set required fields for each mode                                           -->
+<!--     08/28/2020 added Start Date to required fields for an Add                              -->
+<!--     08/28/2020 indicate required fields with background color                              -->
+<!--     08/28/2020 disable fields for List, Delete and Print which are not applicable          -->
+<!--     08/28/2020 adjust colors to lighter values for required and disabled fields            -->
+<!--     08/28/2020 add onSubmit() to form and validate Start and Finish dates                  -->
+<!--     09/03/2020 add lang="en" to <HTML> tag                                                 -->
+<!--     09/07/2020 add menu links and reformat                                                 -->
+<!--     09/08/2020 fix the bug comparing start and finish dates with null finish date          -->
+<!--     10/11/2020 center the navigation links in the main heading                             -->
+<!--     10/18/2020 move the <script> tags to a separate js file formBook.js                    -->
+<!--     10/23/2020 center the body of the webpage in the browser                               -->
+<!--     10/26/2020 change the reference to the favicon to a png file                           -->
+<!-- Enhancements:                                                                              -->
+<!--     move the print function to a button                                                    -->
+
+<!DOCTYPE html>
+
+<HTML lang="en">
+
+<!-- html document head ....................................................................... -->
+
+<HEAD>
+    <TITLE>formBook</TITLE>
+    <META charset="UTF-8">
+    <LINK rel="stylesheet" type="text/css" href="rfstyles.css">
+    <LINK rel="shortcut icon" href="letterRF.png" type="image/png">
+    <META name="description" content= "form exercise with javaScript">
+    <META name="keywords" content="html, css, cgi">
+    <META name="generator" content="vim">
+    <META name="author" content="risingfast">
+    <META name="viewport" content= "width=device-width, initial-scale=1.0">
+</HEAD>
+
+<!-- Main Page ................................................................................ -->
+
+<BODY>
+
+<!-- page heading and horizontal navigation links ............................................. -->
+
+    <HEADER>
+        <DIV class="header">
+            <H2>www.risingfast.com</H2>
+        </DIV>
+    </HEADER>
+    <NAV>
+        <DIV class="outerTopNav">
+            <DIV class="topnav">
+                <A class="active" HREF="http://www.risingfast.com">Home</A>
+                <A HREF="http://www.risingfast.com/d_ajaxFetch.html">Latest</A>
+                <A HREF="http://www.risingfast.com/d_template.html">Template</A>
+                <A HREF="http://www.risingfast.com/email.html">Email</A>
+                <A HREF="http://www.risingfast.com/about.html">About</A>
+            </DIV>
+        </DIV>
+    </NAV>
+
+<!-- main document content .................................................................... -->
+
+    <MAIN>
+        <SECTION>
+            <DIV style="width:80%; margin: auto; max-width:800px; text-align:center;">
+                <H3>Book Characters</H3>
+            </DIV>
+        </SECTION>
+
+<!-- form ..................................................................................... -->
+
+        <DIV style="width:80%; margin: auto; max-width:800px; text-align:center;">
+            <FORM NAME="Book" ACTION="http://www.risingfast.com/cgi-bin/formBook.cgi" METHOD="post" onSubmit="return validateForm();">
+                <DIV>
+                    <FIELDSET DATA-ROLE="controlgroup" DATA-TYPE="horizontal">
+                        <LEGEND>Action</LEGEND>
+                            <INPUT CLASS="radio" TYPE="radio" ID="Add" NAME="Mode" VALUE="Add" onclick=setAddFields() CHECKED=checked>Add
+                            <INPUT CLASS="radio" TYPE="radio" ID="Change" NAME="Mode" VALUE="Change" onclick=setChangeFields()>Change
+                            <INPUT CLASS="radio" TYPE="radio" ID="List" NAME="Mode" VALUE="List" onclick=setListDeletePrintFields()>List
+                            <INPUT CLASS="radio" TYPE="radio" ID="Delete" NAME="Mode" VALUE="Delete" onclick=setListDeletePrintFields()>Delete
+                            <INPUT CLASS="radio" TYPE="radio" ID="Print" NAME="Mode" VALUE="Print" onclick=window.print()>Print
+                        &nbsp;&nbsp;<INPUT Type="submit" ID="Submit" VALUE="Submit" onclick=checkRequired()>
+                        &nbsp;&nbsp;<INPUT Type="reset" ID="Reset" VALUE="Reset">
+                    </FIELDSET>
+                    <BR>
+                </DIV>
+                <DIV style="text-align:left; display:inline-block">
+                    <DIV>
+                        <SPAN CLASS="leftcapt">Title:</SPAN><INPUT CLASS="leftinp" TYPE="text" ID="Title" NAME="Title" SIZE=37 STYLE="background-color:#ffff99;" ONFOCUS="onFocusTitle()">
+                        <SPAN CLASS="rightcapt">Author:</SPAN><INPUT TYPE="text" ID="Author" NAME="Author" SIZE="35" STYLE="background-color:#ffff99;" ONFOCUS="onFocusAuthor()"><BR>
+                    </DIV>
+                    <DIV>
+                        <SPAN CLASS="leftcapt">Source:</SPAN><INPUT TYPE="text" ID="Source" NAME="Source" SIZE="37" STYLE="background-color:#ffff99;" ONFOCUS="onFocusSource()">
+                        <SPAN CLASS="rightcapt">Series:</SPAN><INPUT TYPE="text" ID="Series" NAME="Series" SIZE="35" ONFOCUS="onFocusSeries()"><BR>
+                    </DIV>
+                    <DIV>
+                        <SPAN CLASS="leftcapt">Start:</SPAN><INPUT TYPE="date" ID="Start" NAME="Start" SIZE="37" STYLE="background-color:#ffff99; WIDTH:273px" ONFOCUS="onFocusStart()">
+                        <SPAN CLASS="rightcapt">Finish:</SPAN><INPUT TYPE="date" ID="Finish" NAME="Finish" SIZE="35" STYLE="WIDTH:260px" ONFOCUS="onFocusFinish()"><BR>
+                    </DIV>
+                </DIV>
+                <BR><BR>
+                <FIELDSET>
+                    <LEGEND>Characters and Contexts</LEGEND>
+                <DIV>
+                    Char01: <INPUT TYPE="text" ID="Char01" NAME="Char01" SIZE=35 ONFOCUS="onFocusChar01()">
+                    Char02: <INPUT TYPE="text" ID="Char02" NAME="Char02" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char03: <INPUT TYPE="text" ID="Char03" NAME="Char03" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char04: <INPUT TYPE="text" ID="Char04" NAME="Char04" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char05: <INPUT TYPE="text" ID="Char05" NAME="Char05" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char06: <INPUT TYPE="text" ID="Char06" NAME="Char06" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char07: <INPUT TYPE="text" ID="Char07" NAME="Char07" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char08: <INPUT TYPE="text" ID="Char08" NAME="Char08" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char09: <INPUT TYPE="text" ID="Char09" NAME="Char09" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char10: <INPUT TYPE="text" ID="Char10" NAME="Char10" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char11: <INPUT TYPE="text" ID="Char11" NAME="Char11" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char12: <INPUT TYPE="text" ID="Char12" NAME="Char12" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char13: <INPUT TYPE="text" ID="Char13" NAME="Char13" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char14: <INPUT TYPE="text" ID="Char14" NAME="Char14" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char15: <INPUT TYPE="text" ID="Char15" NAME="Char15" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char16: <INPUT TYPE="text" ID="Char16" NAME="Char16" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char17: <INPUT TYPE="text" ID="Char17" NAME="Char17" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char18: <INPUT TYPE="text" ID="Char18" NAME="Char18" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char19: <INPUT TYPE="text" ID="Char19" NAME="Char19" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char20: <INPUT TYPE="text" ID="Char20" NAME="Char20" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char21: <INPUT TYPE="text" ID="Char21" NAME="Char21" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char22: <INPUT TYPE="text" ID="Char22" NAME="Char22" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                    Char23: <INPUT TYPE="text" ID="Char23" NAME="Char23" SIZE=35 ONFOCUS="onFocusCharNN()">
+                    Char24: <INPUT TYPE="text" ID="Char24" NAME="Char24" SIZE=35 ONFOCUS="onFocusCharNN()"><BR>
+                </DIV>
+                </FIELDSET>
+                <DIV ID="Debug">
+                    <P>
+                        Messages: <INPUT TYPE="text" ID="Messages" NAME="Messages" VALUE="Required fields are yellow for the current action choice" SIZE=87><BR>
+                    </P>
+                </DIV>
+            </FORM>
+        </DIV>
+
+<!-- buttons to show help ..................................................................... -->
+
+    <DIV style="width:80%; margin: auto; max-width:800px;">
+        <BUTTON onclick="showHelp()">Help</BUTTON>
+    </DIV>
+
+<!-- help text controlled by button ........................................................... -->
+
+        <DIV ID="helpDiv" CLASS="help" style="width:80%; margin: auto; max-width:800px;">
+            <P>
+                Title: book title<BR>
+                Series: book series (if book is part of a series, otherwise blank)<BR>
+                Author: author name<BR>
+                Source: where the book was obtained, such as Amazon, or Overdrive.<BR>
+                Start: date started reading<BR>
+                Finish: date finished reading<BR>
+                Character & Context: character name and context or relevence within the story
+            </P>
+        </DIV>
+
+<!-- internals controlled by button ........................................................... -->
+
+        <BR>
+        <DIV style="width:80%; margin: auto; max-width:800px;">
+            <DETAILS>
+                <SUMMARY style="outline:none">
+                    Internals
+                </SUMMARY>
+                <P>
+                    html file: /var/www.html/formBook.html<BR>
+                    css file: /var/www.html/css/rfstyles.css<BR>
+                    form handler: /usr/lib/cgi-bin/formBook.cgi<BR>
+                    form method: post<BR>
+                    data file: /var/www.html/formBook.dat<BR>
+                    source code: html, javascript, c<BR>
+                </P>
+            </DETAILS>
+        </DIV>
+    </MAIN>
+
+<!-- footer ................................................................................... -->
+
+    <FOOTER>
+        <DIV class="footer">
+            <P>&copy; 2020 www.risingfast.com ... /var/www/html/formBook.html</P>
+        </DIV>
+    </FOOTER>
+
+</BODY>
+
+<SCRIPT src="formBook.js"></SCRIPT>
+
+</HTML>
