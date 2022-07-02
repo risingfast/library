@@ -66,7 +66,7 @@ int main(void) {
 
 // check for a NULL query string -------------------------------------------------------------------------------------=
 
-    setenv("QUERY_STRING", "TitleID=117", 1);
+//    setenv("QUERY_STRING", "TitleID=105", 1);
 
     sParam = getenv("QUERY_STRING");
 

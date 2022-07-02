@@ -7,7 +7,6 @@
  *      04-Jan-2022 copied from bookInquiry2.c
  *      08-May-2022 sort results in alpha order
  *      09-May-2022 fix sort by alpha for authors
- *      11-Jun-2022 move to Google Cloud MySQL
  *  Enhancements:
 */
 
@@ -26,10 +25,8 @@
 
 // global declarations
 
-// char *sgServer = "192.168.0.13";                                                            //mysqlServer IP address
-char *sgServer = "35.188.123.150";                                                             //mysqlServer IP address
-// char *sgUsername = "gjarman";                                                           // mysqlSerer logon username
-char *sgUsername = "root";                                                                 // mysqlSerer logon username
+char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
+char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
 char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
 char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
 

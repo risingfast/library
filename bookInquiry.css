@@ -99,7 +99,7 @@
 
 #titlesfilter-label {
     margin-left: 0px;
-    width:45px;
+    width: 45px;
 }
 
 #titlesfilter-input {
@@ -131,7 +131,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     max-width: 800px;
-    text-align:left;
+    text-align: left;
 }
 
 #recentsfilter-input {
@@ -150,7 +150,7 @@
     font-size: 14px;
     width: 100%;
     margin-left: 0px;
-    white-space:pre
+    white-space: pre
 }
 
 #unreads-div {
@@ -204,12 +204,12 @@
 #charactersbookid-label {
     display: inline-block;
     margin-left: 0px;
-    width: 60px;
+    width: 70px;
 }
 
 #charactersbookid-input {
     width: 5%;
-    margin-left: 10px;
+    margin-left: 0px;
 }
 
 #charactersbooktitle-input{
@@ -243,33 +243,48 @@
 #charactersupdate-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
     text-align: left;
     display: none;
 }
 
-#charactersupdate-label {
-    margin-left: 0px;
+#charactersupdate-span {
+    display: block;
     margin-top: 10px;
-    width: 45px;
+    margin-bottom: 10px;
+}
+
+#charactersupdate-label {
+    display: inline-block;
+    margin-left: 0px;
+    margin-top: 0px;
+    width: 70px;
 }
 
 #charactersupdateid-input {
     width: 5%;
-    margin-top: 10px;
-    margin-left: 17px;
-    margin-bottom: 10px;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
 }
 
 #charactersupdatename-input {
     width: 58%;
-    margin-top: 10px;
+    margin-top: 0px;
     margin-left: 3px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 }
 
 #charactersvalidateid-button {
-    margin-top:10px;
+    margin-top:0px;
+}
+
+#charactersupdated-span {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 i#charactersupdatedname-label {
@@ -289,23 +304,26 @@ i#charactersupdatedname-label {
 #charactersdelete-div {
     width: 80%;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     max-width: 800px;
     text-align: left;
     display: none;
 }
 
 #charactersdeleteid-label {
+    display: inline-block;
     margin-left: 0px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 45px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    width: 70px;
 }
 
 #charactersdeleteid-input {
     width: 5%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 25px;
+    margin-top: 0px;
+    margin-bottom:0px;
+    margin-left: 0px;
 }
 
 #charactersfilter-div {
@@ -526,7 +544,7 @@ i#charactersupdatedname-label {
     width: 65%;
     margin-top: 10px;
     margin-left: 17px;
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
 
 #classificationsupdate-div {
@@ -544,10 +562,10 @@ i#charactersupdatedname-label {
 }
 
 #classificationsupdateid-input {
-    width:5%;
-    margin-top:5px;
-    margin-left:14px;
-    margin-bottom:5px;
+    width: 5%;
+    margin-top: 5px;
+    margin-left: 14px;
+    margin-bottom: 5px;
 }
 
 #classificationsupdatename-input {
@@ -614,12 +632,12 @@ i#charactersupdatedname-label {
 }
 
 #ratingsfilter-div {
-    width:80%; 
+    width: 80%; 
     margin: auto; 
     margin-top: 10px;
     margin-bottom: 10px;
-    max-width:800px; 
-    text-align:left;
+    max-width: 800px; 
+    text-align: left;
 }
 
 #ratingsfilter-label {
@@ -805,7 +823,7 @@ i#charactersupdatedname-label {
 }
 
 #seriesupdate-button {
-    margin-top:5px;
+    margin-top: 5px;
 }
 
 #seriesupdated-label {
@@ -833,7 +851,7 @@ i#charactersupdatedname-label {
 #seriesdelete-label {
     margin-left: 0px;
     margin-top: 5px;
-    width:32px;
+    width: 32px;
 }
 
 #seriesdelete-input {
@@ -841,12 +859,12 @@ i#charactersupdatedname-label {
     margin-top: 5px;
     margin-left: 25px;
     margin-bottom: 5px;
-    }
+}
 
 #serieslist-div {
-    width:80%;
-    margin:auto;
-    max-width:800px;
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
 }
 
 #serieslist-textarea {
@@ -858,7 +876,7 @@ i#charactersupdatedname-label {
 }
 
 #sources-div {
-    display:none;
+    display: none;
 }
 
 #sourcesfilter-div {
@@ -888,8 +906,8 @@ i#charactersupdatedname-label {
 }
 
 #sourcesadd-label {
-    margin-left:0px;
-    width:45px;
+    margin-left: 0px;
+    width: 45px;
 }
 
 #sourcesadd-input {
@@ -928,7 +946,7 @@ i#charactersupdatedname-label {
 }
 
 #sourcesupdate-button {
-    margin-top:5px;
+    margin-top: 5px;
 }
 
 #sourcesupdated-label {
@@ -981,7 +999,7 @@ i#charactersupdatedname-label {
 }
 
 #genres-div {
-    display:none;
+    display: none;
 }
 
 #genresfilter-div {
@@ -1023,17 +1041,17 @@ i#charactersupdatedname-label {
 }
 
 #genresupdate-div {
-    width:80%;
-    margin:auto;
-    max-width:800px;
-    text-align:left;
-    display:none;
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+    text-align: left;
+    display: none;
 }
 
 #genresupdateid-label {
-    margin-left:0px;
-    margin-top:5px;
-    width:32px;
+    margin-left: 0px;
+    margin-top: 5px;
+    width: 32px;
 }
 
 #genresupdateid-input {
@@ -1290,14 +1308,14 @@ i#charactersupdatedname-label {
 }
 
 #booksauthor-input {
-    display:inline-block;
-    width:35px;
+    display: inline-block;
+    width: 35px;
 }
 
 #booksauthor-select {
-    display:inline-block;
-    width:352px;
-    height:22px;
+    display: inline-block;
+    width: 352px;
+    height: 22px;
 }
 
 #bookssource-div {
@@ -1318,7 +1336,7 @@ i#charactersupdatedname-label {
 #bookssource-select {
     display: inline-block;
     width: 200px;
-    height:22px;
+    height: 22px;
 }
 
 #booksseries-div {
@@ -1339,7 +1357,7 @@ i#charactersupdatedname-label {
 #booksseries-select {
     display: inline-block;
     width: 352px;
-    height:22px;
+    height: 22px;
 }
 
 #booksgenre-div {
@@ -1360,7 +1378,7 @@ i#charactersupdatedname-label {
 #booksgenre-select {
     display: inline-block;
     width: 200px;
-    height:22px;
+    height: 22px;
 }
 
 #booksstatus-div {
@@ -1381,7 +1399,7 @@ i#charactersupdatedname-label {
 #booksstatus-select {
     display: inline-block;
     width: 200px;
-    height:22px;
+    height: 22px;
 }
 
 #booksclassification-div {
@@ -1402,7 +1420,7 @@ i#charactersupdatedname-label {
 #booksclassification-select {
     display: inline-block;
     width: 200px;
-    height:22px;
+    height: 22px;
 }
 
 #booksrating-div {
@@ -1423,7 +1441,7 @@ i#charactersupdatedname-label {
 #booksrating-select {
     display: inline-block;
     width: 200px;
-    height:22px;
+    height: 22px;
 }
 
 #booksstart-div {

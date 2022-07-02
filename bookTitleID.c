@@ -1,12 +1,10 @@
-/*  bookTitleID.c - CGI to retrieve a book title for the bookInquiry.html webpage
+/*  bookTitle.c - CGI to retrieve a book title for the bookInquiry.html webpage
  *  Author: Geoffrey Jarman
  *  Started: 23-Nov-2021
  *  References:
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
  *      23-Nov-2021 started by copying bookDetails.c and modifying
- *      05-Dec-2021 change name from bookTitle.c to bookTitleID.c
- *      12-Jun-2021 move to gjarman2020.com
  *  Enhancements:
 */
 
@@ -25,12 +23,10 @@
 
 // global declarations
 
-char *sgServer = "35.188.123.150";                                              // mysqlServer IP address
-// char *sgServer = "192.168.0.13";                                             // mysqlServer IP address$
-char *sgUsername = "root";                                                      // mysqlSerer logon username$
-// char *sgUsername = "gjarman";                                                // mysqlSerer logon username$
-char *sgPassword = "Mpa4egu$";                                                  // password to connect to mysqlserver$
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver$
+char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
+char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;

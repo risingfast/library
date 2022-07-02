@@ -62,10 +62,10 @@
 //    07-May-2022 definefUnwrapAllText()
 //    08-May-2022 refresh LOV's()
 //    09-May-2022 clear (null) from start and finish date and comments if empty in books
-//    12-May-2022 change "none" to "" for x.style.display in fShowHelp()
 //    29-May-2022 make bookcomments editable in update mode
 //    31-May-2022 set cornerimage rotation
 //    06-Jun-2022 add fSetFocusOnSubmit()
+//    18-Jun-2022 move fSetCornerImage() to common.js
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -102,7 +102,6 @@
 //    fEnableBookFields() - enable book fields
 //    fSetElement() - unhide, hide or disable a single HTML element
 //    fUnhideMultiple() - unhide multiple elements
-//    fShowHelp() - show or hide (toggle) help text
 //    fClearPageToChoose() - clear the page and set the topic to 'Choose' to put the page in the initial state 
 //    fDisableModeButton() - disable one mode button and enable all the other mode buttons
 //    fEnableSubmitIfNotNull() - enable the submit button if a field is not empty
@@ -152,7 +151,6 @@ const uri36 = "http://www.risingfast.com/cgi-bin/bookChgAuthorNme.cgi";
 const uri37 = "http://www.risingfast.com/cgi-bin/bookAddBook.cgi";
 const uri38 = "http://www.risingfast.com/cgi-bin/bookDelBook.cgi";
 const uri39 = "http://www.risingfast.com/cgi-bin/bookUpdtBook.cgi";
-const uri40 = "http://www.risingfast.com/cgi-bin/setCornerImage.cgi";
 
 // define globals for mode and topic variables .........................................................................
 
@@ -2376,18 +2374,6 @@ function fUnhideMultiple() {
     }
 }
 
-// function to show or hide (toggle) help text .........................................................................
-
-function fShowHelp() {
-
-    var x = document.getElementById("HELPDIV");
-    if (x.style.display === "") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "";
-    }
-}
-
 // fClearPage() - function to clear and hide all elements on the page ..................................................
 
 function fClearPage() {
@@ -2420,7 +2406,7 @@ function fClearPage() {
 function fClearBookFields() {
 
     fClearPage();
-    fClearExtras();
+    fcClearExtras();
     let tc = document.getElementById("topics-select");
     tc.value = "choose";
 }
@@ -3152,24 +3138,6 @@ async function fFetchTopicList(sInputFilter, sTextAreaResults) {
         } else {
             document.getElementById("submit-message").value=sTopic + " fetched";
         }
-    } else {
-        alert("HttpError: " + response.status);
-    }
-}
-
-
-// function to ajax fetch the current corner image and captiona
-
-async function fSetCornerImage() {
-    let response = await fetch(uri40);
-    if (response.ok) {
-        let text = await response.text();
-        let array = text.split("\n");
-        array.pop();                      // remove the last element (empty element) created by the split("\n")
-        let intRecords = array.length/3;
-        let intRecordSelected = Math.trunc(Math.random() * intRecords);
-        document.getElementById("ASIDE2IMG").src=array[intRecordSelected * 3]
-        document.getElementById("ASIDE3-PARA").innerHTML=array[(intRecordSelected * 3) + 1];
     } else {
         alert("HttpError: " + response.status);
     }
