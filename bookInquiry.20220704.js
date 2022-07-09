@@ -1371,7 +1371,6 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit-message").value = text;
             document.getElementById("charactersadd-input").value = '';
-            fGetBookCharacters2();
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1697,7 +1696,6 @@ async function fonclick_chars_vldt_bk_id() {
             fSetElement("Enable", "charactersfilter-input");
             fSetElement("Enable", "charactersadd-input");
             fSetElement("Hide", "charactersfilter-div");
-            fGetBookCharacters2();
             document.getElementById("submit-message").value = "Enter a character filter (optional) and 'submit'";
         }
     } else {
@@ -1722,7 +1720,6 @@ async function fonclick_chars_vldt_char_id() {
         if (text === "No character found") {
             document.getElementById("submit-message").value = "No character exists for this Character ID";
         } else {
-            document.getElementById("charactersupdatedname-input").value = text;
             fSetElement("Enable", "charactersupdatedname-input");
             fSetElement("Disable", "charactersupdatename-input");
             fSetElement("Hide", "charactersfilter-div");
