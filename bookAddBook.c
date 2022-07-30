@@ -7,6 +7,7 @@
  *      07-Jan-2022 start by copying bookAddBook.c and modifying
  *      08-Jan-2022 add print for new title ID
  *      10-Jan-2022 add NULL handling for start date, finish date and comments
+ *      29-Jul-2022 add abstract field
  *  Enhancements:
 */
 
@@ -18,7 +19,7 @@
 #include <ctype.h>
 #include "../shared/rf50.h"
 
-#define SQL_LEN 5000
+#define SQL_LEN 10000
 
 #define MAXLEN 1024
 
@@ -44,12 +45,16 @@ char caStartDte[11] = {'\0'};
 char caFinishDte[11] = {'\0'};
 char caStartDteQuoted[13] = {'\0'};
 char caFinDteQuoted[13] = {'\0'};
+char caAbstract[MAXLEN * 3] = {'\0'};
+char caAbstractBuf[MAXLEN * 3] = {'\0'};
+char caAbstractQuoted[(MAXLEN * 3) + 2] = {'\0'};
 char caCmnts[MAXLEN * 3] = {'\0'};
 char caCmntsBuf[MAXLEN * 3] = {'\0'};
 char caCmntsQuoted[(MAXLEN * 3) + 2] = {'\0'};
 char *sTitleID = NULL;
 char *sStartDte = NULL;
 char *sFinishDte = NULL;
+char *sAbstrct = NULL;
 char *sCmnts = NULL;
 char *sTemp = NULL;
 int  iTitleID = 0;
@@ -146,6 +151,15 @@ int main(void) {
     }
 
     sTemp = strtok(NULL, caDelimiter);
+    sscanf(sTemp, "abstract=%[^\n]s", caAbstractBuf);
+    if (strlen(caAbstractBuf) == 0) {
+        strcpy(caAbstractQuoted, "NULL");
+    } else {
+        sprintf(caAbstractQuoted, "'%s'", caAbstractBuf);
+    }
+    strcpy(caAbstract, fUrlDecode(caAbstractQuoted));
+
+    sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "cmnts=%[^\n]s", caCmntsBuf);
     if (strlen(caCmntsBuf) == 0) {
         strcpy(caCmntsQuoted, "NULL");
@@ -163,15 +177,16 @@ int main(void) {
         return 0;
     }
 
-// set a SQL query to insert the new author ---------------------------------------------------------------------------
+// set a SQL query to insert the new book title -----------------------------------------------------------------------
 
+/*
     sprintf(caSQL, "INSERT INTO risingfast.`Book Characters` "
                    "(`Character Name`, `Title ID`)  "
                    "VALUES ('%s', %d);", sCharacter, iTitleID);
-
+*/
     sprintf(caSQL, "INSERT INTO risingfast.`Book Titles` "
-                   "(`Title Name`, `Author ID`, `Source ID`, `Series ID`, `Genre ID`, `Status ID`, `Classification ID`, `Rating ID`, Start, Finish, Comments)  "
-                   "VALUES ('%s', %d, %d, %d, %d, %d, %d, %d, %s, %s, %s);", caBookName, iAuthorID, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caCmnts);
+                   "(`Title Name`, `Author ID`, `Source ID`, `Series ID`, `Genre ID`, `Status ID`, `Classification ID`, `Rating ID`, Start, Finish, Abstract, Comments)  "
+                   "VALUES ('%s', %d, %d, %d, %d, %d, %d, %d, %s, %s, %s, %s);", caBookName, iAuthorID, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts);
 
     if(mysql_query(conn, caSQL) != 0)
     {

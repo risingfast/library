@@ -13,6 +13,8 @@
  *      15-Nov-2021 add unreads listing
  *      19-Dec-2021 add author to series listing
  *      22-Mar-2022 remove author sort from author listing sql
+ *      25-Jul-2022 add author name to title query
+ *      25-Jul-2022 add author name to title query filter
  *  Enhancements:
 */
 
@@ -132,11 +134,13 @@ int main(void) {
     else if (strstr(getenv("QUERY_STRING"), "titles") != NULL) {
         sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", BT.`Title Name` as 'Name' "
+                       ", BA.`Author Name` as 'Author' "
                        ", BT.Start"
                        ", BT.Finish"
                        ", BT.Comments "
                        "FROM risingfast.`Book Titles` BT "
-                       "WHERE BT.`Title Name` LIKE '%s' "
+                       "LEFT OUTER JOIN risingfast.`Book Authors` BA on BT.`Author ID` = BA.`Author ID` "
+                       "WHERE CONCAT(BT.`Title Name`, BA.`Author Name`, IFNULL(BT.Comments, ' ')) LIKE '%s' "
                        "ORDER BY BT.`Title ID` ASC", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);

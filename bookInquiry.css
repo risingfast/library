@@ -5,6 +5,7 @@
 /* Log                                                                                                               */
 /*     24-May-2022 - started                                                                                         */
 /*     28-May-2022 - migrate styles from inline html                                                                 */
+/*     26-Jul-2022 - add styling for abstract text area                                                              */
 
 #results-div {
     width: 80%;
@@ -1248,6 +1249,7 @@ i#charactersupdatedname-label {
     width: 80%; 
     margin: auto;
     display: none;
+    text-align: left;
 }
 
 #booksstage-div {
@@ -1474,13 +1476,31 @@ i#charactersupdatedname-label {
     width: 100px;
 }
 
+#booksabstract-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#booksabstract-label {
+    display: block;
+    width: 55px;
+}
+
+#booksabstract-textarea{
+    font-family: "lucida console";
+    font-size: 14px;
+    width: 100%;
+    margin-left: 0px;
+    white-space: pre-wrap;
+}
+
 #bookscomments-div {
     display: block;
     margin: 10px 0px 10px 0px;
 }
 
 #bookscomments-label {
-    display: inline-block;
+    display: block;
     width: 55px;
 }
 
@@ -1498,7 +1518,7 @@ i#charactersupdatedname-label {
 }
 
 #bookscharacters-label {
-    display: inline-block;
+    display: block;
     width: 55px;
 }
 

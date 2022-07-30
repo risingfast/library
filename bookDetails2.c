@@ -6,6 +6,7 @@
  *  Log:
  *      08-Nov-2021 started by copying bookInquiry.c and modifying
  *      09-Nov-2021 create heading row above data row
+ *      26-Jul-2022 add abstract field to the book query
  *  Enhancements:
 */
 
@@ -112,6 +113,7 @@ int main(void) {
                    ", BT.`Start` "
                    ", BT.`Finish` "
                    ", BT.`Comments` "
+                   ", BT.`Abstract` "
                    "FROM risingfast.`Book Titles` BT "
                    "LEFT JOIN risingfast.`Book Authors` BA ON BT.`Author ID` = BA.`Author ID` "
                    "LEFT JOIN risingfast.`Book Sources` BS1 ON BT.`Source ID` = BS1.`Source ID` "

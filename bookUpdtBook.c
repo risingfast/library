@@ -5,6 +5,7 @@
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
  *      13-Jan-2022 start by copying bookAddBook.c and modifying
+ *      27-Jul-2022 add abstract field
  *  Enhancements:
 */
 
@@ -16,7 +17,7 @@
 #include <ctype.h>
 #include "../shared/rf50.h"
 
-#define SQL_LEN 5000
+#define SQL_LEN 10000
 
 #define MAXLEN 1024
 
@@ -42,12 +43,16 @@ char caStartDte[11] = {'\0'};
 char caFinishDte[11] = {'\0'};
 char caStartDteQuoted[13] = {'\0'};
 char caFinDteQuoted[13] = {'\0'};
+char caAbstract[MAXLEN * 3] = {'\0'};
+char caAbstractBuf[MAXLEN * 3] = {'\0'};
+char caAbstractQuoted[(MAXLEN * 3) + 2] = {'\0'};
 char caCmnts[MAXLEN * 3] = {'\0'};
 char caCmntsBuf[MAXLEN * 3] = {'\0'};
 char caCmntsQuoted[(MAXLEN * 3) + 2] = {'\0'};
 char *sTitleID = NULL;
 char *sStartDte = NULL;
 char *sFinishDte = NULL;
+char *sAbstract = NULL;
 char *sCmnts = NULL;
 char *sTemp = NULL;
 int  iBookID = 0;
@@ -86,7 +91,7 @@ int main(void) {
 
 // check for a NULL query string -------------------------------------------------------------------------------------=
 
-//    setenv("QUERY_STRING", "bookId=150&bookName=Test%20Title&authorId=107&sourceId=2&seriesId=82&genreId=1&statusId=4&clsfnId=1&ratingId=4&startDte=2021-01-01&finishDte=2021-12-30&cmnts=Hello", 1);
+//    setenv("QUERY_STRING", "bookId=197&bookName=Test%20Title&authorId=107&sourceId=2&seriesId=82&genreId=1&statusId=4&clsfnId=1&ratingId=4&startDte=2021-01-01&finishDte=2021-12-30&abstract=funny book&cmnts=too bad", 1);
 
     sParam = getenv("QUERY_STRING");
 
@@ -147,6 +152,15 @@ int main(void) {
     }
 
     sTemp = strtok(NULL, caDelimiter);
+    sscanf(sTemp, "abstract=%[^\n]s", caAbstractBuf);
+    if (strlen(caAbstractBuf) == 0) {
+        strcpy(caAbstractQuoted, "NULL");
+    } else {
+        sprintf(caAbstractQuoted, "'%s'", caAbstractBuf);
+    }
+    strcpy(caAbstract, fUrlDecode(caAbstractQuoted));
+
+    sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "cmnts=%[^\n]s", caCmntsBuf);
     if (strlen(caCmntsBuf) == 0) {
         strcpy(caCmntsQuoted, "NULL");
@@ -164,14 +178,13 @@ int main(void) {
         return 0;
     }
 
-// set a SQL query to insert the new author ---------------------------------------------------------------------------
+// set a SQL query to insert the updated fields and make the database update ------------------------------------------
 
     sprintf(caSQL, "UPDATE risingfast.`Book Titles` "
-                   "SET `Title Name` = '%s', `Author ID` = %d, `Source ID` = %d, `Series ID` = %d, `Genre ID` = %d, `Status ID` = %d, `Classification ID` = %d, `Rating ID` = %d, `Start` = %s, `Finish` = %s, `Comments` = %s  WHERE `Title ID` = %d;"
-                   , caBookName, iAuthorID, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caCmnts, iBookID);
+                   "SET `Title Name` = '%s', `Author ID` = %d, `Source ID` = %d, `Series ID` = %d, `Genre ID` = %d, `Status ID` = %d, `Classification ID` = %d, `Rating ID` = %d, `Start` = %s, `Finish` = %s, `Abstract` = %s, `Comments` = %s  WHERE `Title ID` = %d;"
+                   , caBookName, iAuthorID, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts, iBookID);
 
 //    printf("%s\n", caSQL);
-//    return 0;
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -180,6 +193,8 @@ int main(void) {
         printf("\n\n");
         return -1;
     }
+
+// set a SQL query to fetch the title id of the updated book and execute the query ------------------------------------
 
     sprintf(caSQL, "SELECT BT.`Title ID` "
                    "FROM risingfast.`Book Titles` BT "
