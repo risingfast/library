@@ -6,6 +6,7 @@
 /*     24-May-2022 - started                                                                                         */
 /*     28-May-2022 - migrate styles from inline html                                                                 */
 /*     26-Jul-2022 - add styling for abstract text area                                                              */
+/*     02-Aug-2022 - change width of filter input fields                                                             */
 
 #results-div {
     width: 80%;
@@ -104,7 +105,7 @@
 }
 
 #titlesfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 17px;
 }
 
@@ -136,7 +137,7 @@
 }
 
 #recentsfilter-input {
-    width: 40%; 
+    width: 85%; 
     margin-left: 17px;
 }
 
@@ -172,7 +173,7 @@
 }
 
 #unreadsfilter-input {
-    width: 40%; 
+    width: 85%; 
     margin-left: 17px; 
 }
 
@@ -200,12 +201,14 @@
     margin-top: 10px;
     margin-bottom: 10px;
     max-width: 800px;
+    text-align: left;
 }
 
 #charactersbookid-label {
     display: inline-block;
     margin-left: 0px;
     width: 70px;
+    text-align: left;
 }
 
 #charactersbookid-input {
@@ -338,11 +341,11 @@ i#charactersupdatedname-label {
 
 #charactersfilter-label {
     display: inline-block;
-    width: 60px;
+    width: 45px;
 }
 
 #charactersfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 10px;
 }
 
@@ -379,7 +382,7 @@ i#charactersupdatedname-label {
 }
 
 #authorsfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 17px;
 }
 
@@ -525,7 +528,7 @@ i#charactersupdatedname-label {
 }
 
 #classificationsfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 17px;
 }
 
@@ -647,7 +650,7 @@ i#charactersupdatedname-label {
 }
 
 #ratingsfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 17px;
 }
 
@@ -770,7 +773,7 @@ i#charactersupdatedname-label {
 }
 
 #seriesfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 17px;
 }
 
@@ -895,7 +898,7 @@ i#charactersupdatedname-label {
 }
 
 #sourcesfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 17px;
 }
 
@@ -1018,7 +1021,7 @@ i#charactersupdatedname-label {
 }
 
 #genresfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 17px;
 }
 
@@ -1141,7 +1144,7 @@ i#charactersupdatedname-label {
 }
 
 #statusesfilter-input {
-    width: 40%;
+    width: 85%;
     margin-left: 17px;
 }
 

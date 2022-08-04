@@ -11,10 +11,10 @@
 # $^ Dependency files
 # $(CC) Compiler executable
 # $(CFLAGS) Compiler options
-# $@ Souce file
+# $@ Source file
 # $^ Dependent files (dependencies)
 
-# Variables
+# Variables defined with capital letters and invoked with $(VARNAME) in any rules
 
 CC=gcc
 CFLAGS=-g -o

@@ -66,6 +66,7 @@
 //    31-May-2022 set cornerimage rotation
 //    06-Jun-2022 add fSetFocusOnSubmit()
 //    18-Jun-2022 move fSetCornerImage() to common.js
+//    02-Aug-2022 set focus on filter fields or book id field when new mode is chosen
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -274,6 +275,7 @@ function fSetMode(sNewMode) {
             let dt = document.getElementById("booksid-input");
             dt.disabled = false;
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
+            dt.focus();
 
         } else if (sMode === 'query') {
 
@@ -384,6 +386,7 @@ function fSetMode(sNewMode) {
             let dt = document.getElementById("booksid-input");
             dt.disabled = false;
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
+            dt.focus();
 
         } else if (sMode === 'delete') {
 
@@ -402,6 +405,7 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "books-div"); 
             let dt = document.getElementById("booksid-input");
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
+            dt.focus();
             
             // clear the books:titleId field ...........................................................................
 
@@ -420,6 +424,7 @@ function fSetMode(sNewMode) {
         fSetElement("Clear", "titlesarea-textarea");
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "titlesfilter-input");
+        document.getElementById("titlesfilter-input").focus();
 
         if (sMode === 'fetch') {
 
@@ -442,6 +447,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "recents-div", "recentsarea-textarea");
         fSetElement("Clear", "recentsfilter-input");
         fSetElement("UnhideInline", "recentsfilter-input");
+        document.getElementById("recentsfilter-input").focus();
         fSetElement("Clear", "recentsarea-textarea");
         fSetElement("Disable", "submit-button");
 
@@ -464,6 +470,7 @@ function fSetMode(sNewMode) {
 
         fUnhideMultiple("modes-div", "submit-div", "unreads-div", "unreadsarea-textarea");
         fSetElement("Clear", "unreadsfilter-input");
+        document.getElementById("unreadsfilter-input").focus();
         fSetElement("Clear", "unreadsarea-textarea");
         fSetElement("Disable", "submit-button");
 
@@ -489,6 +496,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "characters-div", "charactersarea-textarea");
         fSetElement("Clear", "charactersfilter-input");
         fSetElement("UnhideInline", "charactersfilter-input");
+        document.getElementById("charactersfilter-input").focus();
         fSetElement("Clear", "charactersarea-textarea");
         fSetElement("Disable", "submit-button");
 
@@ -588,6 +596,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "authors-div", "authorslist-textarea");
         fSetElement("Clear", "authorsfilter-input");
         fSetElement("UnhideInline", "authorsfilter-input");
+        document.getElementById("authorsfilter-input").focus();
         fSetElement("Clear", "authorslist-textarea");
         fSetElement("Unhide", "authorsadd-div");
         fSetElement("Clear", "seriesadd-input");
@@ -670,6 +679,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "classifications-div", "classificationslist-textarea");
         fSetElement("Clear", "classificationsfilter-input");
         fSetElement("UnhideInline", "classificationsfilter-input");
+        document.getElementById("classificationsfilter-input").focus();
         fSetElement("Clear", "classificationslist-textarea");
         fSetElement("Unhide", "classificationsadd-div");
         fSetElement("UnhideInline", "classificationsadd-input");
@@ -752,6 +762,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "ratings-div", "ratingslist-textarea");
         fSetElement("Clear", "ratingsfilter-div");
         fSetElement("UnhideInline", "ratingsfilter-div");
+        document.getElementById("ratingsfilter-input").focus();
         fSetElement("Clear", "ratingslist-textarea");
         fSetElement("Unhide", "ratingsadd-div");
         fSetElement("Clear", "ratingsadd-input");
@@ -835,6 +846,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "series-div", "serieslist-textarea");
         fSetElement("Clear", "seriesfilter-input");
         fSetElement("UnhideInline", "seriesfilter-input");
+        document.getElementById("seriesfilter-input").focus();
         fSetElement("Clear", "serieslist-textarea");
         fSetElement("Clear", "seriesadd-input");
         fSetElement("UnhideInline", "seriesadd-input");
@@ -920,6 +932,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "sources-div", "sourceslist-textarea");
         fSetElement("Clear", "sourcesfilter-input");
         fSetElement("UnhideInline", "sourcesfilter-input");
+        document.getElementById("sourcesfilter-input").focus();
         fSetElement("Clear", "sourceslist-textarea");
         fSetElement("Unhide", "sourcesadd-div");
         fSetElement("Clear", "sourcesadd-input");
@@ -1006,6 +1019,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "genres-div", "genreslist-textarea");
         fSetElement("Clear", "genresfilter-input");
         fSetElement("UnhideInline", "genresfilter-input");
+        document.getElementById("genresfilter-input").focus();
         fSetElement("Clear", "genreslist-textarea");
         fSetElement("Unhide", "genresadd-div");
         fSetElement("Clear", "genresadd-input");
@@ -1091,6 +1105,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div", "statuses-div", "statuseslist-textarea");
         fSetElement("Clear", "statusesfilter-input");
         fSetElement("UnhideInline", "statusesfilter-input");
+        document.getElementById("statusesfilter-input").focus();
         fSetElement("Clear", "statuseslist-textarea");
         fSetElement("Unhide", "statusesadd-div");
         fSetElement("Clear", "statusesadd-input");

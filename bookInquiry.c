@@ -15,6 +15,8 @@
  *      22-Mar-2022 remove author sort from author listing sql
  *      25-Jul-2022 add author name to title query
  *      25-Jul-2022 add author name to title query filter
+ *      03-Aug-2022 add author rating to author query filter
+ *      03-Aug-2022 add series rating to series query filter
  *  Enhancements:
 */
 
@@ -80,9 +82,9 @@ int main(void) {
 
 // check for a NULL query string -------------------------------------------------------------------------------------=
 
-//    setenv("QUERY_STRING", "topic=authors&filter=", 1);
+//    setenv("QUERY_STRING", "topic=authors&filter=", 1);          // comment out unless testing
 
-//    setenv("QUERY_STRING", "topic=series&filter=", 1);
+//    setenv("QUERY_STRING", "topic=series&filter=8", 1);       // comment out unless testing
 
     sParams = getenv("QUERY_STRING");
 
@@ -93,8 +95,8 @@ int main(void) {
         return 1;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
+//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));             // comment out unless testing
+//    printf("\n\n");                                                 // comment out unless testing
 
 //  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
 
@@ -155,17 +157,19 @@ int main(void) {
         fPrintResult(sTopic, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
-        sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
-                       ", BA.`Author Name` as 'Name' "
+
+        sprintf(caSQL, "SELECT T.ID, T.`Author Name`, T.`Author Rating` FROM (SELECT BA.`Author ID` as `ID` "
+                       ", BA.`Author Name` as `Author Name` "
                        ", ROUND(SUM(BR.`Rating Value`) / COUNT(BT.`Author ID`), 0) as `Author Rating` "
                        "FROM `Book Authors` BA "
                        "LEFT JOIN risingfast.`Book Titles` BT ON BA.`Author ID` = BT.`Author ID` "
                        "LEFT JOIN risingfast.`Book Ratings` BR ON BT.`Rating ID` = BR.`Rating ID` "
-                       "WHERE BA.`Author Name` LIKE '%s' "
-                       " AND risingfast.BA.`Author Name` != 'Unassigned' "
+                       "WHERE risingfast.BA.`Author Name` != 'Unassigned' "
                        "GROUP BY BA.`Author ID` "
-                       "ORDER BY BA.`Author ID` ASC; ", sFilter)
+                       "ORDER BY BA.`Author ID` ASC) AS T "
+                       "WHERE CONCAT(T.`Author Rating`, T.`Author Name`) like '%s'; ", sFilter)
                        ;
+
          fPrintResult(sTopic, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "recents") != NULL) {
@@ -213,6 +217,7 @@ int main(void) {
         fPrintResult(sTopic, sFilter, caSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "series") != NULL) {
+/*
         sprintf(caSQL, "SELECT BS.`Series ID` as 'ID' "
                        " , BS.`Series Name` as 'Name' "
                        " , BA.`Author Name` as 'Author Name' "
@@ -225,6 +230,21 @@ int main(void) {
                        " WHERE BS.`Series Name` LIKE '%s' "
                        " GROUP BY BS.`Series ID`, BS.`Series Name`, BA.`Author Name` "
                        " ORDER BY BS.`Series ID` ASC", sFilter)
+        ;
+*/        
+        sprintf(caSQL, "SELECT T.`Series ID`, T.`Series Name`, T.`Author Name`, T.`Rating`, T.`Count` "
+                       " FROM (SELECT BS.`Series ID` as 'Series ID' "
+                       " , BS.`Series Name` as 'Series Name' "
+                       " , BA.`Author Name` as 'Author Name' "
+                       " , TRUNCATE(SUM(BR.`Rating Value`)/COUNT(BR.`Rating Value`), 0) as 'Rating' "
+                       " , COUNT(BR.`Rating Value`) as 'Count' "
+                       " FROM risingfast.`Book Series` BS "
+                       " LEFT JOIN risingfast.`Book Titles` BT on BS.`Series ID` = BT.`Series ID` "
+                       " LEFT JOIN risingfast.`Book Authors` BA on BT.`Author ID` = BA.`Author ID` "
+                       " LEFT JOIN risingfast.`Book Ratings` BR on BT.`Rating ID` = BR.`Rating ID` "
+                       " GROUP BY BS.`Series ID`, BS.`Series Name`, BA.`Author Name` "
+                       " ORDER BY BS.`Series ID` ASC) AS T "
+                       " WHERE CONCAT(T.`Series Name`, T.`Author Name`, T.`Rating`, T.`Count`) like '%s'; ", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
