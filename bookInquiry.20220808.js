@@ -3156,11 +3156,11 @@ async function fFetchTopicList(sInputFilter, sTextAreaResults) {
         w.disabled=false;
 
         if (sTopic === "titles") {
-            document.getElementById("submit-message").value = "Titles fetched (including author, start/end dates and comments)";
+            document.getElementById("submit-message").value = "Titles fetched (including start/end dates and comments)";
         } else if (sTopic === "recents") {
             document.getElementById("submit-message").value = "Recents fetched (in descending start-date order)";
         } else if (sTopic === "unreads") {
-            document.getElementById("submit-message").value = "Unreads, authors and author ratings (max 10) fetched (in asc Title ID order)";
+            document.getElementById("submit-message").value = "Unreads fetched (in descending Title ID order)";
         } else if (sTopic === "authors") {
             document.getElementById("submit-message").value = "Authors fetched (including author rating out of 10)";
         } else if (sTopic === "classifications") {
@@ -3168,7 +3168,7 @@ async function fFetchTopicList(sInputFilter, sTextAreaResults) {
         } else if (sTopic === "ratings") {
             document.getElementById("submit-message").value = "Ratings fetched";
         } else if (sTopic === "series") {
-            document.getElementById("submit-message").value = "Series fetched (inc author, author rating and count of titles read)";
+            document.getElementById("submit-message").value = "Series fetched (including Author, rating and count of titles)";
         } else if (sTopic === "sources") {
             document.getElementById("submit-message").value = "Sources fetched";
         } else if (sTopic === "genres") {
