@@ -67,7 +67,6 @@
 //    06-Jun-2022 add fSetFocusOnSubmit()
 //    18-Jun-2022 move fSetCornerImage() to common.js
 //    02-Aug-2022 set focus on filter fields or book id field when new mode is chosen
-//    08-Sep-2022 add fPrintBook()
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -111,7 +110,6 @@
 //    fonKeyUp_any_updt_id() - enable the validate button if an entered ID is a valid format for validating an update
 //    fonKeyUp_any_vldt_id() = validate an id for a single topic value and return the value
 //    fFetchTopicList() -- fetch a list from the database for a single topic
-//    fPrintBook() -- print a book
 
 // define globals for URI's .............................................................................................
 
@@ -3189,6 +3187,3 @@ function fSetFocusOnSubmit() {
     document.getElementById("submit-button").focus();
 }
 
-function fPrintBook() {
-    window.print();
-}

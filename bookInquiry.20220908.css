@@ -7,7 +7,6 @@
 /*     28-May-2022 - migrate styles from inline html                                                                 */
 /*     26-Jul-2022 - add styling for abstract text area                                                              */
 /*     02-Aug-2022 - change width of filter input fields                                                             */
-/*     08-Sep-2022 - add @media rule for printing                                                                    */
 
 #results-div {
     width: 80%;
@@ -1541,53 +1540,3 @@ i#charactersupdatedname-label {
     width: 75%;
 }
 
-@media print {
-    #SESSION1 {
-        display: none;
-    }
-    #HEADER1DIV {
-        display: none;
-    }
-    #topics-div {
-        display: none;
-    }
-    #modes-div {
-        display: none;
-    }
-    #NAV1 {
-        display: none;
-    }
-    #submit-div {
-        display: none;
-    }
-    #MOREBTTNS {
-        display: none;
-    }
-    #HELPDIV {
-        display: none;
-    }
-    #INTERNALS {
-        display: none;
-    }
-    #ASIDE1 {
-        display: none;
-    }
-    #ASIDE2 {
-        display: none;
-    }
-    #ASIDE3 {
-        display: none;
-    }
-    #FOOTER1 {
-        display: none;
-    }
-    button {
-        display: none;
-    }
-    #submit-message {
-        display: none;
-    }
-    #submit-label {
-        display: none;
-    }
-}
