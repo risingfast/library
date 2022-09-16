@@ -5,6 +5,7 @@
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
  *      21-Nov-2021 started by copying bookAddSource.c and modifying
+ *      14-Sep-2022 add Access-Control-Allow-Origin: * HTTP header
  *  Enhancements:
 */
 
@@ -45,7 +46,9 @@ int main(void) {
 
 // print the html content type and <head> block -----------------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
+
 
 // Initialize a connection and connect to the database$$
 

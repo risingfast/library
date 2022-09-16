@@ -3,9 +3,10 @@
  *  Started: 09/21/2020
  *  Ref:
  *  Log:
- *      09/21/2020 start by copying and changing bookShow.c
- *      09/24/2020 add GET vs POST logic to update the file
- *      09/25/2020 handle %0A url encoded newlines in POST process
+ *      21-Sep-2020 start by copying and changing bookShow.c
+ *      24-Sep-2020 add GET vs POST logic to update the file
+ *      25-Sep-2020 handle %0A url encoded newlines in POST process
+ *      15-Sep-2022 add Access-Control-Allow-Header: * CORS http header
  *  Enhancements:
  */
 
@@ -24,9 +25,10 @@ int main(int argc, char** argv) {
     char cyBuffer[1000] = {'\0'};
     char *strBuffer;
 
-// print the html page content type required for cgi ----------------------------------------------
+// print the html page content type header and CORS header required for cgi ----------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // identify GET or POST ---------------------------------------------------------------------------
 

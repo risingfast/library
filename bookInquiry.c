@@ -22,6 +22,7 @@
  *      08-Aug-2022 add spaces between fields in series list
  *      08-Aug-2022 add spaces between fields in titles list
  *      09-Aug-2022 add spaces between fields in other lists: unreads, ratings, sources, genres, and statuses
+ *      14-Sep-2022 add Access-Control-Allow-Origin HTTP header
  *  Enhancements:
 */
 
@@ -69,7 +70,8 @@ int main(void) {
 
 // print the html content type and <head> block -----------------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // Initialize a connection and connect to the database$$
 

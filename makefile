@@ -21,7 +21,7 @@ CFLAGS=-g -o
 SQL1FLAGS=-I/usr/include/mysql
 SQL2FLAGS=-L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl -lresolv
 
-all: mysql-c-library bookInquiry bookInquiry1 bookInquiry2 bookDetails bookDetails2 bookCharacters bookAddAuthor bookAddClassification bookAddRating bookAddSeries bookAddSource bookAddGenre bookAddStatus bookTitleID bookAddCharacter bookChgCharNme bookDelCharacter bookVldtCharId bookDelClassification bookDelRating bookDelSeries bookDelSource bookDelGenre bookDelStatus bookDelAuthor bookVldtStatusId bookChgStatusNme bookVldtGenreId bookChgGenreNme bookVldtSourceId bookChgSourceNme bookVldtSeriesId bookChgSeriesNme bookVldtRatingId bookChgRatingNme bookVldtClassId bookChgClassNme bookVldtAuthorId bookChgAuthorNme bookFetchLOVs bookAddBook bookDelBook bookUpdtBook
+all: mysql-c-library bookInquiry bookInquiry1 bookInquiry2 bookDetails bookDetails2 bookCharacters bookAddAuthor bookAddClassification bookAddRating bookAddSeries bookAddSource bookAddGenre bookAddStatus bookTitleID bookAddCharacter bookChgCharNme bookChgCharacter bookChgCharacter.cgi bookDelCharacter bookVldtCharId bookDelClassification bookDelRating bookDelSeries bookDelSource bookDelGenre bookDelStatus bookDelAuthor bookVldtStatusId bookChgStatusNme bookVldtGenreId bookChgGenreNme bookVldtSourceId bookChgSourceNme bookVldtSeriesId bookChgSeriesNme bookVldtRatingId bookChgRatingNme bookVldtClassId bookChgClassNme bookVldtAuthorId bookChgAuthorNme bookFetchLOVs bookAddBook bookDelBook bookUpdtBook bookShow bookShow.cgi bookUpdate bookUpdate.cgi
 
 mysql-c-library: mysql-c-library.c rf50.c cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
@@ -72,6 +72,12 @@ bookAddCharacter: bookAddCharacter.c ../shared/rf50.c ../shared/cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
 bookChgCharNme: bookChgCharNme.c ../shared/rf50.c ../shared/cs50.c
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
+bookChgCharacter: bookChgCharacter.c ../shared/rf50.c ../shared/cs50.c
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
+bookChgCharacter.cgi: bookChgCharacter.c ../shared/rf50.c ../shared/cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
 bookDelCharacter: bookDelCharacter.c ../shared/rf50.c ../shared/cs50.c
@@ -155,5 +161,17 @@ bookDelBook: bookDelBook.c ../shared/rf50.c ../shared/cs50.c
 bookUpdtBook: bookUpdtBook.c ../shared/rf50.c ../shared/cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
+bookShow: bookShow.c 
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
+bookShow.cgi: bookShow.c 
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
+bookUpdate: bookUpdate.c 
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
+bookUpdate.cgi: bookUpdate.c 
+	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
+
 clean:
-	rm -f *.o *.s *.i mysql-c-library bookInquiry bookInquiry1 bookInquiry2 bookDetails bookDetails2 bookCharacters bookAddAuthor bookAddClassification bookAddRating bookAddSeries bookAddSource bookAddGenre bookAddStatus bookTitleID bookAddCharacter bookChgCharNme bookDelCharacter bookVldtCharId bookDelClassification bookDelRating bookDelSeries bookDelSource bookDelGenre bookDelStatus bookDelAuthor bookVldtStatusId bookChgStatusNme bookVldtGenreId bookChgGenreNme bookVldtSourceId bookChgSourceNme bookVldtSeriesId bookChgSeriesNme bookVldtRatingId bookChgRatingNme bookVldtClassId bookChgClassNme bookVldtAuthorId bookChgAuthorNme bookFetchLOVs bookAddBook bookDelBook bookUpdtBook
+	rm -f *.o *.s *.i mysql-c-library bookInquiry bookInquiry1 bookInquiry2 bookDetails bookDetails2 bookCharacters bookAddAuthor bookAddClassification bookAddRating bookAddSeries bookAddSource bookAddGenre bookAddStatus bookTitleID bookAddCharacter bookChgCharNme bookChgCharacter bookDelCharacter bookVldtCharId bookDelClassification bookDelRating bookDelSeries bookDelSource bookDelGenre bookDelStatus bookDelAuthor bookVldtStatusId bookChgStatusNme bookVldtGenreId bookChgGenreNme bookVldtSourceId bookChgSourceNme bookVldtSeriesId bookChgSeriesNme bookVldtRatingId bookChgRatingNme bookVldtClassId bookChgClassNme bookVldtAuthorId bookChgAuthorNme bookFetchLOVs bookAddBook bookDelBook bookUpdtBook bookShow bookShow.cgi bookUpdate bookUpdate.cgi

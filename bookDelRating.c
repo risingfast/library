@@ -6,6 +6,7 @@
  *  Log:
  *      09-Dec-2021 start by copying bookDelClassification.c
  *      13-Dec-2021 check if no rating deleted
+ *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
  *  Enhancements:
  */
 #include <mysql.h>
@@ -40,9 +41,10 @@ int main(void) {
 
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and CORS <header> block ----------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // Initialize a connection and connect to the database
 
@@ -57,7 +59,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string --------------------------------------------------------------------------------------
 
 //    setenv("QUERY_STRING", "ratingID=22", 1);
 
@@ -69,7 +71,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-//  get the content from QUERY_STRING and tokenize the ratingID value ---------------------------------------------------
+//  get the content from QUERY_STRING and tokenize the ratingID value -------------------------------------------------
 
     sscanf(sParam, "ratingID=%d", &iRatingID);
 

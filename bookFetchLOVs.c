@@ -7,8 +7,9 @@
  *      04-Jan-2022 copied from bookInquiry2.c
  *      08-May-2022 sort results in alpha order
  *      09-May-2022 fix sort by alpha for authors
+ *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
  *  Enhancements:
-*/
+ */
 
 #include <mysql.h>
 #include <stdio.h>
@@ -52,9 +53,10 @@ int main(void) {
     char caOrder[] = {'A', 'S', 'C', '\0'};
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and CORS <header> block -----------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // Initialize a connection and connect to the database$$
 
@@ -70,7 +72,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string --------------------------------------------------------------------------------------
 
 //    setenv("QUERY_STRING", "topic=series&filter=", 1);
 

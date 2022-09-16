@@ -5,6 +5,7 @@
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
  *      14-Dec-2021 started by copying bookVldtStatusId.c and modifying
+ *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
  *  Enhancements:
 */
 
@@ -45,9 +46,10 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block ------------------------------------------------------------------------
+// print the html content type header and CORS header -----------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *l\n\n");
 
 // Initialize a connection and connect to the database$$
 
@@ -63,7 +65,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string ---------------------------------------------------------------------------------------
+// check for a NULL query string --------------------------------------------------------------------------------------
 
 //    setenv("QUERY_STRING", "genreID=1", 1);
 
@@ -76,11 +78,11 @@ int main(void) {
         return 1;
     }
 
-//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
 
     sscanf(sParam, "genreID=%d", &iGenreID);
 
-// test if Null or All or non-Null values should be shown --------------------------------------------------------------
+// test if Null or All or non-Null values should be shown -------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");

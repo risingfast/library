@@ -47,9 +47,10 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and CORS <header> block ----------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // Initialize a connection and connect to the database$$
 
@@ -65,7 +66,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string --------------------------------------------------------------------------------------
 
 //    setenv("QUERY_STRING", "TitleID=102", 1);
 
@@ -86,7 +87,7 @@ int main(void) {
 
     sscanf(sParam, "TitleID=%d", &iTitleID);
 
-// test if Null or All or non-Null values should be shown ------------------------------------------------------------
+// test if Null or All or non-Null values should be shown -------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");

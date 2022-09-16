@@ -5,6 +5,7 @@
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
  *      11-Jan-2022 start by copying bookDelGenre.c
+ *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
  *  Enhancements:
 */
 
@@ -40,9 +41,10 @@ int main(void) {
 
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and CORS <header> block ----------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // Initialize a connection and connect to the database
 
@@ -69,7 +71,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-//  get the content from QUERY_STRING and tokenize the ratingID value ---------------------------------------------------
+//  get the content from QUERY_STRING and tokenize the ratingID value -------------------------------------------------
 
     sscanf(sParam, "titleID=%d", &iTitleID);
 

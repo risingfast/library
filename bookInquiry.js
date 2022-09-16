@@ -68,6 +68,8 @@
 //    18-Jun-2022 move fSetCornerImage() to common.js
 //    02-Aug-2022 set focus on filter fields or book id field when new mode is chosen
 //    08-Sep-2022 add fPrintBook()
+//    09-Sep-2022 add fPrintBookText()
+//    09-Sep-2022 remove fPrintBook() as no longer needed
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -112,6 +114,7 @@
 //    fonKeyUp_any_vldt_id() = validate an id for a single topic value and return the value
 //    fFetchTopicList() -- fetch a list from the database for a single topic
 //    fPrintBook() -- print a book
+//    fPrintBook() -- print a book's text: title, author, abstract, characters
 
 // define globals for URI's .............................................................................................
 
@@ -247,6 +250,7 @@ function fSetMode(sNewMode) {
         fUnhideMultiple("modes-div", "submit-div");
         fSetElement("Disable", "submit-button");
         fClearBookDivElements();
+        fSetElement("Enable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -425,6 +429,7 @@ function fSetMode(sNewMode) {
         fSetElement("UnhideInline", "titlesfilter-input");
         fSetElement("Clear", "titlesarea-textarea");
         fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "printButton");
         fSetElement("Enable", "titlesfilter-input");
         document.getElementById("titlesfilter-input").focus();
 
@@ -475,6 +480,7 @@ function fSetMode(sNewMode) {
         document.getElementById("unreadsfilter-input").focus();
         fSetElement("Clear", "unreadsarea-textarea");
         fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -604,6 +610,7 @@ function fSetMode(sNewMode) {
         fSetElement("Clear", "seriesadd-input");
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "authorsfilter-input");
+        fSetElement("Disable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -688,6 +695,7 @@ function fSetMode(sNewMode) {
         fSetElement("Clear", "classificationsadd-input");
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "classificationsfilter-input");
+        fSetElement("Disable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -771,6 +779,7 @@ function fSetMode(sNewMode) {
         fSetElement("UnhideInline", "ratingsadd-input");
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "ratingsfilter-div");
+        fSetElement("Disable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -854,6 +863,7 @@ function fSetMode(sNewMode) {
         fSetElement("UnhideInline", "seriesadd-input");
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "seriesfilter-input");
+        fSetElement("Disable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -941,6 +951,7 @@ function fSetMode(sNewMode) {
         fSetElement("UnhideInline", "sourcesadd-input");
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "sourcesfilter-input");
+        fSetElement("Disable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -1028,6 +1039,7 @@ function fSetMode(sNewMode) {
         fSetElement("UnhideInline", "genresadd-input");
         fSetElement("Enable", "genresfilter-input");
         fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -1113,6 +1125,7 @@ function fSetMode(sNewMode) {
         fSetElement("Clear", "statusesadd-input");
         fSetElement("UnhideInline", "statusesadd-input");
         fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "printButton");
 
         if (sMode === 'fetch') {
 
@@ -3189,6 +3202,26 @@ function fSetFocusOnSubmit() {
     document.getElementById("submit-button").focus();
 }
 
-function fPrintBook() {
+function fPrintBookText() {
+    let restorepage = document.body.innerHTML;
+    let titleid = document.getElementById("booksid-input").value;
+    let nametext = document.getElementById("booksname-input").value;
+    let bookauthor = document.getElementById("booksauthor-select").value;
+    let seriestext = document.getElementById("booksseries-select").value;
+    let starttext = document.getElementById("booksstart-input").value;
+    let abstracttext = document.getElementById("booksabstract-textarea").value;
+    let commentstext = document.getElementById("bookscomments-textarea").value
+    let characterstext = document.getElementById("bookscharacters-textarea").value.replaceAll("\n", "<br />\r\n");
+    let printcontent = 'Title ID: ' + titleid + '<br><br>'
+                     + 'Title: ' + nametext + '<br><br>'
+                     + 'Author: ' + bookauthor + '<br><br>'
+                     + 'Series: ' + seriestext + '<br><br>'
+                     + 'Started: ' + starttext + '<br><br>'
+                     + 'Abstract:<br>' + abstracttext + '<br><br>'
+                     + 'Comments:<br>' + commentstext + '<br><br>'
+                     + 'Characters:<br>' + characterstext;
+    document.body.innerHTML = printcontent;
     window.print();
+    document.body.innerHTML = restorepage;
 }
+

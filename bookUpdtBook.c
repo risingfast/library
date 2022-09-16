@@ -6,6 +6,7 @@
  *  Log:
  *      13-Jan-2022 start by copying bookAddBook.c and modifying
  *      27-Jul-2022 add abstract field
+ *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
  *  Enhancements:
 */
 
@@ -71,9 +72,10 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type header and CORS <header> block ---------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // Initialize a connection and connect to the database
 
@@ -89,7 +91,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string --------------------------------------------------------------------------------------
 
 //    setenv("QUERY_STRING", "bookId=197&bookName=Test%20Title&authorId=107&sourceId=2&seriesId=82&genreId=1&statusId=4&clsfnId=1&ratingId=4&startDte=2021-01-01&finishDte=2021-12-30&abstract=funny book&cmnts=too bad", 1);
 

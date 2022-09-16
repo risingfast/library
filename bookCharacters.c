@@ -7,6 +7,7 @@
  *      10-Nov-2021 started by copying bookDetails.c and modifying
  *      04-Dec-2021 add the character id to output
  *      26-Dec-2021 add filter to characters
+ *      14-Sep-2022 add Access-Control-Allow-Origin: * in http headers
  *  Enhancements:
 */
 
@@ -51,7 +52,8 @@ int main(void) {
 
 // print the html content type and <head> block -----------------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // Initialize a connection and connect to the database$$
 
@@ -67,7 +69,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string --------------------------------------------------------------------------------------
 
 //    setenv("QUERY_STRING", "TitleID=117&Filter=''", 1);
 
