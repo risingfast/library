@@ -1,6 +1,7 @@
+<!DOCTYPE html>
+
 <!-- <HEAD> region for meta tags ................................................................................... -->
 
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -91,10 +92,6 @@
 <!--    11-Aug-2022 - expand captions on book fields                                                                 -->
 <!--    15-Aug-2022 - add long links                                                                                 -->
 <!--    08-Sep-2022 - add Print button                                                                               -->
-<!--    22-Sep-2022 - add fClickSubmitOnEnter()                                                                      -->
-<!--    22-Sep-2022 - add fEnableSubmitOnInput()                                                                     -->
-<!--    22-Sep-2022 - add fClickValidateBookOnEnter()                                                                -->
-<!--    22-Sep-2022 - add fClickSubmitOnEnter() to filers                                                            -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ..................................................... -->
 
@@ -204,7 +201,7 @@
                     <div id="titles-div">
                         <div id="titlesfilter-div">
                             <label  id="titlesfilter-label" for="titlesfilter-input">Filter:</label>
-                            <input id="titlesfilter-input" required /*onchange="fSetFocusOnSubmit()"*/  onkeypress="fClickSubmitOnEnter()">
+                            <input id="titlesfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="titlesarea-div">
                             <textarea id="titlesarea-textarea" readonly disabled ROWS="50">
@@ -217,7 +214,7 @@
                     <div id="recents-div">
                         <div id="recentsfilter-div">
                             <label  id="recentsfilter-label" for="recentsfilter-input">Filter:</label>
-                            <input id="recentsfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="recentsfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="recentsarea-div">
                             <textarea id="recentsarea-textarea" readonly disabled ROWS="45">
@@ -230,7 +227,7 @@
                     <div id="unreads-div">
                         <div id="unreadsfilter-div">
                             <label id="unreadsfilter-label" for="unreadsfilter-input" >Filter:</label>
-                            <input id="unreadsfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="unreadsfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="unreadsarea-div">
                             <textarea id="unreadsarea-textarea" readonly disabled ROWS="15">
@@ -243,7 +240,7 @@
                     <div id="characters-div">
                         <div id="charactersbook-div">
                             <LABEL id="charactersbookid-label" for="charactersbookid-input">Book ID:</label>
-                            <input id="charactersbookid-input" required /*onKeyUp="fonKeyUp_chars_book_id()"*/ onkeypress="fClickValidateBookOnEnter()">
+                            <input id="charactersbookid-input" required onKeyUp="fonKeyUp_chars_book_id()">
                             <input id="charactersbooktitle-input" required disabled>
                             <button id="charactersvalidatebook-button" disabled onclick="fonclick_chars_vldt_bk_id()">Validate</button>
                         </div>
@@ -254,13 +251,13 @@
                         <div id="charactersupdate-div">
                             <span id="charactersupdate-span">
                                 <label id="charactersupdate-label" for="charactersupdateid-input">Char ID:</label>
-                                <input id="charactersupdateid-input" required /*onKeyUp="fonKeyUp_any_updt_id()"*/ onkeypress="fClickValidateCharacterOnEnter()">
+                                <input id="charactersupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
                                 <input id="charactersupdatename-input" required disabled>
                                 <button id="charactersvalidateid-button" disabled onclick="fonclick_chars_vldt_char_id()">Validate</button>
                             </span>
                             <span id="charactersupdated-span">
                                 <label id="charactersupdatedname-label" for="charactersupdatedname-input">Update:</label>
-                                <input id="charactersupdatedname-input" required onkeyPress="fClickSubmitOnEnter()">
+                                <input id="charactersupdatedname-input" required onKeyUp="fonKeyUp_chars_updtd_name()">
                             </span>
                         </div>
                         <div id="charactersdelete-div">
@@ -269,7 +266,7 @@
                         </div>
                         <div id="charactersfilter-div">
                             <label id="charactersfilter-label" for="chars:filter">Filter:</label>
-                            <input id="charactersfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="charactersfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="charactersarea-div">
                             <textarea id="charactersarea-textarea" readonly disabled ROWS="25">
@@ -282,7 +279,7 @@
                     <div id="authors-div">
                         <div id="authorsfilter-div">
                             <label  id="authorsfilter-label" for="authorsfilter-input">Filter:</label>
-                            <input id="authorsfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                            <input id="authorsfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="authorsadd-div">
                             <label  id="authorsadd-label" for="authorsadd-input">Add Author:</label>
@@ -291,7 +288,7 @@
                         <div id="authorsupdate-div">
                             <span style="display:block">
                                 <label id="authorsupdate-label" for="authorsupdateid-input">Author ID:</label>
-                                <input id="authorsupdateid-input" required /*onKeyUp="fonKeyUp_any_updt_id()"*/ onkeypress="fClickValidateAuthorOnEnter()">
+                                <input id="authorsupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
                                 <input id="authorsupdatename-input" required disabled>
                                 <button id="authorsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                             </span>
@@ -315,7 +312,7 @@
                     <div id="classifications-div">
                         <div id="classificationsfilter-div">
                             <label id="classificationsfilter-label" for="classificationsfilter-input">Filter:</label>
-                            <input id="classificationsfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="classificationsfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="classificationsadd-div">
                             <label id="classificationsadd-label" for="classificationsadd-input">Add Class:</label>
@@ -324,7 +321,7 @@
                         <div id="classificationsupdate-div">
                             <span style="display:block">
                                 <label id="classificationsupdate-label" for="classificationsupdateid-input">Class ID:</label>
-                                <input id="classificationsupdateid-input" required /*onKeyUp="fonKeyUp_any_updt_id()"*/ onkeypress="fClickValidateClassificationOnEnter()">
+                                <input id="classificationsupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
                                 <input id="classificationsupdatename-input" required disabled>
                                 <button id="classificationsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                             </span>
@@ -348,7 +345,7 @@
                     <div id="ratings-div">
                         <div id="ratingsfilter-div">
                             <label id="ratingfilter-label" for="ratingsfilter-input">Filter:</label>
-                            <input id="ratingsfilter-input" required onchange=/*"fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="ratingsfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="ratingsadd-div">
                             <label id="ratingsadd-label" for="ratingsadd-input">Add Rating:</label>
@@ -357,7 +354,7 @@
                         <div id="ratingsupdate-div">
                             <span style="display:block">
                                 <label id="ratingsupdate-label" for="ratingsupdateid-input" >Rating ID:</label>
-                                <input id="ratingsupdateid-input" required /*onKeyUp="fonKeyUp_any_updt_id()"/* onkeypress="fClickValidateRatingOnEnter()">
+                                <input id="ratingsupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
                                 <input id="ratingsupdatename-input" required disabled>
                                 <button id="ratingsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                             </span>
@@ -381,7 +378,7 @@
                     <div id="series-div">
                         <div id="seriesfilter-div">
                             <label id="seriesfilter-label" for="seriesfilter-input">Filter:</label>
-                            <input id="seriesfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="seriesfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="seriesadd-div">
                             <label id="seriesadd-label" for="seriesadd-input">Add Series:</label>
@@ -390,7 +387,7 @@
                         <div id="seriesupdate-div">
                             <span style="display:block">
                                 <label id="seriesupdate-label" for="seriesupdateid-input">Series ID:</label>
-                                <input id="seriesupdateid-input" required /*onKeyUp="fonKeyUp_any_updt_id()"*/ onkeypress="fClickValidateSeriesOnEnter()">
+                                <input id="seriesupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
                                 <input id="seriesupdatename-input" required>
                                 <button id="seriesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                             </span>
@@ -414,7 +411,7 @@
                     <div id="sources-div">
                         <div id="sourcesfilter-div">
                             <label id="sourcesfilter-label" for="sourcesfilter-input">Filter:</label>
-                            <input id="sourcesfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="sourcesfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="sourcesadd-div">
                             <label id="sourcesadd-label" for="sourcesadd-input">Add Source:</label>
@@ -423,7 +420,7 @@
                         <div id="sourcesupdate-div">
                             <span style="display:block">
                                 <label id="sourcesupdate-label" for="sourcesupdateid-input">Source ID:</label>
-                                <input id="sourcesupdateid-input" required  /*onKeyUp="fonKeyUp_any_updt_id()"*/ onkeypress="fClickValidateSourceOnEnter()">
+                                <input id="sourcesupdateid-input" required  onKeyUp="fonKeyUp_any_updt_id()">
                                 <input id="sourcesupdatename-input" required disabled>
                                 <button id="sourcesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                             </span>
@@ -447,7 +444,7 @@
                     <div id="genres-div">
                         <div id="genresfilter-div">
                             <label id="genresfilter-label" for="genresfilter-input">Filter:</label>
-                            <input id="genresfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="genresfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="genresadd-div">
                             <label id="genresadd-label" for="genresadd-input">Add Genre:</label>
@@ -456,7 +453,7 @@
                         <div id="genresupdate-div">
                             <span style="display:block">
                                 <label id="genresupdate-label" for="genresupdateid-input">Genre ID:</label>
-                                <input id="genresupdateid-input" required /*onKeyUp="fonKeyUp_any_updt_id()"*/ onkeypress="fClickValidateGenreOnEnter()">
+                                <input id="genresupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
                                 <input id="genresupdatename-input" required disabled>
                                 <button id="genresupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                             </span>
@@ -480,7 +477,7 @@
                     <div id="statuses-div">
                         <div id="statusesfilter-div">
                             <label id="statusesfilter-label" for="statusesfilter-input">Filter:</label>
-                            <input id="statusesfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="statusesfilter-input" required onchange="fSetFocusOnSubmit()">
                         </div>
                         <div id="statusesadd-div">
                             <label id="statusesadd-label" for="statusesadd-input">Add Status:</label>
@@ -489,7 +486,7 @@
                         <div id="statusesupdate-div">
                             <span style="display:block">
                                 <label id="statusesupdateid-label" for="statusesupdateid-input">Status ID:</label>
-                                <input id="statusesupdateid-input" required /*onKeyUp="fonKeyUp_any_updt_id()"*/ onkeypress="fClickValidateStatusOnEnter()">
+                                <input id="statusesupdateid-input" required onKeyUp="fonKeyUp_any_updt_id()">
                                 <input id="statusesupdatename-input" required disabled>
                                 <button id="statusesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
                             </span>
@@ -517,11 +514,11 @@
                         </div>
                         <div id="booksid-div">
                             <label id="booksid-label" for="booksid-input">ID:</label>
-                            <input id="booksid-input" onkeyup="fEnableSubmitButton01('booksid-input')" onkeypress="fClickSubmitOnEnter()">
+                            <input id="booksid-input" onkeyup="fEnableSubmitButton01('booksid-input')">
                         </div>
                         <div id="booksname-div">
                             <Label id="booksname-label" for="booksname-input">Title: </label>
-                            <input id="booksname-input" oninput="fEnableSubmitOnInput()">
+                            <input id="booksname-input">
                         </div>
                         <div id="booksauthor-div">
                             <label id="booksauthor-label" for="booksauthor-input">Author: </label>

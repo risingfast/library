@@ -6,6 +6,8 @@
  *  Log:
  *      19-Nov-2021 started by copying bookAddAuthor.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * HTTP header
+ *      21-Sep-2022 add check for null string for classification name
+ *      21-Sep-2022 add check for empty string for classification name
  *  Enhancements:
 */
 
@@ -63,53 +65,36 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// Format of QUERY_STRING parsed for the claassification name
 
 //    setenv("QUERY_STRING", "classification=Comedies%20and%20Comics", 1);
 
     sParam = getenv("QUERY_STRING");
 
+// check for a NULL query string -------------------------------------------------------------------------------------=
+
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
-        printf("\n\n");
+        printf("Query string identifying classification does not exist. Terminating program");
         return 1;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
-//    return 0;
+// check for an empty query string
+
+    if (strcmp(sParam, "") == 0) {
+        printf("Query string identifying the classification is empty. Expecting QUERY_STRING=\"classification=Classname\". Terminating program");
+        return 1;
+    }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
 
     sscanf(sParam, "classification=%s", caClassification);
     sClassification = fUrlDecode(caClassification);
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
-    }
-
 // set a SQL query to insert the new classification -------------------------------------------------------------------
 
-//    sprintf(caSQL, "SELECT BC.`Character Name` "
-//                   "FROM risingfast.`Book Characters` BC "
-//                   "WHERE BC.`Title ID` = '%d';", iTitleID);
-//
     sprintf(caSQL, "INSERT INTO risingfast.`Book Classifications` "
                    "(`Classification Name`)  "
                    "VALUES ('%s');", sClassification);
-
-// Call the function to print the SQL results to stdout and terminate the program
-
-//    printf("Query: %s", caSQL);
-//    printf("\n\n");
-//    return 0;
-
 
     if(mysql_query(conn, caSQL) != 0)
     {

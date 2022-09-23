@@ -71,7 +71,6 @@
 //    09-Sep-2022 add fPrintBookText()
 //    09-Sep-2022 remove fPrintBook() as no longer needed
 //    16-Sep-2022 change www.risingfast.com to gjarman2020.com
-//    22-Sep-2022 disable the submit button before adding a book
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -338,10 +337,6 @@ function fSetMode(sNewMode) {
             document.getElementById("bookscomments-textarea").disable = false;
             let dt = document.getElementById("booksid-input");
             dt.style.backgroundColor = "rgba(239,239,239, 0.3)";                                     // light grey color
-
-            // disable the submit button
-
-            fSetElement("Disable", "submit-button");
 
             // show instructions in the message area on how to proceed .................................................
 
@@ -1777,6 +1772,7 @@ async function fonclick_chars_vldt_char_id() {
         } else {
             document.getElementById("charactersupdatedname-input").value = text;
             fSetElement("Enable", "charactersupdatedname-input");
+            fSetElement("Disable", "charactersupdatename-input");
             fSetElement("Hide", "charactersfilter-div");
             document.getElementById("charactersupdatedname-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
             document.getElementById("charactersupdatedname-input").style.borderWidth = "thin";
@@ -2123,6 +2119,18 @@ function fonKeyUp_chars_add_name() {
         } else {
             fSetElement("Enable", "submit-button");
         }
+    }
+}
+
+// function to enable the submit button when a changed character is entered ............................................
+
+function fonKeyUp_chars_updtd_name() {
+
+    let sUpdtChar = document.getElementById("charactersupdatedname-input").value;
+    if (sUpdtChar != '') {
+        fSetElement("Enable", "submit-button");
+    } else {
+        fSetElement("Disable", "submit-button");
     }
 }
 
@@ -2761,7 +2769,7 @@ async function fonclick_any_vldt_id() {
         }
         return;
     } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "sources")) {
-        let iSourceId = document.getElementById("sourcesupdateid-input").value;
+        let iSourcesId = document.getElementById("sourcesupdateid-input").value;
         let sRequest = uri27 + '?' + 'sourceID=' + iSourceId;
         let response = await fetch(sRequest);
         document.getElementById("sourcesupdated-input").value = '';
@@ -2783,7 +2791,7 @@ async function fonclick_any_vldt_id() {
         }
         return;
     } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "genres")) {
-        let iGenreId = document.getElementById("genresupdateid-input").value;
+        let iGenresId = document.getElementById("genresupdateid-input").value;
         let sRequest = uri25 + '?' + 'genreID=' + iGenreId;
         let response = await fetch(sRequest);
         document.getElementById("genresupdated-input").value = '';
@@ -3218,103 +3226,3 @@ function fPrintBookText() {
     document.body.innerHTML = restorepage;
 }
 
-// function to enable the Submit button when text is entered in an input field
-
-function fEnableSubmitOnInput() {
-    bookname = document.getElementById("booksname-input").value;
-    if (bookname.length > 0) {
-        fSetElement("Enable", "submit-button");
-    } else {
-        fSetElement("Disable", "submit-button");
-    }
-}
-
-// function to click the submit button when Enter is clicked in an input field
-
-function fClickSubmitOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "submit-button");
-        document.getElementById("submit-button").click();
-      }
-}
-
-// function to click the validate book button when Enter is clicked on input
-
-function fClickValidateBookOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "charactersvalidatebook-button");
-        fonclick_chars_vldt_bk_id();
-      }
-}
-
-// function to click the validate author button when Enter is clicked on input
-
-function fClickValidateAuthorOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "authorsupdate-button");
-        fonclick_any_vldt_id();
-      }
-}
-
-// function to click the validate classification button when Enter is clicked on input
-
-function fClickValidateClassificationOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "classificationsupdate-button");
-        fonclick_any_vldt_id();
-      }
-}
-
-// function to click the validate rating button when Enter is clicked on input
-
-function fClickValidateRatingOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "ratingsupdate-button");
-        fonclick_any_vldt_id();
-      }
-}
-
-// function to click the validate series button when Enter is clicked on input
-
-function fClickValidateSeriesOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "seriesupdate-button");
-        fonclick_any_vldt_id();
-      }
-}
-
-// function to click the validate source button when Enter is clicked on input
-
-function fClickValidateSourceOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "sourcesupdate-button");
-        fonclick_any_vldt_id();
-      }
-}
-
-// function to click the validate genre button when Enter is clicked on input
-
-function fClickValidateGenreOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "genresupdate-button");
-        fonclick_any_vldt_id();
-      }
-}
-
-// function to click the validate status button when Enter is clicked on input
-
-function fClickValidateStatusOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "statusesupdate-button");
-        fonclick_any_vldt_id();
-      }
-}
-
-// function to click the validate character button when Enter is clicked on input
-
-function fClickValidateCharacterOnEnter() {
-      if (event.key === 'Enter') {
-        fSetElement("Enable", "charactersvalidateid-button");
-        fonclick_chars_vldt_char_id();
-      }
-}

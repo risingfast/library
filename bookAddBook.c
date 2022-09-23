@@ -9,6 +9,9 @@
  *      10-Jan-2022 add NULL handling for start date, finish date and comments
  *      29-Jul-2022 add abstract field
  *      14-Sep-2022 add Access-Control-Allow-Origin HTTP header
+ *      21-Sep-2022 add check for empty QUERY_STRRING
+ *      21-Sep-2022 add check for missing book name in the QUERY_STRING
+ *      21-Sep=2022 add a test for a NULL QUERY__STRING
  *  Enhancements:
 */
 
@@ -21,7 +24,6 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 10000
-
 #define MAXLEN 1024
 
 // global declarations
@@ -74,12 +76,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -93,26 +95,50 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// Format of QUERY_STRING parsed for book information
+/*
+    setenv("QUERY_STRING", "bookName=Test%20Title
+                            &authorId=107
+                            &sourceId=2
+                            &seriesId=82
+                            &genreId=1
+                            &statusId=4
+                            &clsfnId=1
+                            &ratingId=4
+                            &startDte=2021-01-01
+                            &finishDte=2021-12-30
+                            &cmnts=Hello", 1);
+*/
 
-//    setenv("QUERY_STRING", "bookName=Test%20Title&authorId=107&sourceId=2&seriesId=82&genreId=1&statusId=4&clsfnId=1&ratingId=4&startDte=2021-01-01&finishDte=2021-12-30&cmnts=Hello", 1);
+// Fetch the QUERY_STRING environment variable paramete string ---------------------------------------------------------
 
     sParam = getenv("QUERY_STRING");
 
-    if(sParam == NULL) {
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
+    if (sParam == NULL) {
+        printf("QUERY_STRING identifying the book does not exist. Terminating program");
+        return 1;
+    }
+
+// check for an empty query string -------------------------------------------------------------------------------------
+
+    if(strcmp(sParam, "") == 0) {
         printf("\n");
-        printf("Query string is empty. No parameters passed. Terminating program");
+        printf("Query string identifying the book is empty. Expecting QUERY_STRING=\"bookName=... etc\" Terminating program");
         printf("\n\n");
         return 1;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
-
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sTemp = strtok(sParam, caDelimiter);
+
     sscanf(sTemp, "bookName=%[^\n]s", caNameBuf);
+    if (caNameBuf[0] == '\0') {
+        printf("Query string has no book name. i.e. \"bookName=''\". Expecting QUERY_STRING=\"bookName=bookTitle...\". Terminating program");
+        return 1;
+    }
     strcpy(caBookName, fUrlDecode(caNameBuf));
 
     sTemp = strtok(NULL, caDelimiter);
@@ -170,22 +196,8 @@ int main(void) {
     }
     strcpy(caCmnts, fUrlDecode(caCmntsQuoted));
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
-    }
-
 // set a SQL query to insert the new book title -----------------------------------------------------------------------
 
-/*
-    sprintf(caSQL, "INSERT INTO risingfast.`Book Characters` "
-                   "(`Character Name`, `Title ID`)  "
-                   "VALUES ('%s', %d);", sCharacter, iTitleID);
-*/
     sprintf(caSQL, "INSERT INTO risingfast.`Book Titles` "
                    "(`Title Name`, `Author ID`, `Source ID`, `Series ID`, `Genre ID`, `Status ID`, `Classification ID`, `Rating ID`, Start, Finish, Abstract, Comments)  "
                    "VALUES ('%s', %d, %d, %d, %d, %d, %d, %d, %s, %s, %s, %s);", caBookName, iAuthorID, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts);

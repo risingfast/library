@@ -48,7 +48,7 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
@@ -67,35 +67,41 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+
+// Format of QUERY_STRING parsed for character name
 
 //    setenv("QUERY_STRING", "TitleID=89&CharacterName=Dummy%20Test", 1);
 
+// Fetch the QUERY_STRING environment variable parameter string
+
     sParam = getenv("QUERY_STRING");
 
-    if(sParam == NULL) {
+// Check for a NULL query string ---------------------------------------------------------------------------------------
+
+    if (sParam == NULL) {
         printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("QUERY_STRING identifying the character does not exist. Terminating program");
         printf("\n\n");
         return 1;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
+// Check for an empty query string -------------------------------------------------------------------------------------
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+    if (strcmp(sParam, "") == 0) {
+        printf("Query string identifying the character is empty. Expecting QUERY_STRING=\"TitleID=Number&CharacterName=New%%20Character\". Terminating program");
+        return 1;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sTitleID = strtok(sParam, caDelimiter);
     sscanf(sTitleID, "TitleID=%d", &iTitleID);
-//    printf("TitleID: %d\n", iTitleID);
 
     sCharacter = strtok(NULL, caDelimiter);
     sscanf(sCharacter, "CharacterName=%s", caCharacterName);
     sCharacter = fUrlDecode(caCharacterName);
-//    printf("sCharacter: %s\ncaCharacterName: %s\n", sCharacter, caCharacterName);
 
-
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");
@@ -104,7 +110,7 @@ int main(void) {
         return 0;
     }
 
-// set a SQL query to insert the new author ---------------------------------------------------------------------------
+// set a SQL query to insert the new author ----------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Characters` "
                    "(`Character Name`, `Title ID`)  "

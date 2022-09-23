@@ -6,6 +6,11 @@
  *  Log:
  *      19-Nov-2021 started by copying bookCharacters.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin CORS header
+ *      20-Sep-2022 add prompt for parameter if no parameter given
+ *      21-Sep-2022 add a test for a NULL QUERY_STRING
+ *      21-Sep-2022 fix test for empty QUERY_STRING
+ *      21-Sep-2022 fix test for parameterless QUERY_STRING
+
  *  Enhancements:
 */
 
@@ -18,7 +23,6 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 5000
-
 #define MAXLEN 1024
 
 // global declarations
@@ -44,12 +48,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and CORS HTML Headers ------------------------------------------------------------------
+// print the html content type and CORS HTML Headers -------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -63,53 +67,45 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// Format of QUERY_STRING parsed for the author name
 
-//    setenv("QUERY_STRING", "author=Fred%20Astair", 1);
+//     setenv("QUERY_STRING", "author=Firstname%20Lastname");
+
+// Fetch the QUERY_STRING environment variable parameter string --------------------------------------------------------
 
     sParam = getenv("QUERY_STRING");
 
-    if(sParam == NULL) {
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
+    if (sParam == NULL) {
+        printf("QUERY_STRING identifying the author does not exist. Terminating program");
+        return 1;
+    }
+
+// check for an empty query string -------------------------------------------------------------------------------------
+
+    if (strcmp(sParam, "") == 0) {
         printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string identifying the author is empty. Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating program");
         printf("\n\n");
         return 1;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
-//    return 0;
-
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "author=%s", caAuthor);
+    
+    if (caAuthor[0] == '\0') {
+        printf("Query string has no author name, ie. \"author=''\". Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating program");
+        return 1;
+    }
     sAuthor = fUrlDecode(caAuthor);
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
+// set a SQL query to insert the new author ----------------------------------------------------------------------------
 
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
-    }
-
-// set a SQL query to insert the new author ---------------------------------------------------------------------------
-
-//    sprintf(caSQL, "SELECT BC.`Character Name` "
-//                   "FROM risingfast.`Book Characters` BC "
-//                   "WHERE BC.`Title ID` = '%d';", iTitleID);
-//
     sprintf(caSQL, "INSERT INTO risingfast.`Book Authors` "
                    "(`Author Name`)  "
                    "VALUES ('%s');", sAuthor);
-
-// Call the function to print the SQL results to stdout and terminate the program
-
-//    printf("Query: %s", caSQL);
-//    printf("\n\n");
-//    return 0;
-
 
     if(mysql_query(conn, caSQL) != 0)
     {
