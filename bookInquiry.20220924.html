@@ -94,8 +94,7 @@
 <!--    22-Sep-2022 - add fClickSubmitOnEnter()                                                                      -->
 <!--    22-Sep-2022 - add fEnableSubmitOnInput()                                                                     -->
 <!--    22-Sep-2022 - add fClickValidateBookOnEnter()                                                                -->
-<!--    22-Sep-2022 - add fClickSubmitOnEnter()                                                                      -->
-<!--    25-Sep-2022 - add default behaviour on <Enter>                                                               -->
+<!--    22-Sep-2022 - add fClickSubmitOnEnter() to filers                                                            -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ..................................................... -->
 
@@ -298,12 +297,12 @@
                             </span>
                             <span style="display:block">
                                 <label id="authorsupdated-label" for="authorsupdated-input">Update:</label>
-                                <input id="authorsupdated-input" required /*onKeyUp="fonKeyUp_author_updtd_name()"*/ onkeypress="fClickSubmitOnEnter()">
+                                <input id="authorsupdated-input" required onKeyUp="fonKeyUp_author_updtd_name()">
                             </span>
                         </div>
                         <div id="authorsdelete-div">
                             <label id="authorsdelete-label" for="authorsdelete-input">Author ID:</label>
-                            <input id="authorsdelete-input" required /*onKeyUp="fonKeyUp_author_del_id()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="authorsdelete-input" required onKeyUp="fonKeyUp_author_del_id()">
                         </div>
                         <div id="authorslist-div">
                             <textarea id="authorslist-textarea" readonly disabled ROWS="45">
@@ -320,7 +319,7 @@
                         </div>
                         <div id="classificationsadd-div">
                             <label id="classificationsadd-label" for="classificationsadd-input">Add Class:</label>
-                            <input id="classificationsadd-input" required /*onKeyUp="fEnableSubmitIfNotNull('classificationsadd-input')"*/ onkeyPress="fClickSubmitOnEnter()">
+                            <input id="classificationsadd-input" required onKeyUp="fEnableSubmitIfNotNull('classificationsadd-input')">
                         </div>
                         <div id="classificationsupdate-div">
                             <span style="display:block">
@@ -331,12 +330,12 @@
                             </span>
                             <span style="display:block">
                                 <label id="classificationsupdated-label" for="classificationsupdated-input">Update:</label>
-                                <input id="classificationsupdated-input" required onkeypress="fClickSubmitOnEnter()">
+                                <input id="classificationsupdated-input" required onKeyUp="fonKeyUp_class_updtd_name()">
                             </span>
                         </div>
                         <div id="classificationsdelete-div">
                             <label id="classificationsdelete-label" for="classificationsdelete-input">Class ID:</label>
-                            <input id="classificationsdelete-input" required onkeypress="fClickSubmitOnEnter()">
+                            <input id="classificationsdelete-input" required onKeyUp="fonKeyUp_class_del_id()">
                         </div>
                         <div id="classificationslist-div">
                             <textarea id="classificationslist-textarea" readonly disabled ROWS="5">
@@ -349,11 +348,11 @@
                     <div id="ratings-div">
                         <div id="ratingsfilter-div">
                             <label id="ratingfilter-label" for="ratingsfilter-input">Filter:</label>
-                            <input id="ratingsfilter-input" required /*onchange="fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="ratingsfilter-input" required onchange=/*"fSetFocusOnSubmit()"*/ onkeypress="fClickSubmitOnEnter()">
                         </div>
                         <div id="ratingsadd-div">
                             <label id="ratingsadd-label" for="ratingsadd-input">Add Rating:</label>
-                            <input id="ratingsadd-input" required /*onKeyUp="fEnableSubmitIfNotNull('ratingsadd-input')"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="ratingsadd-input" required onKeyUp="fEnableSubmitIfNotNull('ratingsadd-input')">
                         </div>
                         <div id="ratingsupdate-div">
                             <span style="display:block">
@@ -364,12 +363,12 @@
                             </span>
                             <span style="display:block">
                                 <labeL id="ratingsupdated-label" for="ratingsupdated-input" >Update:</label>
-                                <input id="ratingsupdated-input" required /*onKeyUp="fonKeyUp_rating_updtd_name()"*/ onkeypress="fClickSubmitOnEnter()">
+                                <input id="ratingsupdated-input" required onKeyUp="fonKeyUp_rating_updtd_name()">
                             </span>
                         </div>
                         <div id="ratingsdelete-div">
                             <label id="ratingsdelete-label" for="ratingsdelete-input">Rating ID:</labeL>
-                            <input id="ratingsdelete-input" required /*onKeyUp="fonKeyUp_ratings_del_id()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="ratingsdelete-input" required onKeyUp="fonKeyUp_ratings_del_id()">
                         </div>
                         <div id="ratingslist-div">
                             <textarea id="ratingslist-textarea" readonly disabled ROWS="7">
@@ -386,7 +385,7 @@
                         </div>
                         <div id="seriesadd-div">
                             <label id="seriesadd-label" for="seriesadd-input">Add Series:</label>
-                            <input id="seriesadd-input" required /*onKeyUp="fEnableSubmitIfNotNull('seriesadd-input')"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="seriesadd-input" required onKeyUp="fEnableSubmitIfNotNull('seriesadd-input')">
                         </div>
                         <div id="seriesupdate-div">
                             <span style="display:block">
@@ -397,12 +396,12 @@
                             </span>
                             <span style="display:block">
                                 <label id="seriesupdated-label" for="seriesupdated-input">Update:</label>
-                                <input id="seriesupdated-input" required /*onKeyUp="fonKeyUp_series_updtd_name()"*/ onkeypress="fClickSubmitOnEnter()">
+                                <input id="seriesupdated-input" required onKeyUp="fonKeyUp_series_updtd_name()">
                             </span>
                         </div>
                         <div id="seriesdelete-div">
                             <label id="seriesdelete-label" for="seriesdelete-input">Series ID:</label>
-                            <input id="seriesdelete-input" required /*onKeyUp="fonKeyUp_series_del_id()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="seriesdelete-input" required onKeyUp="fonKeyUp_series_del_id()">
                         </div>
                         <div id="serieslist-div">
                             <textarea id="serieslist-textarea" readonly disabled ROWS="45">
@@ -419,7 +418,7 @@
                         </div>
                         <div id="sourcesadd-div">
                             <label id="sourcesadd-label" for="sourcesadd-input">Add Source:</label>
-                            <input id="sourcesadd-input" required /*onKeyUp=fEnableSubmitIfNotNull('sourcesadd-input')"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="sourcesadd-input" required onKeyUp="fEnableSubmitIfNotNull('sourcesadd-input')">
                         </div>
                         <div id="sourcesupdate-div">
                             <span style="display:block">
@@ -430,12 +429,12 @@
                             </span>
                             <span style="display:block">
                                 <label id="sourcesupdated-label" for="sourcesupdated-input">Update:</label>
-                                <input id="sourcesupdated-input" required /*onKeyUp="fonKeyUp_sources_updtd_name()"*/ onkeypress="fClickSubmitOnEnter()">
+                                <input id="sourcesupdated-input" required onKeyUp="fonKeyUp_sources_updtd_name()">
                             </span>
                         </div>
                         <div id="sourcesdelete-div">
                             <label id="sourcesdelete-label" for="sourcesdelete-input">Source ID:</label>
-                            <input id="sourcesdelete-input" required /*onKeyUp="fonKeyUp_sources_del_id()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="sourcesdelete-input" required onKeyUp="fonKeyUp_sources_del_id()">
                         </div>
                         <div id="sourceslist-div">
                             <textarea id="sourceslist-textarea" readonly disabled ROWS="13">
@@ -452,7 +451,7 @@
                         </div>
                         <div id="genresadd-div">
                             <label id="genresadd-label" for="genresadd-input">Add Genre:</label>
-                            <input id="genresadd-input" required /*onKeyUp="fEnableSubmitIfNotNull('genresadd-input')"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="genresadd-input" required onKeyUp="fEnableSubmitIfNotNull('genresadd-input')">
                         </div>
                         <div id="genresupdate-div">
                             <span style="display:block">
@@ -463,12 +462,12 @@
                             </span>
                             <span style="display:block">
                                 <label id="genresupdated-label" for="genresupdated-input">Update:</label>
-                                <input id="genresupdated-input" required /*onKeyUp="fonKeyUp_genres_updtd_name()"*/ onkeypress="fClickSubmitOnEnter()">
+                                <input id="genresupdated-input" required onKeyUp="fonKeyUp_genres_updtd_name()">
                             </span>
                         </div>
                         <div id="genresdelete-div">
                             <label id="genresdelete-label" for="genresdelete-input">Genre ID:</label>
-                            <input id="genresdelete-input" required /*onKeyUp="fonKeyUp_genres_del_id()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="genresdelete-input" required onKeyUp="fonKeyUp_genres_del_id()">
                         </div>
                         <div id="genreslist-div">
                             <textarea id="genreslist-textarea" readonly disabled ROWS="22">
@@ -485,7 +484,7 @@
                         </div>
                         <div id="statusesadd-div">
                             <label id="statusesadd-label" for="statusesadd-input">Add Status:</label>
-                            <input id="statusesadd-input" required /*onKeyUp="fEnableSubmitIfNotNull('statusesadd-input')"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="statusesadd-input" required onKeyUp="fEnableSubmitIfNotNull('statusesadd-input')">
                         </div>
                         <div id="statusesupdate-div">
                             <span style="display:block">
@@ -496,12 +495,12 @@
                             </span>
                             <span style="display:block">
                                 <label id="statusesupdated-label" for="statusesupdated-input">Update:</label>
-                                <input id="statusesupdated-input" required /*onKeyUp="fonKeyUp_statuses_updtd_name()"*/ onkeypress="fClickSubmitOnEnter()">
+                                <input id="statusesupdated-input" required onKeyUp="fonKeyUp_statuses_updtd_name()">
                             </span>
                         </div>
                         <div id="statusesdelete-div">
                             <label id="statusesdelete-label" for="statusesdelete-input">Status ID:</label>
-                            <input id="statusesdelete-input" required /*onKeyUp="fonKeyUp_statuses_del_id()"*/ onkeypress="fClickSubmitOnEnter()">
+                            <input id="statusesdelete-input" required onKeyUp="fonKeyUp_statuses_del_id()">
                         </div>
                         <div id="statuseslist-div">
                             <textarea id="statuseslist-textarea" readonly disabled ROWS="9">
@@ -652,7 +651,6 @@
             <aside id="ASIDE1">
                     <h3 id=ASIDE1H3>Changes 2021-22</h3>
                 <ul id="ASIDE1UL">
-                    <li class="ASIDE1LI">24-Sep: add 'Enter' defaults</li>
                     <li class="ASIDE1LI">08-Sep: add Print for books</li>
                     <li class="ASIDE1LI">15-Aug: add long links</li>
                     <li class="ASIDE1LI">11-Aug: expand book field captions</li>
@@ -775,3 +773,4 @@
 </body>
 
 </html>
+

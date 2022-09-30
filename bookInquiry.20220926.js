@@ -1385,7 +1385,6 @@ async function fonclick_submit_submit() {
         fSetElement("Enable", "booksfinish-input");
         fSetElement("Enable", "booksabstract-textarea");
         document.getElementById("booksabstract-textarea").readOnly = false;
-        document.getElementById("booksname-input").focus();
         fSetElement("Enable", "bookscomments-textarea");
         document.getElementById("bookscomments-textarea").readOnly = false;
 

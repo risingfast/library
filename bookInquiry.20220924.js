@@ -711,7 +711,6 @@ function fSetMode(sNewMode) {
             document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
             document.getElementById("authorsdelete-input").style.borderWidth = "thin";
             document.getElementById("submit-message").value = "Enter the Author ID to delete and 'Submit'";
-            document.getElementById("authorsdelete-input").focus();
         }
 
     } else if (sTopic === "classifications") {
@@ -757,10 +756,8 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "classificationsupdate-div");
             document.getElementById("classificationsadd-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("classificationsadd-input").style.borderWidth = "thin";
-            document.getElementById("classificationsadd-input").focus();
             document.getElementById("mode-label").innerHTML = "add mode";
             document.getElementById("submit-message").value = "Enter the new classification and click 'Submit'";
-
 
         } else if (sMode === "update") {
 
@@ -778,7 +775,6 @@ function fSetMode(sNewMode) {
             document.getElementById("classificationsupdatename-input").value = '';
             document.getElementById("classificationsupdateid-input").style.borderWidth = "thin";
             document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
-            document.getElementById("classificationsupdateid-input").focus();
             document.getElementById("mode-label").innerHTML = "update mode";
             document.getElementById("submit-message").value = "Enter the existing classification and click 'Submit'";
 
@@ -797,7 +793,6 @@ function fSetMode(sNewMode) {
             document.getElementById("classificationsdelete-input").value = '';
             document.getElementById("classificationsdelete-input").style.backgroundColor = "rgb(255,255,224)";          // light yellow
             document.getElementById("classificationsdelete-input").style.borderWidth = "thin";
-            document.getElementById("classificationsdelete-input").focus();
             document.getElementById("mode-label").innerHTML = "delete mode";
             document.getElementById("submit-message").value = "Enter the classification ID to delete and 'Submit'";
         }
@@ -846,7 +841,6 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "ratingsfilter-div");
             document.getElementById("ratingsadd-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("ratingsadd-input").style.borderWidth = "thin";
-            document.getElementById("ratingsadd-input").focus();
             document.getElementById("mode-label").innerHTML = "add mode";
             document.getElementById("submit-message").value = "Enter the new rating and click 'Submit'";
 
@@ -863,7 +857,6 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "ratingsupdated-input");
             fSetElement("Hide", "ratingsdelete-div");
             document.getElementById("ratingsupdateid-input").value = '';
-            document.getElementById("ratingsupdateid-input").focus();
             document.getElementById("ratingsupdatename-input").value = '';
             document.getElementById("mode-label").innerHTML = "update mode";
             document.getElementById("ratingsupdateid-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
@@ -886,7 +879,6 @@ function fSetMode(sNewMode) {
             document.getElementById("ratingsdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
             document.getElementById("ratingsdelete-input").style.borderWidth = "thin";
             document.getElementById("ratingsdelete-input").value = '';
-            document.getElementById("ratingsdelete-input").focus();
             document.getElementById("submit-message").value = "Enter the rating ID to delete and 'Submit'";
         }
 
@@ -936,7 +928,6 @@ function fSetMode(sNewMode) {
             document.getElementById("mode-label").innerHTML = "add mode";
             document.getElementById("submit-message").value = "Enter the new series and click 'Submit'";
             document.getElementById("seriesadd-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
-            document.getElementById("seriesadd-input").focus();
             document.getElementById("seriesadd-input").style.borderWidth = "thin";
 
         } else if (sMode === "update") {
@@ -954,7 +945,6 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "seriesupdated-input");
             document.getElementById("mode-label").innerHTML = "update mode";
             document.getElementById("seriesupdateid-input").value = '';
-            document.getElementById("seriesupdateid-input").focus();
             document.getElementById("seriesupdatename-input").value = '';
             document.getElementById("seriesupdateid-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
             document.getElementById("seriesupdateid-input").style.borderWidth = "thin";
@@ -976,7 +966,6 @@ function fSetMode(sNewMode) {
             document.getElementById("seriesdelete-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("seriesdelete-input").style.borderWidth = "thin";
             document.getElementById("seriesdelete-input").value = '';
-            document.getElementById("seriesdelete-input").focus();
             document.getElementById("submit-message").value = "Enter the Series ID to delete and 'Submit'";
         }
 
@@ -1027,7 +1016,6 @@ function fSetMode(sNewMode) {
             document.getElementById("mode-label").innerHTML = "add mode";
             document.getElementById("sourcesadd-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("sourcesadd-input").style.borderWidth = "thin";
-            document.getElementById("sourcesadd-input").focus();
             document.getElementById("sourcesadd-input").value = '';
             document.getElementById("submit-message").value = "Enter the new source and click 'Submit'";
 
@@ -1049,7 +1037,6 @@ function fSetMode(sNewMode) {
             document.getElementById("sourcesupdateid-input").style.borderWidth = "thin";
             document.getElementById("sourcesupdatename-input").value = '';
             document.getElementById("sourcesupdateid-input").value = '';
-            document.getElementById("sourcesupdateid-input").focus();
             document.getElementById("submit-message").value = "Enter the existing source and 'Submit'";
             
         } else if (sMode === "delete") {
@@ -1067,7 +1054,6 @@ function fSetMode(sNewMode) {
             document.getElementById("sourcesdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
             document.getElementById("sourcesdelete-input").style.borderWidth = "thin";
             document.getElementById("sourcesdelete-input").value = '';
-            document.getElementById("sourcesdelete-input").focus();
             document.getElementById("submit-message").value = "Enter the Source ID to delete and 'Submit'";
         }
 
@@ -1118,7 +1104,6 @@ function fSetMode(sNewMode) {
             document.getElementById("mode-label").innerHTML = "add mode";
             document.getElementById("genresadd-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("genresadd-input").style.borderWidth = "thin";
-            document.getElementById("genresadd-input").focus();
             document.getElementById("genresadd-input").value = '';
             document.getElementById("submit-message").value = "Enter a new genre and 'Submit'";
 
@@ -1134,7 +1119,6 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "genresupdate-div");
             fSetElement("Hide", "genresdelete-div");
             document.getElementById("mode-label").innerHTML = "update mode";
-            document.getElementById("genresupdateid-input").focus();
             document.getElementById("genresupdateid-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("genresupdateid-input").style.borderWidth = "thin";
             document.getElementById("genresupdateid-input").value = '';
@@ -1157,7 +1141,6 @@ function fSetMode(sNewMode) {
             document.getElementById("genresdelete-input").value = '';
             document.getElementById("genresdelete-input").style.borderWidth = "thin";
             document.getElementById("genresdelete-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
-            document.getElementById("genresdelete-input").focus();
             document.getElementById("submit-message").value = "Enter the existing Genre ID and 'Submit'";
 
         }
@@ -1207,7 +1190,6 @@ function fSetMode(sNewMode) {
             document.getElementById("submit-message").value = "Enter a new Status Name and 'Submit'";
             document.getElementById("statusesadd-input").style.backgroundColor = "rgb(255,255,224)";     // light yellow
             document.getElementById("statusesadd-input").style.borderWidth = "thin";
-            document.getElementById("statusesadd-input").focus();
             document.getElementById("statusesadd-input").value = '';
 
         } else if (sMode === "update") {
@@ -1222,7 +1204,6 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "statusesupdated-input");
             fSetElement("Hide", "statusesdelete-div");
             document.getElementById("mode-label").innerHTML = "update mode";
-            document.getElementById("statusesupdateid-input").focus();
             document.getElementById("statusesupdateid-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("statusesupdateid-input").style.borderWidth = "thin";
             document.getElementById("statusesupdateid-input").value = '';
@@ -1243,7 +1224,7 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "statusesdelete-div");
             document.getElementById("mode-label").innerHTML = "delete mode";
             document.getElementById("statusesdelete-input").value = '';
-            document.getElementById("statusesdelete-input").focus();
+            document.getElementById("statusesdelete-input").value = '';
             document.getElementById("statusesdelete-input").style.borderWidth = "thin";
             document.getElementById("statusesdelete-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
             document.getElementById("submit-message").value = "Enter the existing Status ID and 'Submit'";
@@ -1385,7 +1366,6 @@ async function fonclick_submit_submit() {
         fSetElement("Enable", "booksfinish-input");
         fSetElement("Enable", "booksabstract-textarea");
         document.getElementById("booksabstract-textarea").readOnly = false;
-        document.getElementById("booksname-input").focus();
         fSetElement("Enable", "bookscomments-textarea");
         document.getElementById("bookscomments-textarea").readOnly = false;
 
@@ -2740,8 +2720,6 @@ async function fonclick_any_vldt_id() {
                 fSetElement("Disable", "authorsupdated-input");
             } else {
                 fSetElement("Enable", "authorsupdated-input");
-                document.getElementById("authorsupdated-input").value = text;
-                document.getElementById("authorsupdated-input").focus();
                 document.getElementById("authorsupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("authorsupdated-input").style.borderWidth = "thin";
                 document.getElementById("submit-message").value = "Enter the changed Author Name and 'submit'";
@@ -2763,8 +2741,6 @@ async function fonclick_any_vldt_id() {
                 fSetElement("Disable", "classificationsupdated-input");
             } else {
                 fSetElement("Enable", "classificationsupdated-input");
-                document.getElementById("classificationsupdated-input").value = text;
-                document.getElementById("classificationsupdated-input").focus();
                 document.getElementById("classificationsupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("classificationsupdated-input").style.borderWidth = "thin";
                 document.getElementById("submit-message").value = "Enter the changed classification name and 'submit'";
@@ -2786,8 +2762,6 @@ async function fonclick_any_vldt_id() {
                 fSetElement("Disable", "ratingsupdated-input");
             } else {
                 fSetElement("Enable", "ratingsupdated-input");
-                document.getElementById("ratingsupdated-input").value = text;
-                document.getElementById("ratingsupdated-input").focus();
                 document.getElementById("ratingsupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("ratingsupdated-input").style.borderWidth = "thin";
                 document.getElementById("submit-message").value = "Enter the changed rating name and 'submit'";
@@ -2809,8 +2783,6 @@ async function fonclick_any_vldt_id() {
                 fSetElement("Disable", "seriesupdated-input");
             } else {
                 fSetElement("Enable", "seriesupdated-input");
-                document.getElementById("seriesupdated-input").value = text;
-                document.getElementById("seriesupdated-input").focus();
                 document.getElementById("seriesupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("seriesupdated-input").style.borderWidth = "thin";
                 document.getElementById("submit-message").value = "Enter the changed series name and 'submit'";
@@ -2833,8 +2805,6 @@ async function fonclick_any_vldt_id() {
                 fSetElement("Disable", "sourcesupdated-input");
             } else {
                 fSetElement("Enable", "sourcesupdated-input");
-                document.getElementById("sourcesupdated-input").value = text;
-                document.getElementById("sourcesupdated-input").focus();
                 document.getElementById("sourcesupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("sourcesupdated-input").style.borderWidth = "thin";
                 document.getElementById("submit-message").value = "Enter the changed source name and 'submit'";
@@ -2857,8 +2827,6 @@ async function fonclick_any_vldt_id() {
                 fSetElement("Disable", "genresupdated-input");
             } else {
                 fSetElement("Enable", "genresupdated-input");
-                document.getElementById("genresupdated-input").value = text;
-                document.getElementById("genresupdated-input").focus();
                 document.getElementById("genresupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("genresupdated-input").style.borderWidth = "thin";
                 document.getElementById("submit-message").value = "Enter the changed genre name and 'submit'";
@@ -2881,8 +2849,6 @@ async function fonclick_any_vldt_id() {
                 fSetElement("Disable", "statusesupdated-input");
             } else {
                 fSetElement("Enable", "statusesupdated-input");
-                document.getElementById("statusesupdated-input").value = text;
-                document.getElementById("statusesupdated-input").focus();
                 document.getElementById("statusesupdated-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
                 document.getElementById("statusesupdated-input").style.borderWidth = "thin";
                 document.getElementById("submit-message").value = "Enter the changed status name and 'submit'";
@@ -3297,8 +3263,8 @@ function fEnableSubmitOnInput() {
 // function to click the submit button when Enter is clicked in an input field
 
 function fClickSubmitOnEnter() {
-      fSetElement("Enable", "submit-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "submit-button");
         document.getElementById("submit-button").click();
       }
 }
@@ -3306,8 +3272,8 @@ function fClickSubmitOnEnter() {
 // function to click the validate book button when Enter is clicked on input
 
 function fClickValidateBookOnEnter() {
-      fSetElement("Enable", "charactersvalidatebook-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "charactersvalidatebook-button");
         fonclick_chars_vldt_bk_id();
       }
 }
@@ -3315,8 +3281,8 @@ function fClickValidateBookOnEnter() {
 // function to click the validate author button when Enter is clicked on input
 
 function fClickValidateAuthorOnEnter() {
-      fSetElement("Enable", "authorsupdate-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "authorsupdate-button");
         fonclick_any_vldt_id();
       }
 }
@@ -3324,8 +3290,8 @@ function fClickValidateAuthorOnEnter() {
 // function to click the validate classification button when Enter is clicked on input
 
 function fClickValidateClassificationOnEnter() {
-      fSetElement("Enable", "classificationsupdate-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "classificationsupdate-button");
         fonclick_any_vldt_id();
       }
 }
@@ -3333,8 +3299,8 @@ function fClickValidateClassificationOnEnter() {
 // function to click the validate rating button when Enter is clicked on input
 
 function fClickValidateRatingOnEnter() {
-      fSetElement("Enable", "ratingsupdate-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "ratingsupdate-button");
         fonclick_any_vldt_id();
       }
 }
@@ -3342,8 +3308,8 @@ function fClickValidateRatingOnEnter() {
 // function to click the validate series button when Enter is clicked on input
 
 function fClickValidateSeriesOnEnter() {
-      fSetElement("Enable", "seriesupdate-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "seriesupdate-button");
         fonclick_any_vldt_id();
       }
 }
@@ -3351,8 +3317,8 @@ function fClickValidateSeriesOnEnter() {
 // function to click the validate source button when Enter is clicked on input
 
 function fClickValidateSourceOnEnter() {
-      fSetElement("Enable", "sourcesupdate-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "sourcesupdate-button");
         fonclick_any_vldt_id();
       }
 }
@@ -3360,8 +3326,8 @@ function fClickValidateSourceOnEnter() {
 // function to click the validate genre button when Enter is clicked on input
 
 function fClickValidateGenreOnEnter() {
-      fSetElement("Enable", "genresupdate-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "genresupdate-button");
         fonclick_any_vldt_id();
       }
 }
@@ -3369,8 +3335,8 @@ function fClickValidateGenreOnEnter() {
 // function to click the validate status button when Enter is clicked on input
 
 function fClickValidateStatusOnEnter() {
-      fSetElement("Enable", "statusesupdate-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "statusesupdate-button");
         fonclick_any_vldt_id();
       }
 }
@@ -3378,8 +3344,8 @@ function fClickValidateStatusOnEnter() {
 // function to click the validate character button when Enter is clicked on input
 
 function fClickValidateCharacterOnEnter() {
-      fSetElement("Enable", "charactersvalidateid-button");
       if (event.key === 'Enter') {
+        fSetElement("Enable", "charactersvalidateid-button");
         fonclick_chars_vldt_char_id();
       }
 }

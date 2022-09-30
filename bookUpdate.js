@@ -14,11 +14,12 @@
 //     09/25/2020 trouble-shoot new line and multi-record post for changes
 //     09/26/2020 change submit button to red when active
 //     09/26/2020 create functions to clean up repetitive code
+//     09/16/2022 change www.risingfast.com to gjarman2020.com
 // Enhancements:
 
 "use strict";
 
-const url1 = "http://www.risingfast.com/cgi-bin/bookUpdate.cgi";
+const url1 = "http://gjarman2020.com/cgi-bin/bookUpdate.cgi";
 
 // intialize internals division and run initial settings ------------------------------------------
 

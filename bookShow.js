@@ -9,12 +9,13 @@
 //    09/15/2020 changed choices to titles and Characters
 //    09/15/2020 changed Titles listing to show start and end dates
 //    09/16/2020 add authors option
+//    09/16/2022 change www.risingfast.com to gjarman2020.com
 // Enhancements:
 //
 
 'use strict';
 
-const uri = "http://www.risingfast.com/cgi-bin/bookShow.cgi";
+const uri = "http://gjarman2020.com/cgi-bin/bookShow.cgi";
 
 
 // function to ajax fetch text1 from the server ---------------------------------------------------
