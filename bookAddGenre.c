@@ -50,7 +50,6 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-
 // Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
@@ -62,7 +61,7 @@ int main(void) {
         printf("\n\n");
         printf("Error: %s\n", mysql_error(conn));
         printf("\n");
-        return  EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
@@ -72,9 +71,9 @@ int main(void) {
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("Query string NULL. Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating program");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
 //    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
@@ -86,7 +85,7 @@ int main(void) {
     if (sParam[0] == '\0') {
         printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating program");
         printf("\n\n");
-        return 0;
+        return EXIT_FAILURE;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
@@ -95,7 +94,7 @@ int main(void) {
     if (caGenre[0] == '\0') {
         printf("Query string \"%s\" has no genre to add, Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating program", sParam);
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
     sGenre = fUrlDecode(caGenre);
 
@@ -117,10 +116,10 @@ int main(void) {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Genre '%s' inserted into Genres table", sGenre);
 
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -6,6 +6,7 @@
  *  Log:
  *      21-Nov-2021 started by copying bookAddRating.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * 
+ *      07-Oct-2022 clean up comments and add checks for invalid QUERY_STRING values
  *  Enhancements:
 */
 
@@ -23,10 +24,10 @@
 
 // global declarations
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -44,12 +45,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -60,66 +61,74 @@ int main(void) {
         printf("\n\n");
         printf("Error: %s\n", mysql_error(conn));
         printf("\n");
-        return  EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "series=Pillages%20in%20the%20Villages", 1);
+//    setenv("QUERY_STRING", "series=Pillages%20in%20the%20Villages", 1);                  // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting  QUERY_STRING=\"series=<newseries>\". Terminating program");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
-//    return 0;
+//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
+//    printf("\n\n");                                                                      // uncomment for testing only
+//    return 0;                                                                            // uncomment for testing only
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"series=<newseries\". Terminating program");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "series=%s", caSeries);
+    if (caSeries[0] == '\0') {
+        printf("Query string \"%s\" has no series to add, Expecting QUERY_STRING=\"series=<newseries>\". Terminating program", sParam);
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
     sSeries = fUrlDecode(caSeries);
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");
         printf("No parameter string passed");
         printf("\n\n");
-        return 0;
+        return EXIT_FAILURE;
     }
 
-// set a SQL query to insert the new series ---------------------------------------------------------------------------
+// set a SQL query to insert the new series ----------------------------------------------------------------------------
 
-//    sprintf(caSQL, "SELECT BC.`Character Name` "
-//                   "FROM risingfast.`Book Characters` BC "
-//                   "WHERE BC.`Title ID` = '%d';", iTitleID);
-//
     sprintf(caSQL, "INSERT INTO risingfast.`Book Series` "
                    "(`Series Name`)  "
                    "VALUES ('%s');", sSeries);
 
-// Call the function to print the SQL results to stdout and terminate the program
+// Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
-//    printf("Query: %s", caSQL);
-//    printf("\n\n");
-//    return 0;
-
+//    printf("Query: %s", caSQL);                                                          // uncomment for testing only
+//    printf("\n\n");                                                                      // uncomment for testing only
+//    return 0;                                                                            // uncomment for testing only
 
     if(mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Series '%s' inserted into Series table", sSeries);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
