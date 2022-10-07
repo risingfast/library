@@ -6,6 +6,7 @@
  *  Log:
  *      19-Nov-2021 started by copying bookAddClassification.c and modifying
  *      14-Sep-2022 added Access-Control-Allow-Headers: *
+ *      07-Oct-2022 test for invalid QUERY_STRING environment variables
  *  Enhancements:
  *      Add rating value to update
 */
