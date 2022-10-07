@@ -8,6 +8,7 @@
  *      14-Sep-2022 add Access-Control-Allow-Origin: * HTTP header
  *      21-Sep-2022 add check for null string for classification name
  *      21-Sep-2022 add check for empty string for classification name
+ *      06-Oct-2022 validate QUERY_STRING parameters
  *  Enhancements:
 */
 
@@ -46,12 +47,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database$ ----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -65,32 +66,39 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// Format of QUERY_STRING parsed for the claassification name
+// Format of QUERY_STRING parsed for the claassification name ----------------------------------------------------------
 
-//    setenv("QUERY_STRING", "classification=Comedies%20and%20Comics", 1);
+//    setenv("QUERY_STRING", "classification=Comedies%20and%20Comics", 1);                 // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
     if(sParam == NULL) {
-        printf("Query string identifying classification does not exist. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"classification=<clasfn>\". 1 Terminating program");
+        printf("\n\n");
         return 1;
     }
 
-// check for an empty query string
+// check for an empty query string -------------------------------------------------------------------------------------
 
-    if (strcmp(sParam, "") == 0) {
-        printf("Query string identifying the classification is empty. Expecting QUERY_STRING=\"classification=Classname\". Terminating program");
+    if (sParam[0] == 0) {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"classification=<clsfn>\". Terminating program");
+        printf("\n\n");
         return 1;
     }
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "classification=%s", caClassification);
     sClassification = fUrlDecode(caClassification);
+    if (caClassification[0] == '\0') {
+         printf("Query string \"%s\" has no classification, Expecting QUERY_STRING=\"classification=<clsfn>\". Terminating program", sParam);
+         printf("\n\n");
+         return 1;
+    }
 
-// set a SQL query to insert the new classification -------------------------------------------------------------------
+// set a SQL query to insert the new classification --------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Classifications` "
                    "(`Classification Name`)  "

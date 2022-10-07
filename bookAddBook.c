@@ -11,7 +11,8 @@
  *      14-Sep-2022 add Access-Control-Allow-Origin HTTP header
  *      21-Sep-2022 add check for empty QUERY_STRRING
  *      21-Sep-2022 add check for missing book name in the QUERY_STRING
- *      21-Sep=2022 add a test for a NULL QUERY__STRING
+ *      21-Sep=2022 add a test for a NULL QUERY_STRING
+ *      06-Oct=2022 add tests for invalid parameters in QUERY_STRING
  *  Enhancements:
 */
 
@@ -28,10 +29,10 @@
 
 // global declarations
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -39,6 +40,7 @@ MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
 char *sParam = NULL;
+char sParamOrig[300] = {'\0'};
 char *sCharacter = NULL;
 char *sCharacterName = NULL;
 char caCharacterName[MAXLEN] = {'\0'};
@@ -95,9 +97,9 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// Format of QUERY_STRING parsed for book information
+// Format of QUERY_STRING parsed for book information ------------------------------------------------------------------
 /*
-    setenv("QUERY_STRING", "bookName=Test%20Title
+    setenv("QUERY_STRING", "bookName=Test%20Title                                          // uncomment for testing only
                             &authorId=107
                             &sourceId=2
                             &seriesId=82
@@ -117,18 +119,20 @@ int main(void) {
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
     if (sParam == NULL) {
-        printf("QUERY_STRING identifying the book does not exist. Terminating program");
+        printf("QUERY_STRING is NULL. Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". Terminating program");
         return 1;
     }
 
 // check for an empty query string -------------------------------------------------------------------------------------
 
-    if(strcmp(sParam, "") == 0) {
+    if(sParam[0] == '\0') {
         printf("\n");
-        printf("Query string identifying the book is empty. Expecting QUERY_STRING=\"bookName=... etc\" Terminating program");
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". Terminating program");
         printf("\n\n");
         return 1;
     }
+
+    strcpy(sParamOrig, sParam);                                                                 // make a copy of sParam
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
@@ -136,31 +140,67 @@ int main(void) {
 
     sscanf(sTemp, "bookName=%[^\n]s", caNameBuf);
     if (caNameBuf[0] == '\0') {
-        printf("Query string has no book name. i.e. \"bookName=''\". Expecting QUERY_STRING=\"bookName=bookTitle...\". Terminating program");
+        printf("Query string \"%s\"has no book name. Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". Terminating program", sParamOrig);
+        printf("\n\n");
         return 1;
     }
     strcpy(caBookName, fUrlDecode(caNameBuf));
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "authorId=%d", &iAuthorID);
+    if (iAuthorID == 0) {
+        printf("Query string \"%s\" has no authorId. Terminating program", sParamOrig);
+        printf("\n\n");
+        return 1;
+    }
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "sourceId=%d", &iSourceID);
+    if (iSourceID == 0) {
+        printf("Query string \"%s\" has no sourceId. Terminating program", sParamOrig);
+        printf("\n\n");
+        return 1;
+    }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "seriesId=%d", &iSeriesID);
+    if (iAuthorID == 0) {
+        printf("Query string \"%s\" has no auhorId. Terminating program", sParamOrig);
+        printf("\n\n");
+        return 1;
+    }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "genreId=%d", &iGenreID);
+    if (iGenreID == 0) {
+        printf("Query string \"%s\" has no genreId. Terminating program", sParamOrig);
+        printf("\n\n");
+        return 1;
+    }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "statusId=%d", &iStatusID);
+    if (iStatusID == 0) {
+        printf("Query string \"%s\" has no statusId. Terminating program", sParamOrig);
+        printf("\n\n");
+        return 1;
+    }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "clsfnId=%d", &iClsfnID);
+    if (iClsfnID == 0) {
+        printf("Query string \"%s\" has no clsfnId. Terminating program", sParamOrig);
+        printf("\n\n");
+        return 1;
+    }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "ratingId=%d", &iRatingID);
+    if (iRatingID == 0) {
+        printf("Query string \"%s\" has no ratingId. Terminating program", sParamOrig);
+        printf("\n\n");
+        return 1;
+    }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "startDte=%[^\n]s", caStartDte);
@@ -196,7 +236,7 @@ int main(void) {
     }
     strcpy(caCmnts, fUrlDecode(caCmntsQuoted));
 
-// set a SQL query to insert the new book title -----------------------------------------------------------------------
+// set a SQL query to insert the new book title ------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Titles` "
                    "(`Title Name`, `Author ID`, `Source ID`, `Series ID`, `Genre ID`, `Status ID`, `Classification ID`, `Rating ID`, Start, Finish, Abstract, Comments)  "
@@ -214,7 +254,7 @@ int main(void) {
                    "FROM risingfast.`Book Titles` BT "
                    "WHERE BT.`Title Name` = '%s';", caBookName);
 
-//    int iColCount = 0;
+//    int iColCount = 0;                                                                   // uncomment for testing only
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -224,7 +264,7 @@ int main(void) {
         return -1;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -236,13 +276,13 @@ int main(void) {
         return -1;
     }
 
-// fetch the number of fields in the result
+// fetch the number of fields in the result ----------------------------------------------------------------------------
 
-//    iColCount = mysql_num_fields(res);
+//    iColCount = mysql_num_fields(res);                                                    // uncomment for testig only
 
     mysql_data_seek(res, 0);
 
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
     if(row = mysql_fetch_row(res))
     {

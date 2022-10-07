@@ -9,7 +9,8 @@
  *      20-Sep-2022 add prompt for parameter if no parameter given
  *      21-Sep-2022 add a test for a NULL QUERY_STRING
  *      21-Sep-2022 fix test for empty QUERY_STRING
- *      21-Sep-2022 fix test for parameterless QUERY_STRING
+ *      21-Sep-2022 fix test for parameter-less QUERY_STRING
+ *      06-Oct-2022 extend validity checking for QUERY_STRING
 
  *  Enhancements:
 */
@@ -77,16 +78,23 @@ int main(void) {
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
+//    if (sParam == NULL) {
+//        printf("QUERY_STRING identifying the author does not exist. Terminating program");
+//        return 1;
+//    }
+
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
     if (sParam == NULL) {
-        printf("QUERY_STRING identifying the author does not exist. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating program");
+        printf("\n\n");
         return 1;
     }
 
-// check for an empty query string -------------------------------------------------------------------------------------
+// check for an empty (non-NULL) query string --------------------------------------------------------------------------
 
-    if (strcmp(sParam, "") == 0) {
-        printf("\n");
-        printf("Query string identifying the author is empty. Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating program");
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating program");
         printf("\n\n");
         return 1;
     }
@@ -96,7 +104,8 @@ int main(void) {
     sscanf(sParam, "author=%s", caAuthor);
     
     if (caAuthor[0] == '\0') {
-        printf("Query string has no author name, ie. \"author=''\". Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating program");
+        printf("Query string \"%sm\" has no author name. Expecting QUERY_STRING=\"author=Firstname Lastname\". Terminating program", sParam);
+        printf("\n\n");
         return 1;
     }
     sAuthor = fUrlDecode(caAuthor);

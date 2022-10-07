@@ -7,6 +7,7 @@
  *      03-Dec-2021 start by copying bookAddAuthor.c and modifying
  *      04-Dec-2021 add fUrlDecodee to the character name
  *      14-Sep-2022 add Access-Control-Allow-Origin * HTTP header
+ *      06-Oct-2022 check QUERY_STRING for NULL, empty and invalid values
  *  Enhancements:
 */
 
@@ -22,7 +23,7 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations ------------------------------------------------------------------------------------------------
 
 char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
 char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
@@ -35,6 +36,7 @@ MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
 char *sParam = NULL;
+char sParamOrig[300] = {'\0'};
 char *sCharacter = NULL;
 char *sCharacterName = NULL;
 char caCharacterName[MAXLEN] = {'\0'};
@@ -67,12 +69,11 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
+// Format of QUERY_STRING parsed for character name --------------------------------------------------------------------
 
-// Format of QUERY_STRING parsed for character name
+//    setenv("QUERY_STRING", "TitleID=89&CharacterName=Dummy%20Test", 1);                  // uncomment for testing only
 
-//    setenv("QUERY_STRING", "TitleID=89&CharacterName=Dummy%20Test", 1);
-
-// Fetch the QUERY_STRING environment variable parameter string
+// Fetch the QUERY_STRING environment variable parameter string --------------------------------------------------------
 
     sParam = getenv("QUERY_STRING");
 
@@ -80,35 +81,38 @@ int main(void) {
 
     if (sParam == NULL) {
         printf("\n");
-        printf("QUERY_STRING identifying the character does not exist. Terminating program");
+        printf("QUERY_STRING is NULL. Expecting QUERY_STRING=\"TitleID=<Number>&CharacterName=<Character Name>\". Terminating program");
         printf("\n\n");
         return 1;
     }
 
-// Check for an empty query string -------------------------------------------------------------------------------------
+// Check for an empty query (non-Null) string --------------------------------------------------------------------------
 
-    if (strcmp(sParam, "") == 0) {
-        printf("Query string identifying the character is empty. Expecting QUERY_STRING=\"TitleID=Number&CharacterName=New%%20Character\". Terminating program");
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"TitleID=<Number>&CharacterName=<Character Name>\". Terminating program");
         return 1;
     }
+
+    strcpy(sParamOrig, sParam);                                                          // preserve the value of sParam
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sTitleID = strtok(sParam, caDelimiter);
     sscanf(sTitleID, "TitleID=%d", &iTitleID);
+    if (iTitleID == 0) {
+         printf("Query string \"%s\" has no TitleID. Expecting QUERY_STRING=\"TitleID=<number>&CharacterName=<Character Name>\". Terminating program", sParamOrig);
+         printf("\n\n");
+         return 1;
+    }
 
     sCharacter = strtok(NULL, caDelimiter);
     sscanf(sCharacter, "CharacterName=%s", caCharacterName);
-    sCharacter = fUrlDecode(caCharacterName);
-
-// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
+    if (caCharacterName[0] == '\0') {
+         printf("Query string \"%s\" has no CharacterName. Expecting QUERY_STRING=\"TitleID=<number>&CharacterName=<Character Name>\". Terminating program", sParamOrig);
+         printf("\n\n");
+         return 1;
     }
+    sCharacter = fUrlDecode(caCharacterName);
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
@@ -116,10 +120,10 @@ int main(void) {
                    "(`Character Name`, `Title ID`)  "
                    "VALUES ('%s', %d);", sCharacter, iTitleID);
 
-// Call the function to print the SQL results to stdout and terminate the program
+// Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
-//    printf("Query: %s", caSQL);
-//    printf("\n\n");
+//    printf("Query: %s", caSQL);                                                          // uncomment for testing only
+//    printf("\n\n");                                                                      // uncomment for testing only
 
 
     if(mysql_query(conn, caSQL) != 0)

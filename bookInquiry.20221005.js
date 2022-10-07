@@ -2,7 +2,7 @@
 // Author: Geoff Jarman
 // Started: 01-Nov-2021
 // Log:
-//    01-Nov-2021 started
+//    01-Nov-2021 started x
 //    04-Nov-2-21 add a Book option
 //    05-Nov-2021 add fGetBookDetails function
 //    06-Nov-2021 add context to Books form modes
@@ -72,8 +72,6 @@
 //    09-Sep-2022 remove fPrintBook() as no longer needed
 //    16-Sep-2022 change www.risingfast.com to gjarman2020.com
 //    22-Sep-2022 disable the submit button before adding a book
-//    05-Oct-2022 - remove fClickSubmitOnEnter() function
-//    05-Oct-2022 - remove fEnableSubmitIfNotNull() function
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -590,6 +588,7 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "modesquery-button");
             fSetElement("Disable", "charactersupdatename-input");
             fSetElement("Disable", "charactersupdatedname-input");
+//            fSetElement("Disable", "chars:vldt-char-id");
             fSetElement("Unhide", "charactersupdate-div");
             fSetElement("Clear", "charactersupdateid-input");
             fSetElement("Clear", "charactersupdatename-input");
@@ -1795,6 +1794,7 @@ async function fonclick_chars_vldt_bk_id() {
             fonclick_submit_submit();
         } else if (document.getElementById("mode-label").innerHTML == "add mode") {
             fSetElement("Unhide", "charactersadd-div");
+//            fSetElement("Enable", "submit-button");
             fSetElement("Enable", "charactersfilter-input");
             fSetElement("Enable", "charactersadd-input");
             fSetElement("Hide", "charactersfilter-div");
@@ -2125,6 +2125,60 @@ function fEnableSubmitButton01(titleId) {
     }
 }
 
+// function to enable the validate or submit buttons if an entered book ID is a valid format ...........................
+
+function fonKeyUp_chars_book_id() {
+
+    if (document.getElementById("mode-label").innerHTML === "add mode") {
+        iBookId = document.getElementById("charactersbookid-input").value;
+        document.getElementById("charactersbooktitle-input").value = '';
+        if (iBookId === '') {
+            fSetElement("Disable", "charactersvalidatebook-button");
+            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+        } else if(isNaN(iBookId) === false){
+            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(189,245,189)";     // pale green color
+            fSetElement("Enable", "charactersvalidatebook-button");
+        } else {
+            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255, 204, 203)";    // light red color
+            fSetElement("Disable", "charactersvalidatebook-button");
+        }
+    } else if (document.getElementById("mode-label").innerHTML === "fetch mode") {
+        iBookId = document.getElementById("charactersbookid-input").value;
+        document.getElementById("charactersbooktitle-input").value = '';
+        fSetElement("Disable", "charactersadd-input");
+        if (iBookId === '') {
+            fSetElement("Disable", "charactersvalidatebook-button");
+            fSetElement("Disable", "submit-button");
+            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+        } else if(isNaN(iBookId) === false){
+            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(189,245,189)";     // pale green color
+            fSetElement("Enable", "charactersvalidatebook-button");
+            fSetElement("Disable", "submit-button");
+        } else {
+            document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255, 204, 203)";    // light red color
+            fSetElement("Disable", "charactersvalidatebook-button");
+            fSetElement("Disable", "submit-button");
+        }
+    }
+}
+
+// function to enable the validate or submit buttons if an entered book ID is a valid format ...........................
+
+function fonKeyUp_chars_add_name() {
+
+    if (document.getElementById("mode-label").innerHTML === "add mode") {
+        iBookId = document.getElementById("charactersbookid-input").value;
+        fSetElement("Disable", "charactersbooktitle-input");
+        let sCharToAdd = document.getElementById("charactersadd-input");
+        if (sCharToAdd === '') {
+            fSetElement("Disable", "submit-button");
+            document.getElementById("charactersadd-input").style.backgroundColor = "rgb(255,255,224)";         //light yellow
+        } else {
+            fSetElement("Enable", "submit-button");
+        }
+    }
+}
+
 // function to enable the submit button when a classification is changed ...............................................
 
 function fonKeyUp_class_updtd_name() {
@@ -2136,6 +2190,109 @@ function fonKeyUp_class_updtd_name() {
         fSetElement("Disable", "submit-button");
     }
     ;
+}
+
+// function to enable the submit button when a changed rating is entered ...............................................
+
+function fonKeyUp_rating_updtd_name() {
+    let sUpdtdRating = document.getElementById("ratingsupdated-input").value;
+    if (sUpdtdRating != '') {
+        fSetElement("Enable", "submit-button");
+    } else {
+        fSetElement("Disable", "submit-button");
+    }
+}
+
+// function to enable the submit button when a changed series is entered ...............................................
+
+function fonKeyUp_series_updtd_name() {
+    let sUpdtdSeries = document.getElementById("seriesupdated-input").value;
+    if (sUpdtdSeries != '') {
+        fSetElement("Enable", "submit-button");
+    } else {
+        fSetElement("Disable", "submit-button");
+    }
+}
+
+// function to enable the submit button when a changed source is entered ...............................................
+
+function fonKeyUp_sources_updtd_name() {
+    let sUpdtdSource = document.getElementById("sourcesupdated-input").value;
+    if (sUpdtdSource != '') {
+        fSetElement("Enable", "submit-button");
+    } else {
+        fSetElement("Disable", "submit-button");
+    }
+}
+
+// function to enable the submit button when a changed genre is entered ................................................
+
+function fonKeyUp_genres_updtd_name() {
+    let sUpdtChar = document.getElementById("genresupdated-input").value;
+    if (sUpdtChar != '') {
+        fSetElement("Enable", "submit-button");
+    } else {
+        fSetElement("Disable", "submit-button");
+    }
+}
+
+// function to enable the submit button when a changed status is entered ...............................................
+
+function fonKeyUp_statuses_updtd_name() {
+    let sUpdtChar = document.getElementById("statusesupdated-input").value;
+    if (sUpdtChar != '') {
+        fSetElement("Enable", "submit-button");
+    } else {
+        fSetElement("Disable", "submit-button");
+    }
+}
+
+// function to enable the submit button if an entered character ID is a valid format ...................................
+
+function fonKeyUp_chars_del_id() {
+
+    if (document.getElementById("mode-label").innerHTML === "delete mode") {
+        iCharId = document.getElementById("charactersdeleteid-input").value;
+        if (iCharId === '') {
+            fSetElement("Disable", "submit-button");
+            document.getElementById("charactersdeleteid-input").style.backgroundColor = "rgb(255,255,224)";          // light yellow
+        } else if (isNaN(iCharId) === true) {
+            document.getElementById("charactersdeleteid-input").style.backgroundColor = "rgb(255, 204, 203)";           // light red
+        } else {
+            fSetElement("Enable", "submit-button");
+            document.getElementById("charactersdeleteid-input").style.backgroundColor = "rgb(189,245,189)";            // pale green
+        }
+    }
+}
+
+// function to enable the submit button when a changed author is entered ...............................................
+
+function fonKeyUp_author_updtd_name() {
+
+    let sUpdtdClass = document.getElementById("authorsupdated-input").value;
+    if (sUpdtdClass != '') {
+        fSetElement("Enable", "submit-button");
+    } else {
+        fSetElement("Disable", "submit-button");
+    }
+}
+
+// function to enable the submit button if an entered classification ID is a valid format ..............................
+
+function fonKeyUp_author_del_id() {
+
+    if (document.getElementById("mode-label").innerHTML === "delete mode") {
+        iClassId = document.getElementById("authorsdelete-input").value;
+        if (iClassId === '') {
+            fSetElement("Disable", "submit-button");
+            document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
+        } else if (isNaN(iClassId) === true) {
+            document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(255, 204, 203)";         // light red
+        } else {
+            fSetElement("Enable", "submit-button");
+            document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(189,245,189)";          // pale green
+        }
+    }
 }
 
 // function to enable the submit button if an entered classification ID is a valid format ..............................
@@ -2152,6 +2309,96 @@ function fonKeyUp_class_del_id() {
         } else {
             fSetElement("Enable", "submit-button");
             document.getElementById("classificationsdelete-input").style.backgroundColor = "rgb(189,245,189)";            // pale green
+        }
+    }
+}
+
+// function to enable the submit button if an entered rating ID (for deletion) is a valid format .......................
+
+function fonKeyUp_ratings_del_id() {
+
+    if (document.getElementById("mode-label").innerHTML === "delete mode") {
+        iRatingId = document.getElementById("ratingsdelete-input").value;
+        if (iRatingId === '') {
+            fSetElement("Disable", "submit-button");
+            document.getElementById("ratingsdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
+        } else if (isNaN(iRatingId) === true) {
+            document.getElementById("ratingsdelete-input").style.backgroundColor = "rgb(255, 204, 203)";         // light red
+        } else {
+            fSetElement("Enable", "submit-button");
+            document.getElementById("ratingsdelete-input").style.backgroundColor = "rgb(189,245,189)";          // pale green
+        }
+    }
+}
+
+// function to enable the submit button if an entered series ID is a valid format ......................................
+
+function fonKeyUp_series_del_id() {
+
+    if (document.getElementById("mode-label").innerHTML === "delete mode") {
+        iSeriesId = document.getElementById("seriesdelete-input").value;
+        if (iSeriesId === '') {
+            fSetElement("Disable", "submit-button");
+            document.getElementById("seriesdelete-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+        } else if (isNaN(iSeriesId) === true) {
+            document.getElementById("seriesdelete-input").style.backgroundColor = "rgb(255, 204, 203)";          // light red
+        } else {
+            fSetElement("Enable", "submit-button");
+            document.getElementById("seriesdelete-input").style.backgroundColor = "rgb(189,245,189)";           // pale green
+        }
+    }
+}
+
+// function to enable the submit button if an entered source ID is a valid format ......................................
+
+function fonKeyUp_sources_del_id() {
+
+    if (document.getElementById("mode-label").innerHTML === "delete mode") {
+        iSourceId = document.getElementById("sourcesdelete-input").value;
+        if (iSourceId === '') {
+            fSetElement("Disable", "submit-button");
+            document.getElementById("sourcesdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
+        } else if (isNaN(iSourceId) === true) {
+            document.getElementById("sourcesdelete-input").style.backgroundColor = "rgb(255, 204, 203)";         // light red
+        } else {
+            fSetElement("Enable", "submit-button");
+            document.getElementById("sourcesdelete-input").style.backgroundColor = "rgb(189,245,189)";          // pale green
+        }
+    }
+}
+
+// function to enable the submit button if an entered genre ID is a valid format .......................................
+
+function fonKeyUp_genres_del_id() {
+
+    if (document.getElementById("mode-label").innerHTML === "delete mode") {
+        iGenreId = document.getElementById("genresdelete-input").value;
+        if (iGenreId === '') {
+            fSetElement("Disable", "submit-button");
+            document.getElementById("genresdelete-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+        } else if (isNaN(iGenreId) === true) {
+            document.getElementById("genresdelete-input").style.backgroundColor = "rgb(255, 204, 203)";          // light red
+        } else {
+            fSetElement("Enable", "submit-button");
+            document.getElementById("genresdelete-input").style.backgroundColor = "rgb(189,245,189)";           // pale green
+        }
+    }
+}
+
+// function to enable the submit button if an entered status ID is a valid format ......................................
+
+function fonKeyUp_statuses_del_id() {
+
+    if (document.getElementById("mode-label").innerHTML === "delete mode") {
+        iStatusId = document.getElementById("statusesdelete-input").value;
+        if (iStatusId === '') {
+            fSetElement("Disable", "submit-button");
+            document.getElementById("statusesdelete-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+        } else if (isNaN(iStatusId) === true) {
+            document.getElementById("statusesdelete-input").style.backgroundColor = "rgb(255, 204, 203)";          // light red
+        } else {
+            fSetElement("Enable", "submit-button");
+            document.getElementById("statusesdelete-input").style.backgroundColor = "rgb(189,245,189)";           // pale green
         }
     }
 }
@@ -2277,6 +2524,18 @@ function fDisableModeButton(sButton) {
     b.disabled = true;
 }
 
+// fEnableSubmitIfNotNull() - function to enable the submit button if a field is not empty .............................
+
+function fEnableSubmitIfNotNull(sElementId) {
+
+    let elementId = document.getElementById(sElementId);
+    if (elementId.value != '') {
+        fSetElement("Enable", "submit-button");
+    } else {
+        fSetElement("Disable", "submit-button");
+    }
+}
+
 // fClearBookElements() - function to clear all elements in books:div ..................................................
 
 function fClearBookDivElements() {
@@ -2287,6 +2546,182 @@ function fClearBookDivElements() {
                        , "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea"];
     for(let i = 0; i < arrayOfClears.length; i++) {
         fSetElement("Clear", arrayOfClears[i]);
+    }
+}
+
+// function to enable the validate button if an entered ID is a valid format for validating an update .................
+
+function fonKeyUp_any_updt_id() {
+
+    if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "characters")) {
+        iBookId = document.getElementById("charactersbookid-input").value;
+        let iCharToAdd = document.getElementById("charactersupdateid-input").value;
+        if (iCharToAdd === '') {
+            document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(255,255,224)";          //light yellow
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "charactersupdatename-input");
+            fSetElement("Disable", "charactersupdatedname-input");
+            fSetElement("Disable", "charactersvalidateid-button");
+        } else if (isNaN(iCharToAdd) === true) {
+            document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";          // light red
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "charactersupdatename-input");
+            fSetElement("Disable", "charactersupdatedname-input");
+            fSetElement("Disable", "charactersvalidateid-button");
+        } else {
+            document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(189,245,189)";           // pale green
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "charactersupdatename-input");
+            fSetElement("Disable", "charactersupdatedname-input");
+            fSetElement("Enable", "charactersvalidateid-button");
+        }
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "authors")) {
+        iAuthorId = document.getElementById("authorsupdateid-input").value;
+        if (iAuthorId === '') {
+            document.getElementById("authorsupdateid-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "authorsupdatename-input");
+            fSetElement("Disable", "authorsupdated-input");
+            fSetElement("Disable", "authorsupdate-button");
+        } else if (isNaN(iAuthorId) === true) {
+            document.getElementById("authorsupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";        // light red
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "authorsupdatename-input");
+            fSetElement("Disable", "authorsupdated-input");
+            fSetElement("Disable", "authorsupdate-button");
+        } else {
+            document.getElementById("authorsupdateid-input").style.backgroundColor = "rgb(189,245,189)";         // pale green
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "authorsupdatename-input");
+            fSetElement("Disable", "authorsupdated-input");
+            fSetElement("Enable", "authorsupdate-button");
+        }
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "classifications")) {
+        iClassId = document.getElementById("classificationsupdateid-input").value;
+        if (iClassId === '') {
+            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "classificationsupdatename-input");
+            fSetElement("Disable", "classificationsupdated-input");
+            fSetElement("Disable", "classificationsupdate-button");
+        } else if (isNaN(iClassId) === true) {
+            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";          // light red
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "classificationsupdatename-input");
+            fSetElement("Disable", "classificationsupdated-input");
+            fSetElement("Disable", "classificationsupdate-button");
+        } else {
+            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(189,245,189)";           // pale green
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "classificationsupdatename-input");
+            fSetElement("Disable", "classificationsupdated-input");
+            fSetElement("Enable", "classificationsupdate-button");
+        }
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "ratings")) {
+        iRatingId = document.getElementById("ratingsupdateid-input").value;
+        if (iRatingId === '') {
+            document.getElementById("ratingsupdateid-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "ratingsupdatename-input");
+            fSetElement("Disable", "ratingsupdated-input");
+            fSetElement("Disable", "ratingsupdate-button");
+        } else if (isNaN(iRatingId) === true) {
+            document.getElementById("ratingsupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";        // light red
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "ratingsupdatename-input");
+            fSetElement("Disable", "ratingsupdated-input");
+            fSetElement("Disable", "ratingsupdate-button");
+        } else {
+            document.getElementById("ratingsupdateid-input").style.backgroundColor = "rgb(189,245,189)";         // pale green
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "ratingsupdatename-input");
+            fSetElement("Disable", "ratingsupdated-input");
+            fSetElement("Enable", "ratingsupdate-button");
+        }
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "series")) {
+        iSeriesId = document.getElementById("seriesupdateid-input").value;
+        if (iSeriesId === '') {
+            document.getElementById("seriesupdateid-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "seriesupdatename-input");
+            fSetElement("Disable", "seriesupdated-input");
+            fSetElement("Disable", "seriesupdate-button");
+        } else if (isNaN(iSeriesId) === true) {
+            document.getElementById("seriesupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";         // light red
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "seriesupdatename-input");
+            fSetElement("Disable", "seriesupdated-input");
+            fSetElement("Disable", "seriesupdate-button");
+        } else {
+            document.getElementById("seriesupdateid-input").style.backgroundColor = "rgb(189,245,189)";          // pale green
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "seriesupdatename-input");
+            fSetElement("Disable", "seriesupdated-input");
+            fSetElement("Enable", "seriesupdate-button");
+        }
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "sources")) {
+        iSourceId = document.getElementById("sourcesupdateid-input").value;
+        if (iSourceId === '') {
+            document.getElementById("sourcesupdateid-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "sourcesupdatename-input");
+            fSetElement("Disable", "sourcesupdated-input");
+            fSetElement("Disable", "sourcesupdate-button");
+        } else if (isNaN(iSourceId) === true) {
+            document.getElementById("sourcesupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";        // light red
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "sourcesupdatename-input");
+            fSetElement("Disable", "sourcesupdated-input");
+            fSetElement("Disable", "sourcesupdate-button");
+        } else {
+            document.getElementById("sourcesupdateid-input").style.backgroundColor = "rgb(189,245,189)";         // pale green
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "sourcesupdatename-input");
+            fSetElement("Disable", "sourcesupdated-input");
+            fSetElement("Enable", "sourcesupdate-button");
+        }
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "genres")) {
+        iGenreId = document.getElementById("genresupdateid-input").value;
+        if (iGenreId === '') {
+            document.getElementById("genresupdateid-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "genresupdatename-input");
+            fSetElement("Disable", "genresupdated-input");
+            fSetElement("Disable", "genresupdate-button");
+        } else if (isNaN(iGenreId) === true) {
+            document.getElementById("genresupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";         // light red
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "genresupdatename-input");
+            fSetElement("Disable", "genresupdated-input");
+            fSetElement("Disable", "genresupdate-button");
+        } else {
+            document.getElementById("genresupdateid-input").style.backgroundColor = "rgb(189,245,189)";          // pale green
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "genresupdatename-input");
+            fSetElement("Disable", "genresupdated-input");
+            fSetElement("Enable", "genresupdate-button");
+        }
+    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "statuses")) {
+        iStatusId = document.getElementById("statusesupdateid-input").value;
+        if (iStatusId === '') {
+            document.getElementById("statusesupdateid-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "statusesupdatename-input");
+            fSetElement("Disable", "statusesupdated-input");
+            fSetElement("Disable", "statusesupdate-button");
+        } else if (isNaN(iStatusId) === true) {
+            document.getElementById("statusesupdateid-input").style.backgroundColor = "rgb(255, 204, 203)";       // light red
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "statusesupdatename-input");
+            fSetElement("Disable", "statusesupdated-input");
+            fSetElement("Disable", "statusesupdate-button");
+        } else {
+            document.getElementById("statusesupdateid-input").style.backgroundColor = "rgb(189,245,189)";        // pale green
+            fSetElement("Disable", "submit-button");
+            fSetElement("Disable", "statusesupdatename-input");
+            fSetElement("Disable", "statusesupdated-input");
+            fSetElement("Enable", "statusesupdate-button");
+        }
     }
 }
 
@@ -2821,6 +3256,10 @@ async function fFetchTopicList(sInputFilter, sTextAreaResults) {
     } else {
         alert("HttpError: " + response.status);
     }
+}
+
+function fSetFocusOnSubmit() {
+    document.getElementById("submit-button").focus();
 }
 
 function fPrintBookText() {

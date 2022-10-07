@@ -8,7 +8,6 @@
  *      04-Dec-2021 add the character id to output
  *      26-Dec-2021 add filter to characters
  *      14-Sep-2022 add Access-Control-Allow-Origin: * in http headers
- *      05-Oct-2022 add Add Character ID to filter in SQL query
  *  Enhancements:
 */
 
@@ -72,7 +71,7 @@ int main(void) {
 
 // check for a NULL query string --------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "TitleID=190&Filter=''", 1);
+//    setenv("QUERY_STRING", "TitleID=117&Filter=''", 1);
 
     sParams = getenv("QUERY_STRING");
 
@@ -121,7 +120,7 @@ int main(void) {
     sprintf(caSQL, "SELECT BC.`Character ID`, BC.`Character Name` "
                    "FROM risingfast.`Book Characters` BC "
                    "WHERE BC.`Title ID` = '%d' "
-                   "AND CONCAT(BC.`Character ID`, BC.`Character Name`) like '%s';", iTitleID, sFilter);
+                   "AND BC.`Character Name` like '%s';", iTitleID, sFilter);
 
 //    printf("\n%s\n", caSQL);
 
