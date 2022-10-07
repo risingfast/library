@@ -6,7 +6,7 @@
  *  Log:
  *      21-Nov-2021 started by copying bookAddSource.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * HTTP header
- *      06-Pct-2022 check for invalid QUERY_STRING enviroment variable
+ *      06-Pct-2022 check for invalid QUERY_STRING enviroment variable value
  *  Enhancements:
 */
 
@@ -77,8 +77,8 @@ int main(void) {
     }
 
 //    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
-//    printf("\n\n");
-//    return 0;
+//    printf("\n\n");                                                                      // uncomment for testing only
+//    return 0;                                                                            // uncomment for testing only
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
@@ -96,6 +96,7 @@ int main(void) {
         printf("\n\n");
         return EXIT_FAILURE;
     }
+
     sGenre = fUrlDecode(caGenre);
 
 // set a SQL query to insert the new genre -----------------------------------------------------------------------------
