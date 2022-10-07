@@ -46,12 +46,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and CORS headers ----------------------------------------------------------------------
+// print the html content type and CORS headers ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -65,9 +65,9 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "rating=Terrible and Awful", 1);
+//    setenv("QUERY_STRING", "rating=Terrible and Awful", 1);                              // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
@@ -78,16 +78,16 @@ int main(void) {
         return 1;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
-//    return 0;
+//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
+//    printf("\n\n");                                                                      // uncomment for testing only
+//    return 0;                                                                            // uncomment for testing only
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "rating=%s", caRating);
     sRating = fUrlDecode(caRating);
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");
@@ -98,19 +98,15 @@ int main(void) {
 
 // set a SQL query to insert the new rating ----------------------------------------------------------------------------
 
-//    sprintf(caSQL, "SELECT BC.`Character Name` "
-//                   "FROM risingfast.`Book Characters` BC "
-//                   "WHERE BC.`Title ID` = '%d';", iTitleID);
-//
     sprintf(caSQL, "INSERT INTO risingfast.`Book Ratings` "
                    "(`Rating Name`, `Rating Value`)  "
                    "VALUES ('%s', 0);", sRating);
 
-// Call the function to print the SQL results to stdout and terminate the program
+// Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
-//    printf("Query: %s", caSQL);
-//    printf("\n\n");
-//    return 0;
+//    printf("Query: %s", caSQL);                                                          // uncomment for testing only
+//    printf("\n\n");                                                                      // uncomment for testing only
+//    return 0;                                                                            // uncomment for testing only
 
 
     if(mysql_query(conn, caSQL) != 0)
