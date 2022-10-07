@@ -6,7 +6,7 @@
  *  Log:
  *      19-Nov-2021 started by copying bookAddClassification.c and modifying
  *      14-Sep-2022 added Access-Control-Allow-Headers: *
- *      07-Oct-2022 test for invalid QUERY_STRING environment variables
+ *      07-Oct-2022 add tests for invalid QUERY_STRING environment variables
  *  Enhancements:
  *      Add rating value to update
 */
@@ -72,8 +72,7 @@ int main(void) {
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"rating=<newrating>\". Terminating program");
         printf("\n\n");
         return 1;
     }
@@ -82,19 +81,23 @@ int main(void) {
 //    printf("\n\n");                                                                      // uncomment for testing only
 //    return 0;                                                                            // uncomment for testing only
 
-//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
-
-    sscanf(sParam, "rating=%s", caRating);
-    sRating = fUrlDecode(caRating);
-
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL).  Expecting QUERY_STRING=\"rating=<newrating>\". Terminating program");
         printf("\n\n");
         return 0;
     }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
+
+    sscanf(sParam, "rating=%s", caRating);
+    if (caRating[0] == '\0') {
+        printf("Query string \"%s\" has no rating to add, Expecting QUERY_STRING=\"rating=<newrating>\". Terminating program", sParam);
+        printf("\n\n");
+        return 1;
+    }
+    sRating = fUrlDecode(caRating);
 
 // set a SQL query to insert the new rating ----------------------------------------------------------------------------
 
