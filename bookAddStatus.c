@@ -22,12 +22,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -45,12 +45,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -60,63 +60,59 @@ int main(void) {
         printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
         printf("\n\n");
         printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "status=Test%20Status", 1);
+//    setenv("QUERY_STRING", "status=Test%20Status", 1);                                   // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
         printf("\n");
         printf("Query string is empty. Terminating program");
-        printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
-//    return 0;
+//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
+//    printf("\n\n");                                                                      // uncomment for testing only
+//    return 0;                                                                            // uncomment for testing only
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "status=%s", caStatus);
     sStatus = fUrlDecode(caStatus);
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");
         printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
+        return EXIT_FAILURE;
     }
 
-// set a SQL query to insert the new status ---------------------------------------------------------------------------
+// set a SQL query to insert the new status ----------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Statuses` "
                    "(`Status Name`)  "
                    "VALUES ('%s');", sStatus);
 
-// Call the function to print the SQL results to stdout and terminate the program
+// Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
-//    printf("Query: %s", caSQL);
-//    printf("\n\n");
-//    return 0;
+//    printf("Query: %s", caSQL);                                                          // uncomment for testing only
+//    printf("\n\n");                                                                      // uncomment for testing only
+//    return EXIT_FAILURE;                                                                 // uncomment for testing only
 
 
     if(mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
-        printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Status '%s' inserted into Statuses table", sStatus);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
