@@ -80,7 +80,7 @@ int main(void) {
         printf("\n");
         printf("Query string is empty. Terminating program");
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
 
 // test for an empty QUERY_STRING -------------------------------------------------------------------------------------

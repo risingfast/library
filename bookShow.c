@@ -3,8 +3,7 @@
  *  Started: 09/12/2020
  *  Ref:
  *  Log:
- *      12-Sep-2020 started
- *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
+ *      09/12/2020 started
  *  Enhancements:
  */
 
@@ -21,10 +20,9 @@ int main(int argc, char** argv) {
     char cyBuffer[1000] = {'\0'};
     char *strBuffer;
 
-// print the html page content type and CORS <header> block ---------------------------------------
+// print the html page content type and <head> block ----------------------------------------------
 
-    printf("Content-type: text/html\n");
-    printf("Access-Control-Allow-Origin: *\n\n");
+    printf("Content-type: text/html\n\n");
 //    printf("<!DOCTYPE html>\n");
 //    printf("<html lang=\"en\">\n");
 //    printf("<head>\n");
