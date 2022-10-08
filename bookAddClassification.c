@@ -9,6 +9,7 @@
  *      21-Sep-2022 add check for null string for classification name
  *      21-Sep-2022 add check for empty string for classification name
  *      06-Oct-2022 validate QUERY_STRING parameters
+ *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *  Enhancements:
 */
 
@@ -75,17 +76,17 @@ int main(void) {
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
     if(sParam == NULL) {
-        printf("Query string is NULL. Expecting QUERY_STRING=\"classification=<clasfn>\". 1 Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"classification=<clasfn>\". 1 Terminating \"bookAddClassification.cgi\"");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
 // check for an empty query string -------------------------------------------------------------------------------------
 
     if (sParam[0] == 0) {
-        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"classification=<clsfn>\". Terminating program");
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"classification=<clsfn>\". Terminating \"bookAddClassification.cgi\"");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
@@ -93,9 +94,9 @@ int main(void) {
     sscanf(sParam, "classification=%s", caClassification);
     sClassification = fUrlDecode(caClassification);
     if (caClassification[0] == '\0') {
-         printf("Query string \"%s\" has no classification, Expecting QUERY_STRING=\"classification=<clsfn>\". Terminating program", sParam);
+         printf("Query string \"%s\" has no classification, Expecting QUERY_STRING=\"classification=<clsfn>\". Terminating \"bookAddClassification.cgi\"", sParam);
          printf("\n\n");
-         return 1;
+         return EXIT_FAILURE;
     }
 
 // set a SQL query to insert the new classification --------------------------------------------------------------------
@@ -109,10 +110,10 @@ int main(void) {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Classification '%s' inserted into Classifications table", sClassification);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
