@@ -6,7 +6,7 @@
  *  Log:
  *      21-Nov-2021 started by copying bookAddSource.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin CCORS http header
- *      07-Oct-2022 add validity checks on QUERY_STRING environment variable
+ *      08-Oct-2022 add validity checks on QUERY_STRING environment variable
  *  Enhancements:
 */
 
