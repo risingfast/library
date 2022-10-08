@@ -8,6 +8,7 @@
  *      04-Dec-2021 add fUrlDecodee to the character name
  *      14-Sep-2022 add Access-Control-Allow-Origin * HTTP header
  *      06-Oct-2022 check QUERY_STRING for NULL, empty and invalid values
+ *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *  Enhancements:
 */
 
@@ -80,17 +81,16 @@ int main(void) {
 // Check for a NULL query string ---------------------------------------------------------------------------------------
 
     if (sParam == NULL) {
-        printf("\n");
-        printf("QUERY_STRING is NULL. Expecting QUERY_STRING=\"TitleID=<Number>&CharacterName=<Character Name>\". Terminating program");
+        printf("QUERY_STRING is NULL. Expecting QUERY_STRING=\"TitleID=<Number>&CharacterName=<Character Name>\". \"Terminating bookAddCharacter\"");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
 // Check for an empty query (non-Null) string --------------------------------------------------------------------------
 
     if (sParam[0] == '\0') {
-        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"TitleID=<Number>&CharacterName=<Character Name>\". Terminating program");
-        return 1;
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"TitleID=<Number>&CharacterName=<Character Name>\". \"Terminating bookAddCharacter\"");
+        return EXIT_FAILURE;
     }
 
     strcpy(sParamOrig, sParam);                                                          // preserve the value of sParam
@@ -100,17 +100,17 @@ int main(void) {
     sTitleID = strtok(sParam, caDelimiter);
     sscanf(sTitleID, "TitleID=%d", &iTitleID);
     if (iTitleID == 0) {
-         printf("Query string \"%s\" has no TitleID. Expecting QUERY_STRING=\"TitleID=<number>&CharacterName=<Character Name>\". Terminating program", sParamOrig);
+         printf("Query string \"%s\" has no TitleID. Expecting QUERY_STRING=\"TitleID=<number>&CharacterName=<Character Name>\". \"Terminating bookAddCharacter\"", sParamOrig);
          printf("\n\n");
-         return 1;
+         return EXIT_FAILURE;
     }
 
     sCharacter = strtok(NULL, caDelimiter);
     sscanf(sCharacter, "CharacterName=%s", caCharacterName);
     if (caCharacterName[0] == '\0') {
-         printf("Query string \"%s\" has no CharacterName. Expecting QUERY_STRING=\"TitleID=<number>&CharacterName=<Character Name>\". Terminating program", sParamOrig);
+         printf("Query string \"%s\" has no CharacterName. Expecting QUERY_STRING=\"TitleID=<number>&CharacterName=<Character Name>\". \"Terminating bookAddCharacter\"", sParamOrig);
          printf("\n\n");
-         return 1;
+         return EXIT_FAILURE;
     }
     sCharacter = fUrlDecode(caCharacterName);
 
@@ -131,10 +131,10 @@ int main(void) {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Character '%s' added", sCharacter);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
