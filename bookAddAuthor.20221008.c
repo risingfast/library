@@ -78,18 +78,25 @@ int main(void) {
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
+//    if (sParam == NULL) {
+//        printf("QUERY_STRING identifying the author does not exist. Terminating program");
+//        return 1;
+//    }
+
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
     if (sParam == NULL) {
-        printf("Query string is NULL. Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating \"bookAddAuthor.cgi\"");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating program");
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
 
 // check for an empty (non-NULL) query string --------------------------------------------------------------------------
 
     if (sParam[0] == '\0') {
-        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating \"bookAddAuthor.cgi\"");
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"author=Firstname%%20Lastname\". Terminating program");
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
@@ -97,9 +104,9 @@ int main(void) {
     sscanf(sParam, "author=%s", caAuthor);
     
     if (caAuthor[0] == '\0') {
-        printf("Query string \"%sm\" has no author name. Expecting QUERY_STRING=\"author=Firstname Lastname\". Terminating \"bookAddAuthor.cgi\"", sParam);
+        printf("Query string \"%sm\" has no author name. Expecting QUERY_STRING=\"author=Firstname Lastname\". Terminating program", sParam);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
     sAuthor = fUrlDecode(caAuthor);
 
@@ -114,10 +121,10 @@ int main(void) {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return EXIT_FAILURE;
+        return -1;
     }
 
     printf("Author '%s' inserted into Authors table", sAuthor);
 
-    return EXIT_SUCCESS;
+    return 0;
 }

@@ -71,7 +71,7 @@ int main(void) {
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("Query string is NULL. Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating \"bookAddGenre.cgi\"");
         printf("\n\n");
         return EXIT_FAILURE;
     }
@@ -83,7 +83,7 @@ int main(void) {
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
     if (sParam[0] == '\0') {
-        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating program");
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating \"bookAddGenre.cgi\"");
         printf("\n\n");
         return EXIT_FAILURE;
     }
@@ -92,7 +92,7 @@ int main(void) {
 
     sscanf(sParam, "genre=%s", caGenre);
     if (caGenre[0] == '\0') {
-        printf("Query string \"%s\" has no genre to add, Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating program", sParam);
+        printf("Query string \"%s\" has no genre to add, Expecting QUERY_STRING=\"genre=<newgenre>\". Terminating \"bookAddGenre.cgi\"", sParam);
         printf("\n\n");
         return EXIT_FAILURE;
     }

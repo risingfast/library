@@ -60,6 +60,7 @@ int main(void) {
         printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
         printf("\n\n");
         printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
         return  EXIT_FAILURE;
     }
 
@@ -70,8 +71,8 @@ int main(void) {
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"status=<newstatus>\". Terminating \"bookAddStatus.cgi\"");
+        printf("\n\n");
         return EXIT_FAILURE;
     }
 
@@ -79,18 +80,24 @@ int main(void) {
 //    printf("\n\n");                                                                      // uncomment for testing only
 //    return 0;                                                                            // uncomment for testing only
 
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"status=<newstatus>>\". Terminating \"bookAddStatus.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "status=%s", caStatus);
-    sStatus = fUrlDecode(caStatus);
-
-// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
+    if (caStatus[0] == '\0') {
+        printf("Query string \"%s\" has no status to add, Expecting QUERY_STRING=\"status=<newstatus>\". Terminating \"bookAddStatus.cgi\"", sParam);
         printf("\n\n");
-        printf("No parameter string passed");
         return EXIT_FAILURE;
     }
+
+    sStatus = fUrlDecode(caStatus);
 
 // set a SQL query to insert the new status ----------------------------------------------------------------------------
 
