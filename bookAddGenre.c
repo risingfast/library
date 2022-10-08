@@ -7,6 +7,7 @@
  *      21-Nov-2021 started by copying bookAddSource.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * HTTP header
  *      06-Pct-2022 check for invalid QUERY_STRING enviroment variable value
+ *      08-Pct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *  Enhancements:
 */
 
