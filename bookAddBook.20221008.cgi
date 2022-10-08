@@ -12,8 +12,7 @@
  *      21-Sep-2022 add check for empty QUERY_STRRING
  *      21-Sep-2022 add check for missing book name in the QUERY_STRING
  *      21-Sep=2022 add a test for a NULL QUERY_STRING
- *      06-Oct-2022 add tests for invalid parameters in QUERY_STRING
- *      08-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
+ *      06-Oct=2022 add tests for invalid parameters in QUERY_STRING
  *  Enhancements:
 */
 
@@ -28,7 +27,7 @@
 #define SQL_LEN 10000
 #define MAXLEN 1024
 
-// global declarations -------------------------------------------------------------------------------------------------
+// global declarations
 
 char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
 char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
@@ -120,17 +119,17 @@ int main(void) {
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
     if (sParam == NULL) {
-        printf("QUERY_STRING is NULL. Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". \"Terminating bookAddBook.cgi\"");
-        printf("\n\n");
-        return EXIT_FAILURE;
+        printf("QUERY_STRING is NULL. Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". Terminating program");
+        return 1;
     }
 
 // check for an empty query string -------------------------------------------------------------------------------------
 
     if(sParam[0] == '\0') {
-        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". \"Terminating bookAddBook.cgi\"");
+        printf("\n");
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". Terminating program");
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
 
     strcpy(sParamOrig, sParam);                                                                 // make a copy of sParam
@@ -141,66 +140,66 @@ int main(void) {
 
     sscanf(sTemp, "bookName=%[^\n]s", caNameBuf);
     if (caNameBuf[0] == '\0') {
-        printf("Query string \"%s\"has no book name. Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("Query string \"%s\"has no book name. Expecting QUERY_STRING=\"bookName=<bnme>&authorId=<authID>&sourceID=<sourceID>& ...\". Terminating program", sParamOrig);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
     strcpy(caBookName, fUrlDecode(caNameBuf));
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "authorId=%d", &iAuthorID);
     if (iAuthorID == 0) {
-        printf("Query string \"%s\" has no authorId. Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("Query string \"%s\" has no authorId. Terminating program", sParamOrig);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "sourceId=%d", &iSourceID);
     if (iSourceID == 0) {
-        printf("Query string \"%s\" has no sourceId. Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("Query string \"%s\" has no sourceId. Terminating program", sParamOrig);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "seriesId=%d", &iSeriesID);
     if (iAuthorID == 0) {
-        printf("Query string \"%s\" has no auhorId. Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("Query string \"%s\" has no auhorId. Terminating program", sParamOrig);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "genreId=%d", &iGenreID);
     if (iGenreID == 0) {
-        printf("Query string \"%s\" has no genreId. Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("Query string \"%s\" has no genreId. Terminating program", sParamOrig);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "statusId=%d", &iStatusID);
     if (iStatusID == 0) {
-        printf("Query string \"%s\" has no statusId. Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("Query string \"%s\" has no statusId. Terminating program", sParamOrig);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "clsfnId=%d", &iClsfnID);
     if (iClsfnID == 0) {
-        printf("Query string \"%s\" has no clsfnId. Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("Query string \"%s\" has no clsfnId. Terminating program", sParamOrig);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
     
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "ratingId=%d", &iRatingID);
     if (iRatingID == 0) {
-        printf("Query string \"%s\" has no ratingId. Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("Query string \"%s\" has no ratingId. Terminating program", sParamOrig);
         printf("\n\n");
-        return EXIT_FAILURE;
+        return 1;
     }
     
     sTemp = strtok(NULL, caDelimiter);
@@ -248,7 +247,7 @@ int main(void) {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return EXIT_FAILURE;
+        return -1;
     }
 
     sprintf(caSQL, "SELECT BT.`Title ID` "
@@ -262,7 +261,7 @@ int main(void) {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return EXIT_FAILURE;
+        return -1;
     }
 
 // store the result of the query ---------------------------------------------------------------------------------------
@@ -274,7 +273,7 @@ int main(void) {
         printf("\n");
 
         mysql_free_result(res);
-        return EXIT_FAILURE;
+        return -1;
     }
 
 // fetch the number of fields in the result ----------------------------------------------------------------------------
@@ -294,5 +293,5 @@ int main(void) {
 
     mysql_free_result(res);
 
-    return EXIT_SUCCESS;
+    return 0;
 }
