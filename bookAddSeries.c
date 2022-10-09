@@ -7,6 +7,7 @@
  *      21-Nov-2021 started by copying bookAddRating.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * 
  *      07-Oct-2022 clean up comments and add checks for invalid QUERY_STRING values
+ *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *  Enhancements:
 */
 

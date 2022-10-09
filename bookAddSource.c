@@ -7,6 +7,7 @@
  *      21-Nov-2021 started by copying bookAddSeries.c and modifying
  *      14-Sep-2022 add Acces-Control-Allow_Origin: * CORS http header
  *      07-Oct-2022 add checks for invalid QUERY_STRING environment variable value
+ *      08-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
  *  Enhancements:
 */
 
@@ -78,7 +79,7 @@ int main(void) {
 
 //    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
 //    printf("\n\n");
-//    return 0;
+//    return EXIT_SUCCESS;
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
@@ -109,7 +110,7 @@ int main(void) {
 
 //    printf("Query: %s", caSQL);                                                          // uncomment for testing only
 //    printf("\n\n");                                                                      // uncomment for testing only
-//    return 0;                                                                            // uncomment for testing only
+//    return EXIT_SUCCESS;                                                                 // uncomment for testing only
 
 
     if(mysql_query(conn, caSQL) != 0)
@@ -117,7 +118,7 @@ int main(void) {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Source '%s' inserted into Sources table", sSource);
