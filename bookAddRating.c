@@ -72,10 +72,17 @@ int main(void) {
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Terminating \"bookAddRating.cgi\"");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
+    }
+
+// test for an empty (non-NULL) QUERY_STRING ---------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Terminating \"bookAddRating.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
     }
 
 //    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
@@ -85,16 +92,14 @@ int main(void) {
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "rating=%s", caRating);
-    sRating = fUrlDecode(caRating);
 
-// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
+    if (caRating[0] == '\0') {
+        printf("Query string \"%s\" has no rating to add, Expecting QUERY_STRING=\"rating=<newrating>\". Terminating \"bookAddRating.cgi\"", sParam);
         printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
+        return EXIT_FAILURE;
     }
+
+    sRating = fUrlDecode(caRating);
 
 // set a SQL query to insert the new rating ----------------------------------------------------------------------------
 
@@ -106,7 +111,7 @@ int main(void) {
 
 //    printf("Query: %s", caSQL);                                                          // uncomment for testing only
 //    printf("\n\n");                                                                      // uncomment for testing only
-//    return 0;                                                                            // uncomment for testing only
+//    return EXIT_SUCCESS;                                                                 // uncomment for testing only
 
 
     if(mysql_query(conn, caSQL) != 0)
@@ -114,10 +119,10 @@ int main(void) {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Rating '%s' inserted into Ratings table", sRating);
 
-    return 0;
+    return EXIT_SUCCESS;
 }

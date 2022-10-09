@@ -11,6 +11,7 @@
  *      21-Sep-2022 fix test for empty QUERY_STRING
  *      21-Sep-2022 fix test for parameter-less QUERY_STRING
  *      06-Oct-2022 extend validity checking for QUERY_STRING
+ *      07-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
 
  *  Enhancements:
 */
