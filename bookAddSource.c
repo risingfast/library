@@ -8,6 +8,7 @@
  *      14-Sep-2022 add Acces-Control-Allow_Origin: * CORS http header
  *      07-Oct-2022 add checks for invalid QUERY_STRING environment variable value
  *      08-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
+ *      09-Oct-2022 clean up comments
  *  Enhancements:
 */
 

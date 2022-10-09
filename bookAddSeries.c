@@ -6,8 +6,9 @@
  *  Log:
  *      21-Nov-2021 started by copying bookAddRating.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * 
- *      07-Oct-2022 clean up comments and add checks for invalid QUERY_STRING values
+ *      07-Oct-2022 add checks for invalid QUERY_STRING values
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      09-Oct-2022 cleanup comments
  *  Enhancements:
 */
 
@@ -23,7 +24,7 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
 char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
 char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
@@ -79,7 +80,7 @@ int main(void) {
 
 //    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
 //    printf("\n\n");                                                                      // uncomment for testing only
-//    return 0;                                                                            // uncomment for testing only
+//    return EXIT_FAILURE;                                                                 // uncomment for testing only
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
@@ -119,7 +120,7 @@ int main(void) {
 
 //    printf("Query: %s", caSQL);                                                          // uncomment for testing only
 //    printf("\n\n");                                                                      // uncomment for testing only
-//    return 0;                                                                            // uncomment for testing only
+//    return EXIT_FAILURE;                                                                 // uncomment for testing only
 
     if(mysql_query(conn, caSQL) != 0)
     {

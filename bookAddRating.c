@@ -7,6 +7,8 @@
  *      19-Nov-2021 started by copying bookAddClassification.c and modifying
  *      14-Sep-2022 added Access-Control-Allow-Headers: *
  *      07-Oct-2022 test for invalid QUERY_STRING environment variables
+ *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      09-Oct-2022 clean up comments
  *  Enhancements:
  *      Add rating value to update
 */
@@ -23,7 +25,7 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations ------------------------------------------------------------------------------------------------
 
 char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
 char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
@@ -72,7 +74,7 @@ int main(void) {
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("Query string is NULL. Terminating \"bookAddRating.cgi\"");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"rating=<newrating>\". Terminating \"bookAddRating.cgi\"");
         printf("\n\n");
         return EXIT_FAILURE;
     }
@@ -80,7 +82,7 @@ int main(void) {
 // test for an empty (non-NULL) QUERY_STRING ---------------------------------------------------------------------------
 
     if (sParam[0] == '\0') {
-        printf("Query string is empty (non-NULL). Terminating \"bookAddRating.cgi\"");
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"rating=<newrating>\". Terminating \"bookAddRating.cgi\"");
         printf("\n\n");
         return EXIT_FAILURE;
     }

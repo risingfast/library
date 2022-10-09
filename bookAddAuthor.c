@@ -69,7 +69,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// Format of QUERY_STRING parsed for the author name
+// Format of QUERY_STRING parsed for the author name -------------------------------------------------------------------
 
 //     setenv("QUERY_STRING", "author=Firstname%20Lastname");
 

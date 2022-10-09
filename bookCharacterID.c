@@ -5,6 +5,9 @@
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
  *  Log:
  *      05-Dec-2021 started by copying bookTitleID.c and modifying
+ *      09-Dec-2021 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      09-Dec-2021 clean up comments
+ *      09-Dec-2021 validate QUERY_STRING and test for NULL and empty values
  *  Enhancements:
 */
 
@@ -21,12 +24,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -45,11 +48,11 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -63,31 +66,36 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "CharID=1026", 1);
+//    setenv("QUERY_STRING", "CharID=1026", 1);                                            // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
-    if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+    if (sParam == NULL) {
+        printf("Query string is NULL. Expecting QUERY_STRING=\"CharID=9999\". Terminating \"bookCharacterID.cgi\"");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+// check if empty (non-NULL) QUERY_STRING ------------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"CharID=9999\". Terminating \"bookCharacterID.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+        
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "CharID=%d", &iCharID);
 
-// test if Null or All or non-Null values should be shown ------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
+    if (iCharID == 0) {
+        printf("CharID is empty. Expecting QUERY_STRING=\"CharID=9999\". Terminating \"bookCharacterID.cgi\"");
         printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
+        return EXIT_FAILURE;
     }
-        
+
     sprintf(caSQL, "SELECT BC.`Character Name` "
                    "FROM risingfast.`Book Characters` BC "
                    "WHERE BC.`Character ID` = '%d';", iCharID);
@@ -101,7 +109,7 @@ void fPrintResult(char *caSQL)
 {
     int iColCount = 0;
 
-    if(mysql_query(conn, caSQL) != 0)
+    if (mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -109,10 +117,10 @@ void fPrintResult(char *caSQL)
         return;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
-    if(res == NULL)
+    if (res == NULL)
     {
         printf("%s() -- no results returned", __func__);
         printf("\n");
@@ -121,15 +129,15 @@ void fPrintResult(char *caSQL)
         return;
     }
     
-// fetch the number of fields in the result
+// fetch the number of fields in the result ----------------------------------------------------------------------------
     
     iColCount = mysql_num_fields(res);
     
     mysql_data_seek(res, 0);
     
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
-    if(row = mysql_fetch_row(res))
+    if (row = mysql_fetch_row(res))
     {
         printf("%s", row[0]);
     } else {

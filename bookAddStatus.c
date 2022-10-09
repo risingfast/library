@@ -8,6 +8,7 @@
  *      14-Sep-2022 add Access-Control-Allow-Origin CCORS http header
  *      07-Oct-2022 add validity checks on QUERY_STRING environment variable
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE for returns
+ *      09-Oct-2022 clean up comments
  *  Enhancements:
 */
 
@@ -79,7 +80,7 @@ int main(void) {
 
 //    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
 //    printf("\n\n");                                                                      // uncomment for testing only
-//    return 0;                                                                            // uncomment for testing only
+//    return EXIT_SUCCESS;                                                                 // uncomment for testing only
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 

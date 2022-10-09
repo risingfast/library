@@ -1,4 +1,4 @@
-/*  bookCharacters.c - CGI to retrieve a characters for a single book for the bookInquiry.html webpage
+/*  bookCharacters.c - CGI to retrieve characters for a single book for the bookInquiry.html webpage
  *  Author: Geoffrey Jarman
  *  Started: 10-Nov-2021
  *  References:
@@ -9,6 +9,7 @@
  *      26-Dec-2021 add filter to characters
  *      14-Sep-2022 add Access-Control-Allow-Origin: * in http headers
  *      05-Oct-2022 add Add Character ID to filter in SQL query
+ *      09-Oct-2022 clean up comments
  *  Enhancements:
 */
 
@@ -24,7 +25,7 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
 char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
 char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
@@ -79,7 +80,7 @@ int main(void) {
     if(sParams == NULL) {
         printf("Query string is NULL. Expecting QUERY_STRING=\"TitleID=9999&Filter=<filterval>\". Terminating program");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
@@ -87,18 +88,23 @@ int main(void) {
     if (sParams[0] == '\0') {
         printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"TitleID=9999&Filter=<filterval>\". Terminating program");
         printf("\n\n");
-        return 0;
+        return EXIT_SUCCESS;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParams, "TitleID=%d", &iTitleID);
 
-
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sSubstring = strtok(sParams, caDelimiter);
     sscanf(sSubstring, "TitleID=%d", &iTitleID);
+
+    if (iTitleID == 0) {
+        printf("Title ID is null. Expecting QUERY_STRING=\"TitleID=9999&Filter=<filterval>\". Terminating program");
+        printf("\n\n");
+        return EXIT_SUCCESS;
+    }
 
     sSubstring = strtok(NULL, caDelimiter);
     sscanf(sSubstring, "Filter=%s", caFilterTemp);
