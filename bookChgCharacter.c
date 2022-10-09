@@ -6,6 +6,8 @@
  *  Log:
  *      06-Dec-2021 start by copying bookAddCharacter.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
+ *      09-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      09-Oct-2022 add validations for NULL and empty QUERY_STRING
  *  Enhancements:
 */
 
@@ -70,10 +72,17 @@ int main(void) {
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"CharacterID=999&CharacterName=<ChngdCharNme>\". Terminating \"bookChgCharacter.cgi\"");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
+    }
+
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"CharacterID=999&CharacterName=<ChngdCharNme>\". Terminating \"bookChgCharacter.cgi\"");
+        printf("\n\n");
+        return EXIT_SUCCESS;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
@@ -81,19 +90,22 @@ int main(void) {
     sCharacterID = strtok(sParam, caDelimiter);
     sscanf(sCharacterID, "CharacterID=%d", &iCharacterID);
 
+    if (iCharacterID == 0) {
+        printf("characterID is NULL. Expecting QUERY_STRING=\"CharacterID=999&CharacterName=<chngdcharnme>\". Terminating \"bookChgCharacter.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
     sCharacter = strtok(NULL, caDelimiter);
     sscanf(sCharacter, "CharacterName=%s", caCharacterName);
-    sCharacter = fUrlDecode(caCharacterName);
 
-
-// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
+    if (caCharacterName == NULL) {
+        printf("CharacterName is NULL. Expecting QUERY_STRING=\"CharacterID=999&CharacterName=<chngdcharnme>\". Terminating \"bookChgCharacter.cgi\"");
         printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
+        return EXIT_FAILURE;
     }
+
+    sCharacter = fUrlDecode(caCharacterName);
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
@@ -101,14 +113,14 @@ int main(void) {
                    "SET BC.`Character Name` = '%s' "
                    "WHERE BC.`Character ID` = %d;", sCharacter, iCharacterID);
 
-// Call the function to print the SQL results to stdout and terminate the program
+// Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
     if(mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Character ID %d updated to '%s'", iCharacterID, sCharacter);
