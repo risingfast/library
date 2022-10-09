@@ -26,10 +26,10 @@
 
 // global declarations
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -51,7 +51,7 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
@@ -70,34 +70,32 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string --------------------------------------------------------------------------------------
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "TitleID=190&Filter=''", 1);
+//    setenv("QUERY_STRING", "TitleID=190&Filter=''", 1);                                  // uncomment for testing only
 
     sParams = getenv("QUERY_STRING");
 
     if(sParams == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"TitleID=9999&Filter=<filterval>\". Terminating program");
         printf("\n\n");
         return 1;
     }
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
+    if (sParams[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"TitleID=9999&Filter=<filterval>\". Terminating program");
         printf("\n\n");
         return 0;
     }
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParams, "TitleID=%d", &iTitleID);
 
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------$
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sSubstring = strtok(sParams, caDelimiter);
     sscanf(sSubstring, "TitleID=%d", &iTitleID);
@@ -105,7 +103,7 @@ int main(void) {
     sSubstring = strtok(NULL, caDelimiter);
     sscanf(sSubstring, "Filter=%s", caFilterTemp);
 
-// parse the QUERY_STRING for each argument: Action and Filter ---------------------------------------------------------$
+// parse the QUERY_STRING for each argument: Action and Filter ---------------------------------------------------------
 
     sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
 
@@ -116,18 +114,19 @@ int main(void) {
     }
     sFilter = caFilter;
 
-// set a SQL query based on a book ID to retrieve all characters-------------------------------------------------------
+// set a SQL query based on a book ID to retrieve all characters--------------------------------------------------------
 
     sprintf(caSQL, "SELECT BC.`Character ID`, BC.`Character Name` "
                    "FROM risingfast.`Book Characters` BC "
                    "WHERE BC.`Title ID` = '%d' "
                    "AND CONCAT(BC.`Character ID`, BC.`Character Name`) like '%s';", iTitleID, sFilter);
 
-//    printf("\n%s\n", caSQL);
+
+//    printf("\n%s\n", caSQL);                                                            // uncommment for testing only
 
     fPrintResult(caSQL);
     
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void fPrintResult(char *caSQL)
@@ -142,7 +141,7 @@ void fPrintResult(char *caSQL)
         return;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -154,14 +153,14 @@ void fPrintResult(char *caSQL)
         return;
     }
     
-// fetch the number of fields in the result
+// fetch the number of fields in the result ----------------------------------------------------------------------------
     
     iColCount = mysql_num_fields(res);
     fields = mysql_fetch_fields(res);
     
     mysql_data_seek(res, 0);
     
-// print the column headings
+// print the column headings -------------------------------------------------------------------------------------------
 
     for(int i = 0; i < iColCount; i++)
     {
@@ -173,7 +172,7 @@ void fPrintResult(char *caSQL)
     }
     printf("\n");
 
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
     while(row = mysql_fetch_row(res))
     {
@@ -192,4 +191,5 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
+    return;
 }

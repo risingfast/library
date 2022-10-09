@@ -6,6 +6,7 @@
  *  Log:
  *      15-Dec-2021 start by copying bookChgGenreNme.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
+ *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE for returns
  *  Enhancements:
 */
 
@@ -23,10 +24,10 @@
 
 // global declarations
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -65,35 +66,46 @@ int main(void) {
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "authorID=138&authorName=Molly%20Fritzz", 1);          // for testing
+//    setenv("QUERY_STRING", "authorID=138&authorName=Molly%20Fritzz", 1);                 // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"authorID=999&authorName=<chgdauthornme>\". Terminating \"bookChgAuthorNme.c\"");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"authorID=999&authorName=<chgdauthornme>\". Terminating \"bookChgAuthorNme.c\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sAuthorID = strtok(sParam, caDelimiter);
     sscanf(sAuthorID, "authorID=%d", &iAuthorID);
 
+    if (iAuthorID == 0) {
+        printf("authorID is NULL. Expecting QUERY_STRING=\"authorID=999&authorName=<chngdauthornme>\". Terminating \"bookChgAuthorNme.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
     sAuthor = strtok(NULL, caDelimiter);
     sscanf(sAuthor, "authorName=%s", caAuthorName);
+
+    if (caAuthorName == NULL) {
+        printf("author name is NULL. Expecting QUERY_STRING=\"authorID=999&authorName=<chngdauthornme>\". Terminating \"bookChgAuthorNme.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
     sAuthor = fUrlDecode(caAuthorName);
 
-
-// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
-    }
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
@@ -101,14 +113,14 @@ int main(void) {
                    "SET BA.`Author Name` = '%s' "
                    "WHERE BA.`Author ID` = %d;", sAuthor, iAuthorID);
 
-// Call the function to print the SQL results to stdout and terminate the program
+// Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
     if(mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Author ID %d updated to '%s'", iAuthorID, sAuthor);
