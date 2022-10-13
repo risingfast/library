@@ -6,6 +6,9 @@
  *  Log:
  *      15-Dec-2021 start by copying bookChgGenreNme.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * html header
+ *      10-Oct-2022 clean up comment lines
+ *      10-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
+ *      10-Oct-2022 validate QUERY_STRING as non-NULL and not empty
  *  Enhancements:
 */
 
@@ -21,12 +24,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -44,12 +47,12 @@ int main(void) {
 
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and CORS <head> block ------------------------------------------------------------------------
+// print the html content type and CORS <head> block -------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -65,35 +68,44 @@ int main(void) {
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "ratingID=1&ratingName=Excellent%20Test", 1);          // for testing
+//    setenv("QUERY_STRING", "ratingID=1&ratingName=Excellent%20Test", 1);                 // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"ratingID=<99>&ratingName=<chngdratingname>\". Terminating bookChgRatingNme.cgi");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
-
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
-
-    sRatingID = strtok(sParam, caDelimiter);
-    sscanf(sRatingID, "ratingID=%d", &iRatingID);
-
-    sRating = strtok(NULL, caDelimiter);
-    sscanf(sRating, "ratingName=%s", caRatingName);
-    sRating = fUrlDecode(caRatingName);
-
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
-    if (getenv("QUERY_STRING") == NULL) {
+    if (sParam[0] == '\0') {
+        printf("Query string is empty. Expecting QUERY_STRING=\"ratingID=<99>&ratingName=<chngdratingname>\". Terminating bookChgRatingNme.cgi");
         printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
+        return EXIT_FAILURE;
     }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character ----------------------------------------------
+
+    sRatingID = strtok(sParam, caDelimiter);
+    sscanf(sRatingID, "ratingID=%d", &iRatingID);
+    if (iRatingID == 0) {
+        printf("Rating ID is 0. Expecting QUERY_STRING=\"ratingID=<99>&ratingName=<chngdratingname>\". Terminating bookChgRatingNme.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+    sRating = strtok(NULL, caDelimiter);
+    sscanf(sRating, "ratingName=%s", caRatingName);
+
+    if (caRatingName[0] == '\0') {
+        printf("Rating Name is empty. Expecting QUERY_STRING=\"ratingID=<99>&ratingName=<chngdratingname>\". Terminating bookChgRatingNme.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+    sRating = fUrlDecode(caRatingName);
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
@@ -101,14 +113,14 @@ int main(void) {
                    "SET BR.`Rating Name` = '%s' "
                    "WHERE BR.`Rating ID` = %d;", sRating, iRatingID);
 
-// Call the function to print the SQL results to stdout and terminate the program
+// Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
     if(mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     printf("Rating ID %d updated to '%s'", iRatingID, sRating);

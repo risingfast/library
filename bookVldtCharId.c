@@ -23,12 +23,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations ------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -47,12 +47,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and CORS <header> block ----------------------------------------------------------------
+// print the html content type and CORS <header> block -----------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -66,24 +66,23 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string --------------------------------------------------------------------------------------
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "CharID=1026", 1);
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
         printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"CharID=1026\". Terminating bookVldtCharId.cgi");
         printf("\n\n");
         return 1;
     }
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "CharID=%d", &iCharID);
 
-// test if Null or All or non-Null values should be shown -------------------------------------------------------------
+// test if Null or All or non-Null values should be shown --------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");
@@ -112,7 +111,7 @@ void fPrintResult(char *caSQL)
         return;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -124,13 +123,13 @@ void fPrintResult(char *caSQL)
         return;
     }
     
-// fetch the number of fields in the result
+// fetch the number of fields in the result ----------------------------------------------------------------------------
     
     iColCount = mysql_num_fields(res);
     
     mysql_data_seek(res, 0);
     
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
     if(row = mysql_fetch_row(res))
     {

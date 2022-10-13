@@ -1,4 +1,4 @@
-/*  bookChgClassNme.c - CGI to change a class name from the bookInquiry.html webpage
+/*  bookChgClassNme.c - CGI to change a classification name from the bookInquiry.html webpage
  *  Author: Geoffrey Jarman
  *  Started: 15-Dec-2021
  *  References:
@@ -6,6 +6,9 @@
  *  Log:
  *      15-Dec-2021 start by copying bookChgRatingNme.c and modifying
  *      14-Sep-2022 add Acess-Control-Allow-Origin: * CORS header
+ *      10-Oct-2022 cleanup comments
+ *      10-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE for returns
+ *      10-Oct-2022 validate QUERY_STRING and test for NULL and empty strings
  *  Enhancements:
 */
 
@@ -21,12 +24,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -44,12 +47,12 @@ int main(void) {
 
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and CORS <header> block ------------------------------------------------------------------------
+// print the html content type and CORS <header> block -----------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -65,35 +68,43 @@ int main(void) {
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "classID=1&className=Fiction%20Test", 1);          // for testing
+//    setenv("QUERY_STRING", "classID=1&className=Fiction%20Test", 1);                     // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"classID=<99>&className=<chngdclassname\". Terminating bookChgClassNme.cgi");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
-
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
-
-    sClassID = strtok(sParam, caDelimiter);
-    sscanf(sClassID, "classID=%d", &iClassID);
-
-    sClass = strtok(NULL, caDelimiter);
-    sscanf(sClass, "className=%s", caClassName);
-    sClass = fUrlDecode(caClassName);
-
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
-    if (getenv("QUERY_STRING") == NULL) {
+    if (sParam[0] == '\0') {
+        printf("Query string is empty. Expecting QUERY_STRING=\"classID=<99>&className=<chngdclassname\". Terminating bookChgClassNme.cgi");
         printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-        return 0;
+        return EXIT_FAILURE;
     }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
+
+    sClassID = strtok(sParam, caDelimiter);
+    sscanf(sClassID, "classID=%d", &iClassID);
+    if (iClassID == 0) {
+        printf("Class ID is 0. Expecting QUERY_STRING=\"classID=<99>&className=<chngdclassname\". Terminating bookChgClassNme.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+    sClass = strtok(NULL, caDelimiter);
+    sscanf(sClass, "className=%s", caClassName);
+    if (caClassName[0] == '\0') {
+        printf("Class Name is empty. Expecting QUERY_STRING=\"classID=<99>&className=<chngdclassname\". Terminating bookChgClassNme.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+    sClass = fUrlDecode(caClassName);
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
@@ -101,7 +112,7 @@ int main(void) {
                    "SET BC.`Classification Name` = '%s' "
                    "WHERE BC.`Classification ID` = %d;", sClass, iClassID);
 
-// Call the function to print the SQL results to stdout and terminate the program
+// Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
     if(mysql_query(conn, caSQL) != 0)
     {

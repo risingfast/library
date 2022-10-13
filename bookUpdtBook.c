@@ -7,6 +7,9 @@
  *      13-Jan-2022 start by copying bookAddBook.c and modifying
  *      27-Jul-2022 add abstract field
  *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
+ *      12-Oct=2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      12-Oct-2022 clean up comments
+ *      12-Oct-2022 validate QUERY_STATUS for NULL or empty values
  *  Enhancements:
 */
 
@@ -22,12 +25,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -72,12 +75,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type header and CORS <header> block ---------------------------------------------------------
+// print the html content type header and CORS <header> block ----------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -91,26 +94,33 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string --------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "bookId=197&bookName=Test%20Title&authorId=107&sourceId=2&seriesId=82&genreId=1&statusId=4&clsfnId=1&ratingId=4&startDte=2021-01-01&finishDte=2021-12-30&abstract=funny book&cmnts=too bad", 1);
-
     sParam = getenv("QUERY_STRING");
 
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. No parameters passed. Terminating program");
+        printf("Query string is null. Expecting QUERY_STRING=\"bookId=<9999>&bookname=<newBookName>&authorId=<authorname>& ...\". Terminating bookUpdtBook.cgi");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
+// check for an empty query string ---------------------------------------------------------------------------------------
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+    if(sParam[0] == '\0') {
+        printf("Query string is empty. Expecting QUERY_STRING=\"bookId=<9999>&bookname=<newBookName>&authorId=<authorname>& ...\". Terminating bookUpdtBook.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sTemp = strtok(sParam, caDelimiter);
     sscanf(sTemp, "bookId=%d", &iBookID);
+    if(iBookID == 0) {
+        printf("Book ID is 0. Expecting QUERY_STRING=\"bookId=<9999>&bookname=<newBookName>&authorId=<authorname>& ...\". Terminating bookUpdtBook.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "bookName=%[^\n]s", caNameBuf);
@@ -171,48 +181,45 @@ int main(void) {
     }
     strcpy(caCmnts, fUrlDecode(caCmntsQuoted));
 
-// test for an empty QUERY_STRING -------------------------------------------------------------------------------------
+// test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");
         printf("No parameter string passed");
         printf("\n\n");
-        return 0;
+        return EXIT_FAILURE;
     }
 
-// set a SQL query to insert the updated fields and make the database update ------------------------------------------
+// set a SQL query to insert the updated fields and make the database update -------------------------------------------
 
     sprintf(caSQL, "UPDATE risingfast.`Book Titles` "
                    "SET `Title Name` = '%s', `Author ID` = %d, `Source ID` = %d, `Series ID` = %d, `Genre ID` = %d, `Status ID` = %d, `Classification ID` = %d, `Rating ID` = %d, `Start` = %s, `Finish` = %s, `Abstract` = %s, `Comments` = %s  WHERE `Title ID` = %d;"
                    , caBookName, iAuthorID, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts, iBookID);
 
-//    printf("%s\n", caSQL);
-
     if(mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
-// set a SQL query to fetch the title id of the updated book and execute the query ------------------------------------
+// set a SQL query to fetch the title id of the updated book and execute the query -------------------------------------
 
     sprintf(caSQL, "SELECT BT.`Title ID` "
                    "FROM risingfast.`Book Titles` BT "
                    "WHERE BT.`Title Name` = '%s';", caBookName);
 
-//    int iColCount = 0;
 
     if(mysql_query(conn, caSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -221,16 +228,14 @@ int main(void) {
         printf("\n");
 
         mysql_free_result(res);
-        return -1;
+        return EXIT_FAILURE;
     }
 
-// fetch the number of fields in the result
-
-//    iColCount = mysql_num_fields(res);
+// fetch the number of fields in the result ----------------------------------------------------------------------------
 
     mysql_data_seek(res, 0);
 
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
     if(row = mysql_fetch_row(res))
     {
@@ -241,5 +246,5 @@ int main(void) {
 
     mysql_free_result(res);
 
-    return 0;
+    return EXIT_FAILURE;
 }

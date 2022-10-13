@@ -6,6 +6,9 @@
  *  Log:
  *      14-Dec-2021 started by copying bookVldtGenreId.c and modifying
  *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS header
+ *      12-Oct-2022 clean up commments
+ *      13-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
+ *      13-Oct-2022 check querry string for NULL and empty values
  *  Enhancements:
 */
 
@@ -22,7 +25,7 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
 char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
 char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
@@ -51,7 +54,7 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -67,27 +70,30 @@ int main(void) {
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "sourceID=1", 1);
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
         printf("\n\n");
-        return 1;
+        return  EXIT_FAILURE;
+    }
+
+// check for an empty query string -------------------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
+        printf("\n\n");
+        return  EXIT_FAILURE;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "sourceID=%d", &iSourceID);
-
-// test if Null or All or non-Null values should be shown --------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
+    if (iSourceID == 0) {
+        printf("Source ID is 0. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
         printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
+        return  EXIT_FAILURE;
     }
 
     sprintf(caSQL, "SELECT BG.`Source Name` "
@@ -111,7 +117,7 @@ void fPrintResult(char *caSQL)
         return;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -123,13 +129,13 @@ void fPrintResult(char *caSQL)
         return;
     }
     
-// fetch the number of fields in the result
+// fetch the number of fields in the result ----------------------------------------------------------------------------
     
     iColCount = mysql_num_fields(res);
     
     mysql_data_seek(res, 0);
     
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
     if(row = mysql_fetch_row(res))
     {
@@ -139,6 +145,5 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
-
     return;
 }

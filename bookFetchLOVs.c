@@ -8,6 +8,9 @@
  *      08-May-2022 sort results in alpha order
  *      09-May-2022 fix sort by alpha for authors
  *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
+ *      12-Oct-2022 clean up comments
+ *      12-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      12-Oct-2022 validate QUERY_STRING for NULL and empty values
  *  Enhancements:
  */
 
@@ -24,12 +27,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -72,41 +75,41 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string --------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "topic=series&filter=", 1);
-
-//    setenv("QUERY_STRING", "topic=series&filter=", 1);
-
     sParams = getenv("QUERY_STRING");
 
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
     if(sParams == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"topic=<topicname>&filter=<filterstring>\". Terminating bookFetchLOVs.cgi");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
+// check for an empty query string ---------------------------------------------------------------------------------------
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+    if(sParams[0] == '\0') {
+        printf("Query string is empty. Expecting QUERY_STRING=\"topic=<topicname>&filter=<filterstring>\". Terminating bookFetchLOVs.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sSubstring = strtok(sParams, caDelimiter);
     sscanf(sSubstring, "topic=%s", caTopic);
+    if(caTopic[0] == '\0') {
+        printf("Topic is empty. Expecting QUERY_STRING=\"topic=<topicname>&filter=<filterstring>\". Terminating bookFetchLOVs.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
     sTopic = caTopic;
 
     sSubstring = strtok(NULL, caDelimiter);
     sscanf(sSubstring, "filter=%s", caFilterTemp);
-//    printf("caFilterTemp: %s", caFilterTemp);
 
-// parse the QUERY_STRING for each argument: Topic and Filter ---------------------------------------------------------
+// parse the QUERY_STRING for each argument: Topic and Filter ----------------------------------------------------------
 
     sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
-
-//    printf("\n\n");
-//    printf("caFilterTemp: %s", caFilterTemp);
-//    printf("\n\n");
 
     if (strlen(caFilterTemp) == 1) {
         sprintf(caFilter, "%s", caFilterTemp);
@@ -115,17 +118,9 @@ int main(void) {
     }
     sFilter = caFilter;
 
-//    printf("Unencoded: %s", sFilter);
-//    printf("\n\n");
+// define and execute a query based on the topic -----------------------------------------------------------------------
 
-// test if Null or All or non-Null values should be shown ------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-    }
-    else if (strstr(getenv("QUERY_STRING"), "titles") != NULL) {
+    if (strstr(getenv("QUERY_STRING"), "titles") != NULL) {
         sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", BT.`Title Name` as 'Name' "
                        ", BT.Start"
@@ -159,21 +154,6 @@ int main(void) {
                        ;
          fPrintResult(sTopic, sFilter, caSQL);
     }
-/*
-    else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
-        sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
-                       ", BA.`Author Name` as 'Name' "
-                       ", ROUND(SUM(BR.`Rating Value`) / COUNT(BT.`Author ID`), 0) as `Author Rating` "
-                       "FROM `Book Authors` BA "
-                       "LEFT JOIN risingfast.`Book Titles` BT ON BA.`Author ID` = BT.`Author ID` "
-                       "LEFT JOIN risingfast.`Book Ratings` BR ON BT.`Rating ID` = BR.`Rating ID` "
-                       "WHERE BA.`Author Name` LIKE '%s' "
-                       "GROUP BY BA.`Author ID` "
-                       "ORDER BY BA.`Author ID` ASC; ", sFilter)
-                       ;
-         fPrintResult(sTopic, sFilter, caSQL);
-    }
-*/
     else if (strstr(getenv("QUERY_STRING"), "recents") != NULL) {
         sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", BT.Start"
@@ -254,15 +234,14 @@ int main(void) {
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
 {
     int iColCount = 0;
 
-//    printf("Topic: %s  Filter: %s", caTopic, caFilter);
-// execute the query and check for no result
+// execute the query and check for no result ---------------------------------------------------------------------------
     
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -272,7 +251,7 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
         return;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -284,13 +263,13 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
         return;
     }
     
-// fetch the number of fields in the result
+// fetch the number of fields in the result ----------------------------------------------------------------------------
     
     iColCount = mysql_num_fields(res);
     
     mysql_data_seek(res, 0);
     
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
      while(row = mysql_fetch_row(res))
     {
@@ -320,4 +299,5 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
     }
 
     mysql_free_result(res);
+    return;
 }

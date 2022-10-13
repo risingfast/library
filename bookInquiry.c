@@ -24,7 +24,10 @@
  *      09-Aug-2022 add spaces between fields in other lists: unreads, ratings, sources, genres, and statuses
  *      14-Sep-2022 add Access-Control-Allow-Origin HTTP header
  *      05-Oct-2022 coalesce a null author rating with '' to return authors without ratings
- *      05-Oct-202a add ID field to each query filter target2
+ *      05-Oct-2022 add ID field to each query filter target2
+ *      09-Oct-2022 add COALESCE to series query to handle NULL's in filter
+ *      09-Oct-2022 clean up comments
+ *      09-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *  Enhancements:
 */
 
@@ -41,12 +44,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -70,7 +73,7 @@ int main(void) {
     char caOrder[] = {'A', 'S', 'C', '\0'};
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block -----------------------------------------------------------------------
+// print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
@@ -89,42 +92,57 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "topic=authors&filter=", 1);              // comment out unless testing
-//    setenv("QUERY_STRING", "topic=unreads&filter=", 1);              // comment out unless testing
-//    setenv("QUERY_STRING", "topic=series&filter=8", 1);              // comment out unless testing
-//    setenv("QUERY_STRING", "topic=characters&filter=1201", 1);       // comment out unless testing
+//    setenv("QUERY_STRING", "topic=authors&filter=", 1);                                  // comment out unless testing
+//    setenv("QUERY_STRING", "topic=unreads&filter=", 1);                                  // comment out unless testing
+//    setenv("QUERY_STRING", "topic=series&filter=8", 1);                                  // comment out unless testing
+//    setenv("QUERY_STRING", "topic=characters&filter=1201", 1);                           // comment out unless testing
 
     sParams = getenv("QUERY_STRING");
 
-    if(sParams == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+// test for a NULL parameter string in QUERY_STRING --------------------------------------------------------------------
+
+    if (sParams == NULL) {
+        printf("Query string is NULL. Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));             // comment out unless testing
-//    printf("\n\n");                                                 // comment out unless testing
+// test for an empty parameter string in QUERY_STRING --------------------------------------------------------------------
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+    if (sParams[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // comment out unless testing
+//    printf("\n\n");                                                                      // comment out unless testing
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sSubstring = strtok(sParams, caDelimiter);
     sscanf(sSubstring, "topic=%s", caTopic);
+    if (caTopic[0] == '\0') {
+        printf("Topic string is empty (non-NULL). Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
     sTopic = caTopic;
 
     sSubstring = strtok(NULL, caDelimiter);
     sscanf(sSubstring, "filter=%s", caFilterTemp);
-//    printf("caFilterTemp: %s", caFilterTemp);                       // comment out unless testing
 
-// parse the QUERY_STRING for each argument: Topic and Filter ---------------------------------------------------------
+//    printf("caFilterTemp: %s", caFilterTemp);                                            // comment out unless testing
+
+// parse the QUERY_STRING for each argument: Topic and Filter ----------------------------------------------------------
 
     sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
 
-//    printf("\n\n");                                                 // comment out unless testing
-//    printf("caFilterTemp: %s", caFilterTemp);                       // comment out unless testing
-//    printf("\n\n");                                                 // comment out unless testing
+//    printf("\n\n");                                                                      // comment out unless testing
+//    printf("caFilterTemp: %s", caFilterTemp);                                            // comment out unless testing
+//    printf("\n\n");                                                                      // comment out unless testing
 
     if (strlen(caFilterTemp) == 1) {
         sprintf(caFilter, "%s", caFilterTemp);
@@ -133,11 +151,11 @@ int main(void) {
     }
     sFilter = caFilter;
 
-//    printf("\n\n");                                                 // comment out unless testing
-//    printf("Unencoded: %s", sFilter);                               // comment out unless testing
-//    printf("\n\n");                                                 // comment out unless testing
+//    printf("\n\n");                                                                     // comment out unless testing
+//    printf("Unencoded: %s", sFilter);                                                   // comment out unless testing
+//    printf("\n\n");                                                                     // comment out unless testing
 
-// test if Null or All or non-Null values should be shown ------------------------------------------------------------
+// test if Null or All or non-Null values should be shown -------------------------------------------------------------
 
     if (getenv("QUERY_STRING") == NULL) {
         printf("\n\n");
@@ -247,7 +265,7 @@ int main(void) {
                        " LEFT JOIN risingfast.`Book Ratings` BR on BT.`Rating ID` = BR.`Rating ID` "
                        " GROUP BY BS.`Series ID`, BS.`Series Name`, BA.`Author Name` "
                        " ORDER BY BS.`Series ID` ASC) AS T "
-                       " WHERE CONCAT(T.`Series ID`, T.`Series Name`, T.`Author Name`, T.`Rating`, T.`Count`) like '%s'; ", sFilter)
+                       " WHERE CONCAT(T.`Series ID`, T.`Series Name`, COALESCE(T.`Author Name`, ''), COALESCE(T.`Rating`, ''), COALESCE(T.`Count`, '')) like '%s'; ", sFilter)
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
@@ -278,15 +296,16 @@ int main(void) {
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
 {
     int iColCount = 0;
 
-//    printf("Topic: %s  Filter: %s", caTopic, caFilter);
-// execute the query and check for no result
+//    printf("Topic: %s  Filter: %s", caTopic, caFilter);                                  // uncomment for testing only
+
+// execute the query and check for no result ---------------------------------------------------------------------------
     
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -296,7 +315,7 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
         return;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -308,13 +327,13 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
         return;
     }
     
-// fetch the number of fields in the result
+// fetch the number of fields in the result ----------------------------------------------------------------------------
     
     iColCount = mysql_num_fields(res);
     
     mysql_data_seek(res, 0);
     
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
     while(row = mysql_fetch_row(res))
     {
@@ -344,4 +363,5 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
     } 
 
     mysql_free_result(res);
+    return;
 }

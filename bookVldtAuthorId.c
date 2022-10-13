@@ -6,6 +6,9 @@
  *  Log:
  *      19-Dec-2021 started by copying bookVldtAuthorId.c and modifying
  *      15-Sep-2021 add Access-Control-Allow-Header: * CORS http header
+ *      12-Oct-2022 clean up comments
+ *      12-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ 8      12-Oct-2022 validate QUERY_STRING for NULL and empty values
  *  Enhancements:
 */
 
@@ -51,7 +54,7 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -67,27 +70,32 @@ int main(void) {
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
-//    setenv("QUERY_STRING", "authorID=138", 1);
-
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"authorID=<999>\". Terminating bookVldtAuthorId.cgi");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
+    }
+
+// test if Query String is empty ---------------------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty. Expecting QUERY_STRING=\"authorID=<999>\". Terminating bookVldtAuthorId.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "authorID=%d", &iAuthorID);
 
-// test if Null or All or non-Null values should be shown --------------------------------------------------------------
+// test for an empty Author ID -----------------------------------------------------------------------------------------
 
-    if (getenv("QUERY_STRING") == NULL) {
+    if (iAuthorID == 0) {
+        printf("Author ID is 0. Expecting QUERY_STRING=\"authorID=<999>\". Terminating bookVldtAuthorId.cgi");
         printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
+        return EXIT_FAILURE;
     }
 
     sprintf(caSQL, "SELECT BA.`Author Name` "
@@ -111,7 +119,7 @@ void fPrintResult(char *caSQL)
         return;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -123,13 +131,13 @@ void fPrintResult(char *caSQL)
         return;
     }
     
-// fetch the number of fields in the result
+// fetch the number of fields in the result ----------------------------------------------------------------------------
     
     iColCount = mysql_num_fields(res);
     
     mysql_data_seek(res, 0);
     
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
     if(row = mysql_fetch_row(res))
     {
@@ -139,6 +147,5 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
-
     return;
 }

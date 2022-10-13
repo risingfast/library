@@ -7,6 +7,7 @@
  *      15-Dec-2021 start by copying bookChgGenreNme.c and modifying
  *      14-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE for returns
+ *      10-Oct-2022 clean up comments
  *  Enhancements:
 */
 
@@ -22,7 +23,7 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
 char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
 char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
@@ -50,7 +51,7 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 

@@ -8,7 +8,8 @@
  *      14-Dec-2021 change name from bookChgCharacter.c to bookChgCharNme.c
  *      14-Sep-2022 add Access-Control-Allow-Origin: * to http headers
  *      09-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
- *      09-Oct-2022 validate QUERY_STRING and test for NULL and empy string
+ *      09-Oct-2022 validate QUERY_STRING and test for NULL and empty string
+ *      10-Oct-2022 clean up comments
  *  Enhancements:
 */
 

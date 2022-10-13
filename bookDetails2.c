@@ -1,4 +1,4 @@
-/*  bookDetails.c - CGI to retrieve a single book for the bookInquiry.html webpage
+/*  bookDetails2.c - CGI to retrieve a single book for the bookInquiry.html webpage
  *  Author: Geoffrey Jarman
  *  Started: 08-Nov-2021
  *  References:
@@ -7,6 +7,10 @@
  *      08-Nov-2021 started by copying bookInquiry.c and modifying
  *      09-Nov-2021 create heading row above data row
  *      26-Jul-2022 add abstract field to the book query
+ *      12-Oct-2022 clean up comments
+ *      12-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      12-Oct-2022 validate qUERY_STRING for NULL or empty values
+ *      12-Oct-2022 remove test comments
  *  Enhancements:
 */
 
@@ -23,12 +27,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -47,12 +51,12 @@ int main(void) {
     int i;
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and CORS <header> block ----------------------------------------------------------------
+// print the html content type and CORS <header> block -----------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -66,35 +70,28 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string --------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "TitleID=102", 1);
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("\n");
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"TitleID=<999>\". Terminating bookDetails2.cgi");
         printf("\n\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));
-//    printf("\n\n");
-//    return 0;
+// test if Null or All or non-Null values should be shown --------------------------------------------------------------
 
-//  get the content from QUERY_STRING and tokenize based on '&' character----------------------------------------------
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"TitleID=<999>\". Terminating bookDetails2.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "TitleID=%d", &iTitleID);
 
-// test if Null or All or non-Null values should be shown -------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-    }
-        
     sprintf(caSQL, "SELECT BT.`Title ID` "
                    ", BT.`Title Name` "
                    ", BA.`Author ID` "
@@ -124,14 +121,9 @@ int main(void) {
                    "LEFT JOIN risingfast.`Book Classifications` BC ON BT.`Classification ID` = BC.`Classification ID` "
                    "LEFT JOIN risingfast.`Book Ratings` BR ON BT.`Rating ID` = BR.`Rating ID` "
                    "WHERE BT.`Title ID` = '%d';", iTitleID);
-    
-//    printf("Query: %s", caSQL);
-//    printf("\n\n");
-//    return 0;
 
     fPrintResult(caSQL);
-    
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void fPrintResult(char *caSQL)
@@ -146,7 +138,7 @@ void fPrintResult(char *caSQL)
         return;
     }
 
-// store the result of the query
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
     if(res == NULL)
@@ -157,15 +149,15 @@ void fPrintResult(char *caSQL)
         mysql_free_result(res);
         return;
     }
-    
-// fetch the number of fields in the result
-    
+
+// fetch the number of fields in the result ----------------------------------------------------------------------------
+
     iColCount = mysql_num_fields(res);
     fields = mysql_fetch_fields(res);
-    
+
     mysql_data_seek(res, 0);
-    
-// print the column headings
+
+// print the column headings -------------------------------------------------------------------------------------------
 
     for(int i = 0; i < iColCount; i++)
     {
@@ -177,7 +169,7 @@ void fPrintResult(char *caSQL)
     }
     printf("\n");
 
-// print each row of results
+// print each row of results -------------------------------------------------------------------------------------------
 
     while(row = mysql_fetch_row(res))
     {
@@ -194,4 +186,5 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
+    return;
 }

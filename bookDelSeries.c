@@ -22,12 +22,12 @@
 
 #define MAXLEN 1024
 
-// global declarations
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
@@ -42,12 +42,12 @@ int main(void) {
 
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and CORS <header> block -----------------------------------------------------------------------
+// print the html content type and CORS <header> block -----------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -60,27 +60,39 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string -------------------------------------------------------------------------------------=
+//    setenv("QUERY_STRING", "seriesID=100", 1);                                           // uncomment for testing only
 
-//    setenv("QUERY_STRING", "seriesID=100", 1);
+// check for a NULL query string ---------------------------------------------------------------------------------------
 
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
-        printf("Query string is empty. Terminating program");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"seriesID=<999>\". Terminating bookDelSeries.cgi");
         printf("\n\n");
         return EXIT_FAILURE;
     }
 
-//  get the content from QUERY_STRING and tokenize the ratingID value ---------------------------------------------------
+// check for an empty query string -------------------------------------------------------------------------------------
+
+    if(sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"seriesID=<999>\". Terminating bookDelSeries.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize the ratingID value --------------------------------------------------
 
     sscanf(sParam, "seriesID=%d", &iSeriesID);
+    if(iSeriesID == 0) {
+        printf("Series ID is 0. Expecting QUERY_STRING=\"seriesID=<999>\". Terminating bookDelSeries.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
 
-// set a SQL query to insert the new author ---------------------------------------------------------------------------
+// set a SQL query to insert the new author ----------------------------------------------------------------------------
 
     sprintf(caSQL, "DELETE FROM risingfast.`Book Series` "
                    "WHERE `Series ID` = %d;", iSeriesID);
-
 
     if(mysql_query(conn, caSQL) != 0)
     {
