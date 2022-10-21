@@ -8,6 +8,7 @@
  *      09-Dec-2021 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      09-Dec-2021 clean up comments
  *      09-Dec-2021 validate QUERY_STRING and test for NULL and empty values
+ *      18-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -21,7 +22,6 @@
 
 #define SQL_LEN 5000
 #define HDG_LEN 1000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -50,21 +50,8 @@ int main(void) {
 
 // print the html content type and <head> block ------------------------------------------------------------------------
 
-    printf("Content-type: text/html\n\n");
-
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
+    printf("Content-type: text/html\n");
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
@@ -96,12 +83,43 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+   
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
+
+// set a SQL query to select a character from the database -------------------------------------------------------------
+
     sprintf(caSQL, "SELECT BC.`Character Name` "
                    "FROM risingfast.`Book Characters` BC "
                    "WHERE BC.`Character ID` = '%d';", iCharID);
     
     fPrintResult(caSQL);
-    
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
+
     return EXIT_SUCCESS;
 }
 

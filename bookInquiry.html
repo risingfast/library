@@ -98,6 +98,7 @@
 <!--    25-Sep-2022 - add default behaviour on <Enter>                                                               -->
 <!--    05-Oct-2022 - remove fClickSubmitOnEnter() function                                                          -->
 <!--    05-Oct-2022 - remove fEnableSubmitIfNotNull() function                                                       -->
+<!--    16-Oct-2022 - add chapter count to books                                                                     -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ..................................................... -->
 
@@ -531,6 +532,10 @@
                             <input id="booksauthor-input">
                             <select id="booksauthor-select" onchange="fPopulateLOVId('authors')"></select>
                         </div>
+                        <div id="bookschapters-div">
+                            <label id="bookschapters-label" for="bookschapters-input">Chaptrs: </label>
+                            <input id="bookschapters-input">
+                        </div>
                         <div id="bookssource-div">
                             <label id="bookssource-label" for="books:source">Source: </label>
                             <input id="bookssource-input">
@@ -654,6 +659,8 @@
             <aside id="ASIDE1">
                     <h3 id=ASIDE1H3>Changes 2021-22</h3>
                 <ul id="ASIDE1UL">
+                    <li CLASS="ASIDE1LI">01-Jan: Happy New Year 2023</li>
+                    <li class="ASIDE1LI">16-Oct: add chapter count</li>
                     <li class="ASIDE1LI">05-Oct: fix author listing</li>
                     <li class="ASIDE1LI">24-Sep: add 'Enter' defaults</li>
                     <li class="ASIDE1LI">08-Sep: add Print for books</li>
@@ -687,6 +694,7 @@
                     <li CLASS="ASIDE1LI">11-Jan: protect ' adding a book</li>
                     <li CLASS="ASIDE1LI">07-Jan: add book</li>
                     <li CLASS="ASIDE1LI">04-Jan: implement attribute LOV's</li>
+                    <li CLASS="ASIDE1LI">01-Jan: Happy New Year 2022</li>
                     <li CLASS="ASIDE1LI">30-Dec: escape ' in updates</li>
                     <li CLASS="ASIDE1LI">29-Dec: combine _updt_id()'s</li>
                     <li CLASS="ASIDE1LI">27-Dec: escape ' character</li>
@@ -737,6 +745,7 @@
                     <li CLASS="ASIDE1LI">02-Nov: enable filters</li>
                     <li CLASS="ASIDE1LI">02-Nov: add Titles listing</li>
                     <li CLASS="ASIDE1LI">01-Nov: create this page</li>
+                    <li CLASS="ASIDE1LI">01-Jan: Happy New Year 2021</li>
                 </ul>
             </aside>
 

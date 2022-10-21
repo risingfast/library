@@ -9,6 +9,7 @@
  *      07-Oct-2022 test for invalid QUERY_STRING environment variables
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      09-Oct-2022 clean up comments
+ *      19-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
  *      Add rating value to update
 */
@@ -22,22 +23,21 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 5000
-
 #define MAXLEN 1024
 
-// global declarations ------------------------------------------------------------------------------------------------
+// global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
 MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
-char caRating[SQL_LEN] = {'\0'};
+char caRating[MAXLEN] = {'\0'};
 char *sRating = NULL;
 char *sParam = NULL;
 char *sSubstring = NULL;
@@ -53,23 +53,7 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
 // check for a NULL query string ---------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "rating=Terrible and Awful", 1);                              // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
@@ -87,10 +71,6 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
-//    printf("\n\n");                                                                      // uncomment for testing only
-//    return 0;                                                                            // uncomment for testing only
-
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "rating=%s", caRating);
@@ -102,19 +82,37 @@ int main(void) {
     }
 
     sRating = fUrlDecode(caRating);
+    strcpy(caRating, sRating);
+    free(sRating);
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
 
 // set a SQL query to insert the new rating ----------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Ratings` "
                    "(`Rating Name`, `Rating Value`)  "
-                   "VALUES ('%s', 0);", sRating);
+                   "VALUES ('%s', 0);", caRating);
 
 // Call the function to print the SQL results to stdout and terminate the program --------------------------------------
-
-//    printf("Query: %s", caSQL);                                                          // uncomment for testing only
-//    printf("\n\n");                                                                      // uncomment for testing only
-//    return EXIT_SUCCESS;                                                                 // uncomment for testing only
-
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -124,7 +122,15 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    printf("Rating '%s' inserted into Ratings table", sRating);
+    printf("Rating '%s' inserted into Ratings table", caRating);
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
 
     return EXIT_SUCCESS;
 }

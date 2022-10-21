@@ -8,6 +8,7 @@
  *      14-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE for returns
  *      10-Oct-2022 clean up comments
+ *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -20,7 +21,6 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 5000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -51,23 +51,7 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
 // check for a NULL query string ---------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "authorID=138&authorName=Molly%20Fritzz", 1);                 // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
@@ -106,13 +90,35 @@ int main(void) {
     }
 
     sAuthor = fUrlDecode(caAuthorName);
+    strcpy(caAuthorName, sAuthor);
+    free(sAuthor);
 
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
     sprintf(caSQL, "UPDATE risingfast.`Book Authors` BA "
                    "SET BA.`Author Name` = '%s' "
-                   "WHERE BA.`Author ID` = %d;", sAuthor, iAuthorID);
+                   "WHERE BA.`Author ID` = %d;", caAuthorName, iAuthorID);
 
 // Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
@@ -124,7 +130,15 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    printf("Author ID %d updated to '%s'", iAuthorID, sAuthor);
+    printf("Author ID %d updated to '%s'", iAuthorID, caAuthorName);
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
 
     return EXIT_SUCCESS;
 }

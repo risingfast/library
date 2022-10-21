@@ -8,6 +8,7 @@
 /*     26-Jul-2022 - add styling for abstract text area                                                              */
 /*     02-Aug-2022 - change width of filter input fields                                                             */
 /*     08-Sep-2022 - add @media rule for printing                                                                    */
+/*     16-Oct-2022 - add layout for chapters                                                                         */
 
 #results-div {
     width: 80%;
@@ -1322,6 +1323,21 @@ i#charactersupdatedname-label {
     display: inline-block;
     width: 352px;
     height: 22px;
+}
+
+#bookschapters-div {
+    display: block;
+    margin: 10px 0px 10px 0px;
+}
+
+#bookschapters-label {
+    display: inline-block;
+    width: 55px;
+}
+
+#bookschapters-input {
+    display: inline-block;
+    width: 35px;
 }
 
 #bookssource-div {

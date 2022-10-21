@@ -10,6 +10,7 @@
  *      12-Oct=2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      12-Oct-2022 clean up comments
  *      12-Oct-2022 validate QUERY_STATUS for NULL or empty values
+ *      16-Oct-2022 add chapters
  *  Enhancements:
 */
 
@@ -61,6 +62,7 @@ char *sCmnts = NULL;
 char *sTemp = NULL;
 int  iBookID = 0;
 int  iAuthorID = 0;
+int  iChapters = 0;
 int  iSourceID = 0;
 int  iSeriesID = 0;
 int  iGenreID = 0;
@@ -130,6 +132,9 @@ int main(void) {
     sscanf(sTemp, "authorId=%d", &iAuthorID);
 
     sTemp = strtok(NULL, caDelimiter);
+    sscanf(sTemp, "chapters=%d", &iChapters);
+
+    sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "sourceId=%d", &iSourceID);
     
     sTemp = strtok(NULL, caDelimiter);
@@ -193,8 +198,8 @@ int main(void) {
 // set a SQL query to insert the updated fields and make the database update -------------------------------------------
 
     sprintf(caSQL, "UPDATE risingfast.`Book Titles` "
-                   "SET `Title Name` = '%s', `Author ID` = %d, `Source ID` = %d, `Series ID` = %d, `Genre ID` = %d, `Status ID` = %d, `Classification ID` = %d, `Rating ID` = %d, `Start` = %s, `Finish` = %s, `Abstract` = %s, `Comments` = %s  WHERE `Title ID` = %d;"
-                   , caBookName, iAuthorID, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts, iBookID);
+                   "SET `Title Name` = '%s', `Author ID` = %d, `Chapters` = %d, `Source ID` = %d, `Series ID` = %d, `Genre ID` = %d, `Status ID` = %d, `Classification ID` = %d, `Rating ID` = %d, `Start` = %s, `Finish` = %s, `Abstract` = %s, `Comments` = %s  WHERE `Title ID` = %d;"
+                   , caBookName, iAuthorID, iChapters, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts, iBookID);
 
     if(mysql_query(conn, caSQL) != 0)
     {

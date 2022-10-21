@@ -8,6 +8,7 @@
  *      11-Oct-2022 clean up comments
  *      11-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      11-Oct-2022 validate QUERY_STRING for NULL and empty values
+ *      19-Oct-2022 add check for no rows deleted
  *  Enhancements:
 */
 
@@ -36,6 +37,7 @@ MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
 char *sParam = NULL;
+int iDelRows = 0;
 int  iGenreID = 0;
 
 int main(void) {
@@ -101,7 +103,14 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    printf("Genre ID '%d' deleted", iGenreID);
+
+    iDelRows = (int) mysql_affected_rows(conn);
+
+    if(iDelRows == 0) {
+        printf("No rows deleted. Genre ID not found\n");
+    } else {
+        printf("Genre ID '%d' deleted", iGenreID);
+    }
 
     return EXIT_SUCCESS;
 }

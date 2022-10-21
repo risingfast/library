@@ -14,6 +14,9 @@
  *      21-Sep=2022 add a test for a NULL QUERY_STRING
  *      06-Oct-2022 add tests for invalid parameters in QUERY_STRING
  *      08-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
+ *      16-Oct-2022 add chapters
+ *      18-Oct-2022 extend MySQL initialization and shutdown operations
+ *      18-Oct-2022 free the string created by fUrlDecode()
  *  Enhancements:
 */
 
@@ -63,8 +66,10 @@ char *sFinishDte = NULL;
 char *sAbstrct = NULL;
 char *sCmnts = NULL;
 char *sTemp = NULL;
+char *sTemp2 = NULL;
 int  iTitleID = 0;
 int  iAuthorID = 0;
+int  iChapters = 0;
 int  iSourceID = 0;
 int  iSeriesID = 0;
 int  iGenreID = 0;
@@ -83,35 +88,6 @@ int main(void) {
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
-
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
-// Format of QUERY_STRING parsed for book information ------------------------------------------------------------------
-/*
-    setenv("QUERY_STRING", "bookName=Test%20Title                                          // uncomment for testing only
-                            &authorId=107
-                            &sourceId=2
-                            &seriesId=82
-                            &genreId=1
-                            &statusId=4
-                            &clsfnId=1
-                            &ratingId=4
-                            &startDte=2021-01-01
-                            &finishDte=2021-12-30
-                            &cmnts=Hello", 1);
-*/
 
 // Fetch the QUERY_STRING environment variable paramete string ---------------------------------------------------------
 
@@ -145,12 +121,23 @@ int main(void) {
         printf("\n\n");
         return EXIT_FAILURE;
     }
-    strcpy(caBookName, fUrlDecode(caNameBuf));
+
+    sTemp2 = fUrlDecode(caNameBuf);
+    strcpy(caBookName, sTemp2);
+    free(sTemp2);
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "authorId=%d", &iAuthorID);
     if (iAuthorID == 0) {
         printf("Query string \"%s\" has no authorId. Terminating \"bookAddBook.cgi\"", sParamOrig);
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+    sTemp = strtok(NULL, caDelimiter);
+    sscanf(sTemp, "chapters=%d", &iChapters);
+    if (iAuthorID == 0) {
+        printf("Query string \"%s\" has no chapters. Terminating \"bookAddBook.cgi\"", sParamOrig);
         printf("\n\n");
         return EXIT_FAILURE;
     }
@@ -237,11 +224,34 @@ int main(void) {
     }
     strcpy(caCmnts, fUrlDecode(caCmntsQuoted));
 
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+   printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+    } else {
+       printf("MySQL Client library resources assigned\n");
+    }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
+
 // set a SQL query to insert the new book title ------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Titles` "
-                   "(`Title Name`, `Author ID`, `Source ID`, `Series ID`, `Genre ID`, `Status ID`, `Classification ID`, `Rating ID`, Start, Finish, Abstract, Comments)  "
-                   "VALUES ('%s', %d, %d, %d, %d, %d, %d, %d, %s, %s, %s, %s);", caBookName, iAuthorID, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts);
+                   "(`Title Name`, `Author ID`, `Chapters`, `Source ID`, `Series ID`, `Genre ID`, `Status ID`, `Classification ID`, `Rating ID`, Start, Finish, Abstract, Comments)  "
+                   "VALUES ('%s', %d, %d, %d, %d, %d, %d, %d, %d, %s, %s, %s, %s);", caBookName, iAuthorID, iChapters, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts);
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -293,6 +303,18 @@ int main(void) {
     }
 
     mysql_free_result(res);
+
+// * close the database connection created by mysql_init(NULL) -----------------------------------------------------------
+
+    mysql_close(conn);
+    printf("\n");
+    printf("MySQL connection is closed");
+    printf("\n\n");
+
+// * free resources used by the MySQL library ----------------------------------------------------------------------------
+
+    mysql_library_end();                                                                                                                                                                                            printf("MySQL library resources freed");
+    printf("\n\n");
 
     return EXIT_SUCCESS;
 }

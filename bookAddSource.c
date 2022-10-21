@@ -9,6 +9,7 @@
  *      07-Oct-2022 add checks for invalid QUERY_STRING environment variable value
  *      08-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
  *      09-Oct-2022 clean up comments
+ *      19-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -21,7 +22,6 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 5000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ MYSQL_RES *res;
 MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
-char caSource[SQL_LEN] = {'\0'};
+char caSource[MAXLEN] = {'\0'};
 char *sSource = NULL;
 char *sParam = NULL;
 char *sSubstring = NULL;
@@ -52,23 +52,7 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
 // check for a NULL query string ---------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "source=The%20Cloud", 1);                                     // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
@@ -77,10 +61,6 @@ int main(void) {
         printf("\n\n");
         return EXIT_FAILURE;
     }
-
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
-//    printf("\n\n");
-//    return EXIT_SUCCESS;
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
@@ -100,19 +80,37 @@ int main(void) {
     }
 
     sSource = fUrlDecode(caSource);
+    strcpy(caSource, sSource);
+    free(sSource);
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
 
 // set a SQL query to insert the new source ----------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Sources` "
                    "(`Source Name`)  "
-                   "VALUES ('%s');", sSource);
+                   "VALUES ('%s');", caSource);
 
 // Call the function to print the SQL results to stdout and terminate the program --------------------------------------
-
-//    printf("Query: %s", caSQL);                                                          // uncomment for testing only
-//    printf("\n\n");                                                                      // uncomment for testing only
-//    return EXIT_SUCCESS;                                                                 // uncomment for testing only
-
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -122,7 +120,15 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    printf("Source '%s' inserted into Sources table", sSource);
+    printf("Source '%s' inserted into Sources table", caSource);
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
 
     return EXIT_SUCCESS;
 }

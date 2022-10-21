@@ -11,6 +11,7 @@
  *      12-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      12-Oct-2022 validate qUERY_STRING for NULL or empty values
  *      12-Oct-2022 remove test comments
+ *      16-Oct-2022 add chapter count
  *  Enhancements:
 */
 
@@ -96,6 +97,7 @@ int main(void) {
                    ", BT.`Title Name` "
                    ", BA.`Author ID` "
                    ", BA.`Author Name` "
+                   ", BT.`Chapters` "
                    ", BS1.`Source ID` "
                    ", BS1.`Source Name` "
                    ", BS2.`Series ID` "

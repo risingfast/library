@@ -9,6 +9,7 @@
  *      06-Oct-2022 check for invalid QUERY_STRING enviroment variable value
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      09-Oct-2022 clean up comments
+  *     19-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -36,7 +37,7 @@ MYSQL_RES *res;
 MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
-char caGenre[SQL_LEN] = {'\0'};
+char caGenre[MAXLEN] = {'\0'};
 char *sGenre = NULL;
 char *sParam = NULL;
 char *sSubstring = NULL;
@@ -52,24 +53,6 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return EXIT_FAILURE;
-    }
-
-// check for a NULL query string ---------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "genre=Test%20genre", 1);                                     // uncomment for testing only
-
     sParam = getenv("QUERY_STRING");
 
     if(sParam == NULL) {
@@ -77,10 +60,6 @@ int main(void) {
         printf("\n\n");
         return EXIT_FAILURE;
     }
-
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // uncomment for testing only
-//    printf("\n\n");                                                                      // uncomment for testing only
-//    return EXIT_FAILURE;                                                                 // uncomment for testing only
 
 // test for an empty QUERY_STRING --------------------------------------------------------------------------------------
 
@@ -100,19 +79,37 @@ int main(void) {
     }
 
     sGenre = fUrlDecode(caGenre);
+    strcpy(caGenre, sGenre);
+    free(sGenre);
+
+// * initialize the MySQL client library
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return EXIT_FAILURE;
+    }
 
 // set a SQL query to insert the new genre -----------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Genres` "
                    "(`Genre Name`)  "
-                   "VALUES ('%s');", sGenre);
+                   "VALUES ('%s');", caGenre);
 
 // Call the function to print the SQL results to stdout and terminate the program --------------------------------------
-
-//    printf("Query: %s", caSQL);                                                          // uncomment for testing only
-//    printf("\n\n");                                                                      // uncomment for testing only
-//    return EXIT_SUCCESS;                                                                 // uncomment for testing only
-
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -122,7 +119,15 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    printf("Genre '%s' inserted into Genres table", sGenre);
+// * close the database connection created by mysql_init(NULL) -----------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library ----------------------------------------------------------------------------
+
+    mysql_library_end();
+
+    printf("Genre '%s' inserted into Genres table", caGenre);
 
     return EXIT_SUCCESS;
 }

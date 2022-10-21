@@ -12,6 +12,7 @@
  *      21-Sep-2022 fix test for parameter-less QUERY_STRING
  *      06-Oct-2022 extend validity checking for QUERY_STRING
  *      07-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      17-Oct-2022 extend MySQL initialization and shutdown operations
 
  *  Enhancements:
 */
@@ -55,24 +56,6 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
-// Format of QUERY_STRING parsed for the author name -------------------------------------------------------------------
-
-//     setenv("QUERY_STRING", "author=Firstname%20Lastname");
-
 // Fetch the QUERY_STRING environment variable parameter string --------------------------------------------------------
 
     sParam = getenv("QUERY_STRING");
@@ -104,6 +87,27 @@ int main(void) {
     }
     sAuthor = fUrlDecode(caAuthor);
 
+// * initialize the MySQL client library
+
+   if (mysql_library_init(0, NULL, NULL)) {
+   printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
+
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Authors` "
@@ -119,6 +123,16 @@ int main(void) {
     }
 
     printf("Author '%s' inserted into Authors table", sAuthor);
+
+// * close the database connection created by mysql_init(NULL) -----------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library ----------------------------------------------------------------------------
+
+    mysql_library_end();
+
+    free(sAuthor);
 
     return EXIT_SUCCESS;
 }

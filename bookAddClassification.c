@@ -10,6 +10,7 @@
  *      21-Sep-2022 add check for empty string for classification name
  *      06-Oct-2022 validate QUERY_STRING parameters
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      19-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -22,6 +23,7 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 5000
+#define CLASFN_LEN 4000
 
 #define MAXLEN 1024
 
@@ -37,7 +39,7 @@ MYSQL_RES *res;
 MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
-char caClassification[SQL_LEN] = {'\0'};
+char caClassification[CLASFN_LEN] = {'\0'};
 char *sClassification = NULL;
 char *sParam = NULL;
 char *sSubstring = NULL;
@@ -52,24 +54,6 @@ int main(void) {
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
-
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
-// Format of QUERY_STRING parsed for the claassification name ----------------------------------------------------------
-
-//    setenv("QUERY_STRING", "classification=Comedies%20and%20Comics", 1);                 // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
@@ -92,18 +76,41 @@ int main(void) {
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "classification=%s", caClassification);
-    sClassification = fUrlDecode(caClassification);
     if (caClassification[0] == '\0') {
          printf("Query string \"%s\" has no classification, Expecting QUERY_STRING=\"classification=<clsfn>\". Terminating \"bookAddClassification.cgi\"", sParam);
          printf("\n\n");
          return EXIT_FAILURE;
+    }
+    sClassification = fUrlDecode(caClassification);
+    strcpy(caClassification, sClassification);
+    free(sClassification);
+
+// * initialize the MySQL client library
+
+   if (mysql_library_init(0, NULL, NULL)) {
+   printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+    }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
     }
 
 // set a SQL query to insert the new classification --------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Classifications` "
                    "(`Classification Name`)  "
-                   "VALUES ('%s');", sClassification);
+                   "VALUES ('%s');", caClassification);
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -113,7 +120,15 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    printf("Classification '%s' inserted into Classifications table", sClassification);
+    printf("Classification '%s' inserted into Classifications table", caClassification);
 
-    return EXIT_SUCCESS;
+// * close the database connection created by mysql_init(NULL) -----------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library ----------------------------------------------------------------------------
+
+    mysql_library_end();
+
+return EXIT_SUCCESS;
 }

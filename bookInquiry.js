@@ -74,6 +74,7 @@
 //    22-Sep-2022 disable the submit button before adding a book
 //    05-Oct-2022 - remove fClickSubmitOnEnter() function
 //    05-Oct-2022 - remove fEnableSubmitIfNotNull() function
+//    16-Oct-2022 - add chapter count
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -267,7 +268,7 @@ function fSetMode(sNewMode) {
 
             //  disable all book fields except Book ID .................................................................
 
-            fDisableBookFields("booksid-input", "booksname-input", "booksauthor-input", "booksauthor-select", "bookssource-input", "bookssource-select"
+            fDisableBookFields("booksid-input", "booksname-input", "booksauthor-input", "bookschapters-input", "booksauthor-select", "bookssource-input", "bookssource-select"
                              , "booksseries-input", "booksseries-select", "booksgenre-input", "booksgenre-select", "booksstatus-input", "booksstatus-select"
                              , "booksclassification-input", "booksclassification-select", "booksrating-input", "booksrating-select", "booksstart-input", "booksfinish-input"
                              , "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea");
@@ -319,7 +320,7 @@ function fSetMode(sNewMode) {
 
             //  enable all book fields for 'add' mode ..................................................................
 
-            fEnableBookFields("booksid-input", "booksname-input", "booksauthor-select", "bookssource-select", "booksseries-select", "booksgenre-select"
+            fEnableBookFields("booksid-input", "booksname-input", "booksauthor-select", "bookschapters-input", "bookssource-select", "booksseries-select", "booksgenre-select"
                             , "booksstatus-select", "booksclassification-select", "booksrating-select", "booksstart-input", "booksfinish-input"
                             , "booksabstract-textarea", "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea");
             fSetElement("Unhide", "books-div"); 
@@ -354,6 +355,8 @@ function fSetMode(sNewMode) {
             document.getElementById("booksauthor-select").value = 'Unassigned';
             fPopulateLOVId('authors');
             
+            document.getElementById("bookschapters-input").value = "";
+            
             document.getElementById("bookssource-select").value = 'Unassigned';
             fPopulateLOVId('sources');
             
@@ -387,7 +390,7 @@ function fSetMode(sNewMode) {
 
             //  disable all book fields except Book ID for initial fetch ...............................................
 
-            fDisableBookFields("booksid-input", "booksname-input", "booksauthor-input", "booksauthor-select", "bookssource-input", "bookssource-select"
+            fDisableBookFields("booksid-input", "booksname-input", "booksauthor-input", "booksauthor-select", "bookschapters-input", "bookssource-input", "bookssource-select"
                              , "booksseries-input", "booksseries-select", "booksgenre-input", "booksgenre-select", "booksstatus-input", "booksstatus-select"
                              , "booksclassification-input", "booksclassification-select", "booksrating-input", "booksrating-select", "booksstart-input", "booksfinish-input"
                              , "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea");
@@ -417,7 +420,7 @@ function fSetMode(sNewMode) {
 
             //  disable and unhide all book fields .....................................................................
 
-            fDisableBookFields("booksname-input", "booksauthor-select", "bookssource-select", "booksseries-select", "booksgenre-select", "booksstatus-select"
+            fDisableBookFields("booksname-input", "booksauthor-select", "bookschapters-input", "bookssource-select", "booksseries-select", "booksgenre-select", "booksstatus-select"
                              , "booksclassification-select", "booksrating-select", "booksstart-input", "booksfinish-input"
                              , "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea");
             fSetElement("Enable", "booksid-input");
@@ -1317,6 +1320,7 @@ async function fonclick_submit_submit() {
     } else if ((sTopic === 'books') && sMode === "add") {
         let sBookName = document.getElementById("booksname-input").value;
         let sBookAuthorId = document.getElementById("booksauthor-input").value;
+        let sBookChapters = document.getElementById("bookschapters-input").value;
         let sBookSourceId = document.getElementById("bookssource-input").value;
         let sBookSeriesId = document.getElementById("booksseries-input").value;
         let sBookGenreId = document.getElementById("booksgenre-input").value;
@@ -1329,6 +1333,7 @@ async function fonclick_submit_submit() {
         let sBookCmnts = document.getElementById("bookscomments-textarea").value;
         let sRequest = uri37 + '?' + 'bookName=' + sBookName.replace(/'/g, "''") + 
                                '&' + 'authorId=' + sBookAuthorId + 
+                               '&' + 'chapters=' + sBookChapters + 
                                '&' + 'sourceId=' + sBookSourceId + 
                                '&' + 'seriesId=' + sBookSeriesId + 
                                '&' + 'genreId=' + sBookGenreId + 
@@ -1348,6 +1353,7 @@ async function fonclick_submit_submit() {
             fSetElement("Disable", "booksid-input");
             fSetElement("Disable", "booksname-input");
             fSetElement("Disable", "booksauthor-select");
+            fSetElement("Disable", "bookschapters-input");
             fSetElement("Disable", "bookssource-select");
             fSetElement("Disable", "booksseries-select");
             fSetElement("Disable", "booksgenre-select");
@@ -1370,16 +1376,13 @@ async function fonclick_submit_submit() {
         fPopulateLOV('genres');
         fSetElement("Disable", "booksid-input");
         fGetBookDetails();
-        if (document.getElementById('booksname-input').value.length > 0) {
-            document.getElementById("booksstage-input").value = 'Book Fetch Submitted';
-        } else {
-            document.getElementById("booksstage-input").value = 'No Book Fetched';
-        }
+        document.getElementById("booksstage-input").value = 'Book Fetch Submitted';
         document.getElementById("submit-message").value=sTopic.substring(0, 4) + " details fetched so make updates and submit";
         fSetElement("Disable", "booksstage-input");
         fSetElement("Disable", "booksid-input");
         fSetElement("Enable", "booksname-input");
         fSetElement("Enable", "booksauthor-select");
+        fSetElement("Enable", "bookschapters-input");
         fSetElement("Enable", "bookssource-select");
         fSetElement("Enable", "booksseries-select");
         fSetElement("Enable", "booksgenre-select");
@@ -1399,6 +1402,7 @@ async function fonclick_submit_submit() {
         let sBookId = document.getElementById("booksid-input").value;
         let sBookName = document.getElementById("booksname-input").value;
         let sBookAuthorId = document.getElementById("booksauthor-input").value;
+        let sBookChapters = document.getElementById("bookschapters-input").value;
         let sBookSourceId = document.getElementById("bookssource-input").value;
         let sBookSeriesId = document.getElementById("booksseries-input").value;
         let sBookGenreId = document.getElementById("booksgenre-input").value;
@@ -1412,6 +1416,7 @@ async function fonclick_submit_submit() {
         let sRequest = uri39 + '?' + 'bookId=' + sBookId + 
                                '&' + 'bookName=' + sBookName.replace(/'/g, "''") + 
                                '&' + 'authorId=' + sBookAuthorId + 
+                               '&' + 'chapters=' + sBookChapters + 
                                '&' + 'sourceId=' + sBookSourceId + 
                                '&' + 'seriesId=' + sBookSeriesId + 
                                '&' + 'genreId=' + sBookGenreId + 
@@ -1431,6 +1436,7 @@ async function fonclick_submit_submit() {
             fSetElement("Disable", "booksid-input");
             fSetElement("Disable", "booksname-input");
             fSetElement("Disable", "booksauthor-select");
+            fSetElement("Disable", "bookschapters-input");
             fSetElement("Disable", "bookssource-select");
             fSetElement("Disable", "booksseries-select");
             fSetElement("Disable", "booksgenre-select");
@@ -1456,13 +1462,15 @@ async function fonclick_submit_submit() {
             }
     } else if ((sTopic === 'characters') && sMode === "fetch") {
         let iTitleID = document.getElementById("charactersbookid-input").value;
-        let sTitleName = await fGetBookTitle(iTitleID);
-        document.getElementById("charactersbooktitle-input").value = sTitleName;
-        if (sTitleName === "No title found") {
-            document.getElementById("submit-message").value = "Invalid Book ID. No titles exist for this ID";
-            document.getElementById("charactersarea-textarea").value = '';
-        } else {
-            fGetBookCharacters2();
+        if (iTitleID != "") {
+            let sTitleName = await fGetBookTitle(iTitleID);
+            document.getElementById("charactersbooktitle-input").value = sTitleName;
+            if (sTitleName === "No title found") {
+                document.getElementById("submit-message").value = "Invalid Book ID. No titles exist for this ID";
+                document.getElementById("charactersarea-textarea").value = '';
+            } else {
+                fGetBookCharacters2();
+            }
         }
     } else if ((sTopic === 'characters') && sMode === "add") {
         let sTitleID=  document.getElementById("charactersbookid-input").value;
@@ -1859,35 +1867,40 @@ async function fGetBookDetails() {
             document.getElementById("booksname-input").value = arrayFields[1];
             document.getElementById("booksauthor-input").value = arrayFields[2];
             document.getElementById("booksauthor-select").value = arrayFields[3];
-            document.getElementById("bookssource-input").value = arrayFields[4];
-            document.getElementById("bookssource-select").value = arrayFields[5];
-            document.getElementById("booksseries-input").value = arrayFields[6];
-            document.getElementById("booksseries-select").value = arrayFields[7];
-            document.getElementById("booksstatus-input").value = arrayFields[8];
-            document.getElementById("booksstatus-select").value = arrayFields[9];
-            document.getElementById("booksgenre-input").value = arrayFields[10];
-            document.getElementById("booksgenre-select").value = arrayFields[11];
-            document.getElementById("booksclassification-input").value = arrayFields[12];
-            document.getElementById("booksclassification-select").value = arrayFields[13];
-            document.getElementById("booksrating-input").value = arrayFields[14];
-            document.getElementById("booksrating-select").value = arrayFields[15];
-            if (arrayFields[16] != "(null)") {                                           // set the start date empty if (null)
-                document.getElementById("booksstart-input").value = arrayFields[16];
+            if (arrayFields[4] != "9null)") {
+                document.getElementById("bookschapters-input").value = arrayFields[4];
+            } else {
+                document.getElementById("bookschapters-input").value = "";
+            }
+            document.getElementById("bookssource-input").value = arrayFields[5];
+            document.getElementById("bookssource-select").value = arrayFields[6];
+            document.getElementById("booksseries-input").value = arrayFields[7];
+            document.getElementById("booksseries-select").value = arrayFields[8];
+            document.getElementById("booksstatus-input").value = arrayFields[9];
+            document.getElementById("booksstatus-select").value = arrayFields[10];
+            document.getElementById("booksgenre-input").value = arrayFields[11];
+            document.getElementById("booksgenre-select").value = arrayFields[12];
+            document.getElementById("booksclassification-input").value = arrayFields[13];
+            document.getElementById("booksclassification-select").value = arrayFields[14];
+            document.getElementById("booksrating-input").value = arrayFields[15];
+            document.getElementById("booksrating-select").value = arrayFields[16];
+            if (arrayFields[17] != "(null)") {                                           // set the start date empty if (null)
+                document.getElementById("booksstart-input").value = arrayFields[17];
             } else {
                 document.getElementById("booksstart-input").value = "";
             }
-            if (arrayFields[17] != "(null)") {                                           // set the finish date empty if (null)
-                document.getElementById("booksfinish-input").value = arrayFields[17];
+            if (arrayFields[18] != "(null)") {                                           // set the finish date empty if (null)
+                document.getElementById("booksfinish-input").value = arrayFields[18];
             } else {
                 document.getElementById("booksfinish-input").value = "";
             }
-            if (arrayFields[18] != "(null)") {                                           // set comments empty if (nullL
-                document.getElementById("bookscomments-textarea").value = arrayFields[18];
+            if (arrayFields[19] != "(null)") {                                           // set comments empty if (nullL
+                document.getElementById("bookscomments-textarea").value = arrayFields[19];
             } else {
                 document.getElementById("bookscomments-textarea").value = "";
             }
-            if (arrayFields[19] != "(null)") {                                           // set comments empty if (nullL
-                document.getElementById("booksabstract-textarea").value = arrayFields[19];
+            if (arrayFields[20] != "(null)") {                                           // set comments empty if (nullL
+                document.getElementById("booksabstract-textarea").value = arrayFields[20];
             } else {
                 document.getElementById("booksabstract-textarea").value = "";
             }

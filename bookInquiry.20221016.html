@@ -1,0 +1,780 @@
+<!-- <HEAD> region for meta tags ................................................................................... -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Library page on the gjarman2020.com website">
+    <meta name="keywords" content="html, css, cgi">
+    <meta name="generator" content="vim">
+    <meta name="author" content="gjarman2020">
+    <title>Library</title>
+    <link rel="stylesheet" type="text/css" href="bookInquiry.css">
+    <link rel="stylesheet" type="text/css" href="common.css">
+    <link rel="shortcut icon" href="letterRF.png" type="image/png">
+</head>
+
+<!-- Comments region ............................................................................................... -->
+<!--                                                                                                                 -->
+<!-- bookInquiry.html -  grid layout of book inqiries page                                                           -->
+<!-- References:                                                                                                     -->
+<!--      https://www.youtube.com/watch?v=qTGbWfEEnKI                                                                -->
+<!--          Easily Structure your Layout with CSS Grid's 'grid-template-areas'                                     -->
+<!-- Templates:                                                                                                      -->
+<!--      none                                                                                                       -->
+<!-- Log:                                                                                                            -->
+<!--    01-Nov-2021 - copy starting page from cheatSheets.html and modify                                            -->
+<!--    05-Nov-2021 - add display area for book detals                                                               -->
+<!--    06-Nov-2021 - add modes to books form                                                                        -->
+<!--    06-Nov-2021 - add modes to books form                                                                        -->
+<!--    10-Nov-2021 - add cgi files to Internals dropdown                                                            -->
+<!--    10-Nov-2021 - change to a single submit button                                                               -->
+<!--    12-Nov-2021 - add divisions for topics                                                                       -->
+<!--    14-Nov-2021 - debug Fetch code for attributes                                                                -->
+<!--    15-Nov-2021 - change text area font                                                                          -->
+<!--    17-Nov-2021 - implement book details                                                                         -->
+<!--    19-Nov-2021 - fix the clear button to revert to 'Choose' topic                                               -->
+<!--    19-Nov-2021 - implement add on authors                                                                       -->
+<!--    19-Nov-2021 - implement add on classifications                                                               -->
+<!--    20-Nov-2021 - implement add on ratings                                                                       -->
+<!--    21-Nov-2021 - implement add on series                                                                        -->
+<!--    21-Nov-2021 - implement add on sources                                                                       -->
+<!--    21-Nov-2021 - implement add on genres                                                                        -->
+<!--    21-Nov-2021 - implement add on statuses                                                                      -->
+<!--    22-Nov-2021 - message area added                                                                             -->
+<!--    25-Nov-2021 - add fEnableSubmitIfNotNull() function                                                          -->
+<!--    28-Nov-2021 - clear book inputs switching between book modes                                                 -->
+<!--    29-Nov-2021 - add characters for a book                                                                      -->
+<!--    03-Dec-2021 - change element naming                                                                          -->
+<!--    04-Dec-2021 - add delete character                                                                           -->
+<!--    07-Dec-2021 - add update character                                                                           -->
+<!--    11-Dec-2021 - add delete genre                                                                               -->
+<!--    12-Dec-2021 - add delete status                                                                              -->
+<!--    16-Dec-2021 - add update sources                                                                             -->
+<!--    17-Dec-2021 - add update series                                                                              -->
+<!--    18-Dec-2021 - add update ratings                                                                             -->
+<!--    18-Dec-2021 - add update classifications                                                                     -->
+<!--    19-Dec-2021 - add update authors                                                                             -->
+<!--    20-Dec-2021 - add authors to series listing                                                                  -->
+<!--    20-Dec-2021 - add id's to book details                                                                       -->
+<!--    26-Dec-2021 - clear bookdiv elements                                                                         -->
+<!--    27-Dec-2021 - fix add character bug                                                                          -->
+<!--    27-Dec-2021 - escape ' in additions                                                                          -->
+<!--    27-Dec-2021 - escape ' in updates                                                                            -->
+<!--    02-Jan-2022 - fix character filter                                                                           -->
+<!--    02-Jan-2022 - implement attribute LOV's                                                                      -->
+<!--    07-Jan-2022 - add book                                                                                       -->
+<!--    10-Jan-2022 - protect ' character adding a book                                                              -->
+<!--    11-Jan-2022 - rename books div elements                                                                      -->
+<!--    11-Jan-2022 - implement delete                                                                               -->
+<!--    05-May-2022 - remove SECTION tags on validation                                                              -->
+<!--    05-May-2022 - remove </INPUT> tags on validation                                                             -->
+<!--    05-May-2022 - remove float:left property form textareas                                                      -->
+<!--    05-May-2022 - resize text boxes                                                                              -->
+<!--    06-May-2022 - align submit block                                                                             -->
+<!--    06-May-2022 - make queries immediate                                                                         -->
+<!--    07-May-2022 - wrap book comments                                                                             -->
+<!--    10-May-2022 - move common styles to CSS                                                                      -->
+<!--    11-May-2022 - add <ASIDE3> grid region                                                                       -->
+<!--    16-May-2022 - expand clear button function                                                                   -->
+<!--    19-May-2022 - add common.css                                                                                 -->
+<!--    22-May-2022 - lowercase html tags                                                                            -->
+<!--    24-May-2022 - move styles to bookInquiry.css                                                                 -->
+<!--    31-May-2022 - add cornerimage rotation                                                                       -->
+<!--    06-Jun-2022 - set focus on filter input                                                                      -->
+<!--    26-Jun-2022 - set corner image behaviour                                                                     -->
+<!--    22-Jul-2022 - add session div, secured div and authentication link                                           -->
+<!--    25-Jul-2022 - add authentication anchor                                                                      -->
+<!--    11-Aug-2022 - expand captions on book fields                                                                 -->
+<!--    15-Aug-2022 - add long links                                                                                 -->
+<!--    08-Sep-2022 - add Print button                                                                               -->
+<!--    22-Sep-2022 - add fClickSubmitOnEnter()                                                                      -->
+<!--    22-Sep-2022 - add fEnableSubmitOnInput()                                                                     -->
+<!--    22-Sep-2022 - add fClickValidateBookOnEnter()                                                                -->
+<!--    22-Sep-2022 - add fClickSubmitOnEnter()                                                                      -->
+<!--    25-Sep-2022 - add default behaviour on <Enter>                                                               -->
+<!--    05-Oct-2022 - remove fClickSubmitOnEnter() function                                                          -->
+<!--    05-Oct-2022 - remove fEnableSubmitIfNotNull() function                                                       -->
+<!--                                                                                                                 -->
+<!-- <BODY> region for all content including header and footer ..................................................... -->
+
+<body onload="fcSetCornerImage(), fcSetFooterOptions(), fcCheckAuthentication()">
+    <div id="WRAPPER1">
+        <div id="WRAPPER2">
+            <headeR id="HEADER1">
+                <br>
+                <div id="HEADER1DIV">
+                     <h2>gjarman2020.com</h2>
+                </div>
+            </header>
+            <nav id="NAV1">
+                    <h3 id="NAV1H3">Links</h3>
+                <ul id="NAV1UL">
+                    <li class="NAV1LI"><a class="active" href="http://gjarman2020.com">Home</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/mcaListPeople.html">Ancestry</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/bookInquiry.html">Library</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/cheatsheets.html">Cheatsheets</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/authenticateUser.html">Authenticate</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/options.html">Options</a></li>
+                </ul>
+                <ul id="NAV1UL2" hidden>
+                    <li class="NAV1LI"><a class="active" href="http://gjarman2020.com">Home</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/mcaListPeople.html">Ancestry</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/bookInquiry.html">Library</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/cheatsheets.html">Cheatsheets</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/guessAnIdiom.html">Guess an Idiom</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/battleShips.html">Battleships</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/d_regexWords.html">Crossword Helper</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/environment.html">Environment</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/serverProfile.html">Server Profile</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/authenticateUser.html">Authenticate</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/options.html">Options</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/about.html">About</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/simplest.html">Text Fetcher</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/helloWorld.html">Hello World!</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/tcount.html">Counter</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/multiply.html">Multiplier</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/collectText.html">Collect Text</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/d_ajaxFetch.html">Ajax Fetch</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/d_ajaxPost.html">Post Text to Server</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/d_template.html">Template</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/dogAPI.html">Dog API</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/email.html">Email</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/perlTest.html">Cookies</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/DOM_Drills.html">DOM Drills</a></li>
+            </nav>
+
+<!-- <SESSION1> region for session information .................................................................... -->
+
+            <aside id="SESSION1">
+                    <h3 id=SESSION1H3>Current Session</h3>
+                    <p id="SESSION1PARA">
+                    </p>
+            </aside>
+
+<!-- <MAIN> region for main content and background image ........................................................... -->
+
+            <main id="MAIN1">
+
+                <div id="heading-div">
+                    <H3>Library</H3>
+                </div>
+
+<!-- options div ................................................................................................... -->
+
+                <div id="unsecured-div">
+                    <p><a href="http://gjarman2020.com/authenticateUser.html">Authentication</a> is required for this page (or via: Home >> Utilities >> Authenticate)</p>
+                </div>
+
+                <div id="secured-div">
+    
+                    <div id="topics-div">
+                        <label id="topics-label" for="topic-select">Topic:</label>
+                            <select id="topics-select" onchange="fSetTopic()">
+                                <option value="choose" selected>Choose</option>
+                                <option value="books">Books</option>
+                                <option value="titles">Titles</option>
+                                <option value="recents">Recents</option>
+                                <option value="unreads">Unreads</option>
+                                <option value="characters">Characters</option>
+                                <option value="authors">Authors</option>
+                                <option value="classifications">Classifications</option>
+                                <option value="ratings">Ratings</option>
+                                <option value="series">Series</option>
+                                <option value="sources">Sources</option>
+                                <option value="genres">Genres</option>
+                                <option value="statuses">Statuses</option>
+                            </select>
+                    </div>
+    
+<!-- mode buttons div .............................................................................................. -->
+    
+                    <div id="modes-div">
+                        <button id="modesfetch-button"  onclick="fSetMode('fetch')">Fetch</button>
+                        <button id="modesquery-button"  onclick="fSetMode('query')">Query</button>
+                        <button id="modesadd-button" onclick="fSetMode('add')">Add</button>
+                        <button id="modesupdate-button" onclick="fSetMode('update')">Update</button>
+                        <button id="modesdelete-button" onclick="fSetMode('delete')">Delete</button>
+                        <label id="mode-label"></label>
+                        <br>
+                    </div>
+    
+<!-- titles div .................................................................................................... -->
+    
+                    <div id="titles-div">
+                        <div id="titlesfilter-div">
+                            <label  id="titlesfilter-label" for="titlesfilter-input">Filter:</label>
+                            <input id="titlesfilter-input" required  onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="titlesarea-div">
+                            <textarea id="titlesarea-textarea" readonly disabled ROWS="50">
+                            </textarea> 
+                        </div>
+                    </div>
+    
+<!-- recents div ................................................................................................... -->
+    
+                    <div id="recents-div">
+                        <div id="recentsfilter-div">
+                            <label  id="recentsfilter-label" for="recentsfilter-input">Filter:</label>
+                            <input id="recentsfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="recentsarea-div">
+                            <textarea id="recentsarea-textarea" readonly disabled ROWS="45">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- unreads div ................................................................................................... -->
+    
+                    <div id="unreads-div">
+                        <div id="unreadsfilter-div">
+                            <label id="unreadsfilter-label" for="unreadsfilter-input" >Filter:</label>
+                            <input id="unreadsfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="unreadsarea-div">
+                            <textarea id="unreadsarea-textarea" readonly disabled ROWS="15">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- characters div ................................................................................................ -->
+    
+                    <div id="characters-div">
+                        <div id="charactersbook-div">
+                            <LABEL id="charactersbookid-label" for="charactersbookid-input">Book ID:</label>
+                            <input id="charactersbookid-input" required onkeypress="fClickValidateBookOnEnter()">
+                            <input id="charactersbooktitle-input" required disabled>
+                            <button id="charactersvalidatebook-button" disabled onclick="fonclick_chars_vldt_bk_id()">Validate</button>
+                        </div>
+                        <div id="charactersadd-div">
+                            <label id="charactersadd-label" for="chars:add-name">Character:</label>
+                            <input id="charactersadd-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="charactersupdate-div">
+                            <span id="charactersupdate-span">
+                                <label id="charactersupdate-label" for="charactersupdateid-input">Char ID:</label>
+                                <input id="charactersupdateid-input" required onkeypress="fClickValidateCharacterOnEnter()">
+                                <input id="charactersupdatename-input" required disabled>
+                                <button id="charactersvalidateid-button" disabled onclick="fonclick_chars_vldt_char_id()">Validate</button>
+                            </span>
+                            <span id="charactersupdated-span">
+                                <label id="charactersupdatedname-label" for="charactersupdatedname-input">Update:</label>
+                                <input id="charactersupdatedname-input" required onkeyPress="fClickSubmitOnEnter()">
+                            </span>
+                        </div>
+                        <div id="charactersdelete-div">
+                            <label id="charactersdeleteid-label" for="charactersdeleteid-inputd">Char ID:</label>
+                            <input id="charactersdeleteid-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="charactersfilter-div">
+                            <label id="charactersfilter-label" for="chars:filter">Filter:</label>
+                            <input id="charactersfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="charactersarea-div">
+                            <textarea id="charactersarea-textarea" readonly disabled ROWS="25">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- authors div ................................................................................................... -->
+    
+                    <div id="authors-div">
+                        <div id="authorsfilter-div">
+                            <label  id="authorsfilter-label" for="authorsfilter-input">Filter:</label>
+                            <input id="authorsfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="authorsadd-div">
+                            <label  id="authorsadd-label" for="authorsadd-input">Add Author:</label>
+                            <input id="authorsadd-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="authorsupdate-div">
+                            <span style="display:block">
+                                <label id="authorsupdate-label" for="authorsupdateid-input">Author ID:</label>
+                                <input id="authorsupdateid-input" required onkeypress="fClickValidateAuthorOnEnter()">
+                                <input id="authorsupdatename-input" required disabled>
+                                <button id="authorsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            </span>
+                            <span style="display:block">
+                                <label id="authorsupdated-label" for="authorsupdated-input">Update:</label>
+                                <input id="authorsupdated-input" required onkeypress="fClickSubmitOnEnter()">
+                            </span>
+                        </div>
+                        <div id="authorsdelete-div">
+                            <label id="authorsdelete-label" for="authorsdelete-input">Author ID:</label>
+                            <input id="authorsdelete-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="authorslist-div">
+                            <textarea id="authorslist-textarea" readonly disabled ROWS="45">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- classifications div ........................................................................................... -->
+    
+                    <div id="classifications-div">
+                        <div id="classificationsfilter-div">
+                            <label id="classificationsfilter-label" for="classificationsfilter-input">Filter:</label>
+                            <input id="classificationsfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="classificationsadd-div">
+                            <label id="classificationsadd-label" for="classificationsadd-input">Add Class:</label>
+                            <input id="classificationsadd-input" required onkeyPress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="classificationsupdate-div">
+                            <span style="display:block">
+                                <label id="classificationsupdate-label" for="classificationsupdateid-input">Class ID:</label>
+                                <input id="classificationsupdateid-input" required onkeypress="fClickValidateClassificationOnEnter()">
+                                <input id="classificationsupdatename-input" required disabled>
+                                <button id="classificationsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            </span>
+                            <span style="display:block">
+                                <label id="classificationsupdated-label" for="classificationsupdated-input">Update:</label>
+                                <input id="classificationsupdated-input" required onkeypress="fClickSubmitOnEnter()">
+                            </span>
+                        </div>
+                        <div id="classificationsdelete-div">
+                            <label id="classificationsdelete-label" for="classificationsdelete-input">Class ID:</label>
+                            <input id="classificationsdelete-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="classificationslist-div">
+                            <textarea id="classificationslist-textarea" readonly disabled ROWS="5">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- ratings div ................................................................................................... -->
+    
+                    <div id="ratings-div">
+                        <div id="ratingsfilter-div">
+                            <label id="ratingfilter-label" for="ratingsfilter-input">Filter:</label>
+                            <input id="ratingsfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="ratingsadd-div">
+                            <label id="ratingsadd-label" for="ratingsadd-input">Add Rating:</label>
+                            <input id="ratingsadd-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="ratingsupdate-div">
+                            <span style="display:block">
+                                <label id="ratingsupdate-label" for="ratingsupdateid-input" >Rating ID:</label>
+                                <input id="ratingsupdateid-input" required onkeypress="fClickValidateRatingOnEnter()">
+                                <input id="ratingsupdatename-input" required disabled>
+                                <button id="ratingsupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            </span>
+                            <span style="display:block">
+                                <labeL id="ratingsupdated-label" for="ratingsupdated-input" >Update:</label>
+                                <input id="ratingsupdated-input" required onkeypress="fClickSubmitOnEnter()">
+                            </span>
+                        </div>
+                        <div id="ratingsdelete-div">
+                            <label id="ratingsdelete-label" for="ratingsdelete-input">Rating ID:</labeL>
+                            <input id="ratingsdelete-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="ratingslist-div">
+                            <textarea id="ratingslist-textarea" readonly disabled ROWS="7">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- series div .................................................................................................... -->
+    
+                    <div id="series-div">
+                        <div id="seriesfilter-div">
+                            <label id="seriesfilter-label" for="seriesfilter-input">Filter:</label>
+                            <input id="seriesfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="seriesadd-div">
+                            <label id="seriesadd-label" for="seriesadd-input">Add Series:</label>
+                            <input id="seriesadd-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="seriesupdate-div">
+                            <span style="display:block">
+                                <label id="seriesupdate-label" for="seriesupdateid-input">Series ID:</label>
+                                <input id="seriesupdateid-input" required onkeypress="fClickValidateSeriesOnEnter()">
+                                <input id="seriesupdatename-input" required>
+                                <button id="seriesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            </span>
+                            <span style="display:block">
+                                <label id="seriesupdated-label" for="seriesupdated-input">Update:</label>
+                                <input id="seriesupdated-input" required onkeypress="fClickSubmitOnEnter()">
+                            </span>
+                        </div>
+                        <div id="seriesdelete-div">
+                            <label id="seriesdelete-label" for="seriesdelete-input">Series ID:</label>
+                            <input id="seriesdelete-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="serieslist-div">
+                            <textarea id="serieslist-textarea" readonly disabled ROWS="45">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- sources div ................................................................................................... -->
+    
+                    <div id="sources-div">
+                        <div id="sourcesfilter-div">
+                            <label id="sourcesfilter-label" for="sourcesfilter-input">Filter:</label>
+                            <input id="sourcesfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="sourcesadd-div">
+                            <label id="sourcesadd-label" for="sourcesadd-input">Add Source:</label>
+                            <input id="sourcesadd-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="sourcesupdate-div">
+                            <span style="display:block">
+                                <label id="sourcesupdate-label" for="sourcesupdateid-input">Source ID:</label>
+                                <input id="sourcesupdateid-input" required onkeypress="fClickValidateSourceOnEnter()">
+                                <input id="sourcesupdatename-input" required disabled>
+                                <button id="sourcesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            </span>
+                            <span style="display:block">
+                                <label id="sourcesupdated-label" for="sourcesupdated-input">Update:</label>
+                                <input id="sourcesupdated-input" required onkeypress="fClickSubmitOnEnter()">
+                            </span>
+                        </div>
+                        <div id="sourcesdelete-div">
+                            <label id="sourcesdelete-label" for="sourcesdelete-input">Source ID:</label>
+                            <input id="sourcesdelete-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="sourceslist-div">
+                            <textarea id="sourceslist-textarea" readonly disabled ROWS="13">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- genres div .................................................................................................... -->
+    
+                    <div id="genres-div">
+                        <div id="genresfilter-div">
+                            <label id="genresfilter-label" for="genresfilter-input">Filter:</label>
+                            <input id="genresfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="genresadd-div">
+                            <label id="genresadd-label" for="genresadd-input">Add Genre:</label>
+                            <input id="genresadd-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="genresupdate-div">
+                            <span style="display:block">
+                                <label id="genresupdate-label" for="genresupdateid-input">Genre ID:</label>
+                                <input id="genresupdateid-input" required onkeypress="fClickValidateGenreOnEnter()">
+                                <input id="genresupdatename-input" required disabled>
+                                <button id="genresupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            </span>
+                            <span style="display:block">
+                                <label id="genresupdated-label" for="genresupdated-input">Update:</label>
+                                <input id="genresupdated-input" required onkeypress="fClickSubmitOnEnter()">
+                            </span>
+                        </div>
+                        <div id="genresdelete-div">
+                            <label id="genresdelete-label" for="genresdelete-input">Genre ID:</label>
+                            <input id="genresdelete-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="genreslist-div">
+                            <textarea id="genreslist-textarea" readonly disabled ROWS="22">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- statuses div .................................................................................................. -->
+    
+                    <div id="statuses-div">
+                        <div id="statusesfilter-div">
+                            <label id="statusesfilter-label" for="statusesfilter-input">Filter:</label>
+                            <input id="statusesfilter-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="statusesadd-div">
+                            <label id="statusesadd-label" for="statusesadd-input">Add Status:</label>
+                            <input id="statusesadd-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="statusesupdate-div">
+                            <span style="display:block">
+                                <label id="statusesupdateid-label" for="statusesupdateid-input">Status ID:</label>
+                                <input id="statusesupdateid-input" required onkeypress="fClickValidateStatusOnEnter()">
+                                <input id="statusesupdatename-input" required disabled>
+                                <button id="statusesupdate-button" disabled onclick="fonclick_any_vldt_id()">Validate</button>
+                            </span>
+                            <span style="display:block">
+                                <label id="statusesupdated-label" for="statusesupdated-input">Update:</label>
+                                <input id="statusesupdated-input" required onkeypress="fClickSubmitOnEnter()">
+                            </span>
+                        </div>
+                        <div id="statusesdelete-div">
+                            <label id="statusesdelete-label" for="statusesdelete-input">Status ID:</label>
+                            <input id="statusesdelete-input" required onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="statuseslist-div">
+                            <textarea id="statuseslist-textarea" readonly disabled ROWS="9">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- books div ..................................................................................................... -->
+    
+                    <div id="books-div" id="books:div">
+                        <div id="booksstage-div">
+                            <label id="booksstage-label" for="booksstage-input">Stage:</label>
+                            <input id="booksstage-input">
+                        </div>
+                        <div id="booksid-div">
+                            <label id="booksid-label" for="booksid-input">ID:</label>
+                            <input id="booksid-input" onkeyup="fEnableSubmitButton01('booksid-input')" onkeypress="fClickSubmitOnEnter()">
+                        </div>
+                        <div id="booksname-div">
+                            <Label id="booksname-label" for="booksname-input">Title: </label>
+                            <input id="booksname-input" oninput="fEnableSubmitOnInput()">
+                        </div>
+                        <div id="booksauthor-div">
+                            <label id="booksauthor-label" for="booksauthor-input">Author: </label>
+                            <input id="booksauthor-input">
+                            <select id="booksauthor-select" onchange="fPopulateLOVId('authors')"></select>
+                        </div>
+                        <div id="bookssource-div">
+                            <label id="bookssource-label" for="books:source">Source: </label>
+                            <input id="bookssource-input">
+                            <select id="bookssource-select" onchange="fPopulateLOVId('sources')"></select>
+                        </div>
+                        <div id="booksseries-div">
+                            <label id="booksseries-label" for="books:series">Series: </label>
+                            <input id="booksseries-input">
+                            <select id="booksseries-select" onchange="fPopulateLOVId('series')"></select>
+                        </div>
+                        <div id="booksgenre-div">
+                            <label id="booksgenre-label" for="books:genre">Genre: </label>
+                            <input id="booksgenre-input">
+                            <select id="booksgenre-select" onchange="fPopulateLOVId('genres')"></select>
+                        </div>
+                        <div id="booksstatus-div">
+                            <labeL id="booksstatus-label" for="books:status">Status: </label>
+                            <input id="booksstatus-input">
+                            <select id="booksstatus-select" onchange="fPopulateLOVId('statuses')"></select>
+                        </div>
+                        <div id="booksclassification-div">
+                            <label id="booksclassification-label" for="books:clsfn">Clsfn: </label>
+                            <input id="booksclassification-input">
+                            <select id="booksclassification-select" onchange="fPopulateLOVId('classifications')"></select>
+                        </div>
+                        <div id="booksrating-div">
+                            <label id="booksrating-label" for="books:rating">Rating: </label>
+                            <input id="booksrating-input">
+                            <select id="booksrating-select" onchange="fPopulateLOVId('ratings')"></select>
+                        </div>
+                        <div id="booksstart-div">
+                            <label id="booksstart-label" for="booksstart-input">Start: </label>
+                            <input id="booksstart-input">
+                        </div>
+                        <div id="booksfinish-div">
+                            <label id="booksfinish-label" for="books:finish">Finish: </label>
+                            <input id="booksfinish-input">
+                        </div>
+                        <div id="booksabstract-div">
+                            <label id="booksabstract-label" for="books:abstract">Abstract: </label>
+                            <textarea id="booksabstract-textarea" readonly disabled rows="6">
+                            </textarea>
+                        </div>
+                        <div id="bookscomments-div">
+                            <label id="bookscomments-label" for="books:cmnts">Comments: </label>
+                            <textarea id="bookscomments-textarea" readonly disabled rows="3">
+                            </textarea>
+                        </div>
+                        <div id="bookscharacters-div">
+                            <label id="bookscharacters-label" for="books:chrs">Chararacters: </label>
+                            <textarea id="bookscharacters-textarea" readonly disabled rows="20">
+                            </textarea>
+                        </div>
+                    </div>
+    
+<!-- submit button and messages div ................................................................................ -->
+    
+                    <div id="submit-div">
+                        <button id="submit-button"  onclick="fonclick_submit_submit()" disabled>Submit</button>
+                        <label id="submit-label" for="submit-message">Message</label>
+                        <input id="submit-message" disabled>
+                    </div>
+                </div>
+
+<!-- buttons to clear the page and show and hide help and internals ................................................ -->
+
+                <div id="MOREBTTNS">
+                    <button id="helpButton"onclick="fcShowHelp()">Help</button>
+                    <button id="clearButton" onclick="fClearBookFields()">Clear</button>
+                    <button id="wrapButton" onclick="fWrapText()">Wrap</button>
+                    <button id="printButton" onclick="fPrintBookText()">Print</button>
+                    <br>
+                </div>
+
+<!-- help text controlled by a button............................................................................... -->
+
+                    <div id="HELPDIV">
+                        <p>
+                            Choose a topic and a mode and click submit to see results<br>
+                            Some modes are disabled for some topics, as not applicable to the topic<br>
+                            Choosing a new topic will default the mode initially to 'Fetch'<br>
+                            The 'submit' button will remain disabled unless required information is entered<br>
+                            A filter is available in 'Fetch' mode to filter results<br>
+                            The filter is case-sensitive but does not support wildcards or regex expressions<br>
+                            The filter allows multiple words and spaces<br>
+                            Click 'Wrap' to word-wrap or turn off word-wrap on the displayed sheet contents<br>
+                            Print is enabled for the 'Books' topic to print a summary of a book
+                        </p>
+                    </div>
+
+<!-- internals div ................................................................................................. -->
+
+               <div id="INTERNALS">
+                    <details id="internals-details">
+                        <summary style="outline:none">
+                            Internals
+                        </summary>
+                        <p STYLE="PADDING-LEFT:17px">
+                            html file: /var/www.html/bookInquiry.html<br>
+                            js file1: /var/www.html/common.js<br>
+                            js file2: /var/www.html/bookInquiry.js<br>
+                            css file1: /var/www/html/common.css<br>
+                            css file2: /var/www/html/bookInquiry.css<br>
+                            cgi file: /usr/lib/cgi-bin/bookInquiry.cgi<br>
+                            cgi file: /usr/lib/cgi-bin/bookDetails.cgi<br>
+                            cgi file: /usr/lib/cgi-bin/bookCharacters.cgi<br>
+                            corner image: /var/www/html/cornerImage.png<br>
+                            background image: /var/www/html/background.jpg<br>
+                            CGI source code: C<br>
+                        </p>
+                    </details>
+                </div>
+
+                <script src="bookInquiry.js"></script>
+                <script src="common.js"></script>
+
+            </main>
+
+<!-- <ASIDE1> region for change log ................................................................................ -->
+
+            <aside id="ASIDE1">
+                    <h3 id=ASIDE1H3>Changes 2021-22</h3>
+                <ul id="ASIDE1UL">
+                    <li class="ASIDE1LI">05-Oct: fix author listing</li>
+                    <li class="ASIDE1LI">24-Sep: add 'Enter' defaults</li>
+                    <li class="ASIDE1LI">08-Sep: add Print for books</li>
+                    <li class="ASIDE1LI">15-Aug: add long links</li>
+                    <li class="ASIDE1LI">11-Aug: expand book field captions</li>
+                    <li class="ASIDE1LI">08-Aug: add rating to unread</li>
+                    <li class="ASIDE1LI">08-Aug: add to Recents filter fields</li>
+                    <li class="ASIDE1LI">03-Aug: add rating to series filter</li>
+                    <li class="ASIDE1LI">03-Aug: add rating to author filter</li>
+                    <li class="ASIDE1LI">27-Jul: clear abstract on mode</li>
+                    <li class="ASIDE1LI">25-Jul: add authentication anchor</li>
+                    <li class="ASIDE1LI">22-Jul: add authenticate link</li>
+                    <li class="ASIDE1LI">22-Jul: show session block</li>
+                    <li CLASS="ASIDE1LI">26-Jun: set corner image behaviour</li>
+                    <li CLASS="ASIDE1LI">31-May: add cornerimage rotation</li>
+                    <li CLASS="ASIDE1LI">29-May: fix ratings filter</li>
+                    <li CLASS="ASIDE1LI">29-May: editable book comments</li>
+                    <li CLASS="ASIDE1LI">24-May: move local styles</li>
+                    <li CLASS="ASIDE1LI">22-May: lowercase html tags</li>
+                    <li CLASS="ASIDE1LI">19-May: add common.css</li>
+                    <li CLASS="ASIDE1LI">16-May: expand clear function</li>
+                    <li CLASS="ASIDE1LI">11-May: add corner image caption</li>
+                    <li CLASS="ASIDE1LI">09-May: clear date (null)'s</li>
+                    <li CLASS="ASIDE1LI">08-May: refresh LOV's</li>
+                    <li CLASS="ASIDE1LI">07-May: wrap book comments</li>
+                    <li CLASS="ASIDE1LI">07-May: define unwrap</li>
+                    <li CLASS="ASIDE1LI">06-May: make fetches immediate</li>
+                    <li CLASS="ASIDE1LI">06-May: align submit button</li>
+                    <li CLASS="ASIDE1LI">15-Jan: disable query mode</li>
+                    <li cLASS="ASIDE1LI">11-Jan: implement delete</li>
+                    <li CLASS="ASIDE1LI">11-Jan: protect ' adding a book</li>
+                    <li CLASS="ASIDE1LI">07-Jan: add book</li>
+                    <li CLASS="ASIDE1LI">04-Jan: implement attribute LOV's</li>
+                    <li CLASS="ASIDE1LI">30-Dec: escape ' in updates</li>
+                    <li CLASS="ASIDE1LI">29-Dec: combine _updt_id()'s</li>
+                    <li CLASS="ASIDE1LI">27-Dec: escape ' character</li>
+                    <li CLASS="ASIDE1LI">27-Dec: fix add character bug</li>
+                    <li CLASS="ASIDE1LI">26-Dec: clear bookdiv elements</li>
+                    <li CLASS="ASIDE1LI">21-Dec: add ID's to book details</li>
+                    <li CLASS="ASIDE1LI">19-Dec: add rating to series list</li>
+                    <li CLASS="ASIDE1LI">19-Dec: add author to series list</li>
+                    <li CLASS="ASIDE1LI">19-Dec: add update characters</li>
+                    <li CLASS="ASIDE1LI">19-Dec: add update authors</li>
+                    <li CLASS="ASIDE1LI">18-Dec: add update classifications</li>
+                    <li CLASS="ASIDE1LI">18-Dec: add update ratings</li>
+                    <li CLASS="ASIDE1LI">17-Dec: add update series</li>
+                    <li CLASS="ASIDE1LI">15-Dec: add update sources</li>
+                    <li CLASS="ASIDE1LI">14-Dec: add update genres</li>
+                    <li CLASS="ASIDE1LI">14-Dec: add update statuses</li>
+                    <li CLASS="ASIDE1LI">13-Dec: add update characters</li>
+                    <li CLASS="ASIDE1LI">12-Dec: add delete statuses</li>
+                    <li CLASS="ASIDE1LI">11-Dec: add delete genres</li>
+                    <li CLASS="ASIDE1LI">10-Dec: add delete sources</li>
+                    <li CLASS="ASIDE1LI">10-Dec: add delete series</li>
+                    <li CLASS="ASIDE1LI">09-Dec: add delete rating</li>
+                    <li CLASS="ASIDE1LI">08-Dec: namespaces divisions</li>
+                    <li CLASS="ASIDE1LI">07-Dec: update character</li>
+                    <li CLASS="ASIDE1LI">04-Dec: delete character</li>
+                    <li CLASS="ASIDE1LI">03-Dec: change element naming</li>
+                    <li CLASS="ASIDE1LI">29-Nov: add characters</li>
+                    <li CLASS="ASIDE1LI">25-Nov: disable attribute areas</li>
+                    <li CLASS="ASIDE1LI">25-Nov: clear book inputs</li>
+                    <li CLASS="ASIDE1LI">25-Nov: refactor w'function params</li>
+                    <li CLASS="ASIDE1LI">22-Nov: add message area</li>
+                    <li CLASS="ASIDE1LI">21-Nov: add on statuses</li>
+                    <li CLASS="ASIDE1LI">21-Nov: add on genres</li>
+                    <li CLASS="ASIDE1LI">21-Nov: add on sources</li>
+                    <li CLASS="ASIDE1LI">21-Nov: add on series</li>
+                    <li CLASS="ASIDE1LI">20-Nov: add on ratings</li>
+                    <li CLASS="ASIDE1LI">19-Nov: add on classifications</li>
+                    <li CLASS="ASIDE1LI">19-Nov: add on authors</li>
+                    <li CLASS="ASIDE1LI">18-Nov: fix Clear button</li>
+                    <li CLASS="ASIDE1LI">15-Nov: implement book details</li>
+                    <li CLASS="ASIDE1LI">15-Nov: add unreads option</li>
+                    <li CLASS="ASIDE1LI">15-Nov: remove unreads fr'recents</li>
+                    <li CLASS="ASIDE1LI">15-Nov: change text area font</li>
+                    <li CLASS="ASIDE1LI">14-Nov: implement new Fetch</li>
+                    <li CLASS="ASIDE1LI">05-Nov: add characters to Books</li>
+                    <li CLASS="ASIDE1LI">05-Nov: add modes to Books</li>
+                    <li CLASS="ASIDE1LI">05-Nov: add Books option</li>
+                    <li CLASS="ASIDE1LI">02-Nov: enable filters</li>
+                    <li CLASS="ASIDE1LI">02-Nov: add Titles listing</li>
+                    <li CLASS="ASIDE1LI">01-Nov: create this page</li>
+                </ul>
+            </aside>
+
+<!-- <ASIDE2> region for corner image .............................................................................. -->
+
+            <aside id="ASIDE2">
+                <div id="ASIDE2DIV">
+                     <img id="ASIDE2IMG" SRC="cornerImage.png" ALT="Cannot Load cornerImage.png">
+                </div>
+            </aside>
+
+<!-- <ASIDE3> region for corner image caption ...................................................................... -->
+
+            <aside id="ASIDE3">
+                <div id="ASIDE3DIV">
+                    <p id="ASIDE3-PARA">
+                     Matilda Cook in Magpies uniform before her next netball game 2022
+                    </p>
+                </div>
+            </aside>
+
+<!-- <FOOTER> region for page footer .............................................................................. -->
+
+
+            <footer id="FOOTER1">
+                <div id="FOOTER1OPTIONS-DIV">
+                    Corner Image Behaviour: <label id="footeroptionscichoice"></label>;
+                    Background Image: <label id="footeroptionsbackgroundimage"></label>;
+                    Show Webserver Log: <label id="footeroptionsshowserverlog"></label>;
+                    Show Session Log: <label id="footeroptionsshowsession"></label>;
+                    Left Links: <label id="footeroptionsleftlinks"></label>
+                </div>
+                <div id="FOOTER1DIV">
+                    <p>&copy; 2020 gjarman2020.com ... /var/www/html/bookInquiries.html</P>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+
+</html>
