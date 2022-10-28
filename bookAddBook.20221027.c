@@ -3,7 +3,6 @@
  *  Started: 07-Jan-2022
  *  References:
  *      http://www6.uniovi.es/cscene/topics/web/cs2-12.xml.html
- *      https://stackoverflow.com/questions/17112852/get-the-new-record-primary-key-id-from-mysql-insert-query
  *  Log:
  *      07-Jan-2022 start by copying bookAddBook.c and modifying
  *      08-Jan-2022 add print for new title ID
@@ -17,8 +16,7 @@
  *      08-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
  *      16-Oct-2022 add chapters
  *      18-Oct-2022 extend MySQL initialization and shutdown operations
- *      18-Oct-2022 free memory for the string created by fUrlDecode()
- *      27-Oct-2022 add a query to fetch the ID of the newly inserted title
+ *      18-Oct-2022 free the string created by fUrlDecode()
  *  Enhancements:
 */
 
@@ -90,11 +88,6 @@ int main(void) {
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
-
-// QUERY_STRING format and sample for tesing ---------------------------------------------------------------------------
-
-//    QUERY_STRING="bookName=TestBook1&authorId=67&chapters=10&sourceId=10&seriesId=57&genreId=19&statusId=6&clsfnId=3&ratingId=6&startDte=&finishDte=&abstract=&cmnts=TestComments"
-//    export QUERY_STRING
 
 // Fetch the QUERY_STRING environment variable paramete string ---------------------------------------------------------
 
@@ -220,9 +213,7 @@ int main(void) {
     } else {
         sprintf(caAbstractQuoted, "'%s'", caAbstractBuf);
     }
-    sTemp = fUrlDecode(caAbstractQuoted);
-    strcpy(caAbstract, sTemp);
-    free(sTemp);
+    strcpy(caAbstract, fUrlDecode(caAbstractQuoted));
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "cmnts=%[^\n]s", caCmntsBuf);
@@ -231,15 +222,15 @@ int main(void) {
     } else {
         sprintf(caCmntsQuoted, "'%s'", caCmntsBuf);
     }
-    sTemp = fUrlDecode(caCmntsQuoted);
-    strcpy(caCmnts, sTemp);
-    free(sTemp);
+    strcpy(caCmnts, fUrlDecode(caCmntsQuoted));
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------
 
    if (mysql_library_init(0, NULL, NULL)) {
    printf("Cannot initialize MySQL Client library\n");
        return EXIT_FAILURE;
+    } else {
+       printf("MySQL Client library resources assigned\n");
     }
 
 // Initialize a connection and connect to the database -----------------------------------------------------------------
@@ -256,7 +247,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// set and perform a SQL query to insert the new book title ------------------------------------------------------------
+// set a SQL query to insert the new book title ------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Titles` "
                    "(`Title Name`, `Author ID`, `Chapters`, `Source ID`, `Series ID`, `Genre ID`, `Status ID`, `Classification ID`, `Rating ID`, Start, Finish, Abstract, Comments)  "
@@ -270,9 +261,11 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-// set and perform a SQL query to return the last inserted ID in the current session and connection --------------------
+    sprintf(caSQL, "SELECT BT.`Title ID` "
+                   "FROM risingfast.`Book Titles` BT "
+                   "WHERE BT.`Title Name` = '%s';", caBookName);
 
-    sprintf(caSQL, "SELECT LAST_INSERT_ID()");
+//    int iColCount = 0;                                                                   // uncomment for testing only
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -282,37 +275,46 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-// store the result of the last query and seek to the first row of results (only one row is expected) ------------------
+// store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
-
     if(res == NULL)
     {
         printf("%s() -- no results returned", __func__);
         printf("\n");
 
         mysql_free_result(res);
-
         return EXIT_FAILURE;
     }
 
+// fetch the number of fields in the result ----------------------------------------------------------------------------
+
+//    iColCount = mysql_num_fields(res);                                                    // uncomment for testig only
+
     mysql_data_seek(res, 0);
 
-// print the Title ID of the newly inserted title from the first result row --------------------------------------------
+// print each row of results -------------------------------------------------------------------------------------------
 
-    row = mysql_fetch_row(res);                                 // fetch the first row of data from the result 'res' set
-    
-    printf("%s", row[0]);                                                           // print the newly inserted Title ID
-    
+    if(row = mysql_fetch_row(res))
+    {
+        printf("%s", row[0]);
+    } else {
+        printf("No book id found");
+    }
+
     mysql_free_result(res);
 
-// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+// * close the database connection created by mysql_init(NULL) -----------------------------------------------------------
 
     mysql_close(conn);
+    printf("\n");
+    printf("MySQL connection is closed");
+    printf("\n\n");
 
-// * free resources used by the MySQL library --------------------------------------------------------------------------
+// * free resources used by the MySQL library ----------------------------------------------------------------------------
 
-    mysql_library_end();
+    mysql_library_end();                                                                                                                                                                                            printf("MySQL library resources freed");
+    printf("\n\n");
 
     return EXIT_SUCCESS;
 }

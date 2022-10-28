@@ -8,6 +8,8 @@
  *      15-Sep-2022 add Access-Control-Allow-Header: * CORS http header
  *      12-Oct-2022 clean up comments
  *      12-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
+ *      11-Oct-2022 validate QUERY_STRING is not NULL or empty
+ *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -21,7 +23,6 @@
 
 #define SQL_LEN 5000
 #define HDG_LEN 1000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -53,6 +54,41 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
+    sParam = getenv("QUERY_STRING");
+
+    if(sParam == NULL) {
+        printf("Query string is NULL. Expecting QUERY_STRING=\"TitleID=<9999>\". Terminating bookTitleID.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+// check for an empty (non-NULL) query string --------------------------------------------------------------------------
+
+    if(sParam[0] == '\0') {
+        printf("Query string is empty. Expecting QUERY_STRING=\"TitleID=<9999>\". Terminating bookTitleID.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
+
+    sscanf(sParam, "TitleID=%d", &iTitleID);
+
+    if(iTitleID == 0) {
+        printf("Title ID is 0. Expecting QUERY_STRING=\"TitleID=<9999>\". Terminating bookTitleID.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
 // Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
@@ -67,32 +103,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    sParam = getenv("QUERY_STRING");
-
-// check for a NULL query string -------------------------------------------------------------------------------------=
-
-    if(sParam == NULL) {
-        printf("Query string is NULL. Expecting QUERY_STRING=\"TitleID=<9999>\". Terminating bookTitleID.cgi");
-        printf("\n\n");
-        return EXIT_FAILURE;
-    }
-
-// check for an empty query string -------------------------------------------------------------------------------------
-
-    if(sParam[0] == '\0') {
-        printf("Query string is empty. Expecting QUERY_STRING=\"TitleID=<9999>\". Terminating bookTitleID.cgi");
-        printf("\n\n");
-        return EXIT_FAILURE;
-    }
-
-//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
-
-    sscanf(sParam, "TitleID=%d", &iTitleID);
-    if(iTitleID == 0) {
-        printf("Title ID is 0. Expecting QUERY_STRING=\"TitleID=<9999>\". Terminating bookTitleID.cgi");
-        printf("\n\n");
-        return EXIT_FAILURE;
-    }
+// set a SQL query to select the title ---------------------------------------------------------------------------------
 
     sprintf(caSQL, "SELECT BT.`Title Name` "
                    "FROM risingfast.`Book Titles` BT "
@@ -118,12 +129,14 @@ void fPrintResult(char *caSQL)
 // store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
+
     if(res == NULL)
     {
         printf("%s() -- no results returned", __func__);
         printf("\n");
 
         mysql_free_result(res);
+
         return;
     }
     
@@ -143,5 +156,14 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
+
     return;
 }

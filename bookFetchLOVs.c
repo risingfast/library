@@ -11,6 +11,7 @@
  *      12-Oct-2022 clean up comments
  *      12-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      12-Oct-2022 validate QUERY_STRING for NULL and empty values
+ *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
  */
 
@@ -24,7 +25,6 @@
 
 #define SQL_LEN 5000
 #define HDG_LEN 1000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -47,6 +47,7 @@ char *sFilter = NULL;
 char *sParams = NULL;
 char *sSubstring = NULL;
 char caDelimiter[] = "&";
+char *sTemp = NULL;
 
 void fPrintResult(char *, char *, char *);
 
@@ -61,20 +62,6 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
     sParams = getenv("QUERY_STRING");
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
@@ -85,7 +72,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-// check for an empty query string ---------------------------------------------------------------------------------------
+// check for an empty (non-NULL) query string --------------------------------------------------------------------------
 
     if(sParams[0] == '\0') {
         printf("Query string is empty. Expecting QUERY_STRING=\"topic=<topicname>&filter=<filterstring>\". Terminating bookFetchLOVs.cgi");
@@ -104,19 +91,42 @@ int main(void) {
     }
     sTopic = caTopic;
 
+// parse the QUERY_STRING for the filter element and add the enclosing '%' wildcards -----------------------------------
+
     sSubstring = strtok(NULL, caDelimiter);
     sscanf(sSubstring, "filter=%s", caFilterTemp);
 
-// parse the QUERY_STRING for each argument: Topic and Filter ----------------------------------------------------------
+    sTemp = fUrlDecode(caFilterTemp);                                    // remove URL encoding from the filter contents
+    sprintf(caFilterTemp, "%%%s", sTemp);                                     // prefix the filter with the '%' wildcard
+    free(sTemp);
 
-    sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
-
-    if (strlen(caFilterTemp) == 1) {
+    if (strlen(caFilterTemp) == 1) {              //add a '%' suffix bu only if there are other characters in the filter
         sprintf(caFilter, "%s", caFilterTemp);
     } else {
         sprintf(caFilter, "%s%%", caFilterTemp);
     }
     sFilter = caFilter;
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
 
 // define and execute a query based on the topic -----------------------------------------------------------------------
 
@@ -234,6 +244,7 @@ int main(void) {
         ;
         fPrintResult(sTopic, sFilter, caSQL);
     }
+
     return EXIT_SUCCESS;
 }
 
@@ -299,5 +310,14 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
     }
 
     mysql_free_result(res);
-    return;
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
+
+return;
 }

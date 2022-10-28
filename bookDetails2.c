@@ -25,7 +25,6 @@
 
 #define SQL_LEN 5000
 #define HDG_LEN 1000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -57,6 +56,41 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
+    sParam = getenv("QUERY_STRING");
+
+    if(sParam == NULL) {
+        printf("Query string is NULL. Expecting QUERY_STRING=\"TitleID=<999>\". Terminating bookDetails2.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+// check for an empty (non-NULL) query string --------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"TitleID=<999>\". Terminating bookDetails2.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
+
+    sscanf(sParam, "TitleID=%d", &iTitleID);
+
+    if(iTitleID == '\0') {
+        printf("Title ID is 0. Expecting QUERY_STRING=\"TitleID=<99>\". Terminating bookDelDetails2.cgi");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
 // Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
@@ -71,27 +105,7 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string ---------------------------------------------------------------------------------------
-
-    sParam = getenv("QUERY_STRING");
-
-    if(sParam == NULL) {
-        printf("Query string is NULL. Expecting QUERY_STRING=\"TitleID=<999>\". Terminating bookDetails2.cgi");
-        printf("\n\n");
-        return EXIT_FAILURE;
-    }
-
-// test if Null or All or non-Null values should be shown --------------------------------------------------------------
-
-    if (sParam[0] == '\0') {
-        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"TitleID=<999>\". Terminating bookDetails2.cgi");
-        printf("\n\n");
-        return EXIT_FAILURE;
-    }
-
-//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
-
-    sscanf(sParam, "TitleID=%d", &iTitleID);
+// set a SQL query to insert the new author ----------------------------------------------------------------------------
 
     sprintf(caSQL, "SELECT BT.`Title ID` "
                    ", BT.`Title Name` "
@@ -125,12 +139,25 @@ int main(void) {
                    "WHERE BT.`Title ID` = '%d';", iTitleID);
 
     fPrintResult(caSQL);
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
+
     return EXIT_SUCCESS;
 }
+
+// function to print the results of a query passed as *caSQL
 
 void fPrintResult(char *caSQL)
 {
     int iColCount = 0;
+
+// call the function to execute the query ------------------------------------------------------------------------------
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -188,5 +215,6 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
+
     return;
 }

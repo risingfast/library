@@ -7,6 +7,10 @@
  *      13-Dec-2021 start by copying bookDelStatus.c
  *      13-Dec-2021 check if no status deleted
  *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
+ *      11-Oct-2022 clean up comments
+ *      11-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      11-Oct-2022 validate QUERY_STRING is not NULL or empty
+ *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -19,7 +23,6 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 5000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -47,21 +50,6 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
-//    setenv("QUERY_STRING", "statusID=19", 1);                                            // uncomment for testing only
-
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
     sParam = getenv("QUERY_STRING");
@@ -72,7 +60,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-// check for an empty query string ---------------------------------------------------------------------------------------
+// check for an empty (non-NULL) query string -------------------------------------------------------------------------
 
     if(sParam[0] == '\0') {
         printf("Query string is empty. Expecting QUERY_STRING=\"statusID=<99>\". Terminating bookDelStatus.cgi");
@@ -83,16 +71,39 @@ int main(void) {
 //  get the content from QUERY_STRING and tokenize the ratingID value -------------------------------------------------
 
     sscanf(sParam, "statusID=%d", &iStatusID);
+
     if(iStatusID == 0) {
         printf("Status ID is 0. Expecting QUERY_STRING=\"statusID=<99>\". Terminating bookDelStatus.cgi");
         printf("\n\n");
         return EXIT_FAILURE;
     }
 
-// set a SQL query to insert the new author ---------------------------------------------------------------------------
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
+
+// set a SQL query to insert the new author ----------------------------------------------------------------------------
 
     sprintf(caSQL, "DELETE FROM risingfast.`Book Statuses` "
                    "WHERE `Status ID` = %d;", iStatusID);
+
+// Call the function to execute the query ------------------------------------------------------------------------------
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -102,6 +113,8 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
+// Check for a count of deleted rows -----------------------------------------------------------------------------------
+
     iDelRows = (int) mysql_affected_rows(conn);
 
     if(iDelRows == 0) {
@@ -109,6 +122,14 @@ int main(void) {
     } else {
         printf("Character ID '%d' deleted", iStatusID);
     }
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
 
     return EXIT_SUCCESS;
 }

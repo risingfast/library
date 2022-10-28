@@ -9,6 +9,7 @@
  *      10-Oct-2022 clean up comments
  *      10-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      10-Oct-2022 validate QUERY_STRING not NULL or empty
+ *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -21,7 +22,6 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 5000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -52,23 +52,7 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("\n");
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
-
 // check for a NULL query string ---------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "sourceID=1&sourceName=Paperback%20Test", 1);                 // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
@@ -90,6 +74,7 @@ int main(void) {
 
     sSourceID = strtok(sParam, caDelimiter);
     sscanf(sSourceID, "sourceID=%d", &iSourceID);
+
     if (iSourceID == 0) {
         printf("Source ID is 0. Expecting QUERY_STRING=\"sourceID=<99>&sourceName=<chngdsourcename>\". Terminating bookChgSourceNme.cgi");
         printf("\n\n");
@@ -98,18 +83,43 @@ int main(void) {
 
     sSource = strtok(NULL, caDelimiter);
     sscanf(sSource, "sourceName=%s", caSourceName);
+
     if (caSourceName[0] == '\0') {
         printf("Source Name is empty. Expecting QUERY_STRING=\"sourceID=<99>&sourceName=<chngdsourcename>\". Terminating bookChgSourceNme.cgi");
         printf("\n\n");
         return EXIT_FAILURE;
     }
+
     sSource = fUrlDecode(caSourceName);
+    strcpy(caSourceName, sSource);
+    free(sSource);
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
     sprintf(caSQL, "UPDATE risingfast.`Book Sources` BS "
                    "SET BS.`Source Name` = '%s' "
-                   "WHERE BS.`Source ID` = %d;", sSource, iSourceID);
+                   "WHERE BS.`Source ID` = %d;", caSourceName, iSourceID);
 
 // Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
@@ -121,7 +131,15 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    printf("Source ID %d updated to '%s'", iSourceID, sSource);
+    printf("Source ID %d updated to '%s'", iSourceID, caSourceName);
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
 
     return EXIT_SUCCESS;
 }

@@ -9,6 +9,7 @@
  *      12-Oct-2022 clean up commments
  *      13-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
  *      13-Oct-2022 check querry string for NULL and empty values
+ *      23-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -22,7 +23,6 @@
 
 #define SQL_LEN 5000
 #define HDG_LEN 1000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -54,6 +54,41 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
+    sParam = getenv("QUERY_STRING");
+
+    if(sParam == NULL) {
+        printf("Query string is NULL. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
+        printf("\n\n");
+        return  EXIT_FAILURE;
+    }
+
+// check for an empty (non-Null) query string --------------------------------------------------------------------------
+
+    if (sParam[0] == '\0') {
+        printf("Query string is empty. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
+        printf("\n\n");
+        return  EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
+
+    sscanf(sParam, "sourceID=%d", &iSourceID);
+
+    if (iSourceID == 0) {
+        printf("Source ID is 0. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
+        printf("\n\n");
+        return  EXIT_FAILURE;
+    }
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
 // Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
@@ -68,42 +103,16 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string ---------------------------------------------------------------------------------------
-
-
-    sParam = getenv("QUERY_STRING");
-
-    if(sParam == NULL) {
-        printf("Query string is NULL. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
-        printf("\n\n");
-        return  EXIT_FAILURE;
-    }
-
-// check for an empty query string -------------------------------------------------------------------------------------
-
-    if (sParam[0] == '\0') {
-        printf("Query string is empty. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
-        printf("\n\n");
-        return  EXIT_FAILURE;
-    }
-
-//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
-
-    sscanf(sParam, "sourceID=%d", &iSourceID);
-    if (iSourceID == 0) {
-        printf("Source ID is 0. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
-        printf("\n\n");
-        return  EXIT_FAILURE;
-    }
-
     sprintf(caSQL, "SELECT BG.`Source Name` "
                    "FROM risingfast.`Book Sources` BG "
                    "WHERE BG.`Source ID` = '%d';", iSourceID);
-    
+
     fPrintResult(caSQL);
-    
+
     return EXIT_SUCCESS;
 }
+
+// function to print all rows in the result of an SQL query ------------------------------------------------------------
 
 void fPrintResult(char *caSQL)
 {
@@ -120,21 +129,23 @@ void fPrintResult(char *caSQL)
 // store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
+
     if(res == NULL)
     {
         printf("%s() -- no results returned", __func__);
         printf("\n");
 
         mysql_free_result(res);
+
         return;
     }
-    
+
 // fetch the number of fields in the result ----------------------------------------------------------------------------
-    
+
     iColCount = mysql_num_fields(res);
-    
+
     mysql_data_seek(res, 0);
-    
+
 // print each row of results -------------------------------------------------------------------------------------------
 
     if(row = mysql_fetch_row(res))
@@ -145,5 +156,14 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
+
     return;
 }

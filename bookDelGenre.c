@@ -7,8 +7,10 @@
  *      13-Dec-2021 start by copying bookDelGenre.c
  *      11-Oct-2022 clean up comments
  *      11-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      11-Oct-2022 clean up comments
  *      11-Oct-2022 validate QUERY_STRING for NULL and empty values
  *      19-Oct-2022 add check for no rows deleted
+ *      22-Oct-2022 extend MySQL initialization and shutdown operation
  *  Enhancements:
 */
 
@@ -21,7 +23,6 @@
 #include "../shared/rf50.h"
 
 #define SQL_LEN 5000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -44,26 +45,12 @@ int main(void) {
 
     char caSQL[SQL_LEN] = {'\0'};
 
-// print the html content type and <head> block ------------------------------------------------------------------------
+// print the html content type and CORS <header> block -----------------------------------------------------------------
 
     printf("Content-type: text/html\n\n");
-
-// Initialize a connection and connect to the database -----------------------------------------------------------------
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
-    {
-        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
-        printf("\n\n");
-        printf("Error: %s\n", mysql_error(conn));
-        printf("\n");
-        return  EXIT_FAILURE;
-    }
+    printf("Access-Control-Allow-Origin: *\n\n");
 
 // check for a NULL query string ---------------------------------------------------------------------------------------
-
-//    setenv("QUERY_STRING", "genreID=38", 1);                                             // uncomment for testing only
 
     sParam = getenv("QUERY_STRING");
 
@@ -73,7 +60,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-// check for an empty query string ---------------------------------------------------------------------------------------
+// check for an empty (non-NULL) query string ---------------------------------------------------------------------------------------
 
     if(sParam[0] == '\0') {
         printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"genreID=<99>\". Terminating bookDelGenre.cgi");
@@ -84,16 +71,40 @@ int main(void) {
 //  get the content from QUERY_STRING and tokenize the ratingID value --------------------------------------------------
 
     sscanf(sParam, "genreID=%d", &iGenreID);
+
     if(iGenreID == 0) {
         printf("Genre ID is 0. Expecting QUERY_STRING=\"genreID=<99>\". Terminating bookDelGenre.cgi");
         printf("\n\n");
         return EXIT_FAILURE;
     }
 
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, sgServer, sgUsername, sgPassword, sgDatabase, 0, NULL, 0))
+    {
+        printf("\n");
+        printf("Failed to connect to MySQL Server %s in module %s()", sgServer, __func__);
+        printf("\n\n");
+        printf("Error: %s\n", mysql_error(conn));
+        printf("\n");
+        return  EXIT_FAILURE;
+    }
+
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
     sprintf(caSQL, "DELETE FROM risingfast.`Book Genres` "
                    "WHERE `Genre ID` = %d;", iGenreID);
+
+// Call the function to execute the query ------------------------------------------------------------------------------
 
     if(mysql_query(conn, caSQL) != 0)
     {
@@ -103,6 +114,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
+// Check for a count of deleted rows -----------------------------------------------------------------------------------
 
     iDelRows = (int) mysql_affected_rows(conn);
 
@@ -111,6 +123,14 @@ int main(void) {
     } else {
         printf("Genre ID '%d' deleted", iGenreID);
     }
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
 
     return EXIT_SUCCESS;
 }

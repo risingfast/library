@@ -28,6 +28,7 @@
  *      09-Oct-2022 add COALESCE to series query to handle NULL's in filter
  *      09-Oct-2022 clean up comments
  *      09-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
+ *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *  Enhancements:
 */
 
@@ -41,7 +42,6 @@
 
 #define SQL_LEN 5000
 #define HDG_LEN 1000
-
 #define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
@@ -64,6 +64,7 @@ char *sFilter = NULL;
 char *sParams = NULL;
 char *sSubstring = NULL;
 char caDelimiter[] = "&";
+char *sTemp = NULL;
 
 void fPrintResult(char *, char *, char *);
 
@@ -78,7 +79,61 @@ int main(void) {
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
 
-// Initialize a connection and connect to the database$$
+// check for a NULL query string ---------------------------------------------------------------------------------------
+
+    sParams = getenv("QUERY_STRING");
+
+// test for a NULL parameter string in QUERY_STRING --------------------------------------------------------------------
+
+    if (sParams == NULL) {
+        printf("Query string is NULL. Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+// test for an empty (non-NULL) parameter string in QUERY_STRING -------------------------------------------------------
+
+    if (sParams[0] == '\0') {
+        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+
+//  get the content from QUERY_STRING and tokenize based on '&' character for the first element: topic -----------------
+
+    sSubstring = strtok(sParams, caDelimiter);
+    sscanf(sSubstring, "topic=%s", caTopic);
+    if (caTopic[0] == '\0') {
+        printf("Topic string is empty (non-NULL). Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
+        printf("\n\n");
+        return EXIT_FAILURE;
+    }
+    sTopic = caTopic;
+
+// parse the QUERY_STRING for the filter element and prefix and add the enclosing '%' wildcards ------------------------
+
+    sSubstring = strtok(NULL, caDelimiter);
+    sscanf(sSubstring, "filter=%s", caFilterTemp);
+
+    sTemp = fUrlDecode(caFilterTemp);                                    // Remove URL encoding from the filter contents
+    sprintf(caFilterTemp, "%%%s", sTemp);                                     // Prefix the filter with the '%' wildcard
+    free(sTemp);
+
+    if (strlen(caFilterTemp) == 1) {            // add a '%' suffix but only if there are other characters in the filter
+        sprintf(caFilter, "%s", caFilterTemp);
+    } else {
+        sprintf(caFilter, "%s%%", caFilterTemp);
+    }
+    sFilter = caFilter;
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
+
+// Initialize a connection and connect to the database -----------------------------------------------------------------
 
     conn = mysql_init(NULL);
 
@@ -92,77 +147,9 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-// check for a NULL query string ---------------------------------------------------------------------------------------
+// set the SQL query based on the topic passed in QUER_STRING ----------------------------------------------------------
 
-//    setenv("QUERY_STRING", "topic=authors&filter=", 1);                                  // comment out unless testing
-//    setenv("QUERY_STRING", "topic=unreads&filter=", 1);                                  // comment out unless testing
-//    setenv("QUERY_STRING", "topic=series&filter=8", 1);                                  // comment out unless testing
-//    setenv("QUERY_STRING", "topic=characters&filter=1201", 1);                           // comment out unless testing
-
-    sParams = getenv("QUERY_STRING");
-
-// test for a NULL parameter string in QUERY_STRING --------------------------------------------------------------------
-
-    if (sParams == NULL) {
-        printf("Query string is NULL. Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
-        printf("\n\n");
-        return EXIT_FAILURE;
-    }
-
-// test for an empty parameter string in QUERY_STRING --------------------------------------------------------------------
-
-    if (sParams[0] == '\0') {
-        printf("Query string is empty (non-NULL). Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
-        printf("\n\n");
-        return EXIT_FAILURE;
-    }
-
-//    printf("QUERY_STRING: %s", getenv("QUERY_STRING"));                                  // comment out unless testing
-//    printf("\n\n");                                                                      // comment out unless testing
-
-//  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
-
-    sSubstring = strtok(sParams, caDelimiter);
-    sscanf(sSubstring, "topic=%s", caTopic);
-    if (caTopic[0] == '\0') {
-        printf("Topic string is empty (non-NULL). Expecting QUERY_STRING=\"topic=<querytopic>&filter=<queryfilter>\". Terminating \"bookInquiry.cgi\"");
-        printf("\n\n");
-        return EXIT_FAILURE;
-    }
-    sTopic = caTopic;
-
-    sSubstring = strtok(NULL, caDelimiter);
-    sscanf(sSubstring, "filter=%s", caFilterTemp);
-
-//    printf("caFilterTemp: %s", caFilterTemp);                                            // comment out unless testing
-
-// parse the QUERY_STRING for each argument: Topic and Filter ----------------------------------------------------------
-
-    sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
-
-//    printf("\n\n");                                                                      // comment out unless testing
-//    printf("caFilterTemp: %s", caFilterTemp);                                            // comment out unless testing
-//    printf("\n\n");                                                                      // comment out unless testing
-
-    if (strlen(caFilterTemp) == 1) {
-        sprintf(caFilter, "%s", caFilterTemp);
-    } else {
-        sprintf(caFilter, "%s%%", caFilterTemp);
-    }
-    sFilter = caFilter;
-
-//    printf("\n\n");                                                                     // comment out unless testing
-//    printf("Unencoded: %s", sFilter);                                                   // comment out unless testing
-//    printf("\n\n");                                                                     // comment out unless testing
-
-// test if Null or All or non-Null values should be shown -------------------------------------------------------------
-
-    if (getenv("QUERY_STRING") == NULL) {
-        printf("\n\n");
-        printf("No parameter string passed");
-        printf("\n\n");
-    }
-    else if (strstr(getenv("QUERY_STRING"), "titles") != NULL) {
+    if (strstr(getenv("QUERY_STRING"), "titles") != NULL) {
         sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", CONCAT(' ', BT.`Title Name`) as 'Name' "
                        ", CONCAT(' ', BA.`Author Name`) as 'Author' "
@@ -303,8 +290,6 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
 {
     int iColCount = 0;
 
-//    printf("Topic: %s  Filter: %s", caTopic, caFilter);                                  // uncomment for testing only
-
 // execute the query and check for no result ---------------------------------------------------------------------------
     
     if(mysql_query(conn, caSQL) != 0)
@@ -363,5 +348,14 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
     } 
 
     mysql_free_result(res);
-    return;
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
+
+return;
 }
