@@ -10,6 +10,7 @@
  *      10-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE for returns
  *      10-Oct-2022 validate QUERY_STRING and test for NULL and empty strings
  *      20-Oct-2022 extend MySQL initialization and shutdown operations
+ *      16-Nov-2022 change strcpy() to strncpy()
  *  Enhancements:
 */
 
@@ -38,7 +39,7 @@ MYSQL_FIELD *fields;
 
 char *sParam = NULL;
 char *sClass = NULL;
-char caClassName[MAXLEN] = {'\0'};
+char caClassName[MAXLEN + 1] = {'\0'};
 char *sClassID = NULL;
 int  iClassID = 0;
 char caDelimiter[] = "&";
@@ -91,7 +92,7 @@ int main(void) {
     }
 
     sClass = fUrlDecode(caClassName);
-    strcpy(caClassName, sClass);
+    strncpy(caClassName, sClass, MAXLEN);
     free(sClass);
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------

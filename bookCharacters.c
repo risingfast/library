@@ -10,8 +10,12 @@
  *      14-Sep-2022 add Access-Control-Allow-Origin: * in http headers
  *      05-Oct-2022 add Add Character ID to filter in SQL query
  *      09-Oct-2022 clean up comments
+ *      10-Nov-2022 changes sprintf() to asprintf()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -21,9 +25,6 @@
 #include <ctype.h>
 #include "../shared/rf50.h"
 
-#define SQL_LEN 5000
-
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -44,18 +45,26 @@ char *sFilter =  NULL;
 char caDelimiter[] = "&";
 char caFilterTemp[MAXLEN] = {'\0'};
 char caFilter[MAXLEN + 2] = {'\0'};
+char *strTemp = NULL;
 
 void fPrintResult(char *);
 
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and <head> block ------------------------------------------------------------------------
 
     printf("Content-type: text/html\n");
     printf("Access-Control-Allow-Origin: *\n\n");
+
+// * initialize the MySQL client library -------------------------------------------------------------------------------
+
+   if (mysql_library_init(0, NULL, NULL)) {
+       printf("Cannot initialize MySQL Client library\n");
+       return EXIT_FAILURE;
+   }
 
 // Initialize a connection and connect to the database$$
 
@@ -111,7 +120,9 @@ int main(void) {
 
 // parse the QUERY_STRING for each argument: Action and Filter ---------------------------------------------------------
 
-    sprintf(caFilterTemp, "%%%s", fUrlDecode(caFilterTemp));
+    strTemp = fUrlDecode(caFilterTemp);
+    sprintf(caFilterTemp, "%%%s", strTemp);
+    free(strTemp);
 
     if (strlen(caFilterTemp) == 1) {
         sprintf(caFilter, "%s", caFilterTemp);
@@ -122,24 +133,33 @@ int main(void) {
 
 // set a SQL query based on a book ID to retrieve all characters--------------------------------------------------------
 
-    sprintf(caSQL, "SELECT BC.`Character ID`, BC.`Character Name` "
+    asprintf(&strSQL, "SELECT BC.`Character ID`, BC.`Character Name` "
                    "FROM risingfast.`Book Characters` BC "
                    "WHERE BC.`Title ID` = '%d' "
                    "AND CONCAT(BC.`Character ID`, BC.`Character Name`) like '%s';", iTitleID, sFilter);
 
+    fPrintResult(strSQL);
 
-//    printf("\n%s\n", caSQL);                                                            // uncommment for testing only
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
 
-    fPrintResult(caSQL);
-    
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
+
+// free resources used by strSQL ----------------------------------------------------------------------------------------
+
+    free(strSQL);
+
     return EXIT_SUCCESS;
 }
 
-void fPrintResult(char *caSQL)
+void fPrintResult(char *strSQL)
 {
     int iColCount = 0;
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -197,5 +217,6 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
+
     return;
 }

@@ -10,8 +10,13 @@
  *      10-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
  *      10-Oct-2022 validate QUERY_STRING as non-NULL and not empty
  *      21-Oct-2022 extend MySQL initialization and shutdown operations
+ *      11-Nov-2022 change sprintf() to asprintf()
+ *      16-Nov-2022 change strcpy() to strncpy()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -20,9 +25,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -38,14 +40,14 @@ MYSQL_FIELD *fields;
 
 char *sParam = NULL;
 char *sRating = NULL;
-char caRatingName[MAXLEN] = {'\0'};
+char caRatingName[MAXLEN + 1] = {'\0'};
 char *sRatingID = NULL;
 int  iRatingID = 0;
 char caDelimiter[] = "&";
 
 int main(void) {
 
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and CORS <head> block -------------------------------------------------------------------
 
@@ -91,7 +93,7 @@ int main(void) {
     }
 
     sRating = fUrlDecode(caRatingName);
-    strcpy(caRatingName, sRating);
+    strncpy(caRatingName, sRating, MAXLEN);
     free(sRating);
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------
@@ -117,13 +119,13 @@ int main(void) {
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
-    sprintf(caSQL, "UPDATE risingfast.`Book Ratings` BR "
+    asprintf(&strSQL, "UPDATE risingfast.`Book Ratings` BR "
                    "SET BR.`Rating Name` = '%s' "
                    "WHERE BR.`Rating ID` = %d;", caRatingName, iRatingID);
 
 // Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -140,6 +142,10 @@ int main(void) {
 // * free resources used by the MySQL library --------------------------------------------------------------------------
 
     mysql_library_end();
+
+// free resources used by strSQL ---------------------------------------------------------------------------------------
+
+    free(strSQL);
 
     return EXIT_SUCCESS;
 }

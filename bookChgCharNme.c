@@ -11,8 +11,13 @@
  *      09-Oct-2022 validate QUERY_STRING and test for NULL and empty string
  *      10-Oct-2022 clean up comments
  *      20-Oct-2022 extend MySQL initialization and shutdown operations$
+ *      10-Nov-2022 change sprintf() to as printf()
+ *      16-Nov-2022 change strcpy() to strncpy()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -21,9 +26,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -39,14 +41,14 @@ MYSQL_FIELD *fields;
 
 char *sParam = NULL;
 char *sCharacter = NULL;
-char caCharacterName[MAXLEN] = {'\0'};
+char caCharacterName[MAXLEN + 1] = {'\0'};
 char *sCharacterID = NULL;
 int  iCharacterID = 0;
 char caDelimiter[] = "&";
 
 int main(void) {
 
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and CORS <header> block -----------------------------------------------------------------
 
@@ -94,7 +96,7 @@ int main(void) {
     }
 
     sCharacter = fUrlDecode(caCharacterName);
-    strcpy(caCharacterName, sCharacter);
+    strncpy(caCharacterName, sCharacter, MAXLEN);
     free(sCharacter);
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------
@@ -120,13 +122,13 @@ int main(void) {
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
-    sprintf(caSQL, "UPDATE risingfast.`Book Characters` BC "
+    asprintf(&strSQL, "UPDATE risingfast.`Book Characters` BC "
                    "SET BC.`Character Name` = '%s' "
                    "WHERE BC.`Character ID` = %d;", caCharacterName, iCharacterID);
 
 // Call the function to print the SQL results to stdout and terminate the program --------------------------------------
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -143,6 +145,10 @@ int main(void) {
 // * free resources used by the MySQL library --------------------------------------------------------------------------
 
     mysql_library_end();
+
+// free resources used by strSQL ---------------------------------------------------------------------------------------
+
+    free(strSQL);
 
     return EXIT_SUCCESS;
 }

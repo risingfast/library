@@ -19,8 +19,14 @@
  *      18-Oct-2022 extend MySQL initialization and shutdown operations
  *      18-Oct-2022 free memory for the string created by fUrlDecode()
  *      27-Oct-2022 add a query to fetch the ID of the newly inserted title
+ *      09-Nov-2022 change sprintf() to asprintf()
+ *      15-Nov-2022 change strcpy() to strncpy()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define MAXLEN 1024
+#define STRLEN 300
 
 #include <mysql.h>
 #include <stdio.h>
@@ -29,9 +35,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 10000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -46,22 +49,22 @@ MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
 char *sParam = NULL;
-char sParamOrig[300] = {'\0'};
-char *sCharacter = NULL;
-char *sCharacterName = NULL;
-char caCharacterName[MAXLEN] = {'\0'};
-char caBookName[MAXLEN] = {'\0'};
+char sParamOrig[STRLEN] = {'\0'};
+// char *sCharacter = NULL;
+//char *sCharacterName = NULL;
+// char caCharacterName[MAXLEN] = {'\0'};
+char *strBookName = NULL;
 char caNameBuf[MAXLEN] = {'\0'};
 char caStartDte[11] = {'\0'};
 char caFinishDte[11] = {'\0'};
-char caStartDteQuoted[13] = {'\0'};
-char caFinDteQuoted[13] = {'\0'};
+char *strStartDteQuoted = NULL;
+char *strFinDteQuoted = NULL;
 char caAbstract[MAXLEN * 3] = {'\0'};
 char caAbstractBuf[MAXLEN * 3] = {'\0'};
-char caAbstractQuoted[(MAXLEN * 3) + 2] = {'\0'};
+char *strAbstractQuoted = NULL;
 char caCmnts[MAXLEN * 3] = {'\0'};
 char caCmntsBuf[MAXLEN * 3] = {'\0'};
-char caCmntsQuoted[(MAXLEN * 3) + 2] = {'\0'};
+char *strCmntsQuoted = NULL;
 char *sTitleID = NULL;
 char *sStartDte = NULL;
 char *sFinishDte = NULL;
@@ -84,7 +87,7 @@ char caDelimiter[] = "&";
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and <head> block ------------------------------------------------------------------------
 
@@ -93,8 +96,7 @@ int main(void) {
 
 // QUERY_STRING format and sample for tesing ---------------------------------------------------------------------------
 
-//    QUERY_STRING="bookName=TestBook1&authorId=67&chapters=10&sourceId=10&seriesId=57&genreId=19&statusId=6&clsfnId=3&ratingId=6&startDte=&finishDte=&abstract=&cmnts=TestComments"
-//    export QUERY_STRING
+//    setenv("QUERY_STRING", "bookName=TestBook1&authorId=67&chapters=10&sourceId=10&seriesId=57&genreId=19&statusId=6&clsfnId=3&ratingId=6&startDte=2022-10-10&finishDte=2022-11-11&abstract=&cmnts=TestComments", 1);
 
 // Fetch the QUERY_STRING environment variable paramete string ---------------------------------------------------------
 
@@ -116,7 +118,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    strcpy(sParamOrig, sParam);                                                                 // make a copy of sParam
+    strncpy(sParamOrig, sParam, STRLEN);                                                                 // make a copy of sParam
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
@@ -130,7 +132,7 @@ int main(void) {
     }
 
     sTemp2 = fUrlDecode(caNameBuf);
-    strcpy(caBookName, sTemp2);
+    asprintf(&strBookName, "%s", sTemp2);
     free(sTemp2);
 
     sTemp = strtok(NULL, caDelimiter);
@@ -200,39 +202,39 @@ int main(void) {
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "startDte=%[^\n]s", caStartDte);
     if (strlen(caStartDte) == 0) {
-        strcpy(caStartDteQuoted, "NULL");
+        asprintf(&strStartDteQuoted, "%s", "NULL");
     } else {
-        sprintf(caStartDteQuoted, "'%s'", caStartDte);
+        asprintf(&strStartDteQuoted, "'%s'", caStartDte);
     }
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "finishDte=%[^\n]s", caFinishDte);
     if (strlen(caFinishDte) == 0) {
-        strcpy(caFinDteQuoted, "NULL");
+        asprintf(&strFinDteQuoted, "%s", "NULL");
     } else {
-        sprintf(caFinDteQuoted, "'%s'", caFinishDte);
+        asprintf(&strFinDteQuoted, "'%s'", caFinishDte);
     }
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "abstract=%[^\n]s", caAbstractBuf);
     if (strlen(caAbstractBuf) == 0) {
-        strcpy(caAbstractQuoted, "NULL");
+        asprintf(&strAbstractQuoted, "'%s'", "NULL");
     } else {
-        sprintf(caAbstractQuoted, "'%s'", caAbstractBuf);
+        asprintf(&strAbstractQuoted, "'%s'", caAbstractBuf);
     }
-    sTemp = fUrlDecode(caAbstractQuoted);
-    strcpy(caAbstract, sTemp);
+    sTemp = fUrlDecode(strAbstractQuoted);
+    strncpy(caAbstract, sTemp, MAXLEN + 3);
     free(sTemp);
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "cmnts=%[^\n]s", caCmntsBuf);
     if (strlen(caCmntsBuf) == 0) {
-        strcpy(caCmntsQuoted, "NULL");
+        asprintf(&strCmntsQuoted, "'%s'", "NULL");
     } else {
-        sprintf(caCmntsQuoted, "'%s'", caCmntsBuf);
+        asprintf(&strCmntsQuoted, "'%s'", caCmntsBuf);
     }
-    sTemp = fUrlDecode(caCmntsQuoted);
-    strcpy(caCmnts, sTemp);
+    sTemp = fUrlDecode(strCmntsQuoted);
+    strncpy(caCmnts, sTemp, MAXLEN + 3);
     free(sTemp);
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------
@@ -253,34 +255,43 @@ int main(void) {
         printf("\n\n");
         printf("Error: %s\n", mysql_error(conn));
         printf("\n");
-        return  EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
 // set and perform a SQL query to insert the new book title ------------------------------------------------------------
 
-    sprintf(caSQL, "INSERT INTO risingfast.`Book Titles` "
+    asprintf(&strSQL, "INSERT INTO risingfast.`Book Titles` "
                    "(`Title Name`, `Author ID`, `Chapters`, `Source ID`, `Series ID`, `Genre ID`, `Status ID`, `Classification ID`, `Rating ID`, Start, Finish, Abstract, Comments)  "
-                   "VALUES ('%s', %d, %d, %d, %d, %d, %d, %d, %d, %s, %s, %s, %s);", caBookName, iAuthorID, iChapters, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, caStartDteQuoted, caFinDteQuoted, caAbstract, caCmnts);
+                   "VALUES ('%s', %d, %d, %d, %d, %d, %d, %d, %d, %s, %s, %s, %s);", strBookName, iAuthorID, iChapters, iSourceID, iSeriesID, iGenreID, iStatusID, iClsfnID, iRatingID, strStartDteQuoted, strFinDteQuoted, caAbstract, caCmnts);
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         return EXIT_FAILURE;
     }
+
+    free(strSQL);
+    free(strStartDteQuoted);
+    free(strFinDteQuoted);
+    free(strAbstractQuoted);
+    free(strCmntsQuoted);
+    free(strBookName);
 
 // set and perform a SQL query to return the last inserted ID in the current session and connection --------------------
 
-    sprintf(caSQL, "SELECT LAST_INSERT_ID()");
+    asprintf(&strSQL, "SELECT LAST_INSERT_ID()");
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
         printf("\n\n");
         return EXIT_FAILURE;
     }
+
+    free(strSQL);
 
 // store the result of the last query and seek to the first row of results (only one row is expected) ------------------
 
@@ -303,7 +314,9 @@ int main(void) {
     row = mysql_fetch_row(res);                                 // fetch the first row of data from the result 'res' set
     
     printf("%s", row[0]);                                                           // print the newly inserted Title ID
-    
+   
+// * free resources used by the 'res' array ----------------------------------------------------------------------------
+
     mysql_free_result(res);
 
 // * close the database connection created by mysql_init(NULL) ---------------------------------------------------------

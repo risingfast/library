@@ -75,6 +75,7 @@
 //    05-Oct-2022 - remove fClickSubmitOnEnter() function
 //    05-Oct-2022 - remove fEnableSubmitIfNotNull() function
 //    16-Oct-2022 - add chapter count
+//    07-Nov-2022 - add chapters to print
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -2841,6 +2842,7 @@ function fPrintBookText() {
     let titleid = document.getElementById("booksid-input").value;
     let nametext = document.getElementById("booksname-input").value;
     let bookauthor = document.getElementById("booksauthor-select").value;
+    let bookChapters = document.getElementById("bookschapters-input").value;
     let seriestext = document.getElementById("booksseries-select").value;
     let starttext = document.getElementById("booksstart-input").value;
     let abstracttext = document.getElementById("booksabstract-textarea").value;
@@ -2849,6 +2851,7 @@ function fPrintBookText() {
     let printcontent = 'Title ID: ' + titleid + '<br><br>'
                      + 'Title: ' + nametext + '<br><br>'
                      + 'Author: ' + bookauthor + '<br><br>'
+                     + 'Chapters: ' + bookChapters + '<br><br>'
                      + 'Series: ' + seriestext + '<br><br>'
                      + 'Started: ' + starttext + '<br><br>'
                      + 'Abstract:<br>' + abstracttext + '<br><br>'

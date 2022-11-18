@@ -9,9 +9,13 @@
  *      13-Oct-2022 clean up comments
  *      13-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      13-Oct-2022 validate QUERY_STRING for NULL and empty values
- *      20-Oct-2022 extend MySQL initialization and shutdown operations
+ *      13-Nov-2022 change sprintf() to asprintf()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define HDG_LEN 1000
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -20,10 +24,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define HDG_LEN 1000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ void fPrintResult(char *);
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type header and CORS header block ------------------------------------------------------------
 
@@ -64,25 +64,22 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-// check for an empty (non-NULL) query string --------------------------------------------------------------------------
+// check for an empty query string -------------------------------------------------------------------------------------
 
     if (sParam[0] == '\0') {
         printf("Query string is empty. Expecting QUERY_STRING=\"classID=<99>\". Terminating bookVldtClassId.cgi");
         printf("\n\n");
-        return EXIT_FAILURE;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
     sscanf(sParam, "classID=%d", &iClassID);
-
     if (iClassID == 0) {
         printf("Class ID is 0. Expecting QUERY_STRING=\"classID=<99>\". Terminating bookVldtClassId.cgi");
         printf("\n\n");
-        return EXIT_FAILURE;
     }
 
-// * initialize the MySQL client library -------------------------------------------------------------------------------
+// * initialize the MySQL client library ------------------------------------------------------------
 
    if (mysql_library_init(0, NULL, NULL)) {
        printf("Cannot initialize MySQL Client library\n");
@@ -103,22 +100,25 @@ int main(void) {
         return  EXIT_FAILURE;
     }
 
-    sprintf(caSQL, "SELECT BC.`Classification Name` "
-                   "FROM risingfast.`Book Classifications` BC "
-                   "WHERE BC.`Classification ID` = '%d';", iClassID);
+    asprintf(&strSQL, "SELECT BC.`Classification Name` "
+                      "FROM risingfast.`Book Classifications` BC "
+                      "WHERE BC.`Classification ID` = '%d';", iClassID);
     
-    fPrintResult(caSQL);
+    fPrintResult(strSQL);
     
+// free resources used by strSQL ---------------------------------------------------------------------------------------
+
+    free(strSQL);
+
     return EXIT_SUCCESS;
+
 }
 
-// function to print all rows in the result of an SQL query ------------------------------------------------------------
-
-void fPrintResult(char *caSQL)
+void fPrintResult(char *strSQL)
 {
     int iColCount = 0;
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -129,14 +129,12 @@ void fPrintResult(char *caSQL)
 // store the result of the query ---------------------------------------------------------------------------------------
 
     res = mysql_store_result(conn);
-
     if(res == NULL)
     {
         printf("%s() -- no results returned", __func__);
         printf("\n");
 
         mysql_free_result(res);
-
         return;
     }
     
@@ -157,11 +155,11 @@ void fPrintResult(char *caSQL)
 
     mysql_free_result(res);
 
-// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+    // * close the database connection created by mysql_init(NULL) ----------------------------------
 
     mysql_close(conn);
 
-// * free resources used by the MySQL library --------------------------------------------------------------------------
+// * free resources used by the MySQL library -------------------------------------------------------
 
     mysql_library_end();
 

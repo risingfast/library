@@ -29,8 +29,13 @@
  *      09-Oct-2022 clean up comments
  *      09-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      20-Oct-2022 extend MySQL initialization and shutdown operations
+ *      11-Nov-2022 changes sprintf() to asprintf()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define HDG_LEN 1000
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -39,10 +44,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define HDG_LEN 1000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -72,7 +73,7 @@ int main(void) {
 
     int i;
     char caOrder[] = {'A', 'S', 'C', '\0'};
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and <head> block ------------------------------------------------------------------------
 
@@ -150,7 +151,7 @@ int main(void) {
 // set the SQL query based on the topic passed in QUER_STRING ----------------------------------------------------------
 
     if (strstr(getenv("QUERY_STRING"), "titles") != NULL) {
-        sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", CONCAT(' ', BT.`Title Name`) as 'Name' "
                        ", CONCAT(' ', BA.`Author Name`) as 'Author' "
                        ", CONCAT(' ', BT.Start) "
@@ -161,20 +162,20 @@ int main(void) {
                        "WHERE CONCAT(BT.`Title ID`, BT.`Title Name`, BA.`Author Name`, IFNULL(BT.Comments, ' ')) LIKE '%s' "
                        "ORDER BY BT.`Title ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "characters") != NULL) {
-        sprintf(caSQL, "SELECT BC.`Character ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BC.`Character ID` as 'ID' "
                        ", BC.`Character Name` as 'Name' "
                        "FROM risingfast.`Book Characters` BC "
                        "WHERE CONCAT(BC.`Character ID`, BC.`Character Name`) LIKE '%s' "
                        "ORDER BY BC.`Character ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
 
-        sprintf(caSQL, "SELECT T.ID, T.`Author Name`, T.`Author Rating` FROM (SELECT BA.`Author ID` as `ID` "
+        asprintf(&strSQL, "SELECT T.ID, T.`Author Name`, T.`Author Rating` FROM (SELECT BA.`Author ID` as `ID` "
                        ", BA.`Author Name` as `Author Name` "
                        ", ROUND(SUM(BR.`Rating Value`) / COUNT(BT.`Author ID`), 0) as `Author Rating` "
                        "FROM `Book Authors` BA "
@@ -186,10 +187,10 @@ int main(void) {
                        "WHERE CONCAT(T.ID, COALESCE(T.`Author Rating`, ''), T.`Author Name`) like '%s'; ", sFilter)
                        ;
 
-         fPrintResult(sTopic, sFilter, caSQL);
+         fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "recents") != NULL) {
-        sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", CONCAT(' ', BT.Start) "
                        ", CONCAT(' ', BT.`Title Name`) "
                        ", CONCAT(' ', BA.`Author Name`) "
@@ -202,10 +203,10 @@ int main(void) {
                        "ORDER BY BT.`Start` DESC", sFilter)
         ;
 
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "unreads") != NULL) {
-        sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", CONCAT(' ', BT.`Title Name`) as 'Name' "
                        ", CONCAT(' ', BA.`Author Name`) as 'Author' "
                        ", CONCAT(' ', COALESCE(AR.`Author Rating`, 0)) as 'Rating' "
@@ -219,28 +220,28 @@ int main(void) {
                        " ORDER BY BT.`Title ID` ASC", sFilter)
         ; 
 
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "classifications") != NULL) {
-        sprintf(caSQL, "SELECT BC.`Classification ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BC.`Classification ID` as 'ID' "
                        ", CONCAT(' ', BC.`Classification Name`) as 'Name' "
                        "FROM risingfast.`Book Classifications` BC "
                        "WHERE CONCAT(BC.`Classification ID`, BC.`Classification Name`) LIKE '%s' "
                        "ORDER BY BC.`Classification ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "ratings") != NULL) {
-        sprintf(caSQL, "SELECT BR.`Rating ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BR.`Rating ID` as 'ID' "
                        ", CONCAT(' ', BR.`Rating Name`) as 'Name' "
                        "FROM risingfast.`Book Ratings` BR "
                        "WHERE CONCAT(BR.`Rating ID`, BR.`Rating Name`) LIKE '%s' "
                        "ORDER BY BR.`Rating ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "series") != NULL) {
-        sprintf(caSQL, "SELECT T.`Series ID`, CONCAT(' ', T.`Series Name`), CONCAT(' ', T.`Author Name`), CONCAT(' ', T.`Rating`), CONCAT(' ', T.`Count`) "
+        asprintf(&strSQL, "SELECT T.`Series ID`, CONCAT(' ', T.`Series Name`), CONCAT(' ', T.`Author Name`), CONCAT(' ', T.`Rating`), CONCAT(' ', T.`Count`) "
                        " FROM (SELECT BS.`Series ID` as 'Series ID' "
                        " , BS.`Series Name` as 'Series Name' "
                        " , BA.`Author Name` as 'Author Name' "
@@ -254,35 +255,38 @@ int main(void) {
                        " ORDER BY BS.`Series ID` ASC) AS T "
                        " WHERE CONCAT(T.`Series ID`, T.`Series Name`, COALESCE(T.`Author Name`, ''), COALESCE(T.`Rating`, ''), COALESCE(T.`Count`, '')) like '%s'; ", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "sources") != NULL) {
-        sprintf(caSQL, "SELECT BS.`Source ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BS.`Source ID` as 'ID' "
                        ", CONCAT(' ', BS.`Source Name`) as 'Name' "
                        "FROM risingfast.`Book Sources` BS "
                        "WHERE CONCAT(BS.`Source ID`, BS.`Source Name`) LIKE '%s' "
                        "ORDER BY BS.`Source ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "genres") != NULL) {
-        sprintf(caSQL, "SELECT BG.`Genre ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BG.`Genre ID` as 'ID' "
                        ", CONCAT(' ', BG.`Genre Name`) as 'Name' "
                        "FROM risingfast.`Book Genres` BG "
                        "WHERE CONCAT(BG.`Genre ID`, BG.`Genre Name`) LIKE '%s' "
                        "ORDER BY BG.`Genre ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "statuses") != NULL) {
-        sprintf(caSQL, "SELECT BS.`Status ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BS.`Status ID` as 'ID' "
                        ", CONCAT(' ', BS.`Status Name`) as 'Name' "
                        "FROM risingfast.`Book Statuses` BS "
                        "WHERE CONCAT(BS.`Status ID`, BS.`Status Name`) LIKE '%s' "
                        "ORDER BY BS.`Status ID` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
+
+// release the resoures used by strSQL ---------------------------------------------------------------------------------
+
     return EXIT_SUCCESS;
 }
 
@@ -359,3 +363,4 @@ void fPrintResult(char *caTopic, char *caFilter, char *caSQL)
 
 return;
 }
+

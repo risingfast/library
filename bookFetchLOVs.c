@@ -12,8 +12,13 @@
  *      12-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      12-Oct-2022 validate QUERY_STRING for NULL and empty values
  *      20-Oct-2022 extend MySQL initialization and shutdown operations
+ *      11-Nov-2022 change sprintf() to sprintf()
  *  Enhancements:
  */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define HDG_LEN 1000
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -22,10 +27,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define HDG_LEN 1000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -55,7 +56,7 @@ int main(void) {
 
     int i;
     char caOrder[] = {'A', 'S', 'C', '\0'};
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and CORS <header> block -----------------------------------------------------------------
 
@@ -131,7 +132,7 @@ int main(void) {
 // define and execute a query based on the topic -----------------------------------------------------------------------
 
     if (strstr(getenv("QUERY_STRING"), "titles") != NULL) {
-        sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", BT.`Title Name` as 'Name' "
                        ", BT.Start"
                        ", BT.Finish"
@@ -140,19 +141,19 @@ int main(void) {
                        "WHERE BT.`Title Name` LIKE '%s' "
                        "ORDER BY BT.`Title Name` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "characters") != NULL) {
-        sprintf(caSQL, "SELECT BC.`Character ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BC.`Character ID` as 'ID' "
                        ", BC.`Character Name` as 'Name' "
                        "FROM risingfast.`Book Characters` BC "
                        "WHERE BC.`Character Name` LIKE '%s' "
                        "ORDER BY BC.`Character Name` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "authors") != NULL) {
-        sprintf(caSQL, "SELECT BA.`Author ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BA.`Author ID` as 'ID' "
                        ", BA.`Author Name` as 'Name' "
                        ", ROUND(SUM(BR.`Rating Value`) / COUNT(BA.`Author Name`), 0) as `Author Rating` "
                        "FROM `Book Authors` BA "
@@ -162,10 +163,10 @@ int main(void) {
                        "GROUP BY BA.`Author Name`, BA.`Author ID` "
                        "ORDER BY BA.`Author Name` ASC; ", sFilter)
                        ;
-         fPrintResult(sTopic, sFilter, caSQL);
+         fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "recents") != NULL) {
-        sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", BT.Start"
                        ", BT.`Title Name` as 'Name' "
                        ", BT.Finish"
@@ -175,10 +176,10 @@ int main(void) {
                        "AND BT.`Start` IS NOT NULL "
                        "ORDER BY BT.`Start` DESC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "unreads") != NULL) {
-        sprintf(caSQL, "SELECT BT.`Title ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BT.`Title ID` as 'ID' "
                        ", BT.Start"
                        ", BT.`Title Name` as 'Name' "
                        ", BT.Finish"
@@ -188,62 +189,66 @@ int main(void) {
                        "AND BT.`Start` IS NULL "
                        "ORDER BY BT.`Start` DESC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "classifications") != NULL) {
-        sprintf(caSQL, "SELECT BC.`Classification ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BC.`Classification ID` as 'ID' "
                        ", BC.`Classification Name` as 'Name' "
                        "FROM risingfast.`Book Classifications` BC "
                        "WHERE BC.`Classification Name` LIKE '%s' "
                        "ORDER BY BC.`Classification Name` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "ratings") != NULL) {
-        sprintf(caSQL, "SELECT BR.`Rating ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BR.`Rating ID` as 'ID' "
                        ", BR.`Rating Name` as 'Name' "
                        "FROM risingfast.`Book Ratings` BR "
                        "WHERE BR.`Rating Name` LIKE '%s' "
                        "ORDER BY BR.`Rating Name` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "series") != NULL) {
-        sprintf(caSQL, "SELECT BS.`Series ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BS.`Series ID` as 'ID' "
                        " , BS.`Series Name` as 'Name' "
                        " FROM risingfast.`Book Series` BS "
                        " WHERE BS.`Series Name` LIKE '%s' "
                        " ORDER BY BS.`Series Name` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "sources") != NULL) {
-        sprintf(caSQL, "SELECT BS.`Source ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BS.`Source ID` as 'ID' "
                        ", BS.`Source Name` as 'Name' "
                        "FROM risingfast.`Book Sources` BS "
                        "WHERE BS.`Source Name` LIKE '%s' "
                        "ORDER BY BS.`Source Name` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "genres") != NULL) {
-        sprintf(caSQL, "SELECT BG.`Genre ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BG.`Genre ID` as 'ID' "
                        ", BG.`Genre Name` as 'Name' "
                        "FROM risingfast.`Book Genres` BG "
                        "WHERE BG.`Genre Name` LIKE '%s' "
                        "ORDER BY BG.`Genre Name` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
     else if (strstr(getenv("QUERY_STRING"), "statuses") != NULL) {
-        sprintf(caSQL, "SELECT BS.`Status ID` as 'ID' "
+        asprintf(&strSQL, "SELECT BS.`Status ID` as 'ID' "
                        ", BS.`Status Name` as 'Name' "
                        "FROM risingfast.`Book Statuses` BS "
                        "WHERE BS.`Status Name` LIKE '%s' "
                        "ORDER BY BS.`Status Name` ASC", sFilter)
         ;
-        fPrintResult(sTopic, sFilter, caSQL);
+        fPrintResult(sTopic, sFilter, strSQL);
     }
+
+// free resources used by strSQL ---------------------------------------------------------------------------------------
+
+    free(strSQL);
 
     return EXIT_SUCCESS;
 }

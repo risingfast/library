@@ -9,8 +9,13 @@
  *      09-Dec-2021 clean up comments
  *      09-Dec-2021 validate QUERY_STRING and test for NULL and empty values
  *      18-Oct-2022 extend MySQL initialization and shutdown operations
+ *      10-Nov-2022 changes sprintf() to asprintf()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define HDG_LEN 1000
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -19,10 +24,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define HDG_LEN 1000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ void fPrintResult(char *);
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and <head> block ------------------------------------------------------------------------
 
@@ -106,11 +107,11 @@ int main(void) {
 
 // set a SQL query to select a character from the database -------------------------------------------------------------
 
-    sprintf(caSQL, "SELECT BC.`Character Name` "
+    asprintf(&strSQL, "SELECT BC.`Character Name` "
                    "FROM risingfast.`Book Characters` BC "
                    "WHERE BC.`Character ID` = '%d';", iCharID);
     
-    fPrintResult(caSQL);
+    fPrintResult(strSQL);
 
 // * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
 
@@ -120,14 +121,18 @@ int main(void) {
 
     mysql_library_end();
 
+// free resources used by strSQL ---------------------------------------------------------------------------------------
+
+    free(strSQL);
+   
     return EXIT_SUCCESS;
 }
 
-void fPrintResult(char *caSQL)
+void fPrintResult(char *strSQL)
 {
     int iColCount = 0;
 
-    if (mysql_query(conn, caSQL) != 0)
+    if (mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));

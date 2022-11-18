@@ -10,6 +10,7 @@
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      09-Oct-2022 clean up comments
  *      19-Oct-2022 extend MySQL initialization and shutdown operations
+ *      15-Nov-2022 change strcpy() to strncpy()
  *  Enhancements:
  *      Add rating value to update
 */
@@ -82,10 +83,10 @@ int main(void) {
     }
 
     sRating = fUrlDecode(caRating);
-    strcpy(caRating, sRating);
+    strncpy(caRating, sRating, MAXLEN);
     free(sRating);
 
-// * initialize the MySQL client library -------------------------------------------------------------------------------
+// * initialize the MySQL client library
 
    if (mysql_library_init(0, NULL, NULL)) {
        printf("Cannot initialize MySQL Client library\n");
@@ -105,7 +106,6 @@ int main(void) {
         printf("\n");
         return  EXIT_FAILURE;
     }
-
 // set a SQL query to insert the new rating ----------------------------------------------------------------------------
 
     sprintf(caSQL, "INSERT INTO risingfast.`Book Ratings` "
@@ -124,11 +124,11 @@ int main(void) {
 
     printf("Rating '%s' inserted into Ratings table", caRating);
 
-// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+// * close the database connection created by mysql_init(NULL) -----------------------------------------------------------
 
     mysql_close(conn);
 
-// * free resources used by the MySQL library --------------------------------------------------------------------------
+// * free resources used by the MySQL library ----------------------------------------------------------------------------
 
     mysql_library_end();
 

@@ -1,5 +1,8 @@
 // includes and defines
 
+#define SQL_LEN 5000
+#define _GNU_SOURCE
+
 #include <mysql.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,8 +11,6 @@
 #include "../shared/rf50.h"
 #include <ctype.h>
 #include <stdbool.h>
-
-#define SQL_LEN 5000
 
 void fListTitles(char *, int *, char *, char *, char *);                     //show all titles & authors on the console
 void fListAuthors(char *, int *, char *, char *);                    //show all authors and title counts on the console
@@ -80,7 +81,7 @@ int main(int argc, char** argv)
 {
 // declarations
 
-    char *sPrgNme = strcat(argv[0] + 2, " -- Library and reading log");                               // program name
+    char *sPrgNme = strcat(argv[0] + 2, " -- Library and reading log");                                 // program name
     bool bHelp = false;                                                                  // help flag to show help text
     bool bExitMain = false;                                                                 // flag to exit the program
     char cMainChoice = '0';                                                                         // main menu choice

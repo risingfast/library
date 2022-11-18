@@ -9,6 +9,7 @@
 #       10-Dec-2021 add bookDetails2
 #       20-Sep-2022 add .cgi targets
 #       22-Oct-2022 remove bookDetails
+#       13-Nov-2022 change bookDetails2 to bookFetchDetails
 
 # $@ Target file
 # $^ Dependency files
@@ -24,7 +25,7 @@ CFLAGS=-g -o
 SQL1FLAGS=-I/usr/include/mysql
 SQL2FLAGS=-L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl -lresolv
 
-all: mysql-c-library bookInquiry bookInquiry.cgi bookDetails2 bookDetails2.cgi bookCharacters bookCharacters.cgi bookAddAuthor bookAddAuthor.cgi bookAddClassification bookAddClassification.cgi bookAddRating bookAddRating.cgi bookAddSeries bookAddSeries.cgi bookAddSource bookAddSource.cgi bookAddGenre bookAddGenre.cgi bookAddStatus bookAddStatus.cgi bookTitleID bookTitleID.cgi bookAddCharacter bookAddCharacter.cgi bookChgCharNme bookChgCharNme.cgi bookDelCharacter bookDelCharacter.cgi bookVldtCharId bookVldtCharId.cgi bookDelClassification bookDelClassification.cgi bookDelRating bookDelRating.cgi bookDelSeries bookDelSeries.cgi bookDelSource bookDelSource.cgi bookDelGenre bookDelGenre.cgi bookDelStatus bookDelStatus.cgi bookDelAuthor bookDelAuthor.cgi bookVldtStatusId bookVldtStatusId.cgi bookChgStatusNme bookChgStatusNme.cgi bookVldtGenreId bookVldtGenreId.cgi bookChgGenreNme bookChgGenreNme.cgi bookVldtSourceId bookVldtSourceId.cgi bookChgSourceNme bookChgSourceNme.cgi bookVldtSeriesId bookVldtSeriesId.cgi bookChgSeriesNme bookChgSeriesNme.cgi bookVldtRatingId bookVldtRatingId.cgi bookChgRatingNme bookChgRatingNme.cgi bookVldtClassId bookVldtClassId.cgi bookChgClassNme bookChgClassNme.cgi bookVldtAuthorId bookVldtAuthorId.cgi bookChgAuthorNme bookChgAuthorNme.cgi bookFetchLOVs bookFetchLOVs.cgi bookAddBook bookAddBook.cgi bookDelBook bookDelBook.cgi bookUpdtBook bookUpdtBook.cgi bookCharacterID bookCharacterID.cgi bookTest
+all: mysql-c-library bookInquiry bookInquiry.cgi bookFetchDetails bookFetchDetails.cgi bookCharacters bookCharacters.cgi bookAddAuthor bookAddAuthor.cgi bookAddClassification bookAddClassification.cgi bookAddRating bookAddRating.cgi bookAddSeries bookAddSeries.cgi bookAddSource bookAddSource.cgi bookAddGenre bookAddGenre.cgi bookAddStatus bookAddStatus.cgi bookTitleID bookTitleID.cgi bookAddCharacter bookAddCharacter.cgi bookChgCharNme bookChgCharNme.cgi bookDelCharacter bookDelCharacter.cgi bookVldtCharId bookVldtCharId.cgi bookDelClassification bookDelClassification.cgi bookDelRating bookDelRating.cgi bookDelSeries bookDelSeries.cgi bookDelSource bookDelSource.cgi bookDelGenre bookDelGenre.cgi bookDelStatus bookDelStatus.cgi bookDelAuthor bookDelAuthor.cgi bookVldtStatusId bookVldtStatusId.cgi bookChgStatusNme bookChgStatusNme.cgi bookVldtGenreId bookVldtGenreId.cgi bookChgGenreNme bookChgGenreNme.cgi bookVldtSourceId bookVldtSourceId.cgi bookChgSourceNme bookChgSourceNme.cgi bookVldtSeriesId bookVldtSeriesId.cgi bookChgSeriesNme bookChgSeriesNme.cgi bookVldtRatingId bookVldtRatingId.cgi bookChgRatingNme bookChgRatingNme.cgi bookVldtClassId bookVldtClassId.cgi bookChgClassNme bookChgClassNme.cgi bookVldtAuthorId bookVldtAuthorId.cgi bookChgAuthorNme bookChgAuthorNme.cgi bookFetchLOVs bookFetchLOVs.cgi bookAddBook bookAddBook.cgi bookDelBook bookDelBook.cgi bookUpdtBook bookUpdtBook.cgi bookCharacterID bookCharacterID.cgi bookTest
 
 
 mysql-c-library: mysql-c-library.c ../shared/rf50.c ../shared/cs50.c
@@ -36,10 +37,10 @@ bookInquiry: bookInquiry.c ../shared/rf50.c ../shared/cs50.c
 bookInquiry.cgi: bookInquiry.c ../shared/rf50.c ../shared/cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
-bookDetails2: bookDetails2.c ../shared/rf50.c ../shared/cs50.c
+bookFetchDetails: bookFetchDetails.c ../shared/rf50.c ../shared/cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
-bookDetails2.cgi: bookDetails2.c ../shared/rf50.c ../shared/cs50.c
+bookFetchDetails.cgi: bookFetchDetails.c ../shared/rf50.c ../shared/cs50.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
 bookCharacters: bookCharacters.c ../shared/rf50.c ../shared/cs50.c
@@ -280,4 +281,4 @@ bookTest: bookTest.c
 	$(CC) $(CFLAGS) $@ $(SQL1FLAGS) $^ $(SQL2FLAGS)
 
 clean:
-	rm -f *.o *.s *.i mysql-c-library bookInquiry bookInquiry.cgi bookDetails2 bookDetails2.cgi bookCharacters bookCharacters.cgi bookAddAuthor bookAddAuthor.cgi bookAddClassification bookAddClassification.cgi bookAddRating bookAddRating.cgi bookAddSeries bookAddSeries.cgi bookAddSource bookAddSource.cgi bookAddGenre bookAddGenre.cgi bookAddStatus bookAddStatus.cgi bookTitleID bookTitleID.cgi bookAddCharacter bookAddCharacter.cgi bookChgCharNme bookChgCharNme.cgi bookDelCharacter bookDelCharacter.cgi bookVldtCharId bookVldtCharId.cgi bookDelClassification bookDelClassification.cgi bookDelRating bookDelRating.cgi bookDelSeries bookDelSeries.cgi bookDelSource bookDelSource.cgi bookDelGenre bookDelGenre.cgi bookDelStatus bookDelStatus.cgi bookDelAuthor bookDelAuthor.cgi bookVldtStatusId bookVldtStatusId.cgi bookChgStatusNme bookChgStatusNme.cgi bookVldtGenreId bookVldtGenreId.cgi bookChgGenreNme bookChgGenreNme.cgi bookVldtSourceId bookVldtSourceId.cgi bookChgSourceNme bookChgSourceNme.cgi bookVldtSeriesId bookVldtSeriesId.cgi bookChgSeriesNme bookChgSeriesNme.cgi bookVldtRatingId bookVldtRatingId.cgi bookChgRatingNme bookChgRatingNme.cgi bookVldtClassId bookVldtClassId.cgi bookChgClassNme bookChgClassNme.cgi bookVldtAuthorID bookVldtAuthorID.cgi bookChgAuthorNme bookChgAuthorNme.cgi bookFetchLOVs bookFetchLOVs.cgi bookAddBook bookAddBook.cgi bookDelBook bookDelBook.cgi bookUpdtBook bookUpdtBook.cgi bookCharacterID bookCharacterID.cgi bookTest
+	rm -f *.o *.s *.i mysql-c-library bookInquiry bookInquiry.cgi bookFetchDetails bookFetchDetails.cgi bookCharacters bookCharacters.cgi bookAddAuthor bookAddAuthor.cgi bookAddClassification bookAddClassification.cgi bookAddRating bookAddRating.cgi bookAddSeries bookAddSeries.cgi bookAddSource bookAddSource.cgi bookAddGenre bookAddGenre.cgi bookAddStatus bookAddStatus.cgi bookTitleID bookTitleID.cgi bookAddCharacter bookAddCharacter.cgi bookChgCharNme bookChgCharNme.cgi bookDelCharacter bookDelCharacter.cgi bookVldtCharId bookVldtCharId.cgi bookDelClassification bookDelClassification.cgi bookDelRating bookDelRating.cgi bookDelSeries bookDelSeries.cgi bookDelSource bookDelSource.cgi bookDelGenre bookDelGenre.cgi bookDelStatus bookDelStatus.cgi bookDelAuthor bookDelAuthor.cgi bookVldtStatusId bookVldtStatusId.cgi bookChgStatusNme bookChgStatusNme.cgi bookVldtGenreId bookVldtGenreId.cgi bookChgGenreNme bookChgGenreNme.cgi bookVldtSourceId bookVldtSourceId.cgi bookChgSourceNme bookChgSourceNme.cgi bookVldtSeriesId bookVldtSeriesId.cgi bookChgSeriesNme bookChgSeriesNme.cgi bookVldtRatingId bookVldtRatingId.cgi bookChgRatingNme bookChgRatingNme.cgi bookVldtClassId bookVldtClassId.cgi bookChgClassNme bookChgClassNme.cgi bookVldtAuthorID bookVldtAuthorID.cgi bookChgAuthorNme bookChgAuthorNme.cgi bookFetchLOVs bookFetchLOVs.cgi bookAddBook bookAddBook.cgi bookDelBook bookDelBook.cgi bookUpdtBook bookUpdtBook.cgi bookCharacterID bookCharacterID.cgi bookTest

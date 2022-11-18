@@ -13,9 +13,13 @@
  *      06-Oct-2022 extend validity checking for QUERY_STRING
  *      07-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      17-Oct-2022 extend MySQL initialization and shutdown operations
+ *      08-Nov-2022 change sprintf() to asprintf()
 
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -25,22 +29,19 @@
 #include <ctype.h>
 #include "../shared/rf50.h"
 
-#define SQL_LEN 5000
-#define MAXLEN 1024
+// global declarations -------------------------------------------------------------------------------------------------
 
-// global declarations
-
-char *sgServer = "192.168.0.13";                                                               //mysqlServer IP address
-char *sgUsername = "gjarman";                                                              // mysqlSerer logon username
-char *sgPassword = "Mpa4egu$";                                                    // password to connect to mysqlserver
-char *sgDatabase = "risingfast";                                                // default database name on mysqlserver
+char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
+char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
+char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
 
 MYSQL *conn;
 MYSQL_RES *res;
 MYSQL_ROW row;
 MYSQL_FIELD *fields;
 
-char caAuthor[SQL_LEN] = {'\0'};
+char caAuthor[MAXLEN] = {'\0'};
 char *sAuthor = NULL;
 char *sParam = NULL;
 char *sSubstring = NULL;
@@ -49,7 +50,7 @@ char caDelimiter[] = "&";
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and CORS HTML Headers -------------------------------------------------------------------
 
@@ -110,11 +111,11 @@ int main(void) {
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
-    sprintf(caSQL, "INSERT INTO risingfast.`Book Authors` "
+    asprintf(&strSQL, "INSERT INTO risingfast.`Book Authors` "
                    "(`Author Name`)  "
                    "VALUES ('%s');", sAuthor);
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -133,6 +134,8 @@ int main(void) {
     mysql_library_end();
 
     free(sAuthor);
+
+    free(strSQL);
 
     return EXIT_SUCCESS;
 }

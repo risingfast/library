@@ -10,8 +10,14 @@
  *      06-Oct-2022 check QUERY_STRING for NULL, empty and invalid values
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      18-Oct-2022 extend MySQL initialization and shutdown operations
- *  Enhancements:
+ *      09-Nov-2022 change sprintf() to asprintf()
+ *      15-Nov-2022 change strcpy() to strncpy()
+    Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define MAXLEN 1024
+#define STRLEN 300
 
 #include <mysql.h>
 #include <stdio.h>
@@ -20,9 +26,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -38,7 +41,7 @@ MYSQL_FIELD *fields;
 
 char *sParam = NULL;
 char *sTemp = NULL;
-char sParamOrig[300] = {'\0'};
+char sParamOrig[STRLEN] = {'\0'};
 char *sCharacter = NULL;
 char *sCharacterName = NULL;
 char caCharacterName[MAXLEN] = {'\0'};
@@ -50,7 +53,7 @@ char caDelimiter[] = "&";
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and <head> block ------------------------------------------------------------------------
 
@@ -76,7 +79,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    strcpy(sParamOrig, sParam);                                                          // preserve the value of sParam
+    strncpy(sParamOrig, sParam, STRLEN);                                                 // preserve the value of sParam
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
 
@@ -97,17 +100,17 @@ int main(void) {
     }
 
     sTemp = fUrlDecode(caCharacterName);
-    strcpy(caCharacterName, sTemp);
+    strncpy(caCharacterName, sTemp, MAXLEN);
     free(sTemp);
 
-// * initialize the MySQL client library -------------------------------------------------------------------------------
+// * initialize the MySQL client library
 
    if (mysql_library_init(0, NULL, NULL)) {
    printf("Cannot initialize MySQL Client library\n");
        return EXIT_FAILURE;
     }
 
-// Initialize a connection and connect to the database -----------------------------------------------------------------
+// Initialize a connection and connect to the database$$
 
     conn = mysql_init(NULL);
 
@@ -118,16 +121,16 @@ int main(void) {
         printf("\n\n");
         printf("Error: %s\n", mysql_error(conn));
         printf("\n");
-        return  EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
 // set a SQL query to insert the new author ----------------------------------------------------------------------------
 
-    sprintf(caSQL, "INSERT INTO risingfast.`Book Characters` "
+    asprintf(&strSQL, "INSERT INTO risingfast.`Book Characters` "
                    "(`Character Name`, `Title ID`)  "
                    "VALUES ('%s', %d);", caCharacterName, iTitleID);
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -137,13 +140,17 @@ int main(void) {
 
     printf("Character '%s' added", caCharacterName);
 
-// * close the database connection created by mysql_init(NULL) -----------------------------------------------------------
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
 
     mysql_close(conn);
 
-// * free resources used by the MySQL library ----------------------------------------------------------------------------
+// * free resources used by the MySQL library --------------------------------------------------------------------------
 
     mysql_library_end();
+
+// * free resources used by strSQL
+
+    free(strSQL);
 
     return EXIT_SUCCESS;
 }

@@ -11,8 +11,14 @@
  *      06-Oct-2022 validate QUERY_STRING parameters
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      19-Oct-2022 extend MySQL initialization and shutdown operations
+ *      09-Nov-2022 change sprintf() to asprintf()
+ *      15-Nov-2022 change strcpy() to strncpy()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define CLASFN_LEN 4000
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -21,11 +27,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define CLASFN_LEN 4000
-
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -48,7 +49,7 @@ char caDelimiter[] = "&";
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and <head> block ------------------------------------------------------------------------
 
@@ -60,7 +61,7 @@ int main(void) {
 // check for a NULL query string ---------------------------------------------------------------------------------------
 
     if(sParam == NULL) {
-        printf("Query string is NULL. Expecting QUERY_STRING=\"classification=<clasfn>\". 1 Terminating \"bookAddClassification.cgi\"");
+        printf("Query string is NULL. Expecting QUERY_STRING=\"classification=<clasfn>\". Terminating \"bookAddClassification.cgi\"");
         printf("\n\n");
         return EXIT_FAILURE;
     }
@@ -82,7 +83,7 @@ int main(void) {
          return EXIT_FAILURE;
     }
     sClassification = fUrlDecode(caClassification);
-    strcpy(caClassification, sClassification);
+    strncpy(caClassification, sClassification, CLASFN_LEN);
     free(sClassification);
 
 // * initialize the MySQL client library
@@ -108,11 +109,11 @@ int main(void) {
 
 // set a SQL query to insert the new classification --------------------------------------------------------------------
 
-    sprintf(caSQL, "INSERT INTO risingfast.`Book Classifications` "
+    asprintf(&strSQL, "INSERT INTO risingfast.`Book Classifications` "
                    "(`Classification Name`)  "
                    "VALUES ('%s');", caClassification);
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -129,6 +130,10 @@ int main(void) {
 // * free resources used by the MySQL library ----------------------------------------------------------------------------
 
     mysql_library_end();
+
+// * free resources used by strSQL ---------------------------------------------------------------------------------------
+
+    free(strSQL);
 
 return EXIT_SUCCESS;
 }

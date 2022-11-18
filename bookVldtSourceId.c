@@ -10,8 +10,13 @@
  *      13-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
  *      13-Oct-2022 check querry string for NULL and empty values
  *      23-Oct-2022 extend MySQL initialization and shutdown operations
+ *      13-Nov-2022 change sprintf() to asprintf()
  *  Enhancements:
 */
+
+#define _GNU_SOURCE                                                                           // required for asprintf()
+#define HDG_LEN 1000
+#define MAXLEN 1024
 
 #include <mysql.h>
 #include <stdio.h>
@@ -20,10 +25,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define HDG_LEN 1000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ void fPrintResult(char *);
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type header and CORS header block ------------------------------------------------------------
 
@@ -61,7 +62,7 @@ int main(void) {
     if(sParam == NULL) {
         printf("Query string is NULL. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
         printf("\n\n");
-        return  EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
 // check for an empty (non-Null) query string --------------------------------------------------------------------------
@@ -69,7 +70,7 @@ int main(void) {
     if (sParam[0] == '\0') {
         printf("Query string is empty. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
         printf("\n\n");
-        return  EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
 //  get the content from QUERY_STRING and tokenize based on '&' character-----------------------------------------------
@@ -79,7 +80,7 @@ int main(void) {
     if (iSourceID == 0) {
         printf("Source ID is 0. Expectings QUERY_STRING=\"sourceID=<99>\". Terminating bookVldtSourceId.cgi");
         printf("\n\n");
-        return  EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------
@@ -100,25 +101,37 @@ int main(void) {
         printf("\n\n");
         printf("Error: %s\n", mysql_error(conn));
         printf("\n");
-        return  EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
-    sprintf(caSQL, "SELECT BG.`Source Name` "
-                   "FROM risingfast.`Book Sources` BG "
-                   "WHERE BG.`Source ID` = '%d';", iSourceID);
+    asprintf(&strSQL, "SELECT BG.`Source Name` "
+                     "FROM risingfast.`Book Sources` BG "
+                     "WHERE BG.`Source ID` = '%d';", iSourceID);
 
-    fPrintResult(caSQL);
+    fPrintResult(strSQL);
+
+// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
+
+    mysql_close(conn);
+
+// * free resources used by the MySQL library --------------------------------------------------------------------------
+
+    mysql_library_end();
+
+// free resources used by strSQL ---------------------------------------------------------------------------------------
+
+    free(strSQL);
 
     return EXIT_SUCCESS;
 }
 
 // function to print all rows in the result of an SQL query ------------------------------------------------------------
 
-void fPrintResult(char *caSQL)
+void fPrintResult(char *strSQL)
 {
     int iColCount = 0;
 
-    if(mysql_query(conn, caSQL) != 0)
+    if(mysql_query(conn, strSQL) != 0)
     {
         printf("\n");
         printf("mysql_query() error in function %s():\n\n%s", __func__, mysql_error(conn));
@@ -156,14 +169,6 @@ void fPrintResult(char *caSQL)
     }
 
     mysql_free_result(res);
-
-// * close the database connection created by mysql_init(NULL) ---------------------------------------------------------
-
-    mysql_close(conn);
-
-// * free resources used by the MySQL library --------------------------------------------------------------------------
-
-    mysql_library_end();
 
     return;
 }

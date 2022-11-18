@@ -13,6 +13,10 @@
  *  Enhancements:
 */
 
+#define _GNU_SOURCE
+#define HDG_LEN 1000
+#define MAXLEN 1024
+
 #include <mysql.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,10 +24,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../shared/rf50.h"
-
-#define SQL_LEN 5000
-#define HDG_LEN 1000
-#define MAXLEN 1024
 
 // global declarations -------------------------------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ void fPrintResult(char *);
 int main(void) {
 
     int i;
-    char caSQL[SQL_LEN] = {'\0'};
+    char *strSQL = NULL;
 
 // print the html content type and CORS <header> block -----------------------------------------------------------------
 
@@ -105,12 +105,16 @@ int main(void) {
 
 // set a SQL query to select the title ---------------------------------------------------------------------------------
 
-    sprintf(caSQL, "SELECT BT.`Title Name` "
+    asprintf(&strSQL, "SELECT BT.`Title Name` "
                    "FROM risingfast.`Book Titles` BT "
                    "WHERE BT.`Title ID` = '%d';", iTitleID);
     
-    fPrintResult(caSQL);
+    fPrintResult(strSQL);
     
+// free resources used by strSQL ---------------------------------------------------------------------------------------
+
+    free(strSQL);
+
     return EXIT_SUCCESS;
 }
 
@@ -136,7 +140,6 @@ void fPrintResult(char *caSQL)
         printf("\n");
 
         mysql_free_result(res);
-
         return;
     }
     
