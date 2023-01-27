@@ -12,6 +12,7 @@
  *      19-Oct-2022 extend MySQL initialization and shutdown operations
  *      10-Nov-2022 replace sprintf() with asprintf()
  *      16-Nov-2022 change strcpy() to strncpy()
+ *      23-Jan-2023 set freed pointers to NULL
  *  Enhancements:
 */
 
@@ -84,6 +85,7 @@ int main(void) {
     sSource = fUrlDecode(caSource);
     strncpy(caSource, sSource, MAXLEN);
     free(sSource);
+    sSource = NULL;
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------
 
@@ -135,6 +137,7 @@ int main(void) {
 // free resources used by strSQL ---------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
 
     return EXIT_SUCCESS;
 }

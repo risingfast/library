@@ -13,6 +13,7 @@
  *      16-Oct-2022 add chapters
  *      11-Nov-2022 change sprintf() to asprintf()
  *      16-Nov-2022 change strcpy() to strncpy()
+ *      25-Jan-2023 set freed pointers to NULL
  *  Enhancements:
 */
 
@@ -220,6 +221,7 @@ int main(void) {
 // free resources used by strSQL ---------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
 
 // set a SQL query to fetch the title id of the updated book and execute the query -------------------------------------
 
@@ -274,6 +276,7 @@ int main(void) {
 // release resources used by strSQL ------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
 
     return EXIT_FAILURE;
 }

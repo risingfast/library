@@ -11,6 +11,7 @@
  *      10-Oct-2022 validate QUERY_STRING and test for NULL and empty strings
  *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *      16-Nov-2022 change strcpy() to strncpy()
+ *      24-Jan-2023 set freed pointer to NULL
  *  Enhancements:
 */
 
@@ -94,6 +95,7 @@ int main(void) {
     sClass = fUrlDecode(caClassName);
     strncpy(caClassName, sClass, MAXLEN);
     free(sClass);
+    sClass = NULL;
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------
 

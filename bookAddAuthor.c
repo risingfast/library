@@ -14,6 +14,7 @@
  *      07-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      17-Oct-2022 extend MySQL initialization and shutdown operations
  *      08-Nov-2022 change sprintf() to asprintf()
+ *      23-Jan-2023 set freed pointers to NULL
 
  *  Enhancements:
 */
@@ -134,8 +135,10 @@ int main(void) {
     mysql_library_end();
 
     free(sAuthor);
+    sAuthor = NULL;
 
     free(strSQL);
+    strSQL = NULL;
 
     return EXIT_SUCCESS;
 }

@@ -30,6 +30,7 @@
  *      09-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *      11-Nov-2022 changes sprintf() to asprintf()
+ *      25-Jan-2023 set freed pointer to NULL;
  *  Enhancements:
 */
 
@@ -119,6 +120,7 @@ int main(void) {
     sTemp = fUrlDecode(caFilterTemp);                                    // Remove URL encoding from the filter contents
     sprintf(caFilterTemp, "%%%s", sTemp);                                     // Prefix the filter with the '%' wildcard
     free(sTemp);
+    sTemp = NULL;
 
     if (strlen(caFilterTemp) == 1) {            // add a '%' suffix but only if there are other characters in the filter
         sprintf(caFilter, "%s", caFilterTemp);

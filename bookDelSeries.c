@@ -10,6 +10,7 @@
  *      15-Sep-2022 add Access-Control-Allow-Origin: * CORS http header
  *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *      12-Nov-2022 change sprintf() to asprintf()
+ *      25-Jan-2023 set freed pointer to NULL
  *  Enhancements:
  *      None
 */
@@ -135,6 +136,7 @@ int main(void) {
 // free resources used by strSQL ---------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
 
     return EXIT_SUCCESS;
 }

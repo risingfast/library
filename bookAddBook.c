@@ -21,6 +21,7 @@
  *      27-Oct-2022 add a query to fetch the ID of the newly inserted title
  *      09-Nov-2022 change sprintf() to asprintf()
  *      15-Nov-2022 change strcpy() to strncpy()
+ *      23-Jan-2023 set freed pointers to NULL
  *  Enhancements:
 */
 
@@ -134,6 +135,7 @@ int main(void) {
     sTemp2 = fUrlDecode(caNameBuf);
     asprintf(&strBookName, "%s", sTemp2);
     free(sTemp2);
+    sTemp2 = NULL;
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "authorId=%d", &iAuthorID);
@@ -225,6 +227,7 @@ int main(void) {
     sTemp = fUrlDecode(strAbstractQuoted);
     strncpy(caAbstract, sTemp, MAXLEN + 3);
     free(sTemp);
+    sTemp = NULL;
 
     sTemp = strtok(NULL, caDelimiter);
     sscanf(sTemp, "cmnts=%[^\n]s", caCmntsBuf);
@@ -236,6 +239,7 @@ int main(void) {
     sTemp = fUrlDecode(strCmntsQuoted);
     strncpy(caCmnts, sTemp, MAXLEN + 3);
     free(sTemp);
+    sTemp = NULL;
 
 // * initialize the MySQL client library -------------------------------------------------------------------------------
 
@@ -273,11 +277,17 @@ int main(void) {
     }
 
     free(strSQL);
+    strSQL = NULL;
     free(strStartDteQuoted);
+    strStartDteQuoted = NULL;
     free(strFinDteQuoted);
+    strFinDteQuoted = NULL;
     free(strAbstractQuoted);
+    strAbstractQuoted = NULL;
     free(strCmntsQuoted);
+    strCmntsQuoted = NULL;
     free(strBookName);
+    strBookName = NULL;
 
 // set and perform a SQL query to return the last inserted ID in the current session and connection --------------------
 
@@ -292,6 +302,7 @@ int main(void) {
     }
 
     free(strSQL);
+    strSQL = NULL;
 
 // store the result of the last query and seek to the first row of results (only one row is expected) ------------------
 

@@ -9,8 +9,9 @@
  *      06-Oct-2022 check for invalid QUERY_STRING enviroment variable value
  *      08-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      09-Oct-2022 clean up comments
-  *     19-Oct-2022 extend MySQL initialization and shutdown operations
-  *     15-Nov-2022 change strcpy() to strncpy()
+ *      19-Oct-2022 extend MySQL initialization and shutdown operations
+ *      15-Nov-2022 change strcpy() to strncpy()
+ *      23-Jan-2023 set freed pointer to NULL
  *  Enhancements:
 */
 
@@ -82,6 +83,7 @@ int main(void) {
     sGenre = fUrlDecode(caGenre);
     strncpy(caGenre, sGenre, MAXLEN);
     free(sGenre);
+    sGenre = NULL;
 
 // * initialize the MySQL client library
 

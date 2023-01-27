@@ -13,6 +13,7 @@
  *      12-Oct-2022 validate QUERY_STRING for NULL and empty values
  *      20-Oct-2022 extend MySQL initialization and shutdown operations
  *      11-Nov-2022 change sprintf() to sprintf()
+ *      25-Jan-2023 set freed pointers to NULL
  *  Enhancements:
  */
 
@@ -100,6 +101,7 @@ int main(void) {
     sTemp = fUrlDecode(caFilterTemp);                                    // remove URL encoding from the filter contents
     sprintf(caFilterTemp, "%%%s", sTemp);                                     // prefix the filter with the '%' wildcard
     free(sTemp);
+    sTemp = NULL;
 
     if (strlen(caFilterTemp) == 1) {              //add a '%' suffix bu only if there are other characters in the filter
         sprintf(caFilter, "%s", caFilterTemp);
@@ -249,6 +251,7 @@ int main(void) {
 // free resources used by strSQL ---------------------------------------------------------------------------------------
 
     free(strSQL);
+    sTemp = NULL;
 
     return EXIT_SUCCESS;
 }

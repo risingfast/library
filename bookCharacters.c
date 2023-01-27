@@ -11,6 +11,7 @@
  *      05-Oct-2022 add Add Character ID to filter in SQL query
  *      09-Oct-2022 clean up comments
  *      10-Nov-2022 changes sprintf() to asprintf()
+ *      23-Jan-2023 set freed pointer to NULL
  *  Enhancements:
 */
 
@@ -123,6 +124,7 @@ int main(void) {
     strTemp = fUrlDecode(caFilterTemp);
     sprintf(caFilterTemp, "%%%s", strTemp);
     free(strTemp);
+    strTemp = NULL;
 
     if (strlen(caFilterTemp) == 1) {
         sprintf(caFilter, "%s", caFilterTemp);
@@ -151,6 +153,7 @@ int main(void) {
 // free resources used by strSQL ----------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
 
     return EXIT_SUCCESS;
 }

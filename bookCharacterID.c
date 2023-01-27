@@ -10,6 +10,7 @@
  *      09-Dec-2021 validate QUERY_STRING and test for NULL and empty values
  *      18-Oct-2022 extend MySQL initialization and shutdown operations
  *      10-Nov-2022 changes sprintf() to asprintf()
+ *      23-Jan-2023 set freed pointer to NULL
  *  Enhancements:
 */
 
@@ -124,6 +125,7 @@ int main(void) {
 // free resources used by strSQL ---------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
    
     return EXIT_SUCCESS;
 }

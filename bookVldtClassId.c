@@ -10,6 +10,7 @@
  *      13-Oct-2022 use EXIT_SUCCESS and EXIT_FAILURE on returns
  *      13-Oct-2022 validate QUERY_STRING for NULL and empty values
  *      13-Nov-2022 change sprintf() to asprintf()
+ *      25-Jan-2023 set freed pointer to NULL;
  *  Enhancements:
 */
 
@@ -109,6 +110,7 @@ int main(void) {
 // free resources used by strSQL ---------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
 
     return EXIT_SUCCESS;
 

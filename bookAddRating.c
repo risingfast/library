@@ -11,6 +11,7 @@
  *      09-Oct-2022 clean up comments
  *      19-Oct-2022 extend MySQL initialization and shutdown operations
  *      15-Nov-2022 change strcpy() to strncpy()
+ *      23-Jan-2023 set freed pointer to NULL
  *  Enhancements:
  *      Add rating value to update
 */
@@ -85,6 +86,7 @@ int main(void) {
     sRating = fUrlDecode(caRating);
     strncpy(caRating, sRating, MAXLEN);
     free(sRating);
+    sRating = NULL;
 
 // * initialize the MySQL client library
 

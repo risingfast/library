@@ -13,6 +13,7 @@
  *      12-Oct-2022 remove test comments
  *      16-Oct-2022 add chapter count
  *      13-Nov-2022 change sprintf() to asprintf()
+ *      25-Nov-2023 set freed pointer to NULL
  *  Enhancements:
 */
 
@@ -152,6 +153,7 @@ int main(void) {
 // free resources used by strSQL ---------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
 
     return EXIT_SUCCESS;
 }

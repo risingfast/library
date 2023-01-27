@@ -10,6 +10,7 @@
  *      12-Oct-2022 use EXIT_FAILURE and EXIT_SUCCESS on returns
  *      11-Oct-2022 validate QUERY_STRING is not NULL or empty
  *      20-Oct-2022 extend MySQL initialization and shutdown operations
+ *      25-Jan-2023 set freed pointer to NULL
  *  Enhancements:
 */
 
@@ -114,6 +115,7 @@ int main(void) {
 // free resources used by strSQL ---------------------------------------------------------------------------------------
 
     free(strSQL);
+    strSQL = NULL;
 
     return EXIT_SUCCESS;
 }
