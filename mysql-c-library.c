@@ -1,7 +1,9 @@
 // includes and defines
 // log
 //     25-Jan-2023 Set freed pointers to NULL
-//     25-Jan-2025 format comments
+//     25-Jan-2023 format comments
+//     16-Apr-2023 change sgServer from 192.168.0.13 to 192.168.1.64
+//     16-Apr-2023 change sServer from 192.168.0.13 to 192.168.1.64
 
 #define SQL_LEN 5000
 #define _GNU_SOURCE
@@ -73,7 +75,7 @@ void fGetPwdFromConsole(void);                                                  
 
 // global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgServer = "192.168.1.64";                                                                //mysqlServer IP address
 char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
 char sgPassword[20] = {'\0'};                                                      // password to connect to mysqlserver
 char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
@@ -5069,7 +5071,7 @@ void fSearchStatuses(char *strSearchString)
 
 void fDeleteClassification(char *sPrgNme)
 {
-    char *sServer = "192.168.0.13";
+    char *sServer = "192.168.1.64";
     char *sUser = "gjarman";
     char *sPassword = "Mpa4egu$";
     char *sDatabase = "risingfast";

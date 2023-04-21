@@ -12,6 +12,7 @@
  *      09-Oct-2022 clean up comments
  *      10-Nov-2022 changes sprintf() to asprintf()
  *      23-Jan-2023 set freed pointer to NULL
+ *      17-Apr-2023 change sgServer from 192.168.0.13 to 192.168.1.64
  *  Enhancements:
 */
 
@@ -29,7 +30,7 @@
 
 // global declarations -------------------------------------------------------------------------------------------------
 
-char *sgServer = "192.168.0.13";                                                                //mysqlServer IP address
+char *sgServer = "192.168.1.64";                                                                //mysqlServer IP address
 char *sgUsername = "gjarman";                                                               // mysqlSerer logon username
 char *sgPassword = "Mpa4egu$";                                                     // password to connect to mysqlserver
 char *sgDatabase = "risingfast";                                                 // default database name on mysqlserver
