@@ -76,6 +76,9 @@
 //    05-Oct-2022 - remove fEnableSubmitIfNotNull() function
 //    16-Oct-2022 - add chapter count
 //    07-Nov-2022 - add chapters to print
+//    13-Nov-2022 - change bookDetails2.cgi to bookFetchDetails.cgi
+//    03-May-2023 - modify text returned from uri37 request to test for error text
+//    25-Jun-2023 - implement listTitles functions
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -121,11 +124,12 @@
 //    fFetchTopicList() -- fetch a list from the database for a single topic
 //    fPrintBook() -- print a book
 //    fPrintBook() -- print a book's text: title, author, abstract, characters
+//    fValidateStartDate() -- validate the start date field
 
-// define globals for URI's .............................................................................................
+// define globals for URI's --------------------------------------------------------------------------------------------
 
 const uri01 = "http://gjarman2020.com/cgi-bin/bookInquiry.cgi";
-const uri02 = "http://gjarman2020.com/cgi-bin/bookDetails2.cgi";
+const uri02 = "http://gjarman2020.com/cgi-bin/bookFetchDetails.cgi";
 const uri03 = "http://gjarman2020.com/cgi-bin/bookCharacters.cgi";
 const uri04 = "http://gjarman2020.com/cgi-bin/bookAddAuthor.cgi";
 const uri05 = "http://gjarman2020.com/cgi-bin/bookAddClassification.cgi";
@@ -164,12 +168,12 @@ const uri37 = "http://gjarman2020.com/cgi-bin/bookAddBook.cgi";
 const uri38 = "http://gjarman2020.com/cgi-bin/bookDelBook.cgi";
 const uri39 = "http://gjarman2020.com/cgi-bin/bookUpdtBook.cgi";
 
-// define globals for mode and topic variables .........................................................................
+// define globals for mode and topic variables -------------------------------------------------------------------------
 
 let sMode = '';
 let sTopic = '';
-
-// define globals for LOV arrays for book attributes....................................................................
+let iListDisplayLength = 30;                                        // number of entries displayed in the list of titles
+// define globals for LOV arrays for book attributes -------------------------------------------------------------------
 
 let arrAuthorNames = [];
 let arrSourceNames = [];
@@ -179,7 +183,7 @@ let arrStatusNames = [];
 let arrClassificationNames = [];
 let arrRatingNames = [];
 
-// populate global lists of value array for book attributes.............................................................
+// populate global lists of value array for book attributes ------------------------------------------------------------
 
 fPopulateLOV('authors');
 fPopulateLOV('sources');
@@ -189,7 +193,7 @@ fPopulateLOV('statuses');
 fPopulateLOV('classifications');
 fPopulateLOV('ratings');
 
-// set the topic .......................................................................................................
+// function to set the topic -------------------------------------------------------------------------------------------
 
 function fSetTopic() {
 
@@ -203,6 +207,9 @@ function fSetTopic() {
     } else if (tc.value === "titles") {
         fUnhideMultiple("titles-div", "modes-div", "submit-div");
         sTopic = "titles";
+    } else if (tc.value === "listTitles") {
+        fUnhideMultiple("listTitles-div", "modes-div", "submit-div");
+        sTopic = "listTitles";
     } else if (tc.value === "characters") {
         fUnhideMultiple("characters-div", "modes-div", "submit-div");
         sTopic = "characters";
@@ -234,13 +241,13 @@ function fSetTopic() {
         sTopic = "statuses";
     }
 
-    // set the initial mode for any change to another topic change .....................................................
+    // set the initial mode for any change to another topic change -----------------------------------------------------
 
     fSetMode("fetch");
     fonclick_submit_submit();
 }
 
-// functon to set the mode which enables fields and behaviours .........................................................
+// function to set the mode which enables fields and behaviours --------------------------------------------------------
 
 function fSetMode(sNewMode) {
 
@@ -260,14 +267,14 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("booksid-input").style.width = "35px";
 
-            //  disable all book fields except Book ID .................................................................
+            //  disable all book fields except Book ID -----------------------------------------------------------------
 
             fDisableBookFields("booksid-input", "booksname-input", "booksauthor-input", "bookschapters-input", "booksauthor-select", "bookssource-input", "bookssource-select"
                              , "booksseries-input", "booksseries-select", "booksgenre-input", "booksgenre-select", "booksstatus-input", "booksstatus-select"
@@ -275,12 +282,12 @@ function fSetMode(sNewMode) {
                              , "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea");
             fSetElement("Unhide", "books-div"); 
 
-            // show instructions in the message area on how to proceed .................................................
+            // show instructions in the message area on how to proceed -------------------------------------------------
 
             document.getElementById("submit-message").value = "Enter the Book ID and 'Submit'";
             document.getElementById("booksstage-input").value = 'Nothing Fetched';
 
-            //  enable the ID field and color light yellow as a required field .........................................
+            //  enable the ID field and color light yellow as a required field -----------------------------------------
 
             fSetElement("Clear", "booksid-input");
 
@@ -291,12 +298,12 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === 'query') {
 
-            //  disable the 'query' mode button and color it green .....................................................
+            //  disable the 'query' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesquery-button");
-            document.getElementById("mode-label").innerHTML = "query mode";
+            document.getElementById("mode-span").innerHTML = "query mode";
 
-            //  enable all book fields for 'query' mode except for the books:TitleId and books:chrs fields ................
+            //  enable all book fields for 'query' mode except for the books:TitleId and books:chrs fields -------------
 
             fEnableBookFields("booksid-input", "booksname-input", "booksauthor-select", "bookssource-select", "booksseries-select", "booksgenre-select"
                             , "booksstatus-select", "booksclassification-select", "booksrating-select", "booksstart-input", "booksfinish-input"
@@ -307,26 +314,26 @@ function fSetMode(sNewMode) {
             let dt = document.getElementById("booksid-input");
             dt.style.backgroundColor = "rgba(230,239,239, 0.3)";                                          // white color
 
-            // show instructions in the message area on how to proceed .................................................
+            // show instructions in the message area on how to proceed -------------------------------------------------
 
             document.getElementById("submit-message").value = "Enter query values in any editable fields and 'Submit'";
 
         } else if (sMode === 'add') {
 
-            //  disable the 'add' mode button and color it green .......................................................
+            //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
 
-            //  enable all book fields for 'add' mode ..................................................................
+            //  enable all book fields for 'add' mode ------------------------------------------------------------------
 
             fEnableBookFields("booksid-input", "booksname-input", "booksauthor-select", "bookschapters-input", "bookssource-select", "booksseries-select", "booksgenre-select"
                             , "booksstatus-select", "booksclassification-select", "booksrating-select", "booksstart-input", "booksfinish-input"
                             , "booksabstract-textarea", "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea");
             fSetElement("Unhide", "books-div"); 
             
-            //  enable all book fields for 'query' mode except for the books:titleId and books:chrs fields ................
+            //  enable all book fields for 'query' mode except for the books:titleId and books:chrs fields -------------
 
             fEnableBookFields("booksid-input", "booksname-input", "booksauthor-select", "bookssource-select", "booksseries-select", "booksgenre-select", "booksstatus-select", "booksclassification-select", "booksrating-select", "booksstart-input", "booksfinish-input", "booksabstract-textarea", "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea");
             fSetElement("Disable", "booksid-input");
@@ -343,11 +350,17 @@ function fSetMode(sNewMode) {
             let dt = document.getElementById("booksid-input");
             dt.style.backgroundColor = "rgba(239,239,239, 0.3)";                                     // light grey color
 
+            // clear the error text for Chapters, Start and Finish Date ------------------------------------------------
+
+            document.getElementById("bookschaptersmsg-span").textContent = '';
+            document.getElementById("booksstartmsg-span").textContent = '';
+            document.getElementById("booksfinishmsg-span").textContent = '';
+
             // disable the submit button
 
             fSetElement("Disable", "submit-button");
 
-            // show instructions in the message area on how to proceed .................................................
+            // show instructions in the message area on how to proceed -------------------------------------------------
 
             document.getElementById("submit-message").value = "Enter values for a new book and 'Submit'";
 
@@ -383,13 +396,13 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === 'update') {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
-            document.getElementById("mode-label").innerHTML = "update mode";
+            document.getElementById("mode-span").innerHTML = "update mode";
 
-            //  disable all book fields except Book ID for initial fetch ...............................................
+            //  disable all book fields except Book ID for initial fetch -----------------------------------------------
 
             fDisableBookFields("booksid-input", "booksname-input", "booksauthor-input", "booksauthor-select", "bookschapters-input", "bookssource-input", "bookssource-select"
                              , "booksseries-input", "booksseries-select", "booksgenre-input", "booksgenre-select", "booksstatus-input", "booksstatus-select"
@@ -397,12 +410,12 @@ function fSetMode(sNewMode) {
                              , "booksabstract-textarea", "bookscomments-textarea", "bookscharacters-textarea");
             fSetElement("Unhide", "books-div"); 
 
-            // show instructions in the message area on how to proceed .................................................
+            // show instructions in the message area on how to proceed -------------------------------------------------
 
             document.getElementById("booksstage-input").value = 'Nothing Fetched';
             document.getElementById("submit-message").value = "Enter the Book ID and 'Submit' to fetch book to update";
 
-            //  enable the ID field and color light yellow as a required field .........................................
+            //  enable the ID field and color light yellow as a required field -----------------------------------------
 
             fSetElement("Clear", "booksid-input");
 
@@ -411,15 +424,21 @@ function fSetMode(sNewMode) {
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             dt.focus();
 
+            // clear the error text for Chapters, Start and Finish Date ------------------------------------------------
+
+            document.getElementById("bookschaptersmsg-span").textContent = '';
+            document.getElementById("booksstartmsg-span").textContent = '';
+            document.getElementById("booksfinishmsg-span").textContent = '';
+
         } else if (sMode === 'delete') {
 
-            //  disable all book fields except Book ID .................................................................
+            //  disable all book fields except Book ID -----------------------------------------------------------------
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
-            document.getElementById("mode-label").innerHTML = "delete mode";
+            document.getElementById("mode-span").innerHTML = "delete mode";
 
-            //  disable and unhide all book fields .....................................................................
+            //  disable and unhide all book fields ---------------------------------------------------------------------
 
             fDisableBookFields("booksname-input", "booksauthor-select", "bookschapters-input", "bookssource-select", "booksseries-select", "booksgenre-select", "booksstatus-select"
                              , "booksclassification-select", "booksrating-select", "booksstart-input", "booksfinish-input"
@@ -430,11 +449,11 @@ function fSetMode(sNewMode) {
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             dt.focus();
             
-            // clear the books:titleId field ...........................................................................
+            // clear the books:titleId field ---------------------------------------------------------------------------
 
             fSetElement("Clear", "booksid-input");
 
-            // show instructions in the message area on how to proceed .................................................
+            // show instructions in the message area on how to proceed -------------------------------------------------
 
             document.getElementById("submit-message").value = "Enter the Title ID and 'submit' to delete the book";
         }
@@ -452,7 +471,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -460,12 +479,35 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "modesadd-button");
             fSetElement("Disable", "modesupdate-button");
             fSetElement("Disable", "modesdelete-button");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "'Submit' to fetch titles (or set a filter, then 'Submit')";
             fUnwrapAllText();
-
         }
 
+    } else if (sTopic === "listTitles") {
+
+        fUnhideMultiple("modes-div", "submit-div", "listTitles-div", "listButtons-div");
+        fSetElement("Clear", "listTitlesfilter-input");
+        fSetElement("UnhideInline", "listTitlesfilter-input");
+        fSetElement("Disable", "submit-button");
+        fSetElement("Disable", "printButton");
+        fSetElement("Enable", "listTitlesfilter-input");
+        document.getElementById("listTitlesfilter-input").focus();
+
+        if (sMode === 'fetch') {
+
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
+
+            fDisableModeButton("modesfetch-button");
+            fSetElement("Disable", "modesquery-button");
+            fSetElement("Enable", "submit-button");
+            fSetElement("Disable", "modesadd-button");
+            fSetElement("Disable", "modesupdate-button");
+            fSetElement("Disable", "modesdelete-button");
+            document.getElementById("mode-span").innerHTML = "fetch mode";
+            document.getElementById("submit-message").value = "'Submit' to fetch titles (or set a filter, then 'Submit')";
+            fUnwrapAllText();
+        }
     } else if (sTopic === "recents") {
 
         fUnhideMultiple("modes-div", "submit-div", "recents-div", "recentsarea-textarea");
@@ -477,7 +519,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -485,7 +527,7 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "modesadd-button");
             fSetElement("Disable", "modesupdate-button");
             fSetElement("Disable", "modesdelete-button");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
             fUnwrapAllText();
         }
@@ -501,7 +543,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -511,7 +553,7 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "modesadd-button");
             fSetElement("Disable", "modesupdate-button");
             fSetElement("Disable", "modesdelete-button");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
             fUnwrapAllText();
         }
@@ -527,7 +569,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fSetElement("Unhide", "submit-div");
             fDisableModeButton("modesfetch-button");
@@ -541,11 +583,11 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "charactersupdate-div");
             fSetElement("UnhideInline", "charactersvalidatebook-button");
             document.getElementById("charactersfilter-input").disabled = false;
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Enter the Book ID and click 'Submit' to fetch " + sTopic + " for a book";
             fUnwrapAllText();
 
-            //  enable the Book ID field and color light yellow as a required field ....................................
+            //  enable the Book ID field and color light yellow as a required field ------------------------------------
 
             fSetElement("Clear", "charactersbookid-input");
             fSetElement("Clear", "charactersbooktitle-input");
@@ -560,7 +602,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            //  disable the 'add' mode button and color it green .......................................................
+            //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
@@ -574,7 +616,7 @@ function fSetMode(sNewMode) {
             fSetElement("Clear", "charactersbookid-input");
             fSetElement("Clear", "charactersbooktitle-input");
             document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
             document.getElementById("submit-message").value = "Enter the Book ID and 'Validate' to enter characters for a book";
 
             // set focus on the Book ID field for quick entry
@@ -584,7 +626,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "update") {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Hide", "charactersdelete-div");
@@ -599,7 +641,7 @@ function fSetMode(sNewMode) {
             fSetElement("Clear", "charactersupdatename-input");
             document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("charactersupdateid-input").style.borderWidth = "thin";
-            document.getElementById("mode-label").innerHTML = "update mode";
+            document.getElementById("mode-span").innerHTML = "update mode";
             document.getElementById("submit-message").value = "Enter the Book ID and 'Validate' to update characters for a book";
 
             let UpdtCharID = document.getElementById("charactersupdateid-input");
@@ -608,7 +650,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "delete") {
 
-            //  disable the 'delete' mode button and color it green ....................................................
+            //  disable the 'delete' mode button and color it green ----------------------------------------------------
 
             fSetElement("Hide", "charactersdelete-div");
             fDisableModeButton("modesdelete-button");
@@ -623,7 +665,7 @@ function fSetMode(sNewMode) {
             let ci = document.getElementById("charactersdeleteid-input");
             ci.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             ci.style.borderWidth = "thin";
-            document.getElementById("mode-label").innerHTML = "delete mode";
+            document.getElementById("mode-span").innerHTML = "delete mode";
             document.getElementById("submit-message").value = "Enter the Character ID and 'Submit'";
 
             // set focus on the Book ID field for quick entry
@@ -647,7 +689,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -656,7 +698,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "authorsupdate-div");
             fSetElement("Hide", "authorsdelete-div");
             fSetElement("Enable", "submit-button");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch authors (or set a filter, then 'Submit')";
             sInputFilter = "authorsfilter-input";
             sTextAreaResults = "authorslist-textarea";
@@ -665,7 +707,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            //  disable the 'add' mode button and color it green .......................................................
+            //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
@@ -677,12 +719,12 @@ function fSetMode(sNewMode) {
             document.getElementById("submit-message").value = "Enter the new author and click 'Submit'";
             document.getElementById("authorsadd-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("authorsadd-input").style.borderWidth = "thin";
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
             document.getElementById("authorsadd-input").focus();
 
         } else if (sMode === "update") {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
@@ -697,13 +739,13 @@ function fSetMode(sNewMode) {
             document.getElementById("authorsupdatename-input").value = '';
             document.getElementById("authorsupdateid-input").style.borderWidth = "thin";
             document.getElementById("authorsupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
-            document.getElementById("mode-label").innerHTML = "update mode";
+            document.getElementById("mode-span").innerHTML = "update mode";
             document.getElementById("submit-message").value = "Enter the existing author and click 'Submit'";
             document.getElementById("authorsupdateid-input").focus();
 
         } else if (sMode === "delete") {
 
-            //  disable the 'delete' mode button and color it green ....................................................
+            //  disable the 'delete' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
@@ -711,7 +753,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "authorsfilter-div");
             fSetElement("Hide", "authorsadd-div");
             fSetElement("Hide", "authorsupdate-div");
-            document.getElementById("mode-label").innerHTML = "delete mode";
+            document.getElementById("mode-span").innerHTML = "delete mode";
             document.getElementById("authorsdelete-input").value = '';
             document.getElementById("authorsdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
             document.getElementById("authorsdelete-input").style.borderWidth = "thin";
@@ -735,7 +777,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -744,7 +786,7 @@ function fSetMode(sNewMode) {
             fSetElement("Enable", "submit-button");
             fSetElement("Unhide", "classificationsfilter-div");
             fSetElement("Hide", "classificationsupdate-div");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch classification (or set a filter, then 'Submit')";
             sTextAreaResults = "classificationslist-textarea";
             sInputFilter = "classificationsfilter-input";
@@ -753,7 +795,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            //  disable the 'add' mode button and color it green .......................................................
+            //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
@@ -763,13 +805,13 @@ function fSetMode(sNewMode) {
             document.getElementById("classificationsadd-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("classificationsadd-input").style.borderWidth = "thin";
             document.getElementById("classificationsadd-input").focus();
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
             document.getElementById("submit-message").value = "Enter the new classification and click 'Submit'";
 
 
         } else if (sMode === "update") {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
@@ -782,15 +824,15 @@ function fSetMode(sNewMode) {
             document.getElementById("classificationsupdateid-input").value = '';
             document.getElementById("classificationsupdatename-input").value = '';
             document.getElementById("classificationsupdateid-input").style.borderWidth = "thin";
-            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
+            document.getElementById("classificationsupdateid-input").style.backgroundColor = "rgb(255,255,224)"; // light yellow
             document.getElementById("classificationsupdateid-input").focus();
-            document.getElementById("mode-label").innerHTML = "update mode";
+            document.getElementById("mode-span").innerHTML = "update mode";
             document.getElementById("submit-message").value = "Enter the existing classification and click 'Submit'";
 
 
         } else if (sMode === "delete") {
 
-            //  disable the 'delete' mode button and color it green ....................................................
+            //  disable the 'delete' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
@@ -800,10 +842,10 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "classificationsfilter-div");
             fSetElement("Hide", "classificationsupdate-div");
             document.getElementById("classificationsdelete-input").value = '';
-            document.getElementById("classificationsdelete-input").style.backgroundColor = "rgb(255,255,224)";          // light yellow
+            document.getElementById("classificationsdelete-input").style.backgroundColor = "rgb(255,255,224)"; // light yellow
             document.getElementById("classificationsdelete-input").style.borderWidth = "thin";
             document.getElementById("classificationsdelete-input").focus();
-            document.getElementById("mode-label").innerHTML = "delete mode";
+            document.getElementById("mode-span").innerHTML = "delete mode";
             document.getElementById("submit-message").value = "Enter the classification ID to delete and 'Submit'";
         }
 
@@ -823,7 +865,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -832,7 +874,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "ratingsdelete-div");
             fSetElement("Unhide", "ratingsfilter-div");
             fSetElement("Enable", "submit-button");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch ratings (or set a filter, then click 'Submit')";
             sTextAreaResults = "ratingslist-textarea";
             sInputFilter = "ratingsfilter-div";
@@ -841,7 +883,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            //  disable the 'add' mode button and color it green .......................................................
+            //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Hide", "ratingsfilter-div");
@@ -852,12 +894,12 @@ function fSetMode(sNewMode) {
             document.getElementById("ratingsadd-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("ratingsadd-input").style.borderWidth = "thin";
             document.getElementById("ratingsadd-input").focus();
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
             document.getElementById("submit-message").value = "Enter the new rating and click 'Submit'";
 
         } else if (sMode === "update") {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
@@ -870,7 +912,7 @@ function fSetMode(sNewMode) {
             document.getElementById("ratingsupdateid-input").value = '';
             document.getElementById("ratingsupdateid-input").focus();
             document.getElementById("ratingsupdatename-input").value = '';
-            document.getElementById("mode-label").innerHTML = "update mode";
+            document.getElementById("mode-span").innerHTML = "update mode";
             document.getElementById("ratingsupdateid-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
             document.getElementById("ratingsupdateid-input").style.borderWidth = "thin";
             document.getElementById("ratingsupdatename-input").style.borderWidth = "thin";
@@ -878,7 +920,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "delete") {
 
-            //  disable the 'delete' mode button and color it green ....................................................
+            //  disable the 'delete' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
@@ -887,7 +929,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "ratingsfilter-div");
             fSetElement("Hide", "ratingsadd-div");
             fSetElement("Hide", "ratingsupdate-div");
-            document.getElementById("mode-label").innerHTML = "delete mode";
+            document.getElementById("mode-span").innerHTML = "delete mode";
             document.getElementById("ratingsdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
             document.getElementById("ratingsdelete-input").style.borderWidth = "thin";
             document.getElementById("ratingsdelete-input").value = '';
@@ -910,7 +952,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -920,7 +962,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "seriesdelete-div");
             fSetElement("Unhide", "serieslist-div");
             fSetElement("Enable", "submit-button");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch series (or set a filter, then 'Submit')";
             sTextAreaResults = "serieslist-textarea";
             sInputFilter = "seriesfilter-input";
@@ -929,7 +971,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            //  disable the 'add' mode button and color it green .......................................................
+            //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
@@ -938,7 +980,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "seriesupdate-div");
             fSetElement("Hide", "seriesdelete-div");
             fSetElement("unHide", "serieslist-div");
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
             document.getElementById("submit-message").value = "Enter the new series and click 'Submit'";
             document.getElementById("seriesadd-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
             document.getElementById("seriesadd-input").focus();
@@ -946,7 +988,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "update") {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
@@ -957,7 +999,7 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "serieslist-div");
             fSetElement("UnhideInline", "seriesupdated-input");
             fSetElement("Disable", "seriesupdated-input");
-            document.getElementById("mode-label").innerHTML = "update mode";
+            document.getElementById("mode-span").innerHTML = "update mode";
             document.getElementById("seriesupdateid-input").value = '';
             document.getElementById("seriesupdateid-input").focus();
             document.getElementById("seriesupdatename-input").value = '';
@@ -968,7 +1010,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "delete") {
 
-            //  disable the 'delete' mode button and color it green ....................................................
+            //  disable the 'delete' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
@@ -977,7 +1019,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "seriesupdate-div");
             fSetElement("Unhide", "seriesdelete-div");
             fSetElement("Unhide", "serieslist-div");
-            document.getElementById("mode-label").innerHTML = "delete mode";
+            document.getElementById("mode-span").innerHTML = "delete mode";
             document.getElementById("seriesdelete-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
             document.getElementById("seriesdelete-input").style.borderWidth = "thin";
             document.getElementById("seriesdelete-input").value = '';
@@ -1001,7 +1043,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -1010,7 +1052,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "sourcesdelete-div");
             fSetElement("Hide", "sourcesupdate-div");
             fSetElement("Enable", "submit-button");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then click 'Submit')";
             sTextAreaResults = "sourceslist-textarea";
             sInputFilter = "sourcesfilter-input";
@@ -1019,7 +1061,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            //  disable the 'add' mode button and color it green .......................................................
+            //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
@@ -1029,7 +1071,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "sourcesupdate-div");
             fSetElement("Hide", "sourcesdelete-div");
             fSetElement("Unhide", "sourceslist-div");
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
             document.getElementById("sourcesadd-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("sourcesadd-input").style.borderWidth = "thin";
             document.getElementById("sourcesadd-input").focus();
@@ -1038,7 +1080,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "update") {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
@@ -1049,8 +1091,8 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "sourcesupdate-div");
             fSetElement("UnhideInline", "sourcesupdated-input");
             fSetElement("Disable", "sourcesupdated-input");
-            document.getElementById("mode-label").innerHTML = "update mode";
-            document.getElementById("sourcesupdateid-input").style.backgroundColor = "rgb(255,255,224)";       // light yellow
+            document.getElementById("mode-span").innerHTML = "update mode";
+            document.getElementById("sourcesupdateid-input").style.backgroundColor = "rgb(255,255,224)"; // light yellow
             document.getElementById("sourcesupdateid-input").style.borderWidth = "thin";
             document.getElementById("sourcesupdatename-input").value = '';
             document.getElementById("sourcesupdateid-input").value = '';
@@ -1059,7 +1101,7 @@ function fSetMode(sNewMode) {
             
         } else if (sMode === "delete") {
 
-            //  disable the 'delete' mode button and color it green ....................................................
+            //  disable the 'delete' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
@@ -1068,8 +1110,8 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "sourcesupdate-div");
             fSetElement("Unhide", "sourcesdelete-div");
             fSetElement("Unhide", "sourceslist-div");
-            document.getElementById("mode-label").innerHTML = "delete mode";
-            document.getElementById("sourcesdelete-input").style.backgroundColor = "rgb(255,255,224)";        // light yellow
+            document.getElementById("mode-span").innerHTML = "delete mode";
+            document.getElementById("sourcesdelete-input").style.backgroundColor = "rgb(255,255,224)";   // light yellow
             document.getElementById("sourcesdelete-input").style.borderWidth = "thin";
             document.getElementById("sourcesdelete-input").value = '';
             document.getElementById("sourcesdelete-input").focus();
@@ -1092,7 +1134,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -1101,7 +1143,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "genresdelete-div");
             fSetElement("Enable", "submit-button");
             fSetElement("Unhide", "genresfilter-div");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then 'Submit')";
             sTextAreaResults = "genreslist-textarea";
             sInputFilter = "genresfilter-input";
@@ -1110,7 +1152,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            //  disable the 'new' mode button and color it green .......................................................
+            //  disable the 'new' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
@@ -1120,7 +1162,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "genresupdate-div");
             fSetElement("Hide", "genresdelete-div");
             fSetElement("Unhide", "genreslist-div");
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
             document.getElementById("genresadd-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("genresadd-input").style.borderWidth = "thin";
             document.getElementById("genresadd-input").focus();
@@ -1129,7 +1171,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "update") {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
@@ -1138,7 +1180,7 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "genresupdated-input");
             fSetElement("Unhide", "genresupdate-div");
             fSetElement("Hide", "genresdelete-div");
-            document.getElementById("mode-label").innerHTML = "update mode";
+            document.getElementById("mode-span").innerHTML = "update mode";
             document.getElementById("genresupdateid-input").focus();
             document.getElementById("genresupdateid-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("genresupdateid-input").style.borderWidth = "thin";
@@ -1149,7 +1191,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "delete") {
 
-            //  disable the 'delete' mode button and color it green ....................................................
+            //  disable the 'delete' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
@@ -1158,7 +1200,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "genresupdate-div");
             fSetElement("Unhide", "genresdelete-div");
             fSetElement("Hide", "genresfilter-div");
-            document.getElementById("mode-label").innerHTML = "delete mode";
+            document.getElementById("mode-span").innerHTML = "delete mode";
             document.getElementById("genresdelete-input").value = '';
             document.getElementById("genresdelete-input").style.borderWidth = "thin";
             document.getElementById("genresdelete-input").style.backgroundColor = "rgb(255,255,224)";         // light yellow
@@ -1181,7 +1223,7 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            //  disable the 'fetch' mode button and color it green .....................................................
+            //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
@@ -1191,7 +1233,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "statusesadd-div");
             fSetElement("Hide", "statusesupdate-div");
             fSetElement("Hide", "statusesdelete-div");
-            document.getElementById("mode-label").innerHTML = "fetch mode";
+            document.getElementById("mode-span").innerHTML = "fetch mode";
             document.getElementById("submit-message").value = "Click 'Submit' to fetch " + sTopic + " (or set a filter, then 'Submit')";
             sTextAreaResults = "statuseslist-textarea";
             sInputFilter = "statusesfilter-input";
@@ -1200,7 +1242,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            //  disable the 'add' mode button and color it green .......................................................
+            //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
             fSetElement("Disable", "modesquery-button");
@@ -1208,7 +1250,7 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "statusesadd-div");
             fSetElement("Hide", "statusesupdate-div");
             fSetElement("Hide", "statusesdelete-div");
-            document.getElementById("mode-label").innerHTML = "add mode";
+            document.getElementById("mode-span").innerHTML = "add mode";
             document.getElementById("submit-message").value = "Enter a new Status Name and 'Submit'";
             document.getElementById("statusesadd-input").style.backgroundColor = "rgb(255,255,224)";     // light yellow
             document.getElementById("statusesadd-input").style.borderWidth = "thin";
@@ -1217,7 +1259,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "update") {
 
-            //  disable the 'update' mode button and color it green ....................................................
+            //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
             fSetElement("Disable", "modesquery-button");
@@ -1226,7 +1268,7 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "statusesupdate-div");
             fSetElement("Disable", "statusesupdated-input");
             fSetElement("Hide", "statusesdelete-div");
-            document.getElementById("mode-label").innerHTML = "update mode";
+            document.getElementById("mode-span").innerHTML = "update mode";
             document.getElementById("statusesupdateid-input").focus();
             document.getElementById("statusesupdateid-input").style.backgroundColor = "rgb(255,255,224)";      // light yellow
             document.getElementById("statusesupdateid-input").style.borderWidth = "thin";
@@ -1238,7 +1280,7 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "delete") {
 
-            //  disable the 'delete' mode button and color it green ....................................................
+            //  disable the 'delete' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesdelete-button");
             fSetElement("Disable", "modesquery-button");
@@ -1246,7 +1288,7 @@ function fSetMode(sNewMode) {
             fSetElement("Hide", "statusesadd-div");
             fSetElement("Hide", "statusesupdate-div");
             fSetElement("Unhide", "statusesdelete-div");
-            document.getElementById("mode-label").innerHTML = "delete mode";
+            document.getElementById("mode-span").innerHTML = "delete mode";
             document.getElementById("statusesdelete-input").value = '';
             document.getElementById("statusesdelete-input").focus();
             document.getElementById("statusesdelete-input").style.borderWidth = "thin";
@@ -1256,7 +1298,7 @@ function fSetMode(sNewMode) {
     }
 }
 
-// function to fetch results from the server when Submit button is clicked .............................................
+// function to fetch results from the server when Submit button is clicked ---------------------------------------------
 
 async function fonclick_submit_submit() {
 
@@ -1266,13 +1308,15 @@ async function fonclick_submit_submit() {
     let sInputFilter = '';
     let sTextAreaResults = '';
 
-    // fetch list results is the topic is a list-type topic ............................................................
+    // fetch list results if the topic is a list-type topic ------------------------------------------------------------
 
     if ((aTopicsToFetch.includes(sTopic)) && sMode === "fetch") {
 
         if (sTopic === "titles") {
             sTextAreaResults = "titlesarea-textarea";
             sInputFilter = "titlesfilter-input";
+        } else if (sTopic === "listTitles") {
+            sInputFilter = "listTitlesfilter-input";
         } else if (sTopic === "recents") {
             sTextAreaResults = "recentsarea-textarea";
             sInputFilter = "recentsfilter-input";
@@ -1348,8 +1392,12 @@ async function fonclick_submit_submit() {
         let response = await fetch(sRequest);
         if (response.ok) {
             let text = await response.text();
-            document.getElementById("booksid-input").value = text;
-            document.getElementById("submit-message").value = 'Book added';
+            if (isNaN(text)) {
+                document.getElementById("submit-message").value = text;
+            } else {
+                document.getElementById("booksid-input").value = text;
+                document.getElementById("submit-message").value = 'Book added';
+            }
             fSetElement("Disable", "submit-button");
             fSetElement("Disable", "booksid-input");
             fSetElement("Disable", "booksname-input");
@@ -1531,7 +1579,7 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit-message").value = text;
             document.getElementById("authorsupdated-input").value = '';
-            document.getElementById("authorsupdated-input").style.backgroundColor = "rgb(255,255,255)";           // white
+            document.getElementById("authorsupdated-input").style.backgroundColor = "rgb(255,255,255)";         // white
             fPopulateLOV('authors');
         } else {
             alert("HttpError: " + response.status);
@@ -1607,7 +1655,7 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit-message").value = text;
             document.getElementById("ratingsupdated-input").value = '';
-            document.getElementById("ratingsupdated-input").style.backgroundColor = "rgb(255,255,255)";           // white
+            document.getElementById("ratingsupdated-input").style.backgroundColor = "rgb(255,255,255)";         // white
             fPopulateLOV('ratings');
         } else {
             alert("HttpError: " + response.status);
@@ -1645,7 +1693,7 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit-message").value = text;
             document.getElementById("seriesupdated-input").value = '';
-            document.getElementById("seriesupdated-input").style.backgroundColor = "rgb(255,255,255)";            // white
+            document.getElementById("seriesupdated-input").style.backgroundColor = "rgb(255,255,255)";          // white
             fPopulateLOV('series');
         } else {
             alert("HttpError: " + response.status);
@@ -1683,7 +1731,7 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit-message").value = text;
             document.getElementById("sourcesupdated-input").value = '';
-            document.getElementById("sourcesupdated-input").style.backgroundColor = "rgb(255,255,255)";           // white
+            document.getElementById("sourcesupdated-input").style.backgroundColor = "rgb(255,255,255)";         // white
             fPopulateLOV('sources');
         } else {
             alert("HttpError: " + response.status);
@@ -1721,7 +1769,7 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit-message").value = text;
             document.getElementById("genresupdated-input").value = '';
-            document.getElementById("genresupdated-input").style.backgroundColor = "rgb(255,255,255)";            // white
+            document.getElementById("genresupdated-input").style.backgroundColor = "rgb(255,255,255)";          // white
         } else {
             alert("HttpError: " + response.status);
         }
@@ -1758,7 +1806,7 @@ async function fonclick_submit_submit() {
             let text = await response.text();
             document.getElementById("submit-message").value = text;
             document.getElementById("statusesupdated-input").value = '';
-            document.getElementById("statusesupdated-input").style.backgroundColor = "rgb(255,255,255)";            // white
+            document.getElementById("statusesupdated-input").style.backgroundColor = "rgb(255,255,255)";        // white
             fPopulateLOV('statuses');
         } else {
             alert("HttpError: " + response.status);
@@ -1777,7 +1825,7 @@ async function fonclick_submit_submit() {
     }
 }
 
-// function to fetch book results from the server when Validate button is clicked ......................................
+// function to fetch book results from the server when Validate button is clicked --------------------------------------
 
 async function fonclick_chars_vldt_bk_id() {
 
@@ -1790,7 +1838,7 @@ async function fonclick_chars_vldt_bk_id() {
         document.getElementById("charactersbooktitle-input").value = text;
         if (text === "No title found") {
             document.getElementById("submit-message").value = "No book exists for this Title ID";
-        } else if (document.getElementById("mode-label").innerHTML == "fetch mode") {
+        } else if (document.getElementById("mode-span").innerHTML == "fetch mode") {
             fSetElement("Hide", "charactersadd-div");
             fSetElement("Enable", "submit-button");
             fSetElement("Enable", "charactersfilter-input");
@@ -1802,7 +1850,7 @@ async function fonclick_chars_vldt_bk_id() {
             let CharFilter = document.getElementById("charactersfilter-input");
             CharFilter.focus()
             fonclick_submit_submit();
-        } else if (document.getElementById("mode-label").innerHTML == "add mode") {
+        } else if (document.getElementById("mode-span").innerHTML == "add mode") {
             fSetElement("Unhide", "charactersadd-div");
             fSetElement("Enable", "charactersfilter-input");
             fSetElement("Enable", "charactersadd-input");
@@ -1818,11 +1866,11 @@ async function fonclick_chars_vldt_bk_id() {
     return;
 }
 
-// function to fetch results from the server when Validate character is clicked ........................................
+// function to fetch results from the server when Validate character is clicked ----------------------------------------
 
 async function fonclick_chars_vldt_char_id() {
 
-    // fetch to fetch the title matching a book ID .....................................................................
+    // fetch the title matching a book ID ------------------------------------------------------------------------------
 
     let iCharId = document.getElementById("charactersupdateid-input").value;
     let sRequest = uri14 + '?' + 'CharID=' + iCharId;
@@ -1840,7 +1888,7 @@ async function fonclick_chars_vldt_char_id() {
             UpdtdChar.focus();
             fSetElement("Hide", "charactersfilter-div");
             fSetElement("Enable", "submit-button");
-            document.getElementById("charactersupdatedname-input").style.backgroundColor = "rgb(255,255,224)";    // light yellow
+            document.getElementById("charactersupdatedname-input").style.backgroundColor = "rgb(255,255,224)";  // light yellow
             document.getElementById("charactersupdatedname-input").style.borderWidth = "thin";
             document.getElementById("submit-message").value = "Enter the changed character name and 'submit'";
         }
@@ -1850,7 +1898,7 @@ async function fonclick_chars_vldt_char_id() {
     return;
 }
 
-// function to fetch a book detail record ..............................................................................
+// function to fetch a book detail record ------------------------------------------------------------------------------
 
 async function fGetBookDetails() {
 
@@ -1914,7 +1962,7 @@ async function fGetBookDetails() {
     fGetBookCharacters();
 }
 
-// function to fetch book characters  ..................................................................................
+// function to fetch book characters------------------------------------------------------------------------------------
 
 async function fGetBookCharacters() {
 
@@ -1940,7 +1988,7 @@ async function fGetBookCharacters() {
     }
 }
 
-// function to fetch book characters and display in characersArea ......................................................
+// function to fetch book characters and display in characersArea ------------------------------------------------------
 
 async function fGetBookCharacters2() {
 
@@ -1967,7 +2015,7 @@ async function fGetBookCharacters2() {
     }
 }
 
-// function to fetch book title and display in characersArea ...........................................................
+// function to fetch book title and display in characersArea -----------------------------------------------------------
 
 async function fGetBookTitle(iTitleID) {
 
@@ -1981,7 +2029,7 @@ async function fGetBookTitle(iTitleID) {
     }
 }
 
-// function to set wrap on textarea ....................................................................................
+// function to set wrap on textarea ------------------------------------------------------------------------------------
 
 function fWrapText() {
     let r1 = document.getElementById("titlesarea-textarea");
@@ -2083,7 +2131,7 @@ function fWrapText() {
     }
 }
 
-//    function to set wrap off on all textareas
+// function to set wrap off on all textareas ---------------------------------------------------------------------------
 
 function fUnwrapAllText() {
     let r1 = document.getElementById("titlesarea-textarea");
@@ -2114,7 +2162,7 @@ function fUnwrapAllText() {
     w.innerHTML = "Wrap";
 }
 
-// function to validate Title ID entered before fetching a book record .................................................
+// function to validate Title ID entered before fetching a book record -------------------------------------------------
 
 function fEnableSubmitButton01(titleId) {
 
@@ -2139,7 +2187,7 @@ function fEnableSubmitButton01(titleId) {
     }
 }
 
-// function to enable the submit button when a classification is changed ...............................................
+// function to enable the submit button when a classification is changed -----------------------------------------------
 
 function fonKeyUp_class_updtd_name() {
 
@@ -2152,11 +2200,11 @@ function fonKeyUp_class_updtd_name() {
     ;
 }
 
-// function to enable the submit button if an entered classification ID is a valid format ..............................
+// function to enable the submit button if an entered classification ID is a valid format ------------------------------
 
 function fonKeyUp_class_del_id() {
 
-    if (document.getElementById("mode-label").innerHTML === "delete mode") {
+    if (document.getElementById("mode-span").innerHTML === "delete mode") {
         iClassId = document.getElementById("classificationsdelete-input").value;
         if (iClassId === '') {
             fSetElement("Disable", "submit-button");
@@ -2170,7 +2218,7 @@ function fonKeyUp_class_del_id() {
     }
 }
 
-// function to enable all the mode buttons .............................................................................
+// function to enable all the mode buttons -----------------------------------------------------------------------------
 
 function fEnableAllModeButtons() {
 
@@ -2196,7 +2244,7 @@ function fEnableAllModeButtons() {
     db.disabled = false;
 }
 
-// function to disable book fields ..........................................................................
+// function to disable book fields -------------------------------------------------------------------------------------
 
 function fDisableBookFields() {
 
@@ -2205,7 +2253,7 @@ function fDisableBookFields() {
     }
 }
 
-// function to enable book fields ..........................................................................
+// function to enable book fields --------------------------------------------------------------------------------------
 
 function fEnableBookFields() {
 
@@ -2214,7 +2262,7 @@ function fEnableBookFields() {
     }
 }
 
-// function to unhide, hide or disable a single HTML element ...........................................................
+// function to unhide, hide or disable a single HTML element -----------------------------------------------------------
 
 function fSetElement(sFunction, sElement) {
 
@@ -2233,7 +2281,7 @@ function fSetElement(sFunction, sElement) {
     }
 }
 
-// function to unhide multiple elements ................................................................................
+// function to unhide multiple elements --------------------------------------------------------------------------------
 
 function fUnhideMultiple() {
 
@@ -2242,11 +2290,11 @@ function fUnhideMultiple() {
     }
 }
 
-// fClearPage() - function to clear and hide all elements on the page ..................................................
+// function to clear and hide all elements on the page -----------------------------------------------------------------
 
 function fClearPage() {
 
-    let arrayOfHides = ["books-div", "titles-div", "recents-div", "unreads-div", "characters-div"
+    let arrayOfHides = ["books-div", "titles-div", "listTitles-div", "recents-div", "unreads-div", "characters-div"
                       , "authors-div", "authorsadd-div", "classificationsadd-div", "classifications-div"
                       , "ratingsadd-div", "ratings-div", "seriesadd-div", "series-div", "sourcesadd-div"
                       , "sources-div", "genresadd-div", "genres-div", "statusesadd-div", "statuses-div"
@@ -2260,7 +2308,7 @@ function fClearPage() {
                        , "ratingslist-textarea", "seriesadd-input", "seriesfilter-input", "serieslist-textarea", "sourcesadd-input"
                        , "sourcesfilter-input", "sourceslist-textarea", "genresadd-input", "genresfilter-input", "genreslist-textarea"
                        , "statusesadd-input", "statusesfilter-input", "statuseslist-textarea"];
-    for(let i = 0; i < arrayOfClears.length; i++) {
+    for(let i = 0; i < arrayOfHides.length; i++) {
         fSetElement("Hide", arrayOfClears[i]);
     }
     let h = document.getElementById("HELPDIV");
@@ -2269,7 +2317,7 @@ function fClearPage() {
     w.disabled=true;
 }
 
-// fClearBookFields() - function to clear the page and set the topic to 'Choose' to put the page in the initial state 
+// function to clear the page and set the topic to 'Choose' to put the page in the initial state -----------------------
 
 function fClearBookFields() {
 
@@ -2279,7 +2327,7 @@ function fClearBookFields() {
     tc.value = "choose";
 }
 
-// fDisableModeButton() - function to disable one mode button and enable all the other mode buttons ....................
+// function to disable one mode button and enable all the other mode buttons -------------------------------------------
 
 function fDisableModeButton(sButton) {
 
@@ -2291,7 +2339,7 @@ function fDisableModeButton(sButton) {
     b.disabled = true;
 }
 
-// fClearBookElements() - function to clear all elements in books:div ..................................................
+// function to clear all elements in books:div -------------------------------------------------------------------------
 
 function fClearBookDivElements() {
 
@@ -2304,11 +2352,11 @@ function fClearBookDivElements() {
     }
 }
 
-//    fonKeyUp_any_vldt_id() = validate an id for a single topic value and return the value
+// function to validate an id for a single topic value and return the value ------------------===-----------------------
 
 async function fonclick_any_vldt_id() {
 
-    if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "authors")) {
+    if ((document.getElementById("mode-span").innerHTML === "update mode") && (document.getElementById("topics-select").value === "authors")) {
         let iAuthorId = document.getElementById("authorsupdateid-input").value;
         let sRequest = uri35 + '?' + 'authorID=' + iAuthorId;
         let response = await fetch(sRequest);
@@ -2331,7 +2379,7 @@ async function fonclick_any_vldt_id() {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "classifications")) {
+    } else if ((document.getElementById("mode-span").innerHTML === "update mode") && (document.getElementById("topics-select").value === "classifications")) {
         let iClassId = document.getElementById("classificationsupdateid-input").value;
         let sRequest = uri33 + '?' + 'classID=' + iClassId;
         let response = await fetch(sRequest);
@@ -2354,7 +2402,7 @@ async function fonclick_any_vldt_id() {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "ratings")) {
+    } else if ((document.getElementById("mode-span").innerHTML === "update mode") && (document.getElementById("topics-select").value === "ratings")) {
         let iRatingId = document.getElementById("ratingsupdateid-input").value;
         let sRequest = uri31 + '?' + 'ratingID=' + iRatingId;
         let response = await fetch(sRequest);
@@ -2377,7 +2425,7 @@ async function fonclick_any_vldt_id() {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "series")) {
+    } else if ((document.getElementById("mode-span").innerHTML === "update mode") && (document.getElementById("topics-select").value === "series")) {
         let iSeriesId = document.getElementById("seriesupdateid-input").value;
         let sRequest = uri29 + '?' + 'seriesID=' + iSeriesId;
         let response = await fetch(sRequest);
@@ -2400,7 +2448,7 @@ async function fonclick_any_vldt_id() {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "sources")) {
+    } else if ((document.getElementById("mode-span").innerHTML === "update mode") && (document.getElementById("topics-select").value === "sources")) {
         let iSourceId = document.getElementById("sourcesupdateid-input").value;
         let sRequest = uri27 + '?' + 'sourceID=' + iSourceId;
         let response = await fetch(sRequest);
@@ -2424,7 +2472,7 @@ async function fonclick_any_vldt_id() {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "genres")) {
+    } else if ((document.getElementById("mode-span").innerHTML === "update mode") && (document.getElementById("topics-select").value === "genres")) {
         let iGenreId = document.getElementById("genresupdateid-input").value;
         let sRequest = uri25 + '?' + 'genreID=' + iGenreId;
         let response = await fetch(sRequest);
@@ -2448,7 +2496,7 @@ async function fonclick_any_vldt_id() {
             alert("HttpError: " + response.status);
         }
         return;
-    } else if ((document.getElementById("mode-label").innerHTML === "update mode") && (document.getElementById("topics-select").value === "statuses")) {
+    } else if ((document.getElementById("mode-span").innerHTML === "update mode") && (document.getElementById("topics-select").value === "statuses")) {
         let iStatusId = document.getElementById("statusesupdateid-input").value;
         let sRequest = uri23 + '?' + 'statusID=' + iStatusId;
         let response = await fetch(sRequest);
@@ -2475,17 +2523,17 @@ async function fonclick_any_vldt_id() {
     }
 }
 
-// function to fetch lists of values and populate the LOV's for Books
+// function to fetch lists of values and populate the LOV's for Books --------------------------------------------------
 
 async function fPopulateLOV(strAttribute) {
 
-    if (strAttribute == 'authors') {                                           // start procedure to populate authors
+    if (strAttribute == 'authors') {                                              // start procedure to populate authors
 
         if (arrAuthorNames.length > 0) {
             return;
         }
     
-        let text = '';                                                         // fetch the list of authors as lines of text
+        let text = '';                                                     // fetch the list of authors as lines of text
         const uri01 = "http://gjarman2020.com/cgi-bin/bookFetchLOVs.cgi"
         const sRequest = uri01 + '?' + 'topic=' + 'authors' + '&filter= ';
         let response = await fetch(sRequest);
@@ -2495,7 +2543,7 @@ async function fPopulateLOV(strAttribute) {
               alert("HttpError: " + response.status);
         }
     
-        arrAuthorNames = text.split("\n");                                     // split the author lines of text into a 2-dim array
+        arrAuthorNames = text.split("\n");                          // split the author lines of text into a 2-dim array
         const y = document.getElementById("booksauthor-select");
         for (let i = 0; i < arrAuthorNames.length; i++) {
             arrAuthorNames[i] = arrAuthorNames[i].split(",");
@@ -2503,7 +2551,7 @@ async function fPopulateLOV(strAttribute) {
     
         arrAuthorNames.pop();
     
-        for (let i = 0; i < arrAuthorNames.length; i++) {                      // add each author name to the list of author options in books
+        for (let i = 0; i < arrAuthorNames.length; i++) {           // add each author name to the list of author options in books
             var option = document.createElement("option");
             option.text = arrAuthorNames[i][1].trim();
             y.add(option);
@@ -2512,13 +2560,13 @@ async function fPopulateLOV(strAttribute) {
 
         return;
 
-    } else if (strAttribute == 'sources') {                                    // start procedure to populate sources
+    } else if (strAttribute == 'sources') {                                       // start procedure to populate sources
 
         if (arrSourceNames.length > 0) {
             return;
         }
     
-        let text = '';                                                         // fetch the list of sources as lines of text
+        let text = '';                                                     // fetch the list of sources as lines of text
         const uri01 = "http://gjarman2020.com/cgi-bin/bookFetchLOVs.cgi"
         const sRequest = uri01 + '?' + 'topic=' + 'sources' + '&filter= ';
         let response = await fetch(sRequest);
@@ -2528,7 +2576,7 @@ async function fPopulateLOV(strAttribute) {
               alert("HttpError: " + response.status);
         }
     
-        arrSourceNames = text.split("\n");                                     // split the source lines of text into a 2-dim array
+        arrSourceNames = text.split("\n");                          // split the source lines of text into a 2-dim array
         const y = document.getElementById("bookssource-select");
         for (let i = 0; i < arrSourceNames.length; i++) {
             arrSourceNames[i] = arrSourceNames[i].split(",");
@@ -2536,20 +2584,20 @@ async function fPopulateLOV(strAttribute) {
     
         arrSourceNames.pop();
     
-        for (let i = 0; i < arrSourceNames.length; i++) {                      // add each source to the list of source options in books
+        for (let i = 0; i < arrSourceNames.length; i++) {      // add each source to the list of source options in books
             var option = document.createElement("option");
             option.text = arrSourceNames[i][1].trim();
             y.add(option);
         
         }
 
-    } else if (strAttribute == 'series') {                                     // start procedure to populate series
+    } else if (strAttribute == 'series') {                                         // start procedure to populate series
 
         if (arrSeriesNames.length > 0) {
             return;
         }
     
-        let text = '';                                                         // fetch the list of series as lines of text
+        let text = '';                                                      // fetch the list of series as lines of text
         const uri01 = "http://gjarman2020.com/cgi-bin/bookFetchLOVs.cgi"
         const sRequest = uri01 + '?' + 'topic=' + 'series' + '&filter= ';
         let response = await fetch(sRequest);
@@ -2702,6 +2750,8 @@ async function fPopulateLOV(strAttribute) {
     return;
 }
 
+// function to populate or update the LOV's used in the library --------------------------------------------------------
+
 function fPopulateLOVId(strAttribute) {
 
     if (strAttribute == 'authors') {
@@ -2786,6 +2836,8 @@ function fPopulateLOVId(strAttribute) {
     return;
 }
 
+// function to fetch a summary list matching a topic to display in a textbox -------------------------------------------
+
 async function fFetchTopicList(sInputFilter, sTextAreaResults) {
     let tempText = [];
     let row = []
@@ -2837,6 +2889,8 @@ async function fFetchTopicList(sInputFilter, sTextAreaResults) {
     }
 }
 
+// function to print a book summary ------------------------------------------------------------------------------------
+
 function fPrintBookText() {
     let restorepage = document.body.innerHTML;
     let titleid = document.getElementById("booksid-input").value;
@@ -2862,7 +2916,7 @@ function fPrintBookText() {
     document.body.innerHTML = restorepage;
 }
 
-// function to enable the Submit button when text is entered in an input field
+// function to enable the Submit button when text is entered in an input field -----------------------------------------
 
 function fEnableSubmitOnInput() {
     bookname = document.getElementById("booksname-input").value;
@@ -2873,7 +2927,7 @@ function fEnableSubmitOnInput() {
     }
 }
 
-// function to click the submit button when Enter is clicked in an input field
+// function to click the submit button when Enter is clicked in an input field -----------------------------------------
 
 function fClickSubmitOnEnter() {
       fSetElement("Enable", "submit-button");
@@ -2882,7 +2936,7 @@ function fClickSubmitOnEnter() {
       }
 }
 
-// function to click the validate book button when Enter is clicked on input
+// function to click the validate book button when Enter is clicked on input -------------------------------------------
 
 function fClickValidateBookOnEnter() {
       fSetElement("Enable", "charactersvalidatebook-button");
@@ -2891,7 +2945,7 @@ function fClickValidateBookOnEnter() {
       }
 }
 
-// function to click the validate author button when Enter is clicked on input
+// function to click the validate author button when Enter is clicked on input -----------------------------------------
 
 function fClickValidateAuthorOnEnter() {
       fSetElement("Enable", "authorsupdate-button");
@@ -2900,7 +2954,7 @@ function fClickValidateAuthorOnEnter() {
       }
 }
 
-// function to click the validate classification button when Enter is clicked on input
+// function to click the validate classification button when Enter is clicked on input ---------------------------------
 
 function fClickValidateClassificationOnEnter() {
       fSetElement("Enable", "classificationsupdate-button");
@@ -2909,7 +2963,7 @@ function fClickValidateClassificationOnEnter() {
       }
 }
 
-// function to click the validate rating button when Enter is clicked on input
+// function to click the validate rating button when Enter is clicked on input -----------------------------------------
 
 function fClickValidateRatingOnEnter() {
       fSetElement("Enable", "ratingsupdate-button");
@@ -2918,7 +2972,7 @@ function fClickValidateRatingOnEnter() {
       }
 }
 
-// function to click the validate series button when Enter is clicked on input
+// function to click the validate series button when Enter is clicked on input -----------------------------------------
 
 function fClickValidateSeriesOnEnter() {
       fSetElement("Enable", "seriesupdate-button");
@@ -2927,7 +2981,7 @@ function fClickValidateSeriesOnEnter() {
       }
 }
 
-// function to click the validate source button when Enter is clicked on input
+// function to click the validate source button when Enter is clicked on input -----------------------------------------
 
 function fClickValidateSourceOnEnter() {
       fSetElement("Enable", "sourcesupdate-button");
@@ -2936,7 +2990,7 @@ function fClickValidateSourceOnEnter() {
       }
 }
 
-// function to click the validate genre button when Enter is clicked on input
+// function to click the validate genre button when Enter is clicked on input ------------------------------------------
 
 function fClickValidateGenreOnEnter() {
       fSetElement("Enable", "genresupdate-button");
@@ -2945,7 +2999,7 @@ function fClickValidateGenreOnEnter() {
       }
 }
 
-// function to click the validate status button when Enter is clicked on input
+// function to click the validate status button when Enter is clicked on input -----------------------------------------
 
 function fClickValidateStatusOnEnter() {
       fSetElement("Enable", "statusesupdate-button");
@@ -2954,7 +3008,7 @@ function fClickValidateStatusOnEnter() {
       }
 }
 
-// function to click the validate character button when Enter is clicked on input
+// function to click the validate character button when Enter is clicked on input --------------------------------------
 
 function fClickValidateCharacterOnEnter() {
       fSetElement("Enable", "charactersvalidateid-button");
@@ -2962,3 +3016,244 @@ function fClickValidateCharacterOnEnter() {
         fonclick_chars_vldt_char_id();
       }
 }
+
+// function to check a Start Date is entered in the correct format YYYY-MM-DD ------------------------------------------
+
+function fValidateStartDate() {
+    strStartDate = document.getElementById("booksstart-input").value;
+    let n = strStartDate.search(/^\d{4}-\d{2}-\d{2}$/);
+    if (n === -1) {
+        document.getElementById("bookstartmsgspan").textContent = 'Invalid Format (must be hypenated and  numeric: YYYY-MM-DD)';
+    } else {
+        document.getElementById("bookstartmsgspan").textContent = '';
+    }
+}
+
+// function to check a Finish Date is entered in the correct format YYYY-MM-DD -----------------------------------------
+
+function fValidateFinishDate() {
+    strStartDate = document.getElementById("booksfinish-input").value;
+    let n = strStartDate.search(/^\d{4}-\d{2}-\d{2}$/);
+    if (n === -1) {
+        document.getElementById("booksfinishmsg-span").textContent = 'Invalid Format (must be hyphentated and numeric: YYYY-MM-DD)';
+    } else {
+        document.getElementById("booksfinishmsg-span").textContent = '';
+    }
+}
+
+// function to check the number of chapters is a valid number between 1 and 999 ----------------------------------------
+
+function fValidateChapters() {
+    strChapters = document.getElementById("bookschapters-input").value;
+    let strPattern = /^[1-9]$|^[1-9][0-9]$|^[1-9][0-9][0-9]$/;
+    if (strChapters.match(strPattern) === null) {
+        document.getElementById("bookschaptersmsg-span").textContent = 'Invalid (must be 1-999)';
+    } else {
+        document.getElementById("bookschaptersmsg-span").textContent = '';
+    }
+}
+
+// function to show a list of titles on a webpage ----------------------------------------------------------------------
+
+function fShowOrHideList() {
+    let dmParaDiv = "";
+    bttn4.removeAttribute("disabled");
+    let sHtmlString = ``;
+    const bttn3 = document.querySelector("#bttn3");
+    let dmDiv1 = document.createElement('div');
+    if (!document.getElementById('added-div')) {                                    // check if added-div does not exist
+        dmParaDiv = document.querySelector('#listTitlesList-div');
+        dmParaDiv.append(dmDiv1);
+        dmDiv1.innerText = "New Div Added";
+        dmDiv1.setAttribute("id", "added-div");
+        bttn3.textContent =  "Hide";
+        for (let i = 0; i < iListDisplayLength; i++) {
+            sHtmlString += `<input id="inputOffset${i}" size="80" value=""><button id="inputBttn${i}" onclick="fonclick_fetch_submit(this)">Fetch</button><br>`;
+        }
+        dmDiv1.innerHTML = sHtmlString;
+        iCurrOffset = iListDisplayLength;
+        iListDisplayCount = iListDisplayLength;
+        bttn5.removeAttribute("disabled");
+        bttn8.removeAttribute("disabled");
+        bttn6.setAttribute("disabled", true);
+        bttn7.setAttribute("disabled", true);
+        fFetchTitles();
+    } else {                                                   // remove added-div if it already exists to hide the list
+        bttn4.setAttribute("disabled", true);
+        bttn5.setAttribute("disabled", true);
+        bttn6.setAttribute("disabled", true);
+        bttn7.setAttribute("disabled", true);
+        bttn8.setAttribute("disabled", true);
+        dmDiv1 = document.querySelector("#added-div");
+        dmDiv1.remove();
+        bttn3.textContent =  "Show";
+    }
+}
+
+
+// function to fetch title profiles from a database into an array ------------------------------------------------------
+
+async function fFetchTitles() {
+
+    let sText1 = "";                                                       // string of title profiles from the database
+    let sText2 = "";                                            // string of 'scrubbed' title profiles from the database
+    let sFilter = "";                                                                         // filter on title profile
+
+    let sFilterEncoded = encodeURIComponent(document.getElementById("listTitlesfilter-input").value);
+    let sFilterEncoded1 = sFilterEncoded.replace(/'/g, "''");
+    let sRequest = uri01 + '?' + "topic=" + "titles" + '&filter=' + sFilterEncoded1;
+//    let sRequest = "http://gjarman2020.com/cgi-bin/bookInquiry.cgi?topic=titles&filter="
+    let response = await fetch(sRequest);
+
+    if (response.ok) {
+        sText1 = await response.text();
+        iListDisplayCount = 0;
+        sText2 = sText1.replace(/\|/g, ", ");
+        sText1 = sText2;
+        sText2 = sText1.replace(/, , , /g, ", ");
+        sText1 = sText2;
+        sText2 = sText1.replace(/, ,/g, ", ");
+        saTitleProfiles = sText2.split("\n");
+        let saArrayTmp = saTitleProfiles;                                          // copy the array to apply the filter
+        saTitleProfiles = [];
+
+        sFilter = (document.getElementById("listTitlesfilter-input").value).toUpperCase();
+        if(sFilter.length != 0)                                              // apply the filter if there is filter text
+        {
+             for(let i = 0, j = 0; i < saArrayTmp.length; i++)
+             {
+                 if((saArrayTmp[i]).toUpperCase().indexOf(sFilter) != -1)   // check filter match for each array element
+                 {
+                     saTitleProfiles[j] = saArrayTmp[i];             // copy the array values back if the filter matches
+                     j = j + 1;
+                     iListDisplayCount++;
+                 }
+             }
+        } else {                                                                // copy all values if there is no filter
+             saTitleProfiles = saArrayTmp;
+             iListDisplayCount = iListDisplayLength;
+        }
+        iProfilesCount = saTitleProfiles.length;                       // set a count of the number of filtered profiles
+        saArrayTmp = [];                                                                // clean out the temporary array
+        sText1 = "";                                                                      // clean out the sText1 string
+        sText2 = "";                                                                       // clean out the text2 string
+    } else {
+          alert("HttpError: " + response.status);
+    }
+
+    saInputFields= Array.from(document.querySelector("#added-div").querySelectorAll("input"));
+    iCurrOffset = 0;
+
+    for (let j = 0; j < iListDisplayLength; j++) {                                  // wipe the input field values clean
+        saInputFields[j].value="";
+    }
+
+    for (let k = 0; (k < iListDisplayLength) && (k <iProfilesCount) ; k++) {
+        saInputFields[k].value = saTitleProfiles[k];
+        iCurrOffset = k + 1;                                      // set the current position of the title profile array
+    }
+
+    if (iListDisplayCount < iListDisplayLength) {
+        bttn5.setAttribute("disabled", true);
+        bttn6.setAttribute("disabled", true);
+        bttn7.setAttribute("disabled", true);
+        bttn8.setAttribute("disabled", true);
+    } else {
+        bttn5.removeAttribute("disabled");
+        bttn8.removeAttribute("disabled");
+    }
+}
+
+
+// function to refresh the list of titles and apply any filter changes -------------------------------------------------
+
+function fRefreshList() {
+    iCurrOffset = 0;
+    fFetchTitles();
+}
+
+// function to move down the list of preople profiles and display the next set of values -------------------------------
+
+function fMoveDownList() {
+
+    iListDisplayCount = 0;
+    if (iCurrOffset < iProfilesCount - iListDisplayLength) {
+
+        for (let j = 0; j < iListDisplayLength; j++) {                              // wipe the input field values clean
+            saInputFields[j].value = "";
+        }
+
+        for (let j = 0; (j < iListDisplayLength) && (iCurrOffset < iProfilesCount); j++) {
+            if (iCurrOffset < iProfilesCount - 1) {
+                saInputFields[j].value = saTitleProfiles[iCurrOffset++];
+                iListDisplayCount++;                                         // increment the count of displayed records
+            } else {
+                bttn5.setAttribute("disabled", true);
+                bttn8.setAttribute("disabled", true);
+                break;
+            }
+        }
+        bttn6.removeAttribute("disabled");
+        bttn7.removeAttribute("disabled");
+    } else {
+        bttn5.setAttribute("disabled", true);
+        bttn8.setAttribute("disabled", true);
+    }
+}
+
+// function to move up the list of title profiles and display the prior set of values ----------------------------------
+
+function fMoveUpList() {
+
+    iCurrOffset = iCurrOffset - iListDisplayCount - iListDisplayLength;
+
+    if (iCurrOffset < 0) {
+        iCurrOffset = 0;                                                          // don't go past the start of the list
+        bttn6.setAttribute("disabled", true);
+        bttn7.setAttribute("disabled", true);
+        fRefreshList();
+    } else {
+        fMoveDownList();
+        bttn5.removeAttribute("disabled");
+        bttn8.removeAttribute("disabled");
+    }
+
+}
+
+// function to move to the top of the list of title profiles -----------------------------------------------------------
+
+function fMoveToListTop() {
+
+    iCurrOffset = 0;
+    fMoveDownList();
+    bttn6.setAttribute("disabled", true);
+    bttn7.setAttribute("disabled", true);
+    bttn5.removeAttribute("disabled");
+    bttn8.removeAttribute("disabled");
+
+}
+
+// function to move to the bottom of the list of title profiles -----=--------------------------------------------------
+
+function fMoveToListBottom() {
+
+    iCurrOffset = (iProfilesCount - 1) - iListDisplayLength;
+    fMoveDownList();
+    bttn5.setAttribute("disabled", true);
+    bttn8.setAttribute("disabled", true);
+
+}
+
+// function jump to a book's profile from the title list jump field ----------------------------------------------------
+
+function fonclick_fetch_submit(btn) {
+
+    var iArrayIndex = Number(btn.id.replace("inputBttn", ""));
+    var iBook_ID = Number(saInputFields[iArrayIndex].value.substring(1, 4));
+    document.getElementById("topics-select").value = "books";
+    fSetTopic();
+    fSetMode("fetch");
+    document.getElementById("booksid-input").value = iBook_ID;
+    fGetBookDetails();
+}
+

@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="letterRF.png" type="image/png">
 </head>
 
-<!-- Comments region ............................................................................................... -->
+<!-- Comments region ----------------------------------------------------------------------------------------------- -->
 <!--                                                                                                                 -->
 <!-- bookInquiry.html -  grid layout of book inqiries page                                                           -->
 <!-- References:                                                                                                     -->
@@ -99,8 +99,11 @@
 <!--    05-Oct-2022 - remove fClickSubmitOnEnter() function                                                          -->
 <!--    05-Oct-2022 - remove fEnableSubmitIfNotNull() function                                                       -->
 <!--    16-Oct-2022 - add chapter count to books                                                                     -->
+<!--    14-Nov-2022 - validate the start and finish date formats adding or changing a book                           -->
+<!--    23-Jun-2023 - replace <label> with <span> for inline text not related to input elements                      -->
+<!--    25-Jun-2023 - add a listTitles div                                                                           -->
 <!--                                                                                                                 -->
-<!-- <BODY> region for all content including header and footer ..................................................... -->
+<!-- <BODY> region for all content including header and footer ----------------------------------------------------- -->
 
 <body onload="fcSetCornerImage(), fcSetFooterOptions(), fcCheckAuthentication()">
     <div id="WRAPPER1">
@@ -152,9 +155,10 @@
                     <li class="NAV1LI"><a href="http://gjarman2020.com/perlTest.html">Cookies</a></li>
                     <li class="NAV1LI"><a href="http://gjarman2020.com/DOM_Drills.html">DOM Drills</a></li>
                     <li class="NAV1LI"><a href="http://gjarman2020.com/json4Ajax.html">JSON for Ajax</a></li>
+                    <li class="NAV1LI"><a href="http://gjarman2020.com/rRoulette.html">Russian Roulette</a></li>
             </nav>
 
-<!-- <SESSION1> region for session information .................................................................... -->
+<!-- <SESSION1> region for session information --------------------------------------------------------------------- -->
 
             <aside id="SESSION1">
                     <h3 id=SESSION1H3>Current Session</h3>
@@ -162,7 +166,7 @@
                     </p>
             </aside>
 
-<!-- <MAIN> region for main content and background image ........................................................... -->
+<!-- <MAIN> region for main content and background image ----------------------------------------------------------- -->
 
             <main id="MAIN1">
 
@@ -170,7 +174,7 @@
                     <H3>Library</H3>
                 </div>
 
-<!-- options div ................................................................................................... -->
+<!-- options div --------------------------------------------------------------------------------------------------- -->
 
                 <div id="unsecured-div">
                     <p><a href="http://gjarman2020.com/authenticateUser.html">Authentication</a> is required for this page (or via: Home >> Utilities >> Authenticate)</p>
@@ -179,11 +183,12 @@
                 <div id="secured-div">
     
                     <div id="topics-div">
-                        <label id="topics-label" for="topic-select">Topic:</label>
+                        <label id="topics-label" for="topics-select">Topic:</label>
                             <select id="topics-select" onchange="fSetTopic()">
                                 <option value="choose" selected>Choose</option>
                                 <option value="books">Books</option>
                                 <option value="titles">Titles</option>
+                                <option value="listTitles">List Titles</option>
                                 <option value="recents">Recents</option>
                                 <option value="unreads">Unreads</option>
                                 <option value="characters">Characters</option>
@@ -197,7 +202,7 @@
                             </select>
                     </div>
     
-<!-- mode buttons div .............................................................................................. -->
+<!-- mode buttons div ---------------------------------------------------------------------------------------------- -->
     
                     <div id="modes-div">
                         <button id="modesfetch-button"  onclick="fSetMode('fetch')">Fetch</button>
@@ -205,11 +210,11 @@
                         <button id="modesadd-button" onclick="fSetMode('add')">Add</button>
                         <button id="modesupdate-button" onclick="fSetMode('update')">Update</button>
                         <button id="modesdelete-button" onclick="fSetMode('delete')">Delete</button>
-                        <label id="mode-label"></label>
+                        <span id="mode-span"></span>
                         <br>
                     </div>
     
-<!-- titles div .................................................................................................... -->
+<!-- titles div ---------------------------------------------------------------------------------------------------- -->
     
                     <div id="titles-div">
                         <div id="titlesfilter-div">
@@ -222,7 +227,28 @@
                         </div>
                     </div>
     
-<!-- recents div ................................................................................................... -->
+<!-- listTitles div ------------------------------------------------------------------------------------------------ -->
+
+                    <div id="listTitles-div">
+                        <div id="listTitlesfilter-div">
+                            <label  id="listTitlesfilter-label" for="listTitlesfilter-input">Filter:</label>
+                            <input id="listTitlesfilter-input" required  onkeypress="fClickSubmitOnEnter()">
+                        </div>
+
+                        <div id="listButtons-div" style="width:80%; max-width:800px;">
+                            <button id="bttn3" onclick="fShowOrHideList()">Show</button>
+                            <button id="bttn4" onclick="fRefreshList()" disabled>Refresh</button>
+                            <button id="bttn5" onclick="fMoveDownList()" disabled>Down</button>
+                            <button id="bttn6" onclick="fMoveUpList()" disabled >Up</button>
+                            <button id="bttn7" onclick="fMoveToListTop()" disabled>Top</button>
+                            <button id="bttn8" onclick="fMoveToListBottom()"disabled >Bottom</button>
+                        </div>
+
+                        <div id="listTitlesList-div">
+                        </div>
+                    </div>
+    
+<!-- recents div --------------------------------------------------------------------------------------------------- -->
     
                     <div id="recents-div">
                         <div id="recentsfilter-div">
@@ -235,7 +261,7 @@
                         </div>
                     </div>
     
-<!-- unreads div ................................................................................................... -->
+<!-- unreads div --------------------------------------------------------------------------------------------------- -->
     
                     <div id="unreads-div">
                         <div id="unreadsfilter-div">
@@ -248,7 +274,7 @@
                         </div>
                     </div>
     
-<!-- characters div ................................................................................................ -->
+<!-- characters div ------------------------------------------------------------------------------------------------ -->
     
                     <div id="characters-div">
                         <div id="charactersbook-div">
@@ -258,7 +284,7 @@
                             <button id="charactersvalidatebook-button" disabled onclick="fonclick_chars_vldt_bk_id()">Validate</button>
                         </div>
                         <div id="charactersadd-div">
-                            <label id="charactersadd-label" for="chars:add-name">Character:</label>
+                            <label id="charactersadd-label" for="charactersadd-input">Character:</label>
                             <input id="charactersadd-input" required onkeypress="fClickSubmitOnEnter()">
                         </div>
                         <div id="charactersupdate-div">
@@ -274,11 +300,11 @@
                             </span>
                         </div>
                         <div id="charactersdelete-div">
-                            <label id="charactersdeleteid-label" for="charactersdeleteid-inputd">Char ID:</label>
+                            <label id="charactersdeleteid-label" for="charactersdeleteid-input">Char ID:</label>
                             <input id="charactersdeleteid-input" required onkeypress="fClickSubmitOnEnter()">
                         </div>
                         <div id="charactersfilter-div">
-                            <label id="charactersfilter-label" for="chars:filter">Filter:</label>
+                            <label id="charactersfilter-label" for="charactersfilter-input">Filter:</label>
                             <input id="charactersfilter-input" required onkeypress="fClickSubmitOnEnter()">
                         </div>
                         <div id="charactersarea-div">
@@ -287,7 +313,7 @@
                         </div>
                     </div>
     
-<!-- authors div ................................................................................................... -->
+<!-- authors div --------------------------------------------------------------------------------------------------- -->
     
                     <div id="authors-div">
                         <div id="authorsfilter-div">
@@ -320,7 +346,7 @@
                         </div>
                     </div>
     
-<!-- classifications div ........................................................................................... -->
+<!-- classifications div ------------------------------------------------------------------------------------------- -->
     
                     <div id="classifications-div">
                         <div id="classificationsfilter-div">
@@ -353,7 +379,7 @@
                         </div>
                     </div>
     
-<!-- ratings div ................................................................................................... -->
+<!-- ratings div --------------------------------------------------------------------------------------------------- -->
     
                     <div id="ratings-div">
                         <div id="ratingsfilter-div">
@@ -386,7 +412,7 @@
                         </div>
                     </div>
     
-<!-- series div .................................................................................................... -->
+<!-- series div ---------------------------------------------------------------------------------------------------- -->
     
                     <div id="series-div">
                         <div id="seriesfilter-div">
@@ -419,7 +445,7 @@
                         </div>
                     </div>
     
-<!-- sources div ................................................................................................... -->
+<!-- sources div --------------------------------------------------------------------------------------------------- -->
     
                     <div id="sources-div">
                         <div id="sourcesfilter-div">
@@ -452,7 +478,7 @@
                         </div>
                     </div>
     
-<!-- genres div .................................................................................................... -->
+<!-- genres div ---------------------------------------------------------------------------------------------------- -->
     
                     <div id="genres-div">
                         <div id="genresfilter-div">
@@ -485,7 +511,7 @@
                         </div>
                     </div>
     
-<!-- statuses div .................................................................................................. -->
+<!-- statuses div -------------------------------------------------------------------------------------------------- -->
     
                     <div id="statuses-div">
                         <div id="statusesfilter-div">
@@ -518,7 +544,7 @@
                         </div>
                     </div>
     
-<!-- books div ..................................................................................................... -->
+<!-- books div ----------------------------------------------------------------------------------------------------- -->
     
                     <div id="books-div" id="books:div">
                         <div id="booksstage-div">
@@ -540,64 +566,67 @@
                         </div>
                         <div id="bookschapters-div">
                             <label id="bookschapters-label" for="bookschapters-input">Chaptrs: </label>
-                            <input id="bookschapters-input">
+                            <input id="bookschapters-input" placeholder="NN" onblur=fValidateChapters()> 
+                            <span id="bookschaptersmsg-span"></span>
                         </div>
                         <div id="bookssource-div">
-                            <label id="bookssource-label" for="books:source">Source: </label>
+                            <label id="bookssource-label" for="bookssource-input">Source: </label>
                             <input id="bookssource-input">
                             <select id="bookssource-select" onchange="fPopulateLOVId('sources')"></select>
                         </div>
                         <div id="booksseries-div">
-                            <label id="booksseries-label" for="books:series">Series: </label>
+                            <label id="booksseries-label" for="booksseries-input">Series: </label>
                             <input id="booksseries-input">
                             <select id="booksseries-select" onchange="fPopulateLOVId('series')"></select>
                         </div>
                         <div id="booksgenre-div">
-                            <label id="booksgenre-label" for="books:genre">Genre: </label>
+                            <label id="booksgenre-label" for="booksgenre-input">Genre: </label>
                             <input id="booksgenre-input">
                             <select id="booksgenre-select" onchange="fPopulateLOVId('genres')"></select>
                         </div>
                         <div id="booksstatus-div">
-                            <labeL id="booksstatus-label" for="books:status">Status: </label>
+                            <labeL id="booksstatus-label" for="booksstatus-input">Status: </label>
                             <input id="booksstatus-input">
                             <select id="booksstatus-select" onchange="fPopulateLOVId('statuses')"></select>
                         </div>
                         <div id="booksclassification-div">
-                            <label id="booksclassification-label" for="books:clsfn">Clsfn: </label>
+                            <label id="booksclassification-label" for="booksclassification-input">Clsfn: </label>
                             <input id="booksclassification-input">
                             <select id="booksclassification-select" onchange="fPopulateLOVId('classifications')"></select>
                         </div>
                         <div id="booksrating-div">
-                            <label id="booksrating-label" for="books:rating">Rating: </label>
+                            <label id="booksrating-label" for="booksrating-input">Rating: </label>
                             <input id="booksrating-input">
                             <select id="booksrating-select" onchange="fPopulateLOVId('ratings')"></select>
                         </div>
                         <div id="booksstart-div">
                             <label id="booksstart-label" for="booksstart-input">Start: </label>
-                            <input id="booksstart-input">
+                            <input id="booksstart-input" placeholder="YYYY-MM-DD" onblur=fValidateStartDate()>
+                            <span id="booksstartmsg-span"></span>
                         </div>
                         <div id="booksfinish-div">
-                            <label id="booksfinish-label" for="books:finish">Finish: </label>
-                            <input id="booksfinish-input">
+                            <label id="booksfinish-label" for="booksfinish-input">Finish: </label>
+                            <input id="booksfinish-input" placeholder="YYYY-MM-DD" onblur=fValidateFinishDate()>
+                            <span id="booksfinishmsg-span"></span>
                         </div>
                         <div id="booksabstract-div">
-                            <label id="booksabstract-label" for="books:abstract">Abstract: </label>
+                            <label id="booksabstract-label" for="booksabstract-textarea">Abstract: </label>
                             <textarea id="booksabstract-textarea" readonly disabled rows="6">
                             </textarea>
                         </div>
                         <div id="bookscomments-div">
-                            <label id="bookscomments-label" for="books:cmnts">Comments: </label>
+                            <label id="bookscomments-label" for="bookscomments-textarea">Comments: </label>
                             <textarea id="bookscomments-textarea" readonly disabled rows="3">
                             </textarea>
                         </div>
                         <div id="bookscharacters-div">
-                            <label id="bookscharacters-label" for="books:chrs">Chararacters: </label>
+                            <label id="bookscharacters-label" for="bookscharacters-textarea">Chararacters: </label>
                             <textarea id="bookscharacters-textarea" readonly disabled rows="20">
                             </textarea>
                         </div>
                     </div>
     
-<!-- submit button and messages div ................................................................................ -->
+<!-- submit button and messages div -------------------------------------------------------------------------------- -->
     
                     <div id="submit-div">
                         <button id="submit-button"  onclick="fonclick_submit_submit()" disabled>Submit</button>
@@ -606,7 +635,7 @@
                     </div>
                 </div>
 
-<!-- buttons to clear the page and show and hide help and internals ................................................ -->
+<!-- buttons to clear the page and show and hide help and internals ------------------------------------------------ -->
 
                 <div id="MOREBTTNS">
                     <button id="helpButton"onclick="fcShowHelp()">Help</button>
@@ -616,7 +645,7 @@
                     <br>
                 </div>
 
-<!-- help text controlled by a button............................................................................... -->
+<!-- help text controlled by a button ------------------------------------------------------------------------------ -->
 
                     <div id="HELPDIV">
                         <p>
@@ -632,7 +661,7 @@
                         </p>
                     </div>
 
-<!-- internals div ................................................................................................. -->
+<!-- internals div ------------------------------------------------------------------------------------------------- -->
 
                <div id="INTERNALS">
                     <details id="internals-details">
@@ -660,13 +689,17 @@
 
             </main>
 
-<!-- <ASIDE1> region for change log ................................................................................ -->
+<!-- <ASIDE1> region for change log -------------------------------------------------------------------------------- -->
 
             <aside id="ASIDE1">
                     <h3 id=ASIDE1H3>Changes 2021-23</h3>
                 <ul id="ASIDE1UL">
+                    <li CLASS="ASIDE1LI">23-Jun: implement title list</li>
+                    <li CLASS="ASIDE1LI">23-Jun: replace title w/span</li>
                     <li CLASS="ASIDE1LI">01-Jan: happy new year 2023</li>
-                    <li CLASS="ASIDE1LI">01-Jan: add chapters to print</li>
+                    <li CLASS="ASIDE1LI">14-Nov: validate chapters</li>
+                    <li CLASS="ASIDE1LI">14-Nov: validate strt/fin dates</li>
+                    <li CLASS="ASIDE1LI">11-Nov: add chapters to print</li>
                     <li class="ASIDE1LI">16-Oct: add chapter count</li>
                     <li class="ASIDE1LI">05-Oct: fix author listing</li>
                     <li class="ASIDE1LI">24-Sep: add 'Enter' defaults</li>
@@ -756,7 +789,7 @@
                 </ul>
             </aside>
 
-<!-- <ASIDE2> region for corner image .............................................................................. -->
+<!-- <ASIDE2> region for corner image ------------------------------------------------------------------------------ -->
 
             <aside id="ASIDE2">
                 <div id="ASIDE2DIV">
@@ -764,7 +797,7 @@
                 </div>
             </aside>
 
-<!-- <ASIDE3> region for corner image caption ...................................................................... -->
+<!-- <ASIDE3> region for corner image caption ---------------------------------------------------------------------- -->
 
             <aside id="ASIDE3">
                 <div id="ASIDE3DIV">
@@ -774,16 +807,16 @@
                 </div>
             </aside>
 
-<!-- <FOOTER> region for page footer .............................................................................. -->
+<!-- <FOOTER> region for page footer ------------------------------------------------------------------------------- -->
 
 
             <footer id="FOOTER1">
                 <div id="FOOTER1OPTIONS-DIV">
-                    Corner Image Behaviour: <label id="footeroptionscichoice"></label>;
-                    Background Image: <label id="footeroptionsbackgroundimage"></label>;
-                    Show Webserver Log: <label id="footeroptionsshowserverlog"></label>;
-                    Show Session Log: <label id="footeroptionsshowsession"></label>;
-                    Left Links: <label id="footeroptionsleftlinks"></label>
+                    Corner Image Behaviour: <span id="footeroptionscichoice"></span>;
+                    Background Image: <span id="footeroptionsbackgroundimage"></span>;
+                    Show Webserver Log: <span id="footeroptionsshowserverlog"></span>;
+                    Show Session Log: <span id="footeroptionsshowsession"></span>;
+                    Left Links: <span id="footeroptionsleftlinks"></span>
                 </div>
                 <div id="FOOTER1DIV">
                     <p>&copy; 2020 gjarman2020.com ... /var/www/html/bookInquiries.html</P>

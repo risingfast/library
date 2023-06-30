@@ -125,6 +125,45 @@
     white-space: pre;
 }
 
+#listTitles-div {
+    display: none;
+}
+
+#listTitlesfilter-div {
+    width: 80%; 
+    margin: auto; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px; 
+    text-align: left;
+}
+
+#listTitlesfilter-label {
+    margin-left: 0px;
+    width: 45px;
+}
+
+#listTitlesfilter-input {
+    width: 85%;
+    margin-left: 17px;
+}
+
+#listButtons-div {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    text-align: left;
+    display: none;
+}
+
+#listTitlesList-div {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
 #recents-div {
     display: none;
 }
