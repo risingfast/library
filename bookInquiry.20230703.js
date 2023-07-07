@@ -6,12 +6,6 @@
 //     fSetMode() hides and displays the web page elements for the topic and moce
 //     fonclick_submit_submit() responds to the submit button and calls the relevant CGI for the topic and mode
 //     fonclick_submit_submit() calls specific-purpose functions to fetch or save data for the topic and mode
-// Naming Prefixes
-//     i   -- integer
-//     obj -- DOM Object
-//     s   -- string
-//     sa  -- string array
-// Enhancements
 // Log:
 //    01-Nov-2021 started
 //    04-Nov-2-21 -- add a Book option
@@ -93,11 +87,6 @@
 //    28-Jun-2023 -- fix bug with fMoveDownList() log for partial last page of title listings
 //    28-Jun-2023 -- modify fPopulateLOV() to clear values from select-list before adding new values
 //    30-Jun-2023 -- format long lines down to 120 characters
-//    04-Jul-2023 -- add logic to list unread titles in a jump-list
-//    04-Jul-2023 -- implement fShowTitles() and fShowUnreads
-//    05-Jul-2023 -- set the Show button to Hide when displaying unread titles
-//    05-Jul-2023 -- replace querySelector("#...") with getElementById("..")
-//    06-Jul-2023 -- preserve book_ID across mode changes
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -191,8 +180,7 @@ const uri39 = "http://gjarman2020.com/cgi-bin/bookUpdtBook.cgi";
 
 let sMode = '';
 let sTopic = '';
-let iListDisplayLength = 25;                                        // number of entries displayed in the list of titles
-let iBookID = "";                                                            // define a global variable for the book id
+let iListDisplayLength = 30;                                        // number of entries displayed in the list of titles
 
 // define globals for LOV arrays for book attributes -------------------------------------------------------------------
 
@@ -203,11 +191,6 @@ let arrGenreNames = [];
 let arrStatusNames = [];
 let arrClassificationNames = [];
 let arrRatingNames = [];
-
-// define global arrays for lists of titles and unread titles ----------------------------------------------------------
-
-let saUnreadsProfiles = [];
-let saTitlesProfiles = [];
 
 // populate global lists of value array for book attributes ------------------------------------------------------------
 
@@ -261,9 +244,7 @@ function fSetTopic() {
 
     fSetMode("fetch");
     if (sTopic === "titlesList") {
-        fShowTitlesList();
-    } else if (sTopic === "unreadsList") {
-        fShowUnreadsList();
+        document.getElementById("bttn3").click();
     } else if ((sTopic != "books") && (sTopic != "characters")) {
         fonclick_submit_submit();
     }
@@ -276,10 +257,6 @@ function fSetMode(sNewMode) {
     sTopic = document.getElementById("topics-select").value;
     sMode = sNewMode;
 
-    if (document.getElementById("booksid-input").value != "") {
-        iBookID = document.getElementById("booksid-input").value;                       // save the value of the book ID
-    }
-
     fClearPage();
 
     if (sTopic === "choose") {
@@ -290,17 +267,8 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "submit-button");
         fClearBookDivElements();
         fSetElement("Enable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
-
-            // set the book id field is a value for book id was previously saved
-
-            if (iBookID != "") {
-                document.getElementById("booksid-input").value = iBookID;               // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
 
             //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
@@ -326,6 +294,8 @@ function fSetMode(sNewMode) {
             document.getElementById("booksstage-input").value = 'Nothing Fetched';
 
             //  enable the ID field and color light yellow as a required field -----------------------------------------
+
+            fSetElement("Clear", "booksid-input");
 
             let dt = document.getElementById("booksid-input");
             dt.disabled = false;
@@ -439,13 +409,6 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === 'update') {
 
-            // set the book id field is a value for book id was previously saved
-
-            if (iBookID != "") {
-                document.getElementById("booksid-input").value = iBookID;               // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
-
             //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
@@ -470,6 +433,8 @@ function fSetMode(sNewMode) {
 
             //  enable the ID field and color light yellow as a required field -----------------------------------------
 
+            fSetElement("Clear", "booksid-input");
+
             let dt = document.getElementById("booksid-input");
             dt.disabled = false;
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
@@ -482,13 +447,6 @@ function fSetMode(sNewMode) {
             document.getElementById("booksfinishmsg-span").textContent = '';
 
         } else if (sMode === 'delete') {
-
-            // set the book id field is a value for book id was previously saved
-
-            if (iBookID != "") {
-                document.getElementById("booksid-input").value = iBookID;               // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
 
             //  disable all book fields except Book ID -----------------------------------------------------------------
 
@@ -509,6 +467,10 @@ function fSetMode(sNewMode) {
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             dt.focus();
             
+            // clear the books:titleId field ---------------------------------------------------------------------------
+
+            fSetElement("Clear", "booksid-input");
+
             // show instructions in the message area on how to proceed -------------------------------------------------
 
             document.getElementById("submit-message").value = "Enter the Title ID and 'submit' to delete the book";
@@ -523,8 +485,6 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "submit-button");
         fSetElement("Disable", "printButton");
         fSetElement("Enable", "titlesfilter-input");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
         document.getElementById("titlesfilter-input").focus();
 
         if (sMode === 'fetch') {
@@ -551,8 +511,6 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "submit-button");
         fSetElement("Disable", "printButton");
         fSetElement("Enable", "titlesListfilter-input");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Unhide", "titlesList-div");
         document.getElementById("titlesListfilter-input").focus();
 
         if (sMode === 'fetch') {
@@ -578,8 +536,6 @@ function fSetMode(sNewMode) {
         document.getElementById("recentsfilter-input").focus();
         fSetElement("Clear", "recentsarea-textarea");
         fSetElement("Disable", "submit-button");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -605,8 +561,6 @@ function fSetMode(sNewMode) {
         fSetElement("Clear", "unreadsarea-textarea");
         fSetElement("Disable", "submit-button");
         fSetElement("Disable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -635,7 +589,6 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "printButton");
         fSetElement("Enable", "unreadsListfilter-input");
         document.getElementById("unreadsListfilter-input").focus();
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -660,21 +613,15 @@ function fSetMode(sNewMode) {
         document.getElementById("charactersfilter-input").focus();
         fSetElement("Clear", "charactersarea-textarea");
         fSetElement("Disable", "submit-button");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
-
-            if (iBookID != "") {
-                document.getElementById("charactersbookid-input").value = iBookID;      // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
 
             //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fSetElement("Unhide", "submit-div");
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
+            fSetElement("Disable", "submit-button");
             fSetElement("Disable", "charactersvalidatebook-button");
             fSetElement("Unhide", "charactersfilter-div");
             fSetElement("Unhide", "charactersbook-div");
@@ -690,6 +637,7 @@ function fSetMode(sNewMode) {
 
             //  enable the Book ID field and color light yellow as a required field ------------------------------------
 
+            fSetElement("Clear", "charactersbookid-input");
             fSetElement("Clear", "charactersbooktitle-input");
             let bi = document.getElementById("charactersbookid-input");
             bi.disabled = false;
@@ -702,11 +650,6 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            if (iBookID != "") {
-                document.getElementById("charactersbookid-input").value = iBookID;      // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
-
             //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
@@ -718,11 +661,12 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "charactersadd-div");
             fSetElement("UnhideInline", "charactersvalidatebook-button");
             fSetElement("Disable", "charactersadd-input");
+            fSetElement("Clear", "charactersbookid-input");
             fSetElement("Clear", "charactersbooktitle-input");
             document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255,255,224)"; // lght yellow
             document.getElementById("mode-span").innerHTML = "add mode";
-            document.getElementById("submit-message").value = "Enter the Book ID and 'Validate' to enter characters\
- for a book";
+ document.getElementById("submit-message").value = "Enter the Book ID and 'Validate' to enter characters\
+            for a book";
 
             // set focus on the Book ID field for quick entry ----------------------------------------------------------
 
@@ -743,7 +687,7 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "charactersupdatedname-input");
             fSetElement("Unhide", "charactersupdate-div");
             fSetElement("Clear", "charactersupdateid-input");
-            fSetElement("Clear", "charactersupdatedname-input");
+            fSetElement("Clear", "charactersupdatename-input");
             document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(255,255,224)"; //lght yellw
             document.getElementById("charactersupdateid-input").style.borderWidth = "thin";
             document.getElementById("mode-span").innerHTML = "update mode";
@@ -792,8 +736,6 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "authorsfilter-input");
         fSetElement("Disable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -883,8 +825,6 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "classificationsfilter-input");
         fSetElement("Disable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -976,8 +916,6 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "ratingsfilter-div");
         fSetElement("Disable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -1066,8 +1004,6 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "seriesfilter-input");
         fSetElement("Disable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -1149,6 +1085,7 @@ function fSetMode(sNewMode) {
 
     } else if (sTopic === "sources") {
 
+//        fUnhideMultiple("sources-div", "modes-div", "submit-div");
         fUnhideMultiple("modes-div", "submit-div", "sources-div", "sourceslist-textarea");
         fSetElement("Clear", "sourcesfilter-input");
         fSetElement("UnhideInline", "sourcesfilter-input");
@@ -1160,8 +1097,6 @@ function fSetMode(sNewMode) {
         fSetElement("Disable", "submit-button");
         fSetElement("Enable", "sourcesfilter-input");
         fSetElement("Disable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -1254,8 +1189,6 @@ function fSetMode(sNewMode) {
         fSetElement("Enable", "genresfilter-input");
         fSetElement("Disable", "submit-button");
         fSetElement("Disable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -1346,8 +1279,6 @@ function fSetMode(sNewMode) {
         fSetElement("UnhideInline", "statusesadd-input");
         fSetElement("Disable", "submit-button");
         fSetElement("Disable", "printButton");
-        fSetElement("Hide", "unreadsList-div");
-        fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
 
@@ -1453,8 +1384,6 @@ async function fonclick_submit_submit() {
         } else if (sTopic === "unreads") {
             sTextAreaResults = "unreadsarea-textarea";
             sInputFilter = "unreadsfilter-input";
-        } else if (sTopic === "unreadsList") {
-            sInputFilter = "unreadsListfilter-input";
         } else if (sTopic === "characters") {
             sTextAreaResults = "charactersarea-textarea";
             sInputFilter = "charactersfilter-input";
@@ -2464,8 +2393,6 @@ function fClearPage() {
 
 function fClearBookFields() {
 
-    iBookID = "";
-    document.getElementById("booksid-input").value = "";
     fClearPage();
     fcClearExtras();
     let tc = document.getElementById("topics-select");
@@ -2717,9 +2644,9 @@ async function fPopulateLOV(strAttribute) {
         }
     
         for (let i = 0; i < arrAuthorNames.length; i++) {         // add each author name to the author options in books
-            let objOption = document.createElement("option");
-            objOption.text = arrAuthorNames[i][1].trim();
-            y.add(objOption);
+            var option = document.createElement("option");
+            option.text = arrAuthorNames[i][1].trim();
+            y.add(option);
         
         }
 
@@ -2752,9 +2679,9 @@ async function fPopulateLOV(strAttribute) {
         }
     
         for (let i = 0; i < arrSourceNames.length; i++) {      // add each source to the list of source options in books
-            let objOption = document.createElement("option");
-            objOption.text = arrSourceNames[i][1].trim();
-            y.add(objOption);
+            var option = document.createElement("option");
+            option.text = arrSourceNames[i][1].trim();
+            y.add(option);
         
         }
 
@@ -2787,9 +2714,9 @@ async function fPopulateLOV(strAttribute) {
         }
     
         for (let i = 0; i < arrSeriesNames.length; i++) {      // add each series to the list of series options in books
-            let objOption = document.createElement("option");
-            objOption.text = arrSeriesNames[i][1].trim();
-            y.add(objOption);
+            var option = document.createElement("option");
+            option.text = arrSeriesNames[i][1].trim();
+            y.add(option);
         
         }
 
@@ -2822,9 +2749,9 @@ async function fPopulateLOV(strAttribute) {
         }
     
         for (let i = 0; i < arrGenreNames.length; i++) {         // add each genre to the list of genre options in books
-            let objOption = document.createElement("option");
-            objOption.text = arrGenreNames[i][1].trim();
-            y.add(objOption);
+            var option = document.createElement("option");
+            option.text = arrGenreNames[i][1].trim();
+            y.add(option);
         
         }
 
@@ -2857,9 +2784,9 @@ async function fPopulateLOV(strAttribute) {
         }
     
         for (let i = 0; i < arrStatusNames.length; i++) {      // add each status to the list of status options in books
-            let objOption = document.createElement("option");
-            objOption.text = arrStatusNames[i][1].trim();
-            y.add(objOption);
+            var option = document.createElement("option");
+            option.text = arrStatusNames[i][1].trim();
+            y.add(option);
         
         }
 
@@ -2892,9 +2819,9 @@ async function fPopulateLOV(strAttribute) {
         }
     
         for (let i = 0; i < arrClassificationNames.length; i++) {     // add each classification to the options in books
-            let objOption = document.createElement("option");
-            objOption.text = arrClassificationNames[i][1].trim();
-            y.add(objOption);
+            var option = document.createElement("option");
+            option.text = arrClassificationNames[i][1].trim();
+            y.add(option);
         
         }
 
@@ -2927,9 +2854,9 @@ async function fPopulateLOV(strAttribute) {
         }
     
         for (let i = 0; i < arrRatingNames.length; i++) {      // add each rating to the list of rating options in books
-            let objOption = document.createElement("option");
-            objOption.text = arrRatingNames[i][1].trim();
-            y.add(objOption);
+            var option = document.createElement("option");
+            option.text = arrRatingNames[i][1].trim();
+            y.add(option);
         
         }
     }
@@ -3246,73 +3173,41 @@ function fValidateChapters() {
     }
 }
 
-// function to show or hide a list of titles on a webpage --------------------------------------------------------------
-
-function fShowOrHideTitlesList() {
-    let dmParaDiv = "";
-    document.getElementById("tLB-Refresh-button").removeAttribute("disabled");
-    let sHtmlString = ``;
-    let dmDiv1 = document.createElement('div');
-    if (!document.getElementById('tLL-added-div')) {                            // check if tLL-added-div does not exist
-        dmParaDiv = document.getElementById("titlesList-div");
-        dmParaDiv.append(dmDiv1);
-        dmDiv1.innerText = "New Div Added";
-        dmDiv1.setAttribute("id", "tLL-added-div");
-        document.getElementById("tLB-Show-button").textContent = "Hide";
-        for (let i = 0; i < iListDisplayLength; i++) {
-            sHtmlString += `<input id="tLL-inputOffset${i}" size="80" value=""><button id="inputBttn${i}"
-                onclick="fOnclickJumpToTitleSubmit(this)">Edit</button><br>`;
-        }
-        dmDiv1.innerHTML = sHtmlString;
-        iCurrOffset = iListDisplayLength;
-        iListDisplayCount = iListDisplayLength;
-        document.getElementById("tLB-Down-button").removeAttribute("disabled");
-        document.getElementById("tLB-Bottom-button").removeAttribute("disabled");
-        document.getElementById("tLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Top-button").setAttribute("disabled", true);
-        fFetchTitles();
-    } else {                                               // remove tLL-added-div if it already exists to hide the list
-        document.getElementById("tLB-Refresh-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Down-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Top-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Bottom-button").setAttribute("disabled", true);
-        dmDiv1 = document.getElementById("tLL-added-div");
-        dmDiv1.remove();
-        document.getElementById("tLB-Show-button").textContent = "Show";
-    }
-}
-
 // function to show a list of titles on a webpage ----------------------------------------------------------------------
 
-function fShowTitlesList() {
+function fShowOrHideList() {
     let dmParaDiv = "";
-    document.getElementById("tLB-Refresh-button").removeAttribute("disabled");
+    document.getElementById("bttn4").removeAttribute("disabled");
     let sHtmlString = ``;
+    const bttn3 = document.querySelector("#bttn3");
     let dmDiv1 = document.createElement('div');
-    if (document.getElementById('tLL-added-div')) {                                  // remove tLL-added-div if it exist
-        dmDiv1 = document.getElementbyId("tLL-added-div");
-        dmDiv1.remove();
-        document.getElementById("tLB-Show-button").textContent = "Show";
-    }
-    if (!document.getElementById('tLL-added-div')) {                                                // add tLL-added-div
-        dmParaDiv = document.getElementById("titlesList-div");
+    if (!document.getElementById('added-div')) {                                    // check if added-div does not exist
+        dmParaDiv = document.querySelector("#titlesList-div");
         dmParaDiv.append(dmDiv1);
         dmDiv1.innerText = "New Div Added";
-        dmDiv1.setAttribute("id", "tLL-added-div");
-        document.getElementById("tLB-Show-button").textContent = "Hide";
+        dmDiv1.setAttribute("id", "added-div");
+        bttn3.textContent =  "Hide";
         for (let i = 0; i < iListDisplayLength; i++) {
-            sHtmlString += `<input id="tLL-inputOffset${i}" size="80" value=""><button id="inputBttn${i}"
-                onclick="fOnclickJumpToTitleSubmit(this)">Edit</button><br>`;
+            sHtmlString += `<input id="inputOffset${i}" size="80" value=""><button id="inputBttn${i}"
+                onclick="fonclick_update_submit(this)">Edit</button><br>`;
         }
         dmDiv1.innerHTML = sHtmlString;
         iCurrOffset = iListDisplayLength;
         iListDisplayCount = iListDisplayLength;
-        document.getElementById("tLB-Down-button").removeAttribute("disabled");
-        document.getElementById("tLB-Bottom-button").removeAttribute("disabled");
-        document.getElementById("tLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Top-button").setAttribute("disabled", true);
+        document.getElementById("bttn5").removeAttribute("disabled");
+        document.getElementById("bttn8").removeAttribute("disabled");
+        document.getElementById("bttn6").setAttribute("disabled", true);
+        document.getElementById("bttn7").setAttribute("disabled", true);
         fFetchTitles();
+    } else {                                                   // remove added-div if it already exists to hide the list
+        document.getElementById("bttn4").setAttribute("disabled", true);
+        document.getElementById("bttn5").setAttribute("disabled", true);
+        document.getElementById("bttn6").setAttribute("disabled", true);
+        document.getElementById("bttn7").setAttribute("disabled", true);
+        document.getElementById("bttn8").setAttribute("disabled", true);
+        dmDiv1 = document.querySelector("#added-div");
+        dmDiv1.remove();
+        bttn3.textContent =  "Show";
     }
 }
 
@@ -3327,6 +3222,7 @@ async function fFetchTitles() {
     let sFilterEncoded = encodeURIComponent(document.getElementById("titlesListfilter-input").value);
     let sFilterEncoded1 = sFilterEncoded.replace(/'/g, "''");
     let sRequest = uri01 + '?' + "topic=" + "titles" + '&filter=' + sFilterEncoded1;
+//    let sRequest = "http://gjarman2020.com/cgi-bin/bookInquiry.cgi?topic=titles&filter="
     let response = await fetch(sRequest);
 
     if (response.ok) {
@@ -3353,10 +3249,7 @@ async function fFetchTitles() {
                      iListDisplayCount++;
                  }
              }
-        } else if (saArrayTmp.length < iListDisplayLength) {                    // copy all values if there is no filter
-             saTitleProfiles = saArrayTmp;
-             iListDisplayCount = saArayTmp.length;
-        } else {
+        } else {                                                                // copy all values if there is no filter
              saTitleProfiles = saArrayTmp;
              iListDisplayCount = iListDisplayLength;
         }
@@ -3368,7 +3261,7 @@ async function fFetchTitles() {
           alert("HttpError: " + response.status);
     }
 
-    saInputFields= Array.from(document.getElementById("tLL-added-div").querySelectorAll("input"));
+    saInputFields= Array.from(document.querySelector("#added-div").querySelectorAll("input"));
     iCurrOffset = 0;
 
     for (let j = 0; j < iListDisplayLength; j++) {                                  // wipe the input field values clean
@@ -3381,27 +3274,26 @@ async function fFetchTitles() {
     }
 
     if (iListDisplayCount < iListDisplayLength) {
-        document.getElementById("tLB-Show-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Down-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Top-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Bottom-button").setAttribute("disabled", true);
+        document.getElementById("bttn5").setAttribute("disabled", true);
+        document.getElementById("bttn6").setAttribute("disabled", true);
+        document.getElementById("bttn7").setAttribute("disabled", true);
+        document.getElementById("bttn8").setAttribute("disabled", true);
     } else {
-        document.getElementById("tLB-Down-button").removeAttribute("disabled");
-        document.getElementById("tLB-Bottom-button").removeAttribute("disabled");
+        document.getElementById("bttn5").removeAttribute("disabled");
+        document.getElementById("bttn8").removeAttribute("disabled");
     }
 }
 
 // function to refresh the list of titles and apply any filter changes -------------------------------------------------
 
-function fRefreshTitlesList() {
+function fRefreshList() {
     iCurrOffset = 0;
     fFetchTitles();
 }
 
 // function to move down the list of preople profiles and display the next set of values -------------------------------
 
-function fMoveDownTitlesList() {
+function fMoveDownList() {
 
     iListDisplayCount = 0;
     if (iCurrOffset < iProfilesCount) {
@@ -3415,309 +3307,72 @@ function fMoveDownTitlesList() {
                 saInputFields[j].value = saTitleProfiles[iCurrOffset++];
                 iListDisplayCount++;                                         // increment the count of displayed records
             } else {
-                document.getElementById("tLB-Down-button").setAttribute("disabled", true);
-                document.getElementById("tLB-Bottom-button").setAttribute("disabled", true);
+                document.getElementById("bttn5").setAttribute("disabled", true);
+                document.getElementById("bttn8").setAttribute("disabled", true);
                 break;
             }
         }
-        document.getElementById("tLB-Up-button").removeAttribute("disabled");
-        document.getElementById("tLB-Top-button").removeAttribute("disabled");
+        document.getElementById("bttn6").removeAttribute("disabled");
+        document.getElementById("bttn7").removeAttribute("disabled");
     } else {
-        document.getElementById("tLB-Down-button").setAttribute("disabled", true);
-        document.getElementbById("tLB-Bottom-button").setAttribute("disabled", true);
+        document.getElementById("bttn5").setAttribute("disabled", true);
+        document.getElementbById("bttn8").setAttribute("disabled", true);
     }
 }
 
 // function to move up the list of title profiles and display the prior set of values ----------------------------------
 
-function fMoveUpTitlesList() {
+function fMoveUpList() {
 
     iCurrOffset = iCurrOffset - iListDisplayCount - iListDisplayLength;
 
     if (iCurrOffset < 0) {
         iCurrOffset = 0;                                                          // don't go past the start of the list
-        document.getElementById("tLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("tLB-Top-button").setAttribute("disabled", true);
-        fRefreshTitlesList();
+        dccument.getElementById("bttn6").setAttribute("disabled", true);
+        document.getElementById("bttn7").setAttribute("disabled", true);
+        fRefreshList();
     } else {
-        fMoveDownTitlesList();
-        document.getElementById("tLB-Down-button").removeAttribute("disabled");
-        document.getElementById("tLB-Bottom-button").removeAttribute("disabled");
+        fMoveDownList();
+        document.getElementById("bttn5").removeAttribute("disabled");
+        document.getElementById("bttn8").removeAttribute("disabled");
     }
 
 }
 
 // function to move to the top of the list of title profiles -----------------------------------------------------------
 
-function fMoveToTitlesListTop() {
+function fMoveToListTop() {
 
     iCurrOffset = 0;
-    fMoveDownTitlesList();
-    document.getElementById("tLB-Up-button").setAttribute("disabled", true);
-    document.getElementById("tLB-Top-button").setAttribute("disabled", true);
-    document.getElementById("tLB-Down-button").removeAttribute("disabled");
-    document.getElementById("tLB-Bottom-button").removeAttribute("disabled");
+    fMoveDownList();
+    document.getElementById("bttn6").setAttribute("disabled", true);
+    document.getElementById("bttn7").setAttribute("disabled", true);
+    document.getElementById("bttn5").removeAttribute("disabled");
+    document.getElementById("bttn8").removeAttribute("disabled");
 
 }
 
-// function to move to the bottom of the list of title profiles --------------------------------------------------------
+// function to move to the bottom of the list of title profiles -----=--------------------------------------------------
 
-function fMoveToTitlesListBottom() {
+function fMoveToListBottom() {
 
     iCurrOffset = (iProfilesCount - 1) - iListDisplayLength;
-    fMoveDownTitlesList();
-    document.getElementById("tLB-Down-button").setAttribute("disabled", true);
-    document.getElementById("tLB-Bottom-button").setAttribute("disabled", true);
+    fMoveDownList();
+    document.getElementById("bttn5").setAttribute("disabled", true);
+    document.getElementById("bttn8").setAttribute("disabled", true);
 
 }
 
 // function jump to a book's profile from the title list jump field ----------------------------------------------------
 
-function fOnclickJumpToTitleSubmit(btn) {
+function fonclick_update_submit(btn) {
 
-    let iArrayIndex = Number(btn.id.replace("inputBttn", ""));
-    let iBookID = Number(saInputFields[iArrayIndex].value.substring(1, 4));
+    var iArrayIndex = Number(btn.id.replace("inputBttn", ""));
+    var iBook_ID = Number(saInputFields[iArrayIndex].value.substring(1, 4));
     document.getElementById("topics-select").value = "books";
     fSetTopic();
     fSetMode("update");
-    document.getElementById("booksid-input").value = iBookID;
-    fonclick_submit_submit();
-    fSetElement("Enable", "submit-button");
-}
-
-// function to show or hide a list of unreads on a webpage -------------------------------------------------------------
-
-function fShowOrHideUnreadsList() {
-    let dmParaDiv = "";
-    document.getElementById("tLB-Refresh-button").removeAttribute("disabled");
-    let sHtmlString = ``;
-    let dmDiv1 = document.createElement('div');
-    if (!document.getElementById('uLL-added-div')) {                            // check if uLL-added-div does not exist
-        dmParaDiv = document.getElementById("unreadsList-div");
-        dmParaDiv.append(dmDiv1);
-        dmDiv1.innerText = "New Div Added";
-        dmDiv1.setAttribute("id", "uLL-added-div");
-        document.getElementById("tLB-Show-button").textContent = "Hide";
-        for (let i = 0; i < iListDisplayLength; i++) {
-            sHtmlString += `<input id="uLL-inputOffset${i}" size="80" value=""><button id="inputBttn${i}"
-                onclick="fOnclickJumpToUnreadSubmit(this)">Edit</button><br>`;
-        }
-        dmDiv1.innerHTML = sHtmlString;
-        iCurrOffset = iListDisplayLength;
-        iListDisplayCount = iListDisplayLength;
-        document.getElementById("uLB-Down-button").removeAttribute("disabled");
-        document.getElementById("uLB-Bottom-button").removeAttribute("disabled");
-        document.getElementById("uLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Top-button").setAttribute("disabled", true);
-        fFetchUnreads();
-    } else {                                               // remove uLL-added-div if it already exists to hide the list
-        document.getElementById("uLB-Refresh-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Down-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Top-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Bottom-button").setAttribute("disabled", true);
-        dmDiv1 = document.getElementById("uLL-added-div");
-        dmDiv1.remove();
-        document.getElementById("uLB-Show-button").textContent = "Show";
-    }
-}
-
-// function to show a list of unreads on a webpage ---------------------------------------------------------------------
-
-function fShowUnreadsList() {
-    let dmParaDiv = "";
-    document.getElementById("tLB-Refresh-button").removeAttribute("disabled");
-    let sHtmlString = ``;
-    let dmDiv1 = document.createElement('div');
-    if (document.getElementById('uLL-added-div')) {                                     // remove if uLL-added-div exist
-        dmDiv1 = document.getElementById("uLL-added-div");
-        dmDiv1.remove();
-        document.getElementById("uLB-Show-button").textContent = "Show";
-    }
-    dmParaDiv = document.getElementById("unreadsList-div");
-    dmParaDiv.append(dmDiv1);
-    dmDiv1.innerText = "New Div Added";
-    dmDiv1.setAttribute("id", "uLL-added-div");
-    document.getElementById("tLB-Show-button").textContent = "Hide";
-    for (let i = 0; i < iListDisplayLength; i++) {
-        sHtmlString += `<input id="uLL-inputOffset${i}" size="80" value=""><button id="inputBttn${i}"
-                onclick="fOnclickJumpToUnreadSubmit(this)">Edit</button><br>`;
-    }
-    dmDiv1.innerHTML = sHtmlString;
-    iCurrOffset = iListDisplayLength;
-    iListDisplayCount = iListDisplayLength;
-    document.getElementById("uLB-Down-button").removeAttribute("disabled");
-    document.getElementById("uLB-Bottom-button").removeAttribute("disabled");
-    document.getElementById("uLB-Up-button").setAttribute("disabled", true);
-    document.getElementById("uLB-Top-button").setAttribute("disabled", true);
-    fFetchUnreads();
-}
-
-// function to fetch unread profiles from a database into an array -----------------------------------------------------
-
-async function fFetchUnreads() {
-
-    let sText1 = "";                                                     // string of unreads profiles from the database
-    let sText2 = "";                                          // string of 'scrubbed' unreads profiles from the database
-    let sFilter = "";                                                                       // filter on unreads profile
-
-    let sFilterEncoded = encodeURIComponent(document.getElementById("unreadsListfilter-input").value);
-    let sFilterEncoded1 = sFilterEncoded.replace(/'/g, "''");
-    let sRequest = uri01 + '?' + "topic=" + "unreads" + '&filter=' + sFilterEncoded1;
-    let response = await fetch(sRequest);
-
-    if (response.ok) {
-        sText1 = await response.text();
-        iListDisplayCount = 0;
-        sText2 = sText1.replace(/\|/g, ", ");
-        sText1 = sText2;
-        sText2 = sText1.replace(/, , , /g, ", ");
-        sText1 = sText2;
-        sText2 = sText1.replace(/, ,/g, ", ");
-        saUnreadsProfiles = sText2.split("\n");
-        let saArrayTmp = saUnreadsProfiles;                                        // copy the array to apply the filter
-        saUnreadsProfiles = [];
-
-        sFilter = (document.getElementById("unreadsListfilter-input").value).toUpperCase();
-        if(sFilter.length != 0)                                              // apply the filter if there is filter text
-        {
-             for(let i = 0, j = 0; i < saArrayTmp.length; i++)
-             {
-                 if((saArrayTmp[i]).toUpperCase().indexOf(sFilter) != -1)   // check filter match for each array element
-                 {
-                     saUnreadsProfiles[j] = saArrayTmp[i];           // copy the array values back if the filter matches
-                     j = j + 1;
-                     iListDisplayCount++;
-                 }
-             }
-        } else if (saArrayTmp.length < iListDisplayLength) {                   // copy all values if there is no filter
-             saUnreadsProfiles = saArrayTmp;
-             iListDisplayCount = saArrayTmp.length;
-        } else {
-             saUnreadsProfiles = saArrayTmp;
-             iListDisplayCount = iListDisplayLength;
-        }
-        iProfilesCount = saUnreadsProfiles.length;                     // set a count of the number of filtered profiles
-        saArrayTmp = [];                                                                // clean out the temporary array
-        sText1 = "";                                                                      // clean out the sText1 string
-        sText2 = "";                                                                       // clean out the text2 string
-    } else {
-          alert("HttpError: " + response.status);
-    }
-
-    saInputFields= Array.from(document.getElementById("uLL-added-div").querySelectorAll("input"));
-    iCurrOffset = 0;
-
-    for (let j = 0; j < iListDisplayLength; j++) {                                  // wipe the input field values clean
-        saInputFields[j].value="";
-    }
-
-    for (let k = 0; (k < iListDisplayLength) && (k <iProfilesCount) ; k++) {
-        saInputFields[k].value = saUnreadsProfiles[k];
-        iCurrOffset = k + 1;                                    // set the current position of the unreads profile array
-    }
-
-    if (iListDisplayCount < iListDisplayLength) {
-        document.getElementById("uLB-Show-button").textContent = "Hide";
-        document.getElementById("uLB-Down-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Top-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Bottom-button").setAttribute("disabled", true);
-    } else {
-        document.getElementById("uLB-Down-button").removeAttribute("disabled");
-        document.getElementById("uLB-Bottom-button").removeAttribute("disabled");
-    }
-}
-
-// function to refresh the list of unreads and apply any filter changes ------------------------------------------------
-
-function fRefreshUnreadsList() {
-    iCurrOffset = 0;
-    fFetchUnreads();
-}
-
-// function to move down the list of unreads profiles and display the next set of values -------------------------------
-
-function fMoveDownUnreadsList() {
-
-    iListDisplayCount = 0;
-    if (iCurrOffset < iProfilesCount) {
-
-        for (let j = 0; j < iListDisplayLength; j++) {                              // wipe the input field values clean
-            saInputFields[j].value = "";
-        }
-
-        for (let j = 0; (j < iListDisplayLength) && (iCurrOffset < iProfilesCount); j++) {
-            if (iCurrOffset < iProfilesCount - 1) {
-                saInputFields[j].value = saUnreadsProfiles[iCurrOffset++];
-                iListDisplayCount++;                                         // increment the count of displayed records
-            } else {
-                document.getElementById("uLB-Down-button").setAttribute("disabled", true);
-                document.getElementById("uLB-Bottom-button").setAttribute("disabled", true);
-                break;
-            }
-        }
-        document.getElementById("uLB-Up-button").removeAttribute("disabled");
-        document.getElementById("uLB-Top-button").removeAttribute("disabled");
-    } else {
-        document.getElementById("uLB-Down-button").setAttribute("disabled", true);
-        document.getElementbById("uLB-Bottom-button").setAttribute("disabled", true);
-    }
-}
-
-// function to move up the list of unreads profiles and display the prior set of values --------------------------------
-
-function fMoveUpUnreadsList() {
-
-    iCurrOffset = iCurrOffset - iListDisplayCount - iListDisplayLength;
-
-    if (iCurrOffset < 0) {
-        iCurrOffset = 0;                                                          // don't go past the start of the list
-        document.getElementById("uLB-Up-button").setAttribute("disabled", true);
-        document.getElementById("uLB-Top-button").setAttribute("disabled", true);
-        fRefreshUnreadsList();
-    } else {
-        fMoveDownUnreadsList();
-        document.getElementById("uLB-Down-button").removeAttribute("disabled");
-        document.getElementById("uLB-Bottom-button").removeAttribute("disabled");
-    }
-
-}
-
-// function to move to the top of the list of unreads profiles ---------------------------------------------------------
-
-function fMoveToUnreadsListTop() {
-
-    iCurrOffset = 0;
-    fMoveDownUnreadsList();
-    document.getElementById("uLB-Up-button").setAttribute("disabled", true);
-    document.getElementById("uLB-Top-button").setAttribute("disabled", true);
-    document.getElementById("uLB-Down-button").removeAttribute("disabled");
-    document.getElementById("uLB-Bottom-button").removeAttribute("disabled");
-
-}
-
-// function to move to the bottom of the list of unreads profiles ------------------------------------------------------
-
-function fMoveToUnreadsListBottom() {
-
-    iCurrOffset = (iProfilesCount - 1) - iListDisplayLength;
-    fMoveDownUnreadsList();
-    document.getElementById("uLB-Down-button").setAttribute("disabled", true);
-    document.getElementById("uLB-Bottom-button").setAttribute("disabled", true);
-
-}
-
-// function jump to an unread book's profile from the title list jump field --------------------------------------------
-
-function fOnclickJumpToUnreadSubmit(btn) {
-
-    let iArrayIndex = Number(btn.id.replace("inputBttn", ""));
-    let iBookID = Number(saInputFields[iArrayIndex].value.substring(1, 4));
-    document.getElementById("topics-select").value = "books";
-    fSetTopic();
-    fSetMode("update");
-    document.getElementById("booksid-input").value = iBookID;
+    document.getElementById("booksid-input").value = iBook_ID;
     fonclick_submit_submit();
     fSetElement("Enable", "submit-button");
 }

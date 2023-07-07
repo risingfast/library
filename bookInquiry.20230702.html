@@ -102,7 +102,6 @@
 <!--    14-Nov-2022 - validate the start and finish date formats adding or changing a book                           -->
 <!--    23-Jun-2023 - replace <label> with <span> for inline text not related to input elements                      -->
 <!--    25-Jun-2023 - add a listTitles div                                                                           -->
-<!--    25-Jun-2023 - change listTitles to titlesList                                                                -->
 <!--                                                                                                                 -->
 <!-- <BODY> region for all content including header and footer ----------------------------------------------------- -->
 
@@ -189,10 +188,9 @@
                                 <option value="choose" selected>Choose</option>
                                 <option value="books">Books</option>
                                 <option value="titles">Titles</option>
-                                <option value="titlesList">Titles List</option>
+                                <option value="listTitles">Titles List</option>
                                 <option value="recents">Recents</option>
                                 <option value="unreads">Unreads</option>
-                                <option value="unreadsList">Unreads List</option>
                                 <option value="characters">Characters</option>
                                 <option value="authors">Authors</option>
                                 <option value="classifications">Classifications</option>
@@ -229,24 +227,24 @@
                         </div>
                     </div>
     
-<!-- titlesList div ------------------------------------------------------------------------------------------------ -->
+<!-- listTitles div ------------------------------------------------------------------------------------------------ -->
 
-                    <div id="titlesList-div">
-                        <div id="titlesListfilter-div">
-                            <label  id="titlesListfilter-label" for="titlesListfilter-input">Filter:</label>
-                            <input id="titlesListfilter-input" required  onkeypress="fClickSubmitOnEnter()">
+                    <div id="listTitles-div">
+                        <div id="listTitlesfilter-div">
+                            <label  id="listTitlesfilter-label" for="listTitlesfilter-input">Filter:</label>
+                            <input id="listTitlesfilter-input" required  onkeypress="fClickSubmitOnEnter()">
                         </div>
 
-                        <div id="titlesListButtons-div" style="width:80%; max-width:800px;">
-                            <button id="tLB-Show-button" onclick="fShowOrHideTitlesList()">Show</button>
-                            <button id="tLB-Refresh-button" onclick="fRefreshTitlesList()" disabled>Refresh</button>
-                            <button id="tLB-Down-button" onclick="fMoveDownTitlesList()" disabled>Down</button>
-                            <button id="tLB-Up-button" onclick="fMoveUpTitlesList()" disabled >Up</button>
-                            <button id="tLB-Top-button" onclick="fMoveToTitlesListTop()" disabled>Top</button>
-                            <button id="tLB-Bottom-button" onclick="fMoveToTitlesListBottom()"disabled >Bottom</button>
+                        <div id="listButtons-div" style="width:80%; max-width:800px;">
+                            <button id="bttn3" onclick="fShowOrHideList()">Show</button>
+                            <button id="bttn4" onclick="fRefreshList()" disabled>Refresh</button>
+                            <button id="bttn5" onclick="fMoveDownList()" disabled>Down</button>
+                            <button id="bttn6" onclick="fMoveUpList()" disabled >Up</button>
+                            <button id="bttn7" onclick="fMoveToListTop()" disabled>Top</button>
+                            <button id="bttn8" onclick="fMoveToListBottom()"disabled >Bottom</button>
                         </div>
 
-                        <div id="titlesListList-div">
+                        <div id="listTitlesList-div">
                         </div>
                     </div>
     
@@ -273,27 +271,6 @@
                         <div id="unreadsarea-div">
                             <textarea id="unreadsarea-textarea" readonly disabled ROWS="15">
                             </textarea>
-                        </div>
-                    </div>
-    
-<!-- unreadsList div ------------------------------------------------------------------------------------------------ -->
-
-                    <div id="unreadsList-div">
-                        <div id="unreadsListfilter-div">
-                            <label  id="unreadsListfilter-label" for="unreadsListfilter-input">Filter:</label>
-                            <input id="unreadsListfilter-input" required  onkeypress="fClickSubmitOnEnter()">
-                        </div>
-
-                        <div id="unreadsListButtons-div" style="width:80%; max-width:800px;">
-                            <button id="uLB-Show-button" onclick="fShowOrHideUnreadsList()">Show</button>
-                            <button id="uLB-Refresh-button" onclick="fRefreshUnreadsList()" disabled>Refresh</button>
-                            <button id="uLB-Down-button" onclick="fMoveDownUnreadsList()" disabled>Down</button>
-                            <button id="uLB-Up-button" onclick="fMoveUpUnreadsList()" disabled >Up</button>
-                            <button id="uLB-Top-button" onclick="fMoveToUnreadsListTop()" disabled>Top</button>
-                            <button id="uLB-Bottom-button" onclick="fMoveToUnreadsListBottom()"disabled >Bottom</button>
-                        </div>
-
-                        <div id="unreadsListList-div">
                         </div>
                     </div>
     
@@ -717,8 +694,6 @@
             <aside id="ASIDE1">
                     <h3 id=ASIDE1H3>Changes 2021-23</h3>
                 <ul id="ASIDE1UL">
-                    <li CLASS="ASIDE1LI">06-Jul: preserve book id</li>
-                    <li CLASS="ASIDE1LI">04-Jul: implement unreads list</li>
                     <li CLASS="ASIDE1LI">23-Jun: implement title list</li>
                     <li CLASS="ASIDE1LI">23-Jun: replace title w/span</li>
                     <li CLASS="ASIDE1LI">01-Jan: happy new year 2023</li>

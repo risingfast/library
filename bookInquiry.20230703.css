@@ -149,10 +149,10 @@
     margin-left: 17px;
 }
 
-#titlesListButtons-div {
+#titleslistButtons-div {
     width: 80%;
     margin: auto;
-    margin-top: 0px;
+    margin-top: 10px;
     margin-bottom: 10px;
     max-width: 800px;
     text-align: left;
@@ -256,10 +256,10 @@
     margin-left: 17px;
 }
 
-#unreadsListButtons-div {
+#unreadslistButtons-div {
     width: 80%;
     margin: auto;
-    margin-top: 00px;
+    margin-top: 10px;
     margin-bottom: 10px;
     max-width: 800px;
     text-align: left;

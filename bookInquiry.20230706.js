@@ -97,7 +97,6 @@
 //    04-Jul-2023 -- implement fShowTitles() and fShowUnreads
 //    05-Jul-2023 -- set the Show button to Hide when displaying unread titles
 //    05-Jul-2023 -- replace querySelector("#...") with getElementById("..")
-//    06-Jul-2023 -- preserve book_ID across mode changes
 // Functions
 //    fSetTopic() - set the current topic (Books, Titles, Recents etc) {
 //    fSetMode(sNewMode) - set the current mode (Fetch, Query, Add, Update, Delete)
@@ -192,7 +191,6 @@ const uri39 = "http://gjarman2020.com/cgi-bin/bookUpdtBook.cgi";
 let sMode = '';
 let sTopic = '';
 let iListDisplayLength = 25;                                        // number of entries displayed in the list of titles
-let iBookID = "";                                                            // define a global variable for the book id
 
 // define globals for LOV arrays for book attributes -------------------------------------------------------------------
 
@@ -276,10 +274,6 @@ function fSetMode(sNewMode) {
     sTopic = document.getElementById("topics-select").value;
     sMode = sNewMode;
 
-    if (document.getElementById("booksid-input").value != "") {
-        iBookID = document.getElementById("booksid-input").value;                       // save the value of the book ID
-    }
-
     fClearPage();
 
     if (sTopic === "choose") {
@@ -294,13 +288,6 @@ function fSetMode(sNewMode) {
         fSetElement("Hide", "titlesList-div");
 
         if (sMode === 'fetch') {
-
-            // set the book id field is a value for book id was previously saved
-
-            if (iBookID != "") {
-                document.getElementById("booksid-input").value = iBookID;               // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
 
             //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
@@ -326,6 +313,8 @@ function fSetMode(sNewMode) {
             document.getElementById("booksstage-input").value = 'Nothing Fetched';
 
             //  enable the ID field and color light yellow as a required field -----------------------------------------
+
+            fSetElement("Clear", "booksid-input");
 
             let dt = document.getElementById("booksid-input");
             dt.disabled = false;
@@ -439,13 +428,6 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === 'update') {
 
-            // set the book id field is a value for book id was previously saved
-
-            if (iBookID != "") {
-                document.getElementById("booksid-input").value = iBookID;               // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
-
             //  disable the 'update' mode button and color it green ----------------------------------------------------
 
             fDisableModeButton("modesupdate-button");
@@ -470,6 +452,8 @@ function fSetMode(sNewMode) {
 
             //  enable the ID field and color light yellow as a required field -----------------------------------------
 
+            fSetElement("Clear", "booksid-input");
+
             let dt = document.getElementById("booksid-input");
             dt.disabled = false;
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
@@ -482,13 +466,6 @@ function fSetMode(sNewMode) {
             document.getElementById("booksfinishmsg-span").textContent = '';
 
         } else if (sMode === 'delete') {
-
-            // set the book id field is a value for book id was previously saved
-
-            if (iBookID != "") {
-                document.getElementById("booksid-input").value = iBookID;               // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
 
             //  disable all book fields except Book ID -----------------------------------------------------------------
 
@@ -509,6 +486,10 @@ function fSetMode(sNewMode) {
             dt.style.backgroundColor = "rgb(255,255,224)";                                         // light yellow color
             dt.focus();
             
+            // clear the books:titleId field ---------------------------------------------------------------------------
+
+            fSetElement("Clear", "booksid-input");
+
             // show instructions in the message area on how to proceed -------------------------------------------------
 
             document.getElementById("submit-message").value = "Enter the Title ID and 'submit' to delete the book";
@@ -665,16 +646,12 @@ function fSetMode(sNewMode) {
 
         if (sMode === 'fetch') {
 
-            if (iBookID != "") {
-                document.getElementById("charactersbookid-input").value = iBookID;      // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
-
             //  disable the 'fetch' mode button and color it green -----------------------------------------------------
 
             fSetElement("Unhide", "submit-div");
             fDisableModeButton("modesfetch-button");
             fSetElement("Disable", "modesquery-button");
+            fSetElement("Disable", "submit-button");
             fSetElement("Disable", "charactersvalidatebook-button");
             fSetElement("Unhide", "charactersfilter-div");
             fSetElement("Unhide", "charactersbook-div");
@@ -690,6 +667,7 @@ function fSetMode(sNewMode) {
 
             //  enable the Book ID field and color light yellow as a required field ------------------------------------
 
+            fSetElement("Clear", "charactersbookid-input");
             fSetElement("Clear", "charactersbooktitle-input");
             let bi = document.getElementById("charactersbookid-input");
             bi.disabled = false;
@@ -702,11 +680,6 @@ function fSetMode(sNewMode) {
 
         } else if (sMode === "add") {
 
-            if (iBookID != "") {
-                document.getElementById("charactersbookid-input").value = iBookID;      // save the value of the book ID
-                fSetElement("Enable", "submit-button");
-            }
-
             //  disable the 'add' mode button and color it green -------------------------------------------------------
 
             fDisableModeButton("modesadd-button");
@@ -718,11 +691,12 @@ function fSetMode(sNewMode) {
             fSetElement("Unhide", "charactersadd-div");
             fSetElement("UnhideInline", "charactersvalidatebook-button");
             fSetElement("Disable", "charactersadd-input");
+            fSetElement("Clear", "charactersbookid-input");
             fSetElement("Clear", "charactersbooktitle-input");
             document.getElementById("charactersbookid-input").style.backgroundColor = "rgb(255,255,224)"; // lght yellow
             document.getElementById("mode-span").innerHTML = "add mode";
-            document.getElementById("submit-message").value = "Enter the Book ID and 'Validate' to enter characters\
- for a book";
+ document.getElementById("submit-message").value = "Enter the Book ID and 'Validate' to enter characters\
+            for a book";
 
             // set focus on the Book ID field for quick entry ----------------------------------------------------------
 
@@ -743,7 +717,7 @@ function fSetMode(sNewMode) {
             fSetElement("Disable", "charactersupdatedname-input");
             fSetElement("Unhide", "charactersupdate-div");
             fSetElement("Clear", "charactersupdateid-input");
-            fSetElement("Clear", "charactersupdatedname-input");
+            fSetElement("Clear", "charactersupdatename-input");
             document.getElementById("charactersupdateid-input").style.backgroundColor = "rgb(255,255,224)"; //lght yellw
             document.getElementById("charactersupdateid-input").style.borderWidth = "thin";
             document.getElementById("mode-span").innerHTML = "update mode";
@@ -2464,8 +2438,6 @@ function fClearPage() {
 
 function fClearBookFields() {
 
-    iBookID = "";
-    document.getElementById("booksid-input").value = "";
     fClearPage();
     fcClearExtras();
     let tc = document.getElementById("topics-select");
